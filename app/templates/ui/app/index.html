@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+    <!-- build:css(.tmp) styles/all.css -->
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- endbuild -->
+  </head>
+  <body ng-app="sample" ng-controller="SearchCtrl">
+    <nav class="navbar navbar-default" role="navigation">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/">Sample App</a>
+      </div>
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+          <li><a href="/">Search</a></li>
+          <li ng-show="model.user.authenticated"><a href="/create">Create</a></li>
+        </ul>
+        <form class="navbar-form navbar-left" role="search">
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="Search" ng-model="model.text">
+          </div>
+          <button type="submit" class="btn btn-default" ng-click="textSearch()">Submit</button>
+        </form>
+        <div ml-user username="model.user.name" password="model.user.password" authenticated="model.user.authenticated" login="login(username, password)" logout="logout()" loginerror="model.user.loginError"/>
+      </div><!-- /.navbar-collapse -->
+    </nav>
+    <!-- Add your site or application content here -->
+    <div class="container" ng-view=""></div>
+
+
+    <!-- build:js scripts/plugins.js -->
+    <script src="bower_components/jquery/jquery.js"></script>
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+    <script src="bower_components/ckeditor/ckeditor.js"></script>
+    <script src="bower_components/ng-ckeditor/ng-ckeditor.js"></script>
+    <script src="scripts/vendor/ui-bootstrap-tpls-0.9.0.min.js"></script>
+    <!-- endbuild -->
+
+    <!-- build:js scripts/scripts.js -->
+    <script src="scripts/app.js"></script>
+    <script src="scripts/directives/editable.js"></script>
+    <script src="scripts/directives/features.js"></script>
+    <script src="user/user.js"></script>
+    <script src="user/user-dir.js"></script>
+    <script src="user/user-srv.js"></script>
+    <script src="search/search.js"></script>
+    <script src="search/search-ctrl.js"></script>
+    <script src="search/facets-dir.js"></script>
+    <script src="search/results-dir.js"></script>
+    <script src="common/common.js"></script>
+    <script src="common/services/mlrest.js"></script>
+    <script src="scripts/directives/add-comment.js"></script>
+    <script src="scripts/services/features.js"></script>
+    <script src="scripts/controllers/demo.js"></script>
+    <script src="scripts/controllers/create.js"></script>
+    <script src="scripts/controllers/profile.js"></script>
+    <!-- endbuild -->
+  </body>
+</html>

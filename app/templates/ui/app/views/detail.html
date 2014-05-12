@@ -1,0 +1,86 @@
+<div class="row detail">
+  <h2 class="col-md-12">{{model.demo.name}}</h2>
+  <editable class="desc col-md-12" enabled="model.user.authenticated" edit-model="model.demo.description" edit-type="textarea" save="saveField('description', model.demo.description)"/>
+  <div class="col-md-12">
+    <label>Hosted at</label>
+    <a ng-href="{{model.demo.host}}">{{model.demo.host}}</a>
+    (<editable class="host-type" enabled="model.user.authenticated" edit-model="model.demo.hostType" edit-type="text" save="saveField('hostType', model.demo.hostType)"/>)
+  </div>
+  <div class="credentials col-md-12">
+    <label>Credentials</label>
+    <editable enabled="model.user.authenticated" edit-model="model.demo.username" edit-type="text" save="saveField('username', model.demo.username)"/>
+    /
+    <editable enabled="model.user.authenticated" edit-model="model.demo.password" edit-type="text" save="saveField('password', model.demo.password)"/>
+  </div>
+  <div class="browsers col-md-12">
+    <label>Browsers</label>
+    <ul>
+      <li ng-repeat="browser in model.demo.browsers">{{browser}}</li>
+    </ul>
+  </div>
+  <features enabled="model.user.authenticated" edit-features="model.demo.features" feature-choices="model.featureChoices"
+            edit-type="inline" mode="view" save="saveField('features', model.demo.features)"/>
+  <div class="repo col-md-12">
+    <label>Code repo</label>
+    <editable enabled="model.user.authenticated" edit-model="model.demo.repo" edit-type="text" save="saveField('repo', model.demo.repo)"/>
+  </div>
+  <div class="maintainer col-md-12">
+    <label>Maintainer</label>
+    <editable enabled="model.user.authenticated" edit-model="model.demo.maintainer" edit-type="text" save="saveField('maintainer', model.demo.maintainer)"/>
+    (<a ng-href="mailto:{{model.demo.email}}">{{model.demo.email}}</a>)
+  </div>
+  <div class="version col-md-12">
+    <label>MarkLogic version</label>
+    <editable enabled="model.user.authenticated" edit-model="model.demo.version" edit-type="text" save="saveField('version', model.demo.version)"/>
+  </div>
+  <div class="open-bugs col-md-12">
+    <label>Open Bugs</label>
+    <button class="btn btn-primary" ng-show="model.user.authenticated && !showBugForm" ng-click="showBugForm = true">Add</button>
+    <form ng-show="model.user.authenticated && showBugForm">
+      <fieldset class="col-md-12">
+        <label class="col-md-2">Bug description</label>
+        <textarea ng-model="model.additionalBug.msg" name="bugDescription" required></textarea>
+      </fieldset>
+      <fieldset class="col-md-12">
+        <label class="col-md-2">Browser</label>
+        <select ng-model="model.additionalBug.browser" name="bugBrowser" required>
+          <option ng-repeat="browser in model.browserChoices" value="{{browser}}">{{browser}}</option>
+        </select>
+      </fieldset>
+      <div class="col-md-12">
+        <a class="col-md-3" href="#" ng-click="showBugForm = false">Cancel</a>
+        <button class="btn btn-primary" ng-click="addBug(model.additionalBug)">Add</button>
+      </div>
+    </form>
+    <div class="bug col-md-12" ng-repeat="bug in model.demo.bugs | filter: { status: 'open' }: true | orderBy:'-dateTime'" ng-controller="BugCtrl" data-id="{{bug.id}}">
+      <div>{{bug.msg}}</div>
+      <ul class="bug-meta">
+        <li class="bug-status">Status: <editable enabled="model.user.authenticated" edit-model="bug.status" edit-type="select" edit-options="model.bugStatuses" /></li>
+        <li class="bug-dateTime">Created by {{bug.username}} on {{bug.dateTime}}</li>
+        <li class="bug-browser">Browser: {{bug.browser}}</li>
+      </ul>
+    </div>
+  </div>
+  <div class="closed-bugs col-md-12">
+    <label>Closed Bugs</label>
+    <a href="#" ng-show="!showClosedBugs" ng-click="showClosedBugs = true">Expand</a>
+    <a href="#" ng-show="showClosedBugs" ng-click="showClosedBugs = false">Collapse</a>
+    <div class="bug col-md-12" ng-show="showClosedBugs" ng-repeat="bug in model.demo.bugs | filter: { status: 'closed' }: true | orderBy:'-dateTime'" ng-controller="BugCtrl" data-id="{{bug.id}}">
+      <div>{{bug.msg}}</div>
+      <ul class="bug-meta">
+        <li class="bug-status">Status: <editable enabled="model.user.authenticated" edit-model="bug.status" edit-type="select" edit-options="model.bugStatuses" /></li>
+        <li class="bug-dateTime">Created by {{bug.username}} on {{bug.dateTime}}</li>
+        <li class="bug-browser">Browser: {{bug.browser}}</li>
+      </ul>
+    </div>
+  </div>
+  <section class="comments col-md-12">
+    <h3>Comments</h3>
+    <add-comment add-model="model.additionalComment.msg" authenticated="model.user.authenticated" save="addComment(model.additionalComment)"></add-comment>
+    <article class="comment" ng-repeat="comment in model.demo.comments | orderBy:'-dateTime'" data-id="{{comment.id}}">
+      <h4>Comment by {{comment.username}}</h4>
+      <p class="dateTime">on {{comment.dateTime}}</p>
+      {{comment.msg}}
+    </article>
+  </section>
+</div>

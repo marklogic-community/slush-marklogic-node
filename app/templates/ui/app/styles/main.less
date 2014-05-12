@@ -1,0 +1,73 @@
+@import "../bower_components/bootstrap/less/bootstrap.less";
+@import "../bower_components/font-awesome/less/font-awesome.less";
+@icon-font-path:  "/fonts/";
+@FontAwesomePath:    "/fonts/";
+
+.navbar-brand {
+  background-image: url(/images/logo.jpg)
+}
+
+.feature {
+  margin-top: 5px;
+  margin-right: 5px;
+}
+
+.detail {
+  .desc textarea {
+    width: 100%;
+  }
+
+  .credentials div, .repo div, .version div {
+    display: inline;
+  }
+
+  .maintainer div {
+    display: inline-block;
+  }
+
+  .host-type div {
+    display: inline-block;
+  }
+}
+
+.features-view li {
+  margin-left: 30px;
+}
+
+form .features-edit {
+  margin-left: -10px;
+}
+
+.detail .features-edit {
+  margin-left: -105px;
+}
+
+.bug, .comment {
+  margin-left: 10px;
+  &:nth-child(odd) {
+    background-color: #eee;
+  }
+  div {
+    margin-left: 15px;
+  }
+}
+
+ul.bug-meta {
+  list-style: none;
+  li {
+    display: inline-block;
+    margin-right: 10px;
+  }
+}
+
+.features-edit .inline-controls {
+  margin-top: 10px;
+}
+
+.welcome {
+  margin-top: 14px;
+}
+
+.facet-list .facet a {
+  cursor: pointer;
+}
