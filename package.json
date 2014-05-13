@@ -25,5 +25,17 @@
   "devDependencies": {
     "vows": "0.5.x"
   },
-  "engine": "node >= 0.4.1"
+  "engine": "node >= 0.4.1",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/marklogic/slush-marklogic-node"
+  },
+  "license": "Apache v2",
+  "bugs": {
+    "url": "https://github.com/marklogic/slush-marklogic-node/issues"
+  },
+  "homepage": "https://github.com/marklogic/slush-marklogic-node"
 }
