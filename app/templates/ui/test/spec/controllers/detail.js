@@ -1,6 +1,6 @@
 'use strict';
 
-describe('Controller: DemoCtrl', function () {
+describe('Controller: DetailCtrl', function () {
   var $httpBackend, $rootScope, $scope, createController;
 
   var demoModel =

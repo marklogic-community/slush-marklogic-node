@@ -2,11 +2,10 @@
   'use strict';
 
   angular.module('sample.search')
-    .controller('SearchCtrl', ['$scope', 'MLRest', 'User', '$location', function ($scope, mlRest, user, $location) {
+    .controller('SearchCtrl', ['$scope', 'MLRest', '$location', function ($scope, mlRest, $location) {
       var model = {
         selected: [],
-        text: '',
-        user: user // GJo: a bit blunt way to insert the User service, but seems to work
+        text: ''
       };
 
       var searchContext = mlRest.createSearchContext();

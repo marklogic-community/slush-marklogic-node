@@ -144,54 +144,6 @@
 
       this.$get = function($q, $http) {
         var service = {
-          checkLoginStatus: function() {
-            var d = $q.defer();
-            $http.get('/v1/resources/user-status', {})
-            .success(
-              function(data) {
-                d.resolve(data);
-              })
-            .error(
-              function(reason) {
-                d.reject(reason);
-              });
-            return d.promise;
-          },
-          login: function(username, password) {
-            var d = $q.defer();
-            $http.get(
-              '/v1/resources/user-login',
-              {
-                params: {
-                  'rs:username': username,
-                  'rs:password': password
-                }
-              })
-            .success(
-              function(data) {
-                d.resolve(data);
-              })
-            .error(
-              function(reason) {
-                d.reject(reason);
-              });
-            return d.promise;
-          },
-          logout: function() {
-            var d = $q.defer();
-            $http.get(
-              '/v1/resources/user-logout',
-              {})
-            .success(
-              function(data) {
-                d.resolve(data);
-              })
-            .error(
-              function(reason) {
-                d.reject(reason);
-              });
-            return d.promise;
-          },
           createSearchContext: function(options) {
             return new SearchContext(options, $q, $http);
           },

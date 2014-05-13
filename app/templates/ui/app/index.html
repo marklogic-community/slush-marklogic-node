@@ -25,7 +25,7 @@
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
           <li><a href="/">Search</a></li>
-          <li ng-show="model.user.authenticated"><a href="/create">Create</a></li>
+          <li><a href="/create">Create</a></li>
         </ul>
         <form class="navbar-form navbar-left" role="search">
           <div class="form-group">
@@ -33,7 +33,6 @@
           </div>
           <button type="submit" class="btn btn-default" ng-click="textSearch()">Submit</button>
         </form>
-        <div ml-user username="model.user.name" password="model.user.password" authenticated="model.user.authenticated" login="login(username, password)" logout="logout()" loginerror="model.user.loginError"/>
       </div><!-- /.navbar-collapse -->
     </nav>
     <!-- Add your site or application content here -->
@@ -52,22 +51,15 @@
 
     <!-- build:js scripts/scripts.js -->
     <script src="scripts/app.js"></script>
-    <script src="scripts/directives/editable.js"></script>
-    <script src="scripts/directives/features.js"></script>
-    <script src="user/user.js"></script>
-    <script src="user/user-dir.js"></script>
-    <script src="user/user-srv.js"></script>
     <script src="search/search.js"></script>
     <script src="search/search-ctrl.js"></script>
     <script src="search/facets-dir.js"></script>
     <script src="search/results-dir.js"></script>
+    <script src="detail/detail.js"></script>
+    <script src="detail/detail-ctrl.js"></script>
     <script src="common/common.js"></script>
     <script src="common/services/mlrest.js"></script>
-    <script src="scripts/directives/add-comment.js"></script>
-    <script src="scripts/services/features.js"></script>
-    <script src="scripts/controllers/demo.js"></script>
     <script src="scripts/controllers/create.js"></script>
-    <script src="scripts/controllers/profile.js"></script>
     <!-- endbuild -->
   </body>
 </html>

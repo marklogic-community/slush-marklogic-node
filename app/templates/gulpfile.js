@@ -20,11 +20,11 @@ var url = require('url');
 var options = {
   appPort: argv['app-port'] || 9070,
   mlHost: argv['ml-host'] || 'localhost',
-  mlPort: argv['ml-port'] || '8070'
+  mlPort: argv['ml-port'] || '8040'
 };
 
 gulp.task('jshint', function() {
-  gulp.src('ui/app/scripts/**/*.js')
+  gulp.src('ui/app/**/*.js')
     .pipe(jshint())
     .pipe(jshint.reporter('default'));
 });
@@ -38,7 +38,7 @@ gulp.task('less', function() {
 
 // Concatenate & Minify JS
 gulp.task('scripts', function() {
-  return gulp.src('./ui/app/scripts/**/*.js')
+  return gulp.src('./ui/app/**/*.js')
     .pipe(concat('all.js'))
     .pipe(gulp.dest('dist'))
     .pipe(rename('all.min.js'))
@@ -48,7 +48,7 @@ gulp.task('scripts', function() {
 
 // Watch Files For Changes
 gulp.task('watch', function() {
-  gulp.watch('./ui/app/scripts/**/*.js', ['jshint', 'scripts']);
+  gulp.watch('./ui/app/**/*.js', ['jshint', 'scripts']);
   gulp.watch('./ui/app/styles/*.less', ['less']);
 });
 
