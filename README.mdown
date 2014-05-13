@@ -1,0 +1,29 @@
+# MarkLogic-Node Generator
+
+This is a [Slush](https://github.com/klei/slush) generator that produces a skeleton application with the following components:
+
+- [AngularJS](https://angularjs.org/)
+- [Gulp](http://gulpjs.com/)
+- [node.js](http://nodejs.org/): very thin layer, hosting the Angular code and proxying MarkLogic REST API requests
+- [Roxy Deployer](https://github.com/marklogic/roxy): bootstrap MarkLogic databases, application servers, etc; scaffolding for MarkLogic REST API service extensions
+
+# Use
+
+## Required
+
+- node
+- npm
+- gulp
+- slush
+
+    $ npm install -g slush
+
+## Install the generator
+
+    $ npm install -g slush-marklogic-node
+
+## Run the generator
+
+Go to the directory where your new project will be created (the parent). Then:
+
+    $ slush <app name>
