@@ -24,7 +24,7 @@ function getNameProposal () {
 }
 
 // Download the Roxy ml script from GitHub
-function getRoxyScript(appName) {
+function getRoxyScript(appName, appType, branch) {
   'use strict';
 
   var d = q.defer(),
@@ -46,8 +46,13 @@ function getRoxyScript(appName) {
         d.reject(err);
       }
       else {
-        console.log ('chmod done; appName=' + appName);
-        d.resolve({ 'script': scriptName, 'app': appName});
+        console.log ('chmod done; appName=' + appName + '; appType=' + appType + '; branch=' + branch);
+        d.resolve({
+          'script': scriptName,
+          'app': appName,
+          'appType': appType,
+          'branch': branch
+        });
       }
     });
   });
@@ -56,19 +61,22 @@ function getRoxyScript(appName) {
 }
 
 // Run the Roxy "ml new" command for the new project
-function runRoxy(names) {
+function runRoxy(config) {
   'use strict';
 
-  var scriptName = names.script,
-    appName = names.app;
+  var scriptName = config.script,
+    appName = config.app,
+    appType = config.appType,
+    branch = config.branch;
 
   var d = q.defer();
 
   var args = [
     'new',
     appName,
-    '--app-type=rest',
-    '--server-version=7'
+    '--app-type=' + appType,
+    '--server-version=7',
+    '--branch=' + branch
   ];
 
   console.log('Spawning Roxy new command: ' + scriptName + ' ' + args.join(' '));
@@ -86,14 +94,16 @@ gulp.task('default', function (done) {
   'use strict';
 
   inquirer.prompt([
-    {type: 'input', name: 'name', message: 'Name for the app?', default: getNameProposal()}
+    {type: 'input', name: 'name', message: 'Name for the app?', default: getNameProposal()},
+    {type: 'rawlist', name: 'appType', message: 'Roxy App Type?', choices: ['rest', 'mvc', 'hybrid'], default: 'rest'},
+    {type: 'input', name: 'branch', message: 'Roxy Branch?', default: 'master'}
   ],
   function (answers) {
 
     answers.nameDashed = _.slugify(answers.name);
     answers.modulename = _.camelize(answers.nameDashed);
 
-    getRoxyScript(answers.nameDashed)
+    getRoxyScript(answers.nameDashed, answers.appType, answers.branch)
       .then(runRoxy)
       .then(function() {
         // Copy over the Angular files

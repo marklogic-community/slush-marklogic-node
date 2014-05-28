@@ -26,4 +26,4 @@ This is a [Slush](https://github.com/klei/slush) generator that produces a skele
 
 Go to the directory where your new project will be created (the parent). Then:
 
-    $ slush <app name>
+    $ slush marklogic-node <app name>
