@@ -1,0 +1,48 @@
+<div ng-show="model.user.authenticated">
+  <div class="row">
+    <div class="col-sm-2"></div>
+    <h2 class="col-sm-10">Edit your profile</h2>
+  </div>
+  <form class="form-horizontal">
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Full name</label>
+      <div class="col-sm-2">
+        <input type="text" class="form-control" placeholder="full name of user" ng-model="model.user.fullname">
+      </div>
+    </div>
+    <div class="form-group">
+      <!-- show empty field if no emails yet -->
+      <label class="col-sm-2 control-label" ng-show="!model.user.emails.length">E-mail(s)</label>
+      <div class="row" ng-show="!model.user.emails.length">
+        <div class="col-sm-6">
+            <input type="email" class="form-control" placeholder="e-mail of user" ng-model="model.user.emails[0]">
+        </div>
+      </div>
+      <!-- repeat if there are emails -->
+      <div ng-repeat="email in model.user.emails track by $index">
+        <label class="col-sm-2 control-label" ng-show="$first">E-mail(s)</label>
+        <label class="col-sm-2 control-label" ng-hide="$first">&#160;</label>
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="input-group">
+              <input type="email" class="form-control" placeholder="e-mail of user" ng-model="model.user.emails[$index]">
+              <span class="input-group-addon" ng-click="removeEmail($index)">
+                <span class="glyphicon glyphicon-remove"></span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- always show add button -->
+      <div class="row col-sm-offset-2 col-sm-1">
+        <button class="btn btn-default" ng-click="addEmail()">
+          <span class="glyphicon glyphicon-plus"></span>
+        </button>
+      </div>
+    </div>
+    <div class="row">
+      <a class="col-sm-offset-5 col-sm-1" href="/">Cancel</a>
+      <button class="col-sm-2 btn btn-primary" ng-click="submit()">Submit</button>
+    </div>
+  </form>
+</div>

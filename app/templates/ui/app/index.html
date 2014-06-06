@@ -33,9 +33,11 @@
           </div>
           <button type="submit" class="btn btn-default" ng-click="textSearch()">Submit</button>
         </form>
+        <div ml-user username="model.user.name" password="model.user.password" authenticated="model.user.authenticated" login="login(username, password)" logout="logout()" loginerror="model.user.loginError"/>
       </div><!-- /.navbar-collapse -->
     </nav>
     <!-- Add your site or application content here -->
+    <div ng-show="!model.user.authenticated">Please log in to see content</div>
     <div class="container" ng-view=""></div>
 
 
@@ -57,9 +59,13 @@
     <script src="search/results-dir.js"></script>
     <script src="detail/detail.js"></script>
     <script src="detail/detail-ctrl.js"></script>
+    <script src="user/user.js"></script>
+    <script src="user/user-dir.js"></script>
+    <script src="user/user-srv.js"></script>
     <script src="common/common.js"></script>
     <script src="common/services/mlrest.js"></script>
     <script src="scripts/controllers/create.js"></script>
+    <script src="scripts/controllers/profile.js"></script>
     <!-- endbuild -->
   </body>
 </html>

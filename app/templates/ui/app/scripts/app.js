@@ -1,5 +1,5 @@
 
-angular.module('sample', ['ngRoute', 'ngCkeditor', 'sample.search', 'sample.common',, 'sample.detail', 'ui.bootstrap'])
+angular.module('sample', ['ngRoute', 'ngCkeditor', 'sample.user', 'sample.search', 'sample.common',, 'sample.detail', 'ui.bootstrap'])
   .config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
 
     'use strict';
@@ -17,6 +17,10 @@ angular.module('sample', ['ngRoute', 'ngCkeditor', 'sample.search', 'sample.comm
       .when('/detail', {
         templateUrl: '/detail/detail.html',
         controller: 'DetailCtrl'
+      })
+      .when('/profile', {
+        templateUrl: '/views/profile.html',
+        controller: 'ProfileCtrl'
       })
       .otherwise({
         redirectTo: '/'

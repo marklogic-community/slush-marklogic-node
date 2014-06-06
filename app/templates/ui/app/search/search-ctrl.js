@@ -2,10 +2,11 @@
   'use strict';
 
   angular.module('sample.search')
-    .controller('SearchCtrl', ['$scope', 'MLRest', '$location', function ($scope, mlRest, $location) {
+    .controller('SearchCtrl', ['$scope', 'MLRest', 'User', '$location', function ($scope, mlRest, user, $location) {
       var model = {
         selected: [],
-        text: ''
+        text: '',
+        user: user
       };
 
       var searchContext = mlRest.createSearchContext();
@@ -15,7 +16,9 @@
       }
 
       (function init() {
-        searchContext.search().then(updateSearchResults);
+        searchContext
+          .search()
+          .then(updateSearchResults);
       })();
 
       angular.extend($scope, {
@@ -26,7 +29,10 @@
           });
           if ( existing.length === 0 ) {
             model.selected.push({facet: facet, value: value});
-            searchContext.selectFacet(facet, value).then(updateSearchResults);
+            searchContext
+              .selectFacet(facet, value)
+              .search()
+              .then(updateSearchResults);
           }
         },
         clearFacet: function(facet, value) {
@@ -37,12 +43,26 @@
               break;
             }
           }
-          searchContext.clearFacet(facet, value).then(updateSearchResults);
+          searchContext
+            .clearFacet(facet, value)
+            .search()
+            .then(updateSearchResults);
         },
         textSearch: function() {
-          searchContext.setText(model.text).then(updateSearchResults);
+          searchContext
+            .setText(model.text)
+            .search()
+            .then(updateSearchResults);
           $location.path('/');
         }
       });
+
+      $scope.$watch('model.user.authenticated', function(newValue, oldValue) {
+        // authentication status has changed; rerun search
+        searchContext.search().then(updateSearchResults, function(error) {
+          model.search = {};
+        });
+      });
+
     }]);
 }());

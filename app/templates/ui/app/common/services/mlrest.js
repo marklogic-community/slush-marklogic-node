@@ -48,8 +48,13 @@
       function SearchContext(options, $q, $http) {
         options = options || {};
 
+        var boostQueries = [];
         var facetSelections = {};
         var textQuery = null;
+        var snippet = 'compact';
+        var sort = null;
+        var start = 1;
+
 
         (function init(){
           options.queryOptions = options.queryOptions ? options.queryOptions : 'all';
@@ -63,7 +68,8 @@
               params: {
                 format: 'json',
                 options: options.queryOptions,
-                structuredQuery: getStructuredQuery()
+                structuredQuery: getStructuredQuery(),
+                start: start
               }
             })
           .success(
@@ -78,34 +84,119 @@
           return d.promise;
         }
 
-        function getStructuredQuery() {
-          var structured = {
-            query: {
-              'and-query': {
-                'queries': []
-              }
-            }
-          };
+        function buildFacetQuery(queries) {
           var facet;
           for (facet in facetSelections) {
-            if (facetSelections.hasOwnProperty(facet)) {
-              structured.query['and-query'].queries.push(
-                {
-                  'range-constraint-query': {
-                    'constraint-name': facet,
-                    'value': facetSelections[facet]
+            if (facetSelections.hasOwnProperty(facet) && facetSelections[facet].length > 0) {
+              // TODO: derive constraint type from search options!
+              if (facet === 'Dataset') {
+                queries.push(
+                  {
+                    'collection-constraint-query': {
+                      'constraint-name': 'Dataset',
+                      'uri': [facetSelections[facet]]
+                    }
                   }
-                }
-              );
+                );
+              } else if (options.customConstraintNames !== undefined && options.customConstraintNames.indexOf(facet) > -1) {
+                queries.push(
+                  {
+                    'custom-constraint-query' : {
+                      'constraint-name': facet,
+                      'value': facetSelections[facet]
+                    }
+                  }
+                );
+              } else  {
+                queries.push(
+                  {
+                    'range-constraint-query' : {
+                      'constraint-name': facet,
+                      'value': facetSelections[facet]
+                    }
+                  }
+                );
+              }
             }
           }
+        }
+
+        function getStructuredQuery() {
+          var queries = [];
+          var structured;
+
+          buildFacetQuery(queries);
+
           if (textQuery !== null) {
-            structured.query['and-query'].queries.push({
-              'term-query': {
-                text: textQuery
+            queries.push({
+              'qtext': textQuery
+            });
+          }
+
+          if (boostQueries.length > 0) {
+            structured = {
+              query: {
+                'queries': [{
+                  'boost-query': {
+                    'matching-query': {
+                      'and-query': {
+                        'queries': queries
+                      }
+                    },
+                    'boosting-query': {
+                      'and-query': {
+                        'queries': boostQueries
+                      }
+                    }
+                  }
+                }]
+              }
+            };
+          } else {
+            structured = {
+              query: {
+                'queries': [{
+                  'and-query': {
+                    'queries': queries
+                  }
+                }]
+              }
+            };
+          }
+
+          if (options.includeProperties) {
+            structured = {
+              query: {
+                'queries': [{
+                  'or-query': {
+                    'queries': [
+                      structured,
+                      { 'properties-query': structured }
+                    ]
+                  }
+                }]
+              }
+            };
+          }
+
+          if (sort) {
+            structured.query.queries.push({
+              'operator-state': {
+                'operator-name': 'sort',
+                'state-name': sort
               }
             });
           }
+
+          if (snippet) {
+            structured.query.queries.push({
+              'operator-state': {
+                'operator-name': 'results',
+                'state-name': snippet
+              }
+            });
+          }
+
           return structured;
         }
 
@@ -116,13 +207,17 @@
             } else {
               facetSelections[facet].push(value);
             }
-            return runSearch();
+            return this;
           },
           clearFacet: function(facet, value) {
             facetSelections[facet] = facetSelections[facet].filter( function( facetValue ) {
               return facetValue !== value;
             });
-            return runSearch();
+            return this;
+          },
+          clearAllFacets: function() {
+            facetSelections = {};
+            return this;
           },
           getQueryOptions: function() {
             return options.queryOptions;
@@ -137,7 +232,16 @@
             } else {
               textQuery = null;
             }
-            return runSearch();
+            return this;
+          },
+          setPage: function(page, size) {
+            var pageSize = size > 0 ? size : 10;
+            start = 1 + (page - 1) * pageSize;
+            return this;
+          },
+          sortBy: function(sortField) {
+            sort = sortField;
+            return this;
           }
         };
       }

@@ -90,6 +90,20 @@ function runRoxy(config) {
   return d.promise;
 }
 
+// Make some changes to Roxy's deploy/build.properties file for the out-of-the-box application
+function configRoxy() {
+  'use strict';
+
+  console.log('Configuring Roxy');
+
+  var content = fs.readFileSync('deploy/build.properties', { encoding: 'utf8' });
+
+  // set the authentication-method property to digestbasic
+  content = content.replace(/^authentication\-method=digest/m, 'authentication-method=digestbasic');
+
+  fs.writeFileSync('deploy/build.properties', content);
+}
+
 gulp.task('default', function (done) {
   'use strict';
 
@@ -111,6 +125,9 @@ gulp.task('default', function (done) {
         var files = [__dirname + '/app/templates/**'];
 
         process.chdir('./' + answers.nameDashed);
+
+        // this runs asynch, but nothing depends on its results
+        configRoxy();
 
         gulp.src(files)
           // change _foo to .foo

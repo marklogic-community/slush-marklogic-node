@@ -2,20 +2,26 @@
 
 'use strict';
 
+/*
+ * @author Dave Cassel - https://github.com/dmcassel
+ *
+ * This file contains the Gulp tasks you can run. As written, you'll typically run two processes :
+ * $ gulp
+ * - this will watch the file system for changes, running JSHint, compiling lesscss.js files, and minifying JS
+ * $ gulp server
+ * - run a node server, hosting the AngularJS application
+ */
+
 var gulp = require('gulp');
 
 var argv = require('yargs').argv;
 var concat = require('gulp-concat');
-var connect = require('connect');
-var http = require('http');
 var jshint = require('gulp-jshint');
 var less = require('gulp-less');
 var karma = require('karma').server;
 var path = require('path');
-var proxy = require('proxy-middleware');
 var rename = require('gulp-rename');
 var uglify = require('gulp-uglify');
-var url = require('url');
 
 var options = {
   appPort: argv['app-port'] || 9070,
@@ -74,10 +80,8 @@ gulp.task('autotest', function() {
 });
 
 gulp.task('server', function() {
-  var app = connect()
-    .use(connect.static('ui/app'))
-    .use('/v1', proxy(url.parse('http://' + options.mlHost + ':' + options.mlPort + '/v1')));
-  http.createServer(app).listen(options.appPort, 'localhost');
+  var server = require('./server.js').buildExpress(options);
+  server.listen(options.appPort);
 });
 
 // Default Task
