@@ -37,14 +37,14 @@ gulp.task('jshint', function() {
 
 // Compile Our Less
 gulp.task('less', function() {
-  return gulp.src('ui/app/styles/*.less')
+  return gulp.src(['ui/app/**/*.js', '!ui/app/bower_components/**/*.js', '!ui/app/scripts/vendor/**/*.js'])
     .pipe(less())
     .pipe(gulp.dest('ui/app/styles/'));
 });
 
 // Concatenate & Minify JS
 gulp.task('scripts', function() {
-  return gulp.src('./ui/app/**/*.js')
+  return gulp.src(['ui/app/**/*.js', '!ui/app/bower_components/**/*.js', '!ui/app/scripts/vendor/**/*.js'])
     .pipe(concat('all.js'))
     .pipe(gulp.dest('dist'))
     .pipe(rename('all.min.js'))
