@@ -1,5 +1,5 @@
 
-angular.module('sample', ['ngRoute', 'ngCkeditor', 'sample.user', 'sample.search', 'sample.common',, 'sample.detail', 'ui.bootstrap'])
+angular.module('sample', ['ngRoute', 'ngCkeditor', 'sample.user', 'sample.search', 'sample.common', 'sample.detail', 'ui.bootstrap', 'compile'])
   .config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
 
     'use strict';
