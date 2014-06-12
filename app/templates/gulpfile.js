@@ -77,7 +77,7 @@ gulp.task('server', function() {
   var app = connect()
     .use(connect.static('ui/app'))
     .use('/v1', proxy(url.parse('http://' + options.mlHost + ':' + options.mlPort + '/v1')));
-  http.createServer(app).listen(options.appPort, 'localhost');
+  http.createServer(app).listen(options.appPort);
 });
 
 // Default Task

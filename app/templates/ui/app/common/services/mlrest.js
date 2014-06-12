@@ -147,15 +147,19 @@
           createSearchContext: function(options) {
             return new SearchContext(options, $q, $http);
           },
-          getDocument: function(uri) {
+          getDocument: function(uri, options) {
             var d = $q.defer();
+            if (options === undefined || options === null) {
+              options = {};
+            }
+            angular.extend(options, {
+              format: 'json',
+              uri: uri
+            });
             $http.get(
               '/v1/documents',
               {
-                params: {
-                  format: 'json',
-                  uri: uri
-                }
+                params: options
               })
             .success(
               function(data) {
