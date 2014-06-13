@@ -35,4 +35,8 @@ When the generator is finished, start up your application by:
 - $ ./ml local bootstrap
 - $ ./ml local deploy modules
 - edit gulpfile.js. In the options section near the top, set your desired ports
+- $ gulp # this will watch the .less file for changes and compile them to .css
 - $ gulp server
+
+# Data
+The application assumes that you're storing JSON data. This shows up in the default format request for the MLRest service's searchContext, the detailController's (detail-ctrl.js) request to get a document, and in the out-of-the-box detail view.
