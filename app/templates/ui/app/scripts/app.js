@@ -19,7 +19,7 @@ angular.module('sample', ['ngRoute', 'ngCkeditor', 'sample.user', 'sample.search
         controller: 'DetailCtrl'
       })
       .when('/profile', {
-        templateUrl: '/views/profile.html',
+        templateUrl: '/user/profile.html',
         controller: 'ProfileCtrl'
       })
       .otherwise({
