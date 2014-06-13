@@ -1,5 +1,5 @@
 // Copied from https://docs.angularjs.org/api/ng/service/$compile
-angular.module('compile', [], function($compileProvider) {
+angular.module('sample.create', [], function($compileProvider) {
   'use strict';
   // configure new 'compile' directive by passing a directive
   // factory function. The factory function injects the '$compile'

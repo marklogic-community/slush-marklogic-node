@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  angular.module('sample')
+  angular.module('sample.create')
     .controller('CreateCtrl', ['$scope', 'MLRest', 'Features', '$window', function ($scope, mlRest, features, win) {
       var model = {
         demo: {
@@ -16,8 +16,7 @@
           comments: []
         },
         featureChoices: features.list(),
-        browserChoices: ['Firefox', 'Chrome', 'IE'],
-        user: user // GJo: a bit blunt way to insert the User service, but seems to work
+        browserChoices: ['Firefox', 'Chrome', 'IE']
       };
 
       angular.extend($scope, {

@@ -1,5 +1,8 @@
 
-angular.module('sample', ['ngRoute', 'ngCkeditor', 'sample.user', 'sample.search', 'sample.common', 'sample.detail', 'ui.bootstrap', 'compile'])
+angular.module('sample', [
+  'ngRoute', 'ngCkeditor', 'sample.user', 'sample.search', 'sample.common', 'sample.detail',
+  'ui.bootstrap', 'compile', 'gd.ui.jsonexplorer', 'sample.create'
+])
   .config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
 
     'use strict';
@@ -11,7 +14,7 @@ angular.module('sample', ['ngRoute', 'ngCkeditor', 'sample.user', 'sample.search
         templateUrl: '/search/search.html'
       })
       .when('/create', {
-        templateUrl: '/views/create.html',
+        templateUrl: '/create/create.html',
         controller: 'CreateCtrl'
       })
       .when('/detail', {
