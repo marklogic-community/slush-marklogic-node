@@ -9,10 +9,16 @@
       restrict: 'E',
       scope: {
         results: '=resultList',
+        total: '=total',
+        start: '=start',
+        pageLength: '=pageLength',
+        currentPage: '=currentPage',
+        paginate: '&paginate',
         updateQuery: '&updateQuery'
       },
       templateUrl: '/search/results-dir.html',
-      link: function() {
+      link: function(scope) {
+        scope.Math = window.Math;
       }
     };
   }]);
