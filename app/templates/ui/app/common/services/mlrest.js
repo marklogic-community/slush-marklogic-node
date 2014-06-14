@@ -252,7 +252,6 @@
             return new SearchContext(options, $q, $http);
           },
           getDocument: function(uri, options) {
-            var d = $q.defer();
             if (options === undefined || options === null) {
               options = {};
             }
@@ -260,20 +259,11 @@
               format: 'json',
               uri: uri
             });
-            $http.get(
+            return $http.get(
               '/v1/documents',
               {
                 params: options
-              })
-            .success(
-              function(data) {
-                d.resolve(data);
-              })
-            .error(
-              function(reason) {
-                d.reject(reason);
               });
-            return d.promise;
           },
           createDocument: function(doc, options) {
             // send a POST request to /v1/documents

@@ -17,7 +17,7 @@ describe('Controller: CreateCtrl', function () {
       }
     };
 
-    module('sample');
+    module('sample.create');
     module(function($provide) {
       $provide.value('$window', win);
       $provide.value('MLJS', mljs);

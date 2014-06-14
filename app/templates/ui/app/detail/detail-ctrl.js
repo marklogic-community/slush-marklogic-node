@@ -9,8 +9,8 @@
         detail: {}
       };
 
-      mlRest.getDocument(uri, { format: 'json' }).then(function(data) {
-        model.detail = data;
+      mlRest.getDocument(uri, { format: 'json' }).then(function(response) {
+        model.detail = response.data;
       });
 
       angular.extend($scope, {

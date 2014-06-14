@@ -17,6 +17,8 @@
     "yargs": "^1.2.1"
   },
   "devDependencies": {
+    "karma-jasmine": "^0.1.5",
+    "karma-phantomjs-launcher": "^0.1.4"
   },
   "engines": {
     "node": ">=0.8.0"

@@ -23,9 +23,11 @@ module.exports = function(config) {
       'ui/app/bower_components/ckeditor/ckeditor.js',
       'ui/app/bower_components/ng-ckeditor/ng-ckeditor.js',
       'ui/app/bower_components/mlFacets/dist/ml-facets.js',
-      'ui/app/scripts/**/*.html',
-      'ui/app/scripts/**/*.js',
-      'ui/test/**/*.js'
+      'ui/app/common/**/*.js',
+      'ui/app/create/**/*.js',
+      // 'ui/test/**/*.js'
+      'ui/test/helpers.js',
+      'ui/test/spec/services/*.js'
     ],
 
     // generate js files from html templates
