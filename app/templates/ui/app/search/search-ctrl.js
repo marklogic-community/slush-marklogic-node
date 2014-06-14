@@ -54,6 +54,12 @@
             .search()
             .then(updateSearchResults);
           $location.path('/');
+        },
+        pageChanged: function(page) {
+          searchContext
+            .setPage(page, model.pageLength)
+            .search()
+            .then(updateSearchResults);
         }
       });
 

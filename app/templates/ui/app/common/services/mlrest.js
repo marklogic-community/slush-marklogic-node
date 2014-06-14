@@ -58,6 +58,7 @@
 
         (function init(){
           options.queryOptions = options.queryOptions ? options.queryOptions : 'all';
+          options.pageLength = options.pageLength ? options.pageLength : 10;
         })();
 
         function runSearch() {
@@ -69,7 +70,8 @@
                 format: 'json',
                 options: options.queryOptions,
                 structuredQuery: getStructuredQuery(),
-                start: start
+                start: start,
+                pageLength: options.pageLength
               }
             })
           .success(
@@ -234,9 +236,8 @@
             }
             return this;
           },
-          setPage: function(page, size) {
-            var pageSize = size > 0 ? size : 10;
-            start = 1 + (page - 1) * pageSize;
+          setPage: function(page) {
+            start = 1 + (page - 1) * options.pageLength;
             return this;
           },
           sortBy: function(sortField) {
