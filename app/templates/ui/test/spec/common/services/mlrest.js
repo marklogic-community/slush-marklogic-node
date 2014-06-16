@@ -102,4 +102,35 @@ describe('MLRest', function () {
     expect(facetQuery['range-constraint-query'].value[0]).toEqual('bar');
   });
 
+  it('clears a facet correctly', function() {
+    var searchContext = mlRest.createSearchContext();
+    // make one facet selection:
+    searchContext.selectFacet('foo', 'bar');
+    // make another
+    searchContext.selectFacet('cartoon', 'bugs bunny');
+    var fullQuery = JSON.stringify(searchContext.getStructuredQuery());
+    var fooQuery = fullQuery.match('"constraint-name":\s*"foo"');
+    expect(fooQuery).not.toBeNull();
+    var cartoonQuery = fullQuery.match('"constraint-name":\s*"cartoon"');
+    expect(cartoonQuery).not.toBeNull();
+
+    // now clear one selection:
+    searchContext.clearFacet('foo', 'bar');
+
+    fullQuery = JSON.stringify(searchContext.getStructuredQuery());
+    fooQuery = fullQuery.match('"constraint-name":\s*"foo"');
+    expect(fooQuery).toBeNull();
+    cartoonQuery = fullQuery.match('"constraint-name":\s*"cartoon"');
+    expect(cartoonQuery).not.toBeNull();
+
+    // and clear the other one:
+    searchContext.clearFacet('cartoon', 'bugs bunny');
+
+    fullQuery = JSON.stringify(searchContext.getStructuredQuery());
+    fooQuery = fullQuery.match('"constraint-name":\s*"foo"');
+    expect(fooQuery).toBeNull();
+    cartoonQuery = fullQuery.match('"constraint-name":\s*"cartoon"');
+    expect(cartoonQuery).toBeNull();
+
+  });
 });
