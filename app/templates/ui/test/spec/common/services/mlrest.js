@@ -92,4 +92,14 @@ describe('MLRest', function () {
     expect(actual).toMatch({"operator-state":{"operator-name":"sort","state-name":"blah"}});
   });
 
+  it('selects facets correctly', function() {
+    var searchContext = mlRest.createSearchContext();
+    var fullQuery = JSON.stringify(searchContext.selectFacet('foo', 'bar').getStructuredQuery());
+    var facetQuery = JSON.parse('{' + fullQuery.match('"range-constraint-query":\s*{[^}]+}')[0] + '}');
+    expect(facetQuery['range-constraint-query']['constraint-name']).toEqual('foo');
+    expect(Array.isArray(facetQuery['range-constraint-query'].value)).toBeTruthy();
+    expect(facetQuery['range-constraint-query'].value.length).toEqual(1);
+    expect(facetQuery['range-constraint-query'].value[0]).toEqual('bar');
+  });
+
 });
