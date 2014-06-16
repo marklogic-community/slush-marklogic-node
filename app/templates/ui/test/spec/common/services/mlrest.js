@@ -94,7 +94,9 @@ describe('MLRest', function () {
 
   it('selects facets correctly', function() {
     var searchContext = mlRest.createSearchContext();
+    // turn the structured query into a JSON string...
     var fullQuery = JSON.stringify(searchContext.selectFacet('foo', 'bar').getStructuredQuery());
+    // ... grab the part I want and turn that back into JSON for easy access.
     var facetQuery = JSON.parse('{' + fullQuery.match('"range-constraint-query":\s*{[^}]+}')[0] + '}');
     expect(facetQuery['range-constraint-query']['constraint-name']).toEqual('foo');
     expect(Array.isArray(facetQuery['range-constraint-query'].value)).toBeTruthy();
