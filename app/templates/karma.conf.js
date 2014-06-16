@@ -27,7 +27,7 @@ module.exports = function(config) {
       'ui/app/create/**/*.js',
       // 'ui/test/**/*.js'
       'ui/test/helpers.js',
-      'ui/test/spec/services/*.js'
+      'ui/test/spec/common/**/*.js'
     ],
 
     // generate js files from html templates
