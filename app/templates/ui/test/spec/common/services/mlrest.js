@@ -133,4 +133,30 @@ describe('MLRest', function () {
     expect(cartoonQuery).toBeNull();
 
   });
+
+  it('clears all facets correctly', function() {
+    var fullQuery, fooQuery, cartoonQuery;
+    var searchContext = mlRest.createSearchContext();
+    // make one facet selection:
+    searchContext.selectFacet('foo', 'bar');
+    // make another
+    searchContext.selectFacet('cartoon', 'bugs bunny');
+
+    fullQuery = JSON.stringify(searchContext.getStructuredQuery());
+    fooQuery = fullQuery.match('"constraint-name":\s*"foo"');
+    expect(fooQuery).not.toBeNull();
+    cartoonQuery = fullQuery.match('"constraint-name":\s*"cartoon"');
+    expect(cartoonQuery).not.toBeNull();
+
+    // clear both selections
+    searchContext.clearAllFacets();
+
+    fullQuery = JSON.stringify(searchContext.getStructuredQuery());
+    fooQuery = fullQuery.match('"constraint-name":\s*"foo"');
+    expect(fooQuery).toBeNull();
+    cartoonQuery = fullQuery.match('"constraint-name":\s*"cartoon"');
+    expect(cartoonQuery).toBeNull();
+
+  });
+
 });
