@@ -84,4 +84,12 @@ describe('MLRest', function () {
     expect(actual['page-length']).toEqual(5);
   });
 
+  it('sets the sort operator correctly', function() {
+    // this test assumes that the sort operator is called "sort"; the service code
+    // makes this assumption as well. 
+    var searchContext = mlRest.createSearchContext();
+    var actual = JSON.stringify(searchContext.sortBy('blah').getStructuredQuery());
+    expect(actual).toMatch({"operator-state":{"operator-name":"sort","state-name":"blah"}});
+  });
+
 });
