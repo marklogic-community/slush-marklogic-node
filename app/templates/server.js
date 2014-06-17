@@ -46,6 +46,12 @@ exports.buildExpress = function(options) {
       headers: req.headers,
       auth: getAuth(options, req.session)
     }, function(response) {
+      // some requests (POST /v1/documents) return a location header. Make sure 
+      // that gets back to the client. 
+      if (response.headers.location) {
+        res.header('location', response.headers.location);
+      }
+
       response.on('data', function(chunk) {
         res.write(chunk);
       });
@@ -195,6 +201,7 @@ exports.buildExpress = function(options) {
   // for paths that should be handled by AngularJS, add a line here similar to /profile.
   app.use('/profile', express.static('ui/app'));
   app.use('/detail', express.static('ui/app'));
+  app.use('/create', express.static('ui/app'));
 
   return app;
 };
