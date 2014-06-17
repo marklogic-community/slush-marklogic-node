@@ -47,8 +47,8 @@
             extension: '.json',
             'perm:demo-cat-role': 'read',
             'perm:demo-cat-registered-role': 'update'
-          }).then(function(data) {
-            win.location.href = '/detail?uri=' + data.replace(/(.*\?uri=)/, '');
+          }).then(function(data, status, headers, config) {
+            win.location.href = '/detail?uri=' + headers('location').replace(/(.*\?uri=)/, '');
           });
         }
       });

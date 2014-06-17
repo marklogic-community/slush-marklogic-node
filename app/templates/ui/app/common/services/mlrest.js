@@ -272,19 +272,12 @@
           },
           createDocument: function(doc, options) {
             // send a POST request to /v1/documents
-            var d = $q.defer();
-            $http.post(
+            return $http.post(
               '/v1/documents',
               doc,
               {
                 params: options
-              })
-              .success(function(data, status, headers, config) {
-                d.resolve(headers('location'));
-              }).error(function(reason) {
-                d.reject(reason);
               });
-            return d.promise;
           },
           updateDocument: function(doc, options) {
             // send a PUT request to /v1/documents
