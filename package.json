@@ -12,7 +12,7 @@
     "marklogic"
   ],
   "dependencies": {
-    "gulp": "~3.6.1",
+    "gulp": "3.8.x",
     "gulp-install": "~0.1.1",
     "gulp-conflict": "~0.1.1",
     "gulp-template": "~0.1.1",
@@ -23,7 +23,6 @@
     "q": "1.0.x"
   },
   "devDependencies": {
-    "vows": "0.5.x"
   },
   "engine": "node >= 0.4.1",
   "scripts": {
