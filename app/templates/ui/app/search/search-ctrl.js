@@ -60,6 +60,11 @@
             .setPage(page, model.pageLength)
             .search()
             .then(updateSearchResults);
+        },
+        getSuggestions: function(val) {
+          return mlRest.callExtension('extsuggest', { 'method' : 'GET', 'params' : { 'rs:pqtxt' : val, 'rs:options' : 'all'} }).then(function(res){
+            return res.suggestions;
+          });
         }
       });
 
