@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<options xmlns="http://marklogic.com/appservices/search">
+  <search-option>unfiltered</search-option>
+  <page-length>10</page-length>
+  <term apply="term">
+    <empty apply="all-results"/>
+    <term-option>punctuation-insensitive</term-option>
+    <term-option>stemmed</term-option>
+  </term>
+  <grammar>
+    <quotation>"</quotation>
+    <implicit>
+      <cts:and-query strength="20" xmlns:cts="http://marklogic.com/cts"/>
+    </implicit>
+    <starter strength="30" apply="grouping" delimiter=")">(</starter>
+    <starter strength="40" apply="prefix" element="cts:not-query">-</starter>
+    <joiner strength="10" apply="infix" element="cts:or-query" tokenize="word">OR</joiner>
+    <joiner strength="20" apply="infix" element="cts:and-query" tokenize="word">AND</joiner>
+    <joiner strength="30" apply="infix" element="cts:near-query" tokenize="word">NEAR</joiner>
+    <joiner strength="30" apply="near2" consume="2" element="cts:near-query">NEAR/</joiner>
+    <joiner strength="50" apply="constraint">:</joiner>
+    <joiner strength="50" apply="constraint" compare="LT" tokenize="word">LT</joiner>
+    <joiner strength="50" apply="constraint" compare="LE" tokenize="word">LE</joiner>
+    <joiner strength="50" apply="constraint" compare="GT" tokenize="word">GT</joiner>
+    <joiner strength="50" apply="constraint" compare="GE" tokenize="word">GE</joiner>
+    <joiner strength="50" apply="constraint" compare="NE" tokenize="word">NE</joiner>
+  </grammar>
+  <sort-order direction="descending">
+    <score/>
+  </sort-order>
+  <transform-results apply="snippet">
+    <preferred-elements><element ns="" name="body"/></preferred-elements>
+    <max-matches>1</max-matches>
+    <max-snippet-chars>150</max-snippet-chars>
+    <per-match-tokens>20</per-match-tokens>
+  </transform-results>
+  <return-query>1</return-query>
+  <operator name="results">
+    <state name="compact">
+      <transform-results apply="snippet">
+        <preferred-elements><element ns="" name="body"/></preferred-elements>
+        <max-matches>1</max-matches>
+        <max-snippet-chars>150</max-snippet-chars>
+        <per-match-tokens>20</per-match-tokens>
+      </transform-results>
+    </state>
+    <state name="detailed">
+      <transform-results apply="snippet">
+        <preferred-elements><element ns="" name="body"/></preferred-elements>
+        <max-matches>2</max-matches>
+        <max-snippet-chars>400</max-snippet-chars>
+        <per-match-tokens>30</per-match-tokens>
+      </transform-results>
+    </state>
+  </operator>
+  <annotation xmlns="http://marklogic.com/appservices/search">Delta options here</annotation>
+
+  
+  <!-- example facet constraint below -->  
+  <!--
+  <constraint name="myconstraint">
+    <range type="xs:string" facet="true">
+      <facet-option>limit=5</facet-option>
+      <facet-option>frequency-order</facet-option>
+      <facet-option>descending</facet-option>
+      <element ns="" name="my-el"/>
+    </range>
+  </constraint>
+  -->
+    
+  <!-- example suggestion-source below -->
+  <!-- 
+  <suggestion-source ref="myconstraint">
+    <suggestion-option>frequency-order</suggestion-option>
+    <suggestion-option>descending</suggestion-option>
+    <suggestion-option>limit=10</suggestion-option>
+  </suggestion-source>
+  -->
+  
+</options>
