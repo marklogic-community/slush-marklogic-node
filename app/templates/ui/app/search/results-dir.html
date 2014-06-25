@@ -1,4 +1,4 @@
-<pagination boundary-links="true" total-items="total" ng-model="currentPage" items-per-page="pageLength" ng-change="paginate({page: currentPage})" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" ng-show="total > 0"></pagination>
+<pagination boundary-links="true" total-items="total" ng-model="currentPage" items-per-page="pageLength" ng-change="paginate({page: currentPage})" max-size="5" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" ng-show="total > 0"></pagination>
 <span class="search-metrics"ng-show="total > 0">Showing {{start}}-{{Math.min(start + pageLength - 1, total)}} of {{total}}</span>
 <h3 ng-show="total === 0">No results to show</h3>
 <div ng-repeat="result in results">
