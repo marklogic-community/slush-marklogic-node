@@ -6,7 +6,7 @@
     "cookie-parser": "^1.1.0",
     "express": "^4.4.1",
     "express-session": "^1.2.1",
-    "gulp": "^3.6.2",
+    "gulp": "3.8.x",
     "gulp-concat": "^2.2.0",
     "gulp-jshint": "^1.5.5",
     "gulp-karma": "0.0.4",

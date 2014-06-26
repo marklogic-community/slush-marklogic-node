@@ -32,7 +32,10 @@ exports.buildExpress = function(options) {
   app.use(cookieParser());
   // Change this secret to something unique to your application
   app.use(expressSession({secret: '1234567890QWERTY'}));
-  app.use(bodyParser());
+  app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({
+    extended: true
+  }));
 
   // Generic proxy function used by multiple HTTP verbs
   function proxy(req, res) {
@@ -46,8 +49,8 @@ exports.buildExpress = function(options) {
       headers: req.headers,
       auth: getAuth(options, req.session)
     }, function(response) {
-      // some requests (POST /v1/documents) return a location header. Make sure 
-      // that gets back to the client. 
+      // some requests (POST /v1/documents) return a location header. Make sure
+      // that gets back to the client.
       if (response.headers.location) {
         res.header('location', response.headers.location);
       }
