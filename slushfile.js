@@ -126,7 +126,6 @@ gulp.task('default', function (done) {
 
         process.chdir('./' + answers.nameDashed);
 
-        // this runs asynch, but nothing depends on its results
         configRoxy();
 
         gulp.src(files)
