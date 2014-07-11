@@ -23,6 +23,8 @@
     "q": "1.0.x"
   },
   "devDependencies": {
+    "readable-stream": "^1.0.27-1",
+    "vows": "0.5.x"
   },
   "engine": "node >= 0.4.1",
   "scripts": {
