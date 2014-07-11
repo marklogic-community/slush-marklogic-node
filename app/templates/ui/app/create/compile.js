@@ -1,6 +1,8 @@
 // Copied from https://docs.angularjs.org/api/ng/service/$compile
 angular.module('sample.create')
   .directive('compile', function($compile) {
+    'use strict';
+
     // directive factory creates a link function
     return function(scope, element, attrs) {
       scope.$watch(
@@ -22,4 +24,3 @@ angular.module('sample.create')
       );
     };
   });
-});
