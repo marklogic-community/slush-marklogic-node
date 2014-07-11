@@ -1,0 +1,44 @@
+{
+  "id": 4,
+  "guid": "695d2c3b-4356-48cb-9e88-9a11af88ea5b",
+  "isActive": true,
+  "balance": "$3,248.26",
+  "picture": "http://placehold.it/32x32",
+  "age": 28,
+  "eyeColor": "brown",
+  "name": "Samantha Blair",
+  "gender": "female",
+  "company": "PRIMORDIA",
+  "email": "samanthablair@primordia.com",
+  "phone": "+1 (965) 405-2914",
+  "address": "111 Cook Street, Idamay, Indiana, 9169",
+  "about": "Consectetur nulla qui quis mollit nostrud exercitation qui occaecat dolor officia labore sunt sunt. Ad do ad sunt magna veniam. In ex consequat nisi dolore laborum est. Ex adipisicing aliqua reprehenderit duis excepteur fugiat mollit. Dolore aliqua Lorem cupidatat amet duis do consectetur sit eu nulla enim velit.\r\n",
+  "registered": "2014-02-19T08:47:10 +05:00",
+  "latitude": 0.942002,
+  "longitude": 154.686098,
+  "tags": [
+    "aliqua",
+    "irure",
+    "cupidatat",
+    "enim",
+    "eu",
+    "commodo",
+    "velit"
+  ],
+  "friends": [
+    {
+      "id": 0,
+      "name": "Harriett Hodge"
+    },
+    {
+      "id": 1,
+      "name": "Floyd Tucker"
+    },
+    {
+      "id": 2,
+      "name": "Catalina Joseph"
+    }
+  ],
+  "greeting": "Hello, Samantha Blair! You have 8 unread messages.",
+  "favoriteFruit": "banana"
+}

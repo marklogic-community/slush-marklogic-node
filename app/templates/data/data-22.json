@@ -1,0 +1,44 @@
+{
+  "id": 21,
+  "guid": "2a65a137-738e-4777-a82f-73219d180b79",
+  "isActive": true,
+  "balance": "$1,796.99",
+  "picture": "http://placehold.it/32x32",
+  "age": 29,
+  "eyeColor": "brown",
+  "name": "Angel Strickland",
+  "gender": "female",
+  "company": "PHOTOBIN",
+  "email": "angelstrickland@photobin.com",
+  "phone": "+1 (929) 576-2127",
+  "address": "738 Chestnut Street, Taft, Montana, 5246",
+  "about": "Commodo est proident amet quis duis irure qui. Nisi adipisicing qui excepteur quis aute consequat ut. Labore in tempor eiusmod consequat ut anim est magna do velit.\r\n",
+  "registered": "2014-04-15T18:07:49 +04:00",
+  "latitude": -80.543877,
+  "longitude": 131.138056,
+  "tags": [
+    "laborum",
+    "ullamco",
+    "occaecat",
+    "cillum",
+    "nulla",
+    "nostrud",
+    "duis"
+  ],
+  "friends": [
+    {
+      "id": 0,
+      "name": "Massey Holman"
+    },
+    {
+      "id": 1,
+      "name": "Bobbie Cline"
+    },
+    {
+      "id": 2,
+      "name": "Rowena Bradley"
+    }
+  ],
+  "greeting": "Hello, Angel Strickland! You have 1 unread messages.",
+  "favoriteFruit": "apple"
+}

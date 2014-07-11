@@ -1,0 +1,44 @@
+{
+  "id": 5,
+  "guid": "4bde1449-2c29-4fa0-a84b-57ac0b5da345",
+  "isActive": true,
+  "balance": "$1,148.28",
+  "picture": "http://placehold.it/32x32",
+  "age": 27,
+  "eyeColor": "blue",
+  "name": "Dianna Frederick",
+  "gender": "female",
+  "company": "MANGLO",
+  "email": "diannafrederick@manglo.com",
+  "phone": "+1 (935) 498-2640",
+  "address": "961 Victor Road, Sedley, Northern Mariana Islands, 4550",
+  "about": "Pariatur quis nostrud cillum sint. Magna nostrud voluptate excepteur laboris pariatur anim cillum. Ea officia ad tempor duis sunt qui sit. Dolore adipisicing culpa eiusmod enim.\r\n",
+  "registered": "2014-06-10T07:59:53 +04:00",
+  "latitude": -57.726755,
+  "longitude": -31.032061,
+  "tags": [
+    "cupidatat",
+    "et",
+    "dolor",
+    "reprehenderit",
+    "pariatur",
+    "excepteur",
+    "qui"
+  ],
+  "friends": [
+    {
+      "id": 0,
+      "name": "Angelia Mcmahon"
+    },
+    {
+      "id": 1,
+      "name": "Lynette Lawrence"
+    },
+    {
+      "id": 2,
+      "name": "Alta Bartlett"
+    }
+  ],
+  "greeting": "Hello, Dianna Frederick! You have 5 unread messages.",
+  "favoriteFruit": "banana"
+}

@@ -1,0 +1,44 @@
+{
+  "id": 9,
+  "guid": "42a39466-c0cd-4560-a27c-f922f319b47e",
+  "isActive": true,
+  "balance": "$3,862.45",
+  "picture": "http://placehold.it/32x32",
+  "age": 26,
+  "eyeColor": "blue",
+  "name": "Bernice Rosario",
+  "gender": "female",
+  "company": "ANACHO",
+  "email": "bernicerosario@anacho.com",
+  "phone": "+1 (999) 584-2562",
+  "address": "523 Lefferts Place, Moscow, Arkansas, 2255",
+  "about": "Eiusmod dolore proident et eu officia sunt eiusmod nulla ut. Amet qui aute ad exercitation sit consectetur anim est sint id pariatur ex elit minim. Duis quis ullamco culpa officia dolor veniam tempor voluptate consectetur. Eu ad qui ipsum aliquip nulla enim aliquip ipsum id amet proident reprehenderit. Dolor sint labore ad laboris sunt consequat commodo. Magna et incididunt laboris laborum est amet velit deserunt reprehenderit. Elit laboris qui cillum deserunt commodo magna ea occaecat aliqua magna.\r\n",
+  "registered": "2014-01-19T01:42:45 +05:00",
+  "latitude": 7.350901,
+  "longitude": 57.226188,
+  "tags": [
+    "consectetur",
+    "adipisicing",
+    "mollit",
+    "fugiat",
+    "consequat",
+    "nulla",
+    "enim"
+  ],
+  "friends": [
+    {
+      "id": 0,
+      "name": "Dixie Chandler"
+    },
+    {
+      "id": 1,
+      "name": "Frye Schmidt"
+    },
+    {
+      "id": 2,
+      "name": "House Rodriguez"
+    }
+  ],
+  "greeting": "Hello, Bernice Rosario! You have 10 unread messages.",
+  "favoriteFruit": "apple"
+}

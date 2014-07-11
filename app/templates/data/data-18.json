@@ -1,0 +1,44 @@
+{
+  "id": 17,
+  "guid": "d82c6f8b-a716-4a9f-834f-76c044931576",
+  "isActive": true,
+  "balance": "$1,710.08",
+  "picture": "http://placehold.it/32x32",
+  "age": 40,
+  "eyeColor": "blue",
+  "name": "Elba Vang",
+  "gender": "female",
+  "company": "BLANET",
+  "email": "elbavang@blanet.com",
+  "phone": "+1 (864) 595-3814",
+  "address": "648 Shale Street, Faxon, Oklahoma, 4350",
+  "about": "Tempor est ipsum aute incididunt reprehenderit non aute et consequat fugiat exercitation non adipisicing enim. Laborum sit deserunt Lorem est esse anim minim adipisicing sit ea officia. Dolore dolor ad occaecat proident aliqua exercitation eu est nulla velit. Nisi quis veniam reprehenderit consequat pariatur commodo. Nostrud in ipsum anim sunt ipsum est ad. Fugiat nisi esse voluptate qui veniam.\r\n",
+  "registered": "2014-01-05T19:45:01 +05:00",
+  "latitude": 20.020581,
+  "longitude": 127.47059,
+  "tags": [
+    "pariatur",
+    "velit",
+    "minim",
+    "ex",
+    "dolore",
+    "reprehenderit",
+    "non"
+  ],
+  "friends": [
+    {
+      "id": 0,
+      "name": "Savage Salazar"
+    },
+    {
+      "id": 1,
+      "name": "Addie Mcbride"
+    },
+    {
+      "id": 2,
+      "name": "Maura Cummings"
+    }
+  ],
+  "greeting": "Hello, Elba Vang! You have 3 unread messages.",
+  "favoriteFruit": "banana"
+}

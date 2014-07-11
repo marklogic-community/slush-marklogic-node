@@ -1,0 +1,44 @@
+{
+  "id": 18,
+  "guid": "7c0b0977-7ef7-4ace-bad6-0d7ecdd2b8f2",
+  "isActive": true,
+  "balance": "$3,815.38",
+  "picture": "http://placehold.it/32x32",
+  "age": 29,
+  "eyeColor": "brown",
+  "name": "Heidi Hyde",
+  "gender": "female",
+  "company": "INCUBUS",
+  "email": "heidihyde@incubus.com",
+  "phone": "+1 (974) 450-2591",
+  "address": "692 Clifton Place, Lindcove, Virgin Islands, 3196",
+  "about": "Quis ut dolore ex enim incididunt reprehenderit id deserunt cupidatat ipsum. Quis commodo Lorem in nisi deserunt aliquip. Eiusmod deserunt nulla minim fugiat nostrud nulla proident deserunt occaecat. Adipisicing nisi nulla nulla eiusmod. Id do elit fugiat sit mollit sunt mollit in anim occaecat qui irure duis enim.\r\n",
+  "registered": "2014-01-25T04:49:22 +05:00",
+  "latitude": 37.547861,
+  "longitude": -159.36381,
+  "tags": [
+    "exercitation",
+    "sit",
+    "elit",
+    "voluptate",
+    "culpa",
+    "ipsum",
+    "laboris"
+  ],
+  "friends": [
+    {
+      "id": 0,
+      "name": "Socorro Francis"
+    },
+    {
+      "id": 1,
+      "name": "Alston Gamble"
+    },
+    {
+      "id": 2,
+      "name": "Taylor George"
+    }
+  ],
+  "greeting": "Hello, Heidi Hyde! You have 7 unread messages.",
+  "favoriteFruit": "apple"
+}

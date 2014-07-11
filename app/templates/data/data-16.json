@@ -1,0 +1,44 @@
+{
+  "id": 15,
+  "guid": "a3e6ab19-c8f7-42f4-8460-34ace632bec4",
+  "isActive": true,
+  "balance": "$2,062.56",
+  "picture": "http://placehold.it/32x32",
+  "age": 39,
+  "eyeColor": "blue",
+  "name": "Gina Pace",
+  "gender": "female",
+  "company": "SOLAREN",
+  "email": "ginapace@solaren.com",
+  "phone": "+1 (929) 598-3440",
+  "address": "750 Menahan Street, Makena, Illinois, 2948",
+  "about": "Id ex mollit ex occaecat nostrud non proident eu aliquip aliqua. Dolor qui eu dolore velit eu qui aute fugiat minim ut dolor in incididunt deserunt. Ullamco nostrud ullamco laboris anim pariatur elit esse dolore anim sunt amet pariatur anim aliquip. Ex minim minim fugiat laborum Lorem. Laborum incididunt aute in laborum est irure nostrud. Cupidatat aute esse sit magna ullamco sint cupidatat ea sit reprehenderit cillum sint ad. Exercitation non occaecat consectetur nisi elit do.\r\n",
+  "registered": "2014-01-05T19:20:44 +05:00",
+  "latitude": 41.690974,
+  "longitude": 98.731765,
+  "tags": [
+    "ad",
+    "aliquip",
+    "labore",
+    "consequat",
+    "tempor",
+    "proident",
+    "deserunt"
+  ],
+  "friends": [
+    {
+      "id": 0,
+      "name": "Lilia Bowen"
+    },
+    {
+      "id": 1,
+      "name": "Alicia Conner"
+    },
+    {
+      "id": 2,
+      "name": "Parks Ellison"
+    }
+  ],
+  "greeting": "Hello, Gina Pace! You have 2 unread messages.",
+  "favoriteFruit": "banana"
+}

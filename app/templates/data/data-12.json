@@ -1,0 +1,44 @@
+{
+  "id": 11,
+  "guid": "926a1b9b-f4a3-4f84-a61d-4561811a2cd9",
+  "isActive": false,
+  "balance": "$2,561.12",
+  "picture": "http://placehold.it/32x32",
+  "age": 37,
+  "eyeColor": "blue",
+  "name": "Hurley Snider",
+  "gender": "male",
+  "company": "KEENGEN",
+  "email": "hurleysnider@keengen.com",
+  "phone": "+1 (983) 407-2688",
+  "address": "245 Dunne Court, Allamuchy, West Virginia, 3856",
+  "about": "Minim cillum dolore voluptate nisi sunt id do ullamco commodo consequat. Fugiat duis magna duis proident id anim duis excepteur qui. Magna incididunt voluptate cupidatat nisi amet dolor sint culpa ipsum mollit minim proident dolor. Nisi veniam veniam ipsum tempor consectetur cillum commodo consequat ex. Esse qui non nisi sit enim laboris nostrud.\r\n",
+  "registered": "2014-01-21T11:11:29 +05:00",
+  "latitude": -54.120813,
+  "longitude": -69.908237,
+  "tags": [
+    "velit",
+    "laboris",
+    "officia",
+    "laborum",
+    "enim",
+    "eu",
+    "excepteur"
+  ],
+  "friends": [
+    {
+      "id": 0,
+      "name": "Lorrie Graves"
+    },
+    {
+      "id": 1,
+      "name": "Silva Carey"
+    },
+    {
+      "id": 2,
+      "name": "Sybil Gregory"
+    }
+  ],
+  "greeting": "Hello, Hurley Snider! You have 2 unread messages.",
+  "favoriteFruit": "strawberry"
+}

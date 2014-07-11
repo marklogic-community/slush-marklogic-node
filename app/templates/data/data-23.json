@@ -1,0 +1,44 @@
+{
+  "id": 22,
+  "guid": "b16a1fe1-9951-4f5f-80dd-33e5c18e1f23",
+  "isActive": true,
+  "balance": "$3,776.50",
+  "picture": "http://placehold.it/32x32",
+  "age": 35,
+  "eyeColor": "blue",
+  "name": "Leticia Good",
+  "gender": "female",
+  "company": "CINASTER",
+  "email": "leticiagood@cinaster.com",
+  "phone": "+1 (882) 486-3569",
+  "address": "612 Falmouth Street, Davenport, Arizona, 3258",
+  "about": "Sit fugiat proident cupidatat pariatur ad reprehenderit excepteur Lorem nisi ullamco eiusmod mollit duis occaecat. Dolor ex consequat officia in culpa irure officia do dolore aliqua officia adipisicing. In velit tempor sint pariatur ut enim eiusmod in dolor. Consequat pariatur est exercitation quis cupidatat irure. Sit reprehenderit labore fugiat tempor fugiat consequat nostrud consectetur fugiat in. Lorem nisi dolore exercitation veniam sunt eiusmod adipisicing dolor sunt. Est eu velit officia magna laborum duis eu pariatur eu labore ex ipsum.\r\n",
+  "registered": "2014-06-27T02:35:57 +04:00",
+  "latitude": -76.461006,
+  "longitude": 29.06728,
+  "tags": [
+    "pariatur",
+    "voluptate",
+    "nostrud",
+    "deserunt",
+    "cillum",
+    "sint",
+    "voluptate"
+  ],
+  "friends": [
+    {
+      "id": 0,
+      "name": "Armstrong Sherman"
+    },
+    {
+      "id": 1,
+      "name": "Roman Bond"
+    },
+    {
+      "id": 2,
+      "name": "Ellison White"
+    }
+  ],
+  "greeting": "Hello, Leticia Good! You have 7 unread messages.",
+  "favoriteFruit": "strawberry"
+}

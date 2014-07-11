@@ -1,0 +1,44 @@
+{
+  "id": 8,
+  "guid": "65952f80-295a-427c-9bc5-15d6869d6419",
+  "isActive": false,
+  "balance": "$2,875.86",
+  "picture": "http://placehold.it/32x32",
+  "age": 34,
+  "eyeColor": "green",
+  "name": "Oneal Pennington",
+  "gender": "male",
+  "company": "OPTIQUE",
+  "email": "onealpennington@optique.com",
+  "phone": "+1 (931) 479-2666",
+  "address": "142 Greenwood Avenue, Leola, Federated States Of Micronesia, 143",
+  "about": "Cupidatat aliquip proident veniam ea voluptate. Velit elit laboris nulla proident. Fugiat mollit aliqua amet adipisicing non id. Lorem cillum aute eiusmod cupidatat laboris. Nulla occaecat deserunt sit anim sunt sint sint enim ut dolor velit. Velit aute minim labore ad culpa labore id exercitation. Laborum minim cillum laboris et est ipsum ad enim adipisicing minim adipisicing incididunt irure.\r\n",
+  "registered": "2014-01-14T22:29:32 +05:00",
+  "latitude": 36.427159,
+  "longitude": -78.39807,
+  "tags": [
+    "eiusmod",
+    "fugiat",
+    "nulla",
+    "consequat",
+    "consectetur",
+    "minim",
+    "proident"
+  ],
+  "friends": [
+    {
+      "id": 0,
+      "name": "Janette Petersen"
+    },
+    {
+      "id": 1,
+      "name": "Lott Padilla"
+    },
+    {
+      "id": 2,
+      "name": "Hillary Hoffman"
+    }
+  ],
+  "greeting": "Hello, Oneal Pennington! You have 7 unread messages.",
+  "favoriteFruit": "strawberry"
+}

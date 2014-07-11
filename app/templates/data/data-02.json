@@ -1,0 +1,44 @@
+{
+  "id": 1,
+  "guid": "471a7ba8-3b05-4924-846a-49fde52de7ea",
+  "isActive": false,
+  "balance": "$2,289.82",
+  "picture": "http://placehold.it/32x32",
+  "age": 23,
+  "eyeColor": "blue",
+  "name": "Walters Osborne",
+  "gender": "male",
+  "company": "ZOGAK",
+  "email": "waltersosborne@zogak.com",
+  "phone": "+1 (848) 540-3816",
+  "address": "500 Columbia Street, Rosedale, Idaho, 8920",
+  "about": "Enim adipisicing cupidatat esse velit eiusmod ad ea aliquip laboris consequat ad tempor proident aliquip. Occaecat Lorem velit dolore mollit minim nostrud incididunt laborum id occaecat amet nisi occaecat ullamco. Cillum fugiat ullamco eu dolor eu ex excepteur fugiat incididunt fugiat. Mollit qui tempor culpa ut laborum ullamco est pariatur deserunt velit id id. In elit minim elit eiusmod consectetur irure in quis mollit incididunt do laboris sit.\r\n",
+  "registered": "2014-05-30T09:21:23 +04:00",
+  "latitude": 13.363239,
+  "longitude": -109.576254,
+  "tags": [
+    "nisi",
+    "eu",
+    "est",
+    "fugiat",
+    "veniam",
+    "reprehenderit",
+    "qui"
+  ],
+  "friends": [
+    {
+      "id": 0,
+      "name": "Madelyn Lawson"
+    },
+    {
+      "id": 1,
+      "name": "Pena Campos"
+    },
+    {
+      "id": 2,
+      "name": "Mona Duffy"
+    }
+  ],
+  "greeting": "Hello, Walters Osborne! You have 4 unread messages.",
+  "favoriteFruit": "strawberry"
+}

@@ -1,0 +1,44 @@
+{
+  "id": 12,
+  "guid": "ce66ab0d-9bc7-4dee-aadf-bc6039396b36",
+  "isActive": true,
+  "balance": "$3,330.44",
+  "picture": "http://placehold.it/32x32",
+  "age": 38,
+  "eyeColor": "green",
+  "name": "Kate Mckay",
+  "gender": "female",
+  "company": "INFOTRIPS",
+  "email": "katemckay@infotrips.com",
+  "phone": "+1 (807) 475-2154",
+  "address": "897 Herzl Street, Rosburg, New Mexico, 2338",
+  "about": "Tempor elit amet nisi Lorem sunt commodo amet laboris eu aute laboris velit magna. Dolore nostrud aute officia magna ea aliqua laborum. Non voluptate anim irure quis officia dolor et veniam cillum incididunt.\r\n",
+  "registered": "2014-05-11T18:16:09 +04:00",
+  "latitude": 64.326087,
+  "longitude": 88.225364,
+  "tags": [
+    "minim",
+    "pariatur",
+    "ipsum",
+    "dolor",
+    "fugiat",
+    "deserunt",
+    "nisi"
+  ],
+  "friends": [
+    {
+      "id": 0,
+      "name": "Bowen Phillips"
+    },
+    {
+      "id": 1,
+      "name": "Mccarthy James"
+    },
+    {
+      "id": 2,
+      "name": "Lynda Mcknight"
+    }
+  ],
+  "greeting": "Hello, Kate Mckay! You have 6 unread messages.",
+  "favoriteFruit": "strawberry"
+}

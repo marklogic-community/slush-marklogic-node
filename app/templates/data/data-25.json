@@ -1,0 +1,44 @@
+{
+  "id": 24,
+  "guid": "a46da6d5-981d-4260-8149-303bd56f098f",
+  "isActive": true,
+  "balance": "$1,123.07",
+  "picture": "http://placehold.it/32x32",
+  "age": 34,
+  "eyeColor": "green",
+  "name": "Gomez Burns",
+  "gender": "male",
+  "company": "GONKLE",
+  "email": "gomezburns@gonkle.com",
+  "phone": "+1 (900) 522-2154",
+  "address": "220 Judge Street, Manila, District Of Columbia, 2473",
+  "about": "Sit incididunt ullamco incididunt in laboris irure. Deserunt et id elit amet Lorem ullamco proident non. Deserunt minim ullamco eu excepteur. Velit ad Lorem ut irure ex mollit qui ut pariatur anim commodo. Magna aliquip excepteur eu nulla in duis nulla reprehenderit exercitation.\r\n",
+  "registered": "2014-04-27T12:35:16 +04:00",
+  "latitude": 13.917901,
+  "longitude": -10.740452,
+  "tags": [
+    "duis",
+    "consectetur",
+    "sint",
+    "nostrud",
+    "amet",
+    "sit",
+    "elit"
+  ],
+  "friends": [
+    {
+      "id": 0,
+      "name": "Allyson Boyd"
+    },
+    {
+      "id": 1,
+      "name": "Morton Cross"
+    },
+    {
+      "id": 2,
+      "name": "Rosemarie Dawson"
+    }
+  ],
+  "greeting": "Hello, Gomez Burns! You have 3 unread messages.",
+  "favoriteFruit": "banana"
+}

@@ -1,0 +1,44 @@
+{
+  "id": 20,
+  "guid": "bef898e5-3076-4b51-a043-1008b5e21130",
+  "isActive": false,
+  "balance": "$2,300.03",
+  "picture": "http://placehold.it/32x32",
+  "age": 29,
+  "eyeColor": "green",
+  "name": "Gutierrez Winters",
+  "gender": "male",
+  "company": "WRAPTURE",
+  "email": "gutierrezwinters@wrapture.com",
+  "phone": "+1 (908) 446-2054",
+  "address": "286 Willoughby Avenue, Rivereno, California, 3747",
+  "about": "Dolor cillum voluptate qui sit laborum laboris veniam sunt ut. Sunt sint fugiat esse ad non enim. Aliqua voluptate dolor ullamco incididunt fugiat proident. Laboris tempor excepteur sunt exercitation. Consectetur duis ut cillum amet anim voluptate exercitation exercitation irure dolore reprehenderit.\r\n",
+  "registered": "2014-04-20T11:09:35 +04:00",
+  "latitude": -2.128726,
+  "longitude": -74.841905,
+  "tags": [
+    "minim",
+    "nisi",
+    "eu",
+    "aliqua",
+    "do",
+    "adipisicing",
+    "nisi"
+  ],
+  "friends": [
+    {
+      "id": 0,
+      "name": "Calhoun Peterson"
+    },
+    {
+      "id": 1,
+      "name": "Cardenas Britt"
+    },
+    {
+      "id": 2,
+      "name": "Cooley Davidson"
+    }
+  ],
+  "greeting": "Hello, Gutierrez Winters! You have 7 unread messages.",
+  "favoriteFruit": "apple"
+}

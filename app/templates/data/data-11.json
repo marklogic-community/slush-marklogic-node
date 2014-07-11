@@ -1,0 +1,44 @@
+{
+  "id": 10,
+  "guid": "bdc4c263-ccd3-4ae0-ae47-fb4499252ebd",
+  "isActive": true,
+  "balance": "$1,860.67",
+  "picture": "http://placehold.it/32x32",
+  "age": 27,
+  "eyeColor": "green",
+  "name": "Shirley Briggs",
+  "gender": "female",
+  "company": "SOFTMICRO",
+  "email": "shirleybriggs@softmicro.com",
+  "phone": "+1 (888) 491-3210",
+  "address": "292 Alice Court, Nettie, Guam, 2490",
+  "about": "Fugiat exercitation nulla eiusmod tempor fugiat irure laborum magna voluptate. Veniam adipisicing laboris eiusmod duis proident dolore aute. Cupidatat qui deserunt incididunt excepteur. Aliqua voluptate dolore excepteur velit excepteur do aliqua laboris commodo nostrud incididunt. Ipsum in sunt labore duis elit tempor ullamco aliqua irure incididunt. Aute pariatur fugiat consectetur sit velit magna irure esse in sit sint laborum. Sunt fugiat sint Lorem cillum enim aliqua.\r\n",
+  "registered": "2014-01-06T02:49:11 +05:00",
+  "latitude": 2.282397,
+  "longitude": 155.250129,
+  "tags": [
+    "officia",
+    "consectetur",
+    "ipsum",
+    "ex",
+    "in",
+    "dolore",
+    "ipsum"
+  ],
+  "friends": [
+    {
+      "id": 0,
+      "name": "Aguilar Stewart"
+    },
+    {
+      "id": 1,
+      "name": "Lessie Manning"
+    },
+    {
+      "id": 2,
+      "name": "Flynn Hull"
+    }
+  ],
+  "greeting": "Hello, Shirley Briggs! You have 10 unread messages.",
+  "favoriteFruit": "banana"
+}

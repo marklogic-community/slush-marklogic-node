@@ -1,0 +1,44 @@
+{
+  "id": 2,
+  "guid": "3b7c3217-f156-46c3-9448-d66774ae4e60",
+  "isActive": true,
+  "balance": "$3,009.14",
+  "picture": "http://placehold.it/32x32",
+  "age": 35,
+  "eyeColor": "green",
+  "name": "Ray Burton",
+  "gender": "male",
+  "company": "ADORNICA",
+  "email": "rayburton@adornica.com",
+  "phone": "+1 (917) 503-2777",
+  "address": "307 Seaview Court, Joes, Georgia, 6602",
+  "about": "Aute occaecat id irure in. Ullamco Lorem eiusmod eu sit sint voluptate commodo ea non nostrud esse. Do dolore proident ipsum in duis aute ut cupidatat. Eu ullamco consequat culpa duis do sit labore enim cupidatat ipsum. Labore incididunt elit et nulla dolor est ut mollit elit. Incididunt minim cupidatat laborum nisi. In ad magna commodo voluptate culpa.\r\n",
+  "registered": "2014-04-20T10:12:29 +04:00",
+  "latitude": 32.008205,
+  "longitude": 105.737755,
+  "tags": [
+    "id",
+    "ad",
+    "minim",
+    "id",
+    "excepteur",
+    "pariatur",
+    "laboris"
+  ],
+  "friends": [
+    {
+      "id": 0,
+      "name": "Puckett Copeland"
+    },
+    {
+      "id": 1,
+      "name": "Pearlie Guy"
+    },
+    {
+      "id": 2,
+      "name": "Bobbi Tyson"
+    }
+  ],
+  "greeting": "Hello, Ray Burton! You have 5 unread messages.",
+  "favoriteFruit": "apple"
+}

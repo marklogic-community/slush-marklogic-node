@@ -1,0 +1,44 @@
+{
+  "id": 3,
+  "guid": "237fefd1-28ae-4892-882b-ba00111f364d",
+  "isActive": false,
+  "balance": "$2,217.24",
+  "picture": "http://placehold.it/32x32",
+  "age": 27,
+  "eyeColor": "green",
+  "name": "Levine Benton",
+  "gender": "male",
+  "company": "HIVEDOM",
+  "email": "levinebenton@hivedom.com",
+  "phone": "+1 (984) 481-2850",
+  "address": "378 Stockholm Street, Soham, Michigan, 1466",
+  "about": "Consectetur nisi labore occaecat nulla proident culpa ex amet pariatur anim. Laboris officia elit elit ipsum Lorem ipsum nisi ad non cupidatat laborum in reprehenderit ex. Sunt non anim in proident laboris et culpa exercitation ullamco deserunt eiusmod velit. Consectetur cupidatat culpa ullamco fugiat. Irure culpa magna elit ut aliqua occaecat elit aliqua in. Cillum eu consequat ipsum ad laboris nostrud sunt.\r\n",
+  "registered": "2014-03-21T01:38:18 +04:00",
+  "latitude": 0.668418,
+  "longitude": -47.04032,
+  "tags": [
+    "proident",
+    "adipisicing",
+    "officia",
+    "consequat",
+    "est",
+    "fugiat",
+    "eiusmod"
+  ],
+  "friends": [
+    {
+      "id": 0,
+      "name": "Meyer Kane"
+    },
+    {
+      "id": 1,
+      "name": "Hancock Cash"
+    },
+    {
+      "id": 2,
+      "name": "Chase Harmon"
+    }
+  ],
+  "greeting": "Hello, Levine Benton! You have 1 unread messages.",
+  "favoriteFruit": "strawberry"
+}

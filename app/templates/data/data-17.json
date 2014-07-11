@@ -1,0 +1,44 @@
+{
+  "id": 16,
+  "guid": "e904a092-783a-44a5-af37-b9b67e65f8c4",
+  "isActive": false,
+  "balance": "$2,903.94",
+  "picture": "http://placehold.it/32x32",
+  "age": 38,
+  "eyeColor": "brown",
+  "name": "Robyn Duncan",
+  "gender": "female",
+  "company": "PIVITOL",
+  "email": "robynduncan@pivitol.com",
+  "phone": "+1 (915) 463-3855",
+  "address": "881 Polhemus Place, Galesville, Louisiana, 9422",
+  "about": "Cupidatat nulla adipisicing magna eu voluptate irure Lorem dolor. Commodo exercitation sunt fugiat eu velit magna adipisicing sunt quis. Nulla sunt mollit voluptate commodo incididunt eiusmod sit mollit laboris in nisi. Esse et proident veniam aliqua fugiat laboris ad aliquip aliquip pariatur adipisicing. Deserunt Lorem ex dolor laboris sit ullamco sunt anim exercitation. Occaecat laboris in culpa ex do eu qui enim ut pariatur cupidatat.\r\n",
+  "registered": "2014-03-19T05:38:31 +04:00",
+  "latitude": -53.063606,
+  "longitude": 84.829416,
+  "tags": [
+    "consectetur",
+    "ad",
+    "ullamco",
+    "voluptate",
+    "incididunt",
+    "cillum",
+    "sunt"
+  ],
+  "friends": [
+    {
+      "id": 0,
+      "name": "Felicia Mcconnell"
+    },
+    {
+      "id": 1,
+      "name": "Jeannette Mclean"
+    },
+    {
+      "id": 2,
+      "name": "Lowery Simpson"
+    }
+  ],
+  "greeting": "Hello, Robyn Duncan! You have 4 unread messages.",
+  "favoriteFruit": "apple"
+}

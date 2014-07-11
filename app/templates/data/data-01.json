@@ -1,0 +1,44 @@
+{
+  "id": 0,
+  "guid": "b808e01e-270c-4249-89bf-2493a65881ec",
+  "isActive": false,
+  "balance": "$2,495.53",
+  "picture": "http://placehold.it/32x32",
+  "age": 24,
+  "eyeColor": "green",
+  "name": "Melanie Patton",
+  "gender": "female",
+  "company": "QUARMONY",
+  "email": "melaniepatton@quarmony.com",
+  "phone": "+1 (995) 430-2908",
+  "address": "795 Maujer Street, Machias, Nebraska, 257",
+  "about": "Laboris excepteur qui sit reprehenderit Lorem. Eiusmod cupidatat dolore nulla cupidatat laborum id esse commodo laborum esse Lorem ex laborum. Labore ullamco ullamco in esse.\r\n",
+  "registered": "2014-01-16T02:17:30 +05:00",
+  "latitude": -28.696297,
+  "longitude": -147.037854,
+  "tags": [
+    "aliqua",
+    "nisi",
+    "est",
+    "minim",
+    "fugiat",
+    "ullamco",
+    "laboris"
+  ],
+  "friends": [
+    {
+      "id": 0,
+      "name": "Campos Russo"
+    },
+    {
+      "id": 1,
+      "name": "Crawford Mueller"
+    },
+    {
+      "id": 2,
+      "name": "Bonnie Elliott"
+    }
+  ],
+  "greeting": "Hello, Melanie Patton! You have 8 unread messages.",
+  "favoriteFruit": "apple"
+}

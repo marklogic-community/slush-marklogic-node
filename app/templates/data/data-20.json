@@ -1,0 +1,44 @@
+{
+  "id": 19,
+  "guid": "585c063a-e25d-4bc5-a82a-f4ff4399e630",
+  "isActive": false,
+  "balance": "$1,599.36",
+  "picture": "http://placehold.it/32x32",
+  "age": 35,
+  "eyeColor": "brown",
+  "name": "Tasha Colon",
+  "gender": "female",
+  "company": "BYTREX",
+  "email": "tashacolon@bytrex.com",
+  "phone": "+1 (955) 599-3568",
+  "address": "425 Schaefer Street, Urbana, Utah, 931",
+  "about": "Culpa consequat officia eu aute est do incididunt. Aliqua do culpa tempor qui esse dolor ut velit voluptate quis adipisicing. Labore laboris duis duis sint cupidatat. Ad consequat irure irure eu consequat nostrud deserunt est velit veniam enim eiusmod sint proident. Reprehenderit voluptate voluptate id adipisicing officia Lorem elit exercitation dolore mollit pariatur. Sunt mollit occaecat occaecat laborum in mollit incididunt ut ea laborum.\r\n",
+  "registered": "2014-05-23T10:37:40 +04:00",
+  "latitude": -57.976446,
+  "longitude": -174.68282,
+  "tags": [
+    "mollit",
+    "ex",
+    "incididunt",
+    "minim",
+    "culpa",
+    "nostrud",
+    "tempor"
+  ],
+  "friends": [
+    {
+      "id": 0,
+      "name": "Sharon Parker"
+    },
+    {
+      "id": 1,
+      "name": "Megan Bowman"
+    },
+    {
+      "id": 2,
+      "name": "Rhodes Murphy"
+    }
+  ],
+  "greeting": "Hello, Tasha Colon! You have 8 unread messages.",
+  "favoriteFruit": "apple"
+}

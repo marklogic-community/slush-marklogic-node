@@ -1,0 +1,44 @@
+{
+  "id": 23,
+  "guid": "93a69401-8ea1-4700-a611-ffedba3049a2",
+  "isActive": true,
+  "balance": "$2,070.11",
+  "picture": "http://placehold.it/32x32",
+  "age": 24,
+  "eyeColor": "green",
+  "name": "Dora Rojas",
+  "gender": "female",
+  "company": "TSUNAMIA",
+  "email": "dorarojas@tsunamia.com",
+  "phone": "+1 (915) 482-2105",
+  "address": "401 Richardson Street, Lopezo, Washington, 7770",
+  "about": "Fugiat velit magna veniam aliquip exercitation aute minim nulla laboris cillum commodo eiusmod irure cillum. Amet sit consequat adipisicing ipsum nisi elit occaecat qui nostrud. Reprehenderit minim cupidatat dolore sint. Ipsum proident nostrud aliquip ad ullamco aliquip nostrud reprehenderit. Non ullamco veniam sint et exercitation aliqua incididunt aute deserunt velit ut.\r\n",
+  "registered": "2014-05-15T17:11:56 +04:00",
+  "latitude": 1.08336,
+  "longitude": 19.009642,
+  "tags": [
+    "est",
+    "magna",
+    "esse",
+    "dolore",
+    "nisi",
+    "elit",
+    "adipisicing"
+  ],
+  "friends": [
+    {
+      "id": 0,
+      "name": "Molly Griffin"
+    },
+    {
+      "id": 1,
+      "name": "Marisol Best"
+    },
+    {
+      "id": 2,
+      "name": "Wade Thomas"
+    }
+  ],
+  "greeting": "Hello, Dora Rojas! You have 1 unread messages.",
+  "favoriteFruit": "strawberry"
+}

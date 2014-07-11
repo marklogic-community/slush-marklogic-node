@@ -1,0 +1,44 @@
+{
+  "id": 6,
+  "guid": "541f1ac9-642c-42ff-81e2-fc9fb517b8e4",
+  "isActive": true,
+  "balance": "$2,444.74",
+  "picture": "http://placehold.it/32x32",
+  "age": 37,
+  "eyeColor": "blue",
+  "name": "James Houston",
+  "gender": "male",
+  "company": "RAMJOB",
+  "email": "jameshouston@ramjob.com",
+  "phone": "+1 (880) 463-3134",
+  "address": "203 Belvidere Street, Stevens, Tennessee, 4764",
+  "about": "Eiusmod fugiat pariatur deserunt sit aute et eiusmod occaecat. Consectetur cupidatat excepteur officia id nulla Lorem nisi cupidatat Lorem labore pariatur. Irure aliqua magna qui anim cupidatat nulla nisi nisi ut. Commodo commodo quis reprehenderit laborum sit officia. Et sint Lorem commodo occaecat duis adipisicing amet aliqua. Officia pariatur ut deserunt aliqua adipisicing. Ea anim ex excepteur minim sunt cillum dolore proident sint incididunt.\r\n",
+  "registered": "2014-05-29T04:46:59 +04:00",
+  "latitude": 38.988542,
+  "longitude": 43.352314,
+  "tags": [
+    "culpa",
+    "do",
+    "nisi",
+    "enim",
+    "nostrud",
+    "proident",
+    "ipsum"
+  ],
+  "friends": [
+    {
+      "id": 0,
+      "name": "Rivers Benson"
+    },
+    {
+      "id": 1,
+      "name": "Stacie Mcintosh"
+    },
+    {
+      "id": 2,
+      "name": "Savannah Carver"
+    }
+  ],
+  "greeting": "Hello, James Houston! You have 6 unread messages.",
+  "favoriteFruit": "apple"
+}

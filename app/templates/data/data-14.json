@@ -1,0 +1,44 @@
+{
+  "id": 13,
+  "guid": "95c3fad1-75de-4e52-9e4b-550dd0344a0e",
+  "isActive": true,
+  "balance": "$1,847.44",
+  "picture": "http://placehold.it/32x32",
+  "age": 37,
+  "eyeColor": "brown",
+  "name": "Valerie Jordan",
+  "gender": "female",
+  "company": "REMOLD",
+  "email": "valeriejordan@remold.com",
+  "phone": "+1 (980) 564-2979",
+  "address": "743 Harman Street, Rockbridge, South Dakota, 435",
+  "about": "Esse exercitation proident est velit tempor minim est. Incididunt laboris duis quis ullamco exercitation dolore cillum Lorem. Ullamco do culpa non consequat nulla nisi aliqua in veniam aute eiusmod. Sit voluptate adipisicing laborum pariatur commodo nisi incididunt labore aliquip qui ex nisi. Ea aliquip consectetur commodo in dolore irure excepteur nulla eiusmod. Enim non nostrud amet occaecat esse ex ad ipsum non.\r\n",
+  "registered": "2014-04-17T14:13:21 +04:00",
+  "latitude": -24.611332,
+  "longitude": -138.712236,
+  "tags": [
+    "nulla",
+    "velit",
+    "est",
+    "sint",
+    "dolor",
+    "ullamco",
+    "minim"
+  ],
+  "friends": [
+    {
+      "id": 0,
+      "name": "Jillian Cardenas"
+    },
+    {
+      "id": 1,
+      "name": "Rosalie Freeman"
+    },
+    {
+      "id": 2,
+      "name": "Petra Wyatt"
+    }
+  ],
+  "greeting": "Hello, Valerie Jordan! You have 3 unread messages.",
+  "favoriteFruit": "apple"
+}

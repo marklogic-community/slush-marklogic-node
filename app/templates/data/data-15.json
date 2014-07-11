@@ -1,0 +1,44 @@
+{
+  "id": 14,
+  "guid": "e96b3c61-4c25-4afa-9710-ed674694d185",
+  "isActive": true,
+  "balance": "$2,443.95",
+  "picture": "http://placehold.it/32x32",
+  "age": 24,
+  "eyeColor": "green",
+  "name": "Angelica Charles",
+  "gender": "female",
+  "company": "ZIDOX",
+  "email": "angelicacharles@zidox.com",
+  "phone": "+1 (924) 413-3766",
+  "address": "348 Bedford Avenue, Castleton, Hawaii, 5204",
+  "about": "Deserunt elit velit aute velit. Eu tempor fugiat occaecat commodo consectetur. Esse sit consectetur mollit pariatur est aliquip duis in. Consequat elit voluptate exercitation aliquip.\r\n",
+  "registered": "2014-06-23T20:34:07 +04:00",
+  "latitude": -30.033079,
+  "longitude": 113.181947,
+  "tags": [
+    "fugiat",
+    "quis",
+    "cupidatat",
+    "consectetur",
+    "irure",
+    "Lorem",
+    "adipisicing"
+  ],
+  "friends": [
+    {
+      "id": 0,
+      "name": "Ingram Alvarez"
+    },
+    {
+      "id": 1,
+      "name": "Pamela Perkins"
+    },
+    {
+      "id": 2,
+      "name": "Holmes Cantu"
+    }
+  ],
+  "greeting": "Hello, Angelica Charles! You have 7 unread messages.",
+  "favoriteFruit": "apple"
+}

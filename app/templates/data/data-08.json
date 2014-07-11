@@ -1,0 +1,44 @@
+{
+  "id": 7,
+  "guid": "6b49408a-b23c-401c-8148-a36e02149e49",
+  "isActive": false,
+  "balance": "$1,373.63",
+  "picture": "http://placehold.it/32x32",
+  "age": 38,
+  "eyeColor": "blue",
+  "name": "Marylou Cooley",
+  "gender": "female",
+  "company": "GENESYNK",
+  "email": "maryloucooley@genesynk.com",
+  "phone": "+1 (956) 531-2305",
+  "address": "349 Linden Street, Sanborn, Florida, 1943",
+  "about": "Magna sit irure sunt commodo deserunt. Do consectetur aliqua aliqua laboris excepteur ad ipsum enim ullamco amet commodo dolore. Excepteur laboris veniam velit exercitation exercitation occaecat anim laboris in ipsum ea nostrud. Culpa ad dolore enim tempor irure minim cillum nostrud nisi ut sit adipisicing elit consectetur. Commodo nostrud veniam quis proident.\r\n",
+  "registered": "2014-01-09T15:36:48 +05:00",
+  "latitude": -72.590551,
+  "longitude": -108.653071,
+  "tags": [
+    "et",
+    "non",
+    "eiusmod",
+    "dolore",
+    "officia",
+    "sint",
+    "nostrud"
+  ],
+  "friends": [
+    {
+      "id": 0,
+      "name": "Lane King"
+    },
+    {
+      "id": 1,
+      "name": "Gibson Pena"
+    },
+    {
+      "id": 2,
+      "name": "Abigail Merrill"
+    }
+  ],
+  "greeting": "Hello, Marylou Cooley! You have 2 unread messages.",
+  "favoriteFruit": "banana"
+}
