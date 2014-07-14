@@ -1,19 +1,19 @@
-/* global describe, beforeEach, module, it, expect */
+/* global describe, beforeEach, module, it, expect, inject */
 
 describe('MLRest', function () {
   'use strict';
+
   var mlRest = null;
   var $httpBackend, $q;
 
   beforeEach(module('sample.common'));
 
-  beforeEach(function () {
-    var $injector = angular.injector([ 'sample.common', 'ngMock', 'ng' ]);
+  beforeEach(inject(function ($injector) {
     $q = $injector.get('$q');
     $httpBackend = $injector.get('$httpBackend');
 
     mlRest = $injector.get('MLRest', $q, $httpBackend);
-  });
+  }));
 
   it('retrieves a document', function() {
     $httpBackend
@@ -86,10 +86,10 @@ describe('MLRest', function () {
 
   it('sets the sort operator correctly', function() {
     // this test assumes that the sort operator is called "sort"; the service code
-    // makes this assumption as well. 
+    // makes this assumption as well.
     var searchContext = mlRest.createSearchContext();
     var actual = JSON.stringify(searchContext.sortBy('blah').getStructuredQuery());
-    expect(actual).toMatch({"operator-state":{"operator-name":"sort","state-name":"blah"}});
+    expect(actual).toMatch({'operator-state':{'operator-name':'sort','state-name':'blah'}});
   });
 
   it('selects facets correctly', function() {
@@ -97,7 +97,7 @@ describe('MLRest', function () {
     // turn the structured query into a JSON string...
     var fullQuery = JSON.stringify(searchContext.selectFacet('foo', 'bar').getStructuredQuery());
     // ... grab the part I want and turn that back into JSON for easy access.
-    var facetQuery = JSON.parse('{' + fullQuery.match('"range-constraint-query":\s*{[^}]+}')[0] + '}');
+    var facetQuery = JSON.parse('{' + fullQuery.match(/"range-constraint-query":\s*{[^}]+}/)[0] + '}');
     expect(facetQuery['range-constraint-query']['constraint-name']).toEqual('foo');
     expect(Array.isArray(facetQuery['range-constraint-query'].value)).toBeTruthy();
     expect(facetQuery['range-constraint-query'].value.length).toEqual(1);
@@ -111,27 +111,27 @@ describe('MLRest', function () {
     // make another
     searchContext.selectFacet('cartoon', 'bugs bunny');
     var fullQuery = JSON.stringify(searchContext.getStructuredQuery());
-    var fooQuery = fullQuery.match('"constraint-name":\s*"foo"');
+    var fooQuery = fullQuery.match(/"constraint-name":\s*"foo"/);
     expect(fooQuery).not.toBeNull();
-    var cartoonQuery = fullQuery.match('"constraint-name":\s*"cartoon"');
+    var cartoonQuery = fullQuery.match(/"constraint-name":\s*"cartoon"/);
     expect(cartoonQuery).not.toBeNull();
 
     // now clear one selection:
     searchContext.clearFacet('foo', 'bar');
 
     fullQuery = JSON.stringify(searchContext.getStructuredQuery());
-    fooQuery = fullQuery.match('"constraint-name":\s*"foo"');
+    fooQuery = fullQuery.match(/"constraint-name":\s*"foo"/);
     expect(fooQuery).toBeNull();
-    cartoonQuery = fullQuery.match('"constraint-name":\s*"cartoon"');
+    cartoonQuery = fullQuery.match(/"constraint-name":\s*"cartoon"/);
     expect(cartoonQuery).not.toBeNull();
 
     // and clear the other one:
     searchContext.clearFacet('cartoon', 'bugs bunny');
 
     fullQuery = JSON.stringify(searchContext.getStructuredQuery());
-    fooQuery = fullQuery.match('"constraint-name":\s*"foo"');
+    fooQuery = fullQuery.match(/"constraint-name":\s*"foo"/);
     expect(fooQuery).toBeNull();
-    cartoonQuery = fullQuery.match('"constraint-name":\s*"cartoon"');
+    cartoonQuery = fullQuery.match(/"constraint-name":\s*"cartoon"/);
     expect(cartoonQuery).toBeNull();
 
   });
@@ -145,18 +145,18 @@ describe('MLRest', function () {
     searchContext.selectFacet('cartoon', 'bugs bunny');
 
     fullQuery = JSON.stringify(searchContext.getStructuredQuery());
-    fooQuery = fullQuery.match('"constraint-name":\s*"foo"');
+    fooQuery = fullQuery.match(/"constraint-name":\s*"foo"/);
     expect(fooQuery).not.toBeNull();
-    cartoonQuery = fullQuery.match('"constraint-name":\s*"cartoon"');
+    cartoonQuery = fullQuery.match(/"constraint-name":\s*"cartoon"/);
     expect(cartoonQuery).not.toBeNull();
 
     // clear both selections
     searchContext.clearAllFacets();
 
     fullQuery = JSON.stringify(searchContext.getStructuredQuery());
-    fooQuery = fullQuery.match('"constraint-name":\s*"foo"');
+    fooQuery = fullQuery.match(/"constraint-name":\s*"foo"/);
     expect(fooQuery).toBeNull();
-    cartoonQuery = fullQuery.match('"constraint-name":\s*"cartoon"');
+    cartoonQuery = fullQuery.match(/"constraint-name":\s*"cartoon"/);
     expect(cartoonQuery).toBeNull();
 
   });

@@ -14,25 +14,46 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      // 'https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=drawing',
+      // Required libraries
       'ui/app/bower_components/angular/angular.js',
       'ui/app/bower_components/angular-route/angular-route.js',
       'ui/app/bower_components/angular-cookies/angular-cookies.js',
-      'ui/app/bower_components/angular-mocks/angular-mocks.js',
+      'ui/app/bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
       'ui/app/bower_components/jquery/jquery.js',
       'ui/app/bower_components/ckeditor/ckeditor.js',
       'ui/app/bower_components/ng-ckeditor/ng-ckeditor.js',
       'ui/app/bower_components/mlFacets/dist/ml-facets.js',
+      'ui/app/bower_components/ng-json-explorer/src/gd-ui-jsonexplorer.js',
+
+      // App under test
+      'ui/app/app.js',
+      'ui/app/common/common.js',
       'ui/app/common/**/*.js',
+      'ui/app/create/create.js',
       'ui/app/create/**/*.js',
+      'ui/app/user/user.js',
+      'ui/app/search/search.js',
+      'ui/app/search/*.js',
+      'ui/app/detail/detail.js',
+      'ui/app/detail/*.js',
+
+      // templates
+      'ui/app/**/*.html',
+
+      // Mocks
+      'ui/app/bower_components/angular-mocks/angular-mocks.js',
+
+      // Tests
       // 'ui/test/**/*.js'
       'ui/test/helpers.js',
-      'ui/test/spec/common/**/*.js'
+      'ui/test/spec/common/**/*.js',
+      'ui/test/spec/controllers/*.js',
+      'ui/test/spec/directives/*.js'
     ],
 
     // generate js files from html templates
     preprocessors: {
-      'ui/app/scripts/**/*.html': 'ng-html2js'
+      'ui/app/**/*.html': 'ng-html2js'
     },
 
     ngHtml2JsPreprocessor: {

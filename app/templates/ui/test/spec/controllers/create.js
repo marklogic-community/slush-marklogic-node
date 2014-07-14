@@ -1,35 +1,30 @@
-/* global xit */
-
-'use strict';
+/* global xit, it, describe, beforeEach, module, inject, expect */
 
 describe('Controller: CreateCtrl', function () {
-  var CreateCtrl, scope, win, q;
+  'use strict';
+
+  var CreateCtrl, scope, win;
 
   beforeEach(function() {
-    var mljs;
-
     win = { location: { href: '' } };
-    mljs = {
-      createDocument: function () {
-        var deferred = q.defer();
-        deferred.resolve( '/v1/documents?uri=blah' );
-        return deferred.promise;
-      }
-    };
 
     module('sample.create');
     module(function($provide) {
       $provide.value('$window', win);
-      $provide.value('MLJS', mljs);
     });
   });
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function ($q, $controller, $rootScope) {
+  beforeEach(inject(function ($controller, $rootScope) {
+    var features = {
+      list: function() {}
+    };
     scope = $rootScope.$new();
-    q = $q;
     CreateCtrl = $controller('CreateCtrl', {
-      $scope: scope
+      $scope: scope,
+      'MLRest': {},
+      'Features': features,
+      '$window': {}
     });
   }));
 

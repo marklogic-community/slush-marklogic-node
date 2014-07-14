@@ -1,9 +1,11 @@
-'use strict';
+/* global it, describe, beforeEach, module, inject, expect */
 
 describe('Directive: facets', function () {
+  'use strict';
+
   var scope, element;
 
-  beforeEach(module('sample', 'app-templates'));
+  beforeEach(module('sample.search', 'app-templates'));
 
   beforeEach(inject( function($compile, $rootScope) {
     element = '<facets facet-list="model.search.facets" selected="model.selected"/>';
