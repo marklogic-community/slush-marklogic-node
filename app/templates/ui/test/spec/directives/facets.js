@@ -19,6 +19,18 @@ describe('Directive: facets', function () {
     });
   }));
 
+  it('should display the facet title', function() {
+    scope.facets = {
+      feature: {
+        facetValues: ['forms'],
+        type: 'xs:string'
+      }
+    };
+    scope.$digest();
+
+    expect(element.html()).toMatch('<h3[^>]*>feature</h3>');
+  });
+
   it('should create facet list element', function() {
     expect(element.html()).toContain('class="facet-list"');
   });

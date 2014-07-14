@@ -6,8 +6,9 @@
     .filter('object2Array', function() {
       return function(input) {
         var out = [];
-        for (var i in input) {
-          out.push(input[i]);
+        for (var name in input) {
+          input[name].__key = name;
+          out.push(input[name]);
         }
         return out;
       };
