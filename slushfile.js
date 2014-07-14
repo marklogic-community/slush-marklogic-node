@@ -96,12 +96,37 @@ function configRoxy() {
 
   console.log('Configuring Roxy');
 
-  var content = fs.readFileSync('deploy/build.properties', { encoding: 'utf8' });
+  try {
 
-  // set the authentication-method property to digestbasic
-  content = content.replace(/^authentication\-method=digest/m, 'authentication-method=digestbasic');
+    var properties = fs.readFileSync('deploy/build.properties', { encoding: 'utf8' });
 
-  fs.writeFileSync('deploy/build.properties', content);
+    // set the authentication-method property to digestbasic
+    properties = properties.replace(/^authentication\-method=digest/m, 'authentication-method=digestbasic');
+
+    fs.writeFileSync('deploy/build.properties', properties);
+  } catch (e) {
+    console.log('failed to update properties: ' + e.message);
+  }
+
+  try {
+    var foo = fs.readFileSync('deploy/ml-config.xml', { encoding: 'utf8' });
+
+    // add an index for the default content
+    foo = foo.replace(/^\s*<range-element-indexes>/m,
+      '      <range-element-indexes>\n' +
+      '        <range-element-index>\n' +
+      '          <scalar-type>string</scalar-type>\n' +
+      '          <namespace-uri>http://marklogic.com/xdmp/json/basic</namespace-uri>\n' +
+      '          <localname>eyeColor</localname>\n' +
+      '          <collation>http://marklogic.com/collation/codepoint</collation>\n' +
+      '          <range-value-positions>false</range-value-positions>\n' +
+      '        </range-element-index>\n');
+
+    fs.writeFileSync('deploy/ml-config.xml', foo);
+  } catch (e) {
+    console.log('failed to update configuration: ' + e.message);
+  }
+
 }
 
 gulp.task('default', function (done) {

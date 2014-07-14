@@ -60,6 +60,14 @@
     </search:state>
   </search:operator>
   <search:annotation xmlns="http://marklogic.com/appservices/search">Delta options here</search:annotation>
+  <search:constraint name="eyeColor">
+    <search:range type="xs:string" facet="true" collation="http://marklogic.com/collation/codepoint">
+      <search:facet-option>limit=5</search:facet-option>
+      <search:facet-option>frequency-order</search:facet-option>
+      <search:facet-option>descending</search:facet-option>
+      <search:element ns="http://marklogic.com/xdmp/json/basic" name="eyeColor"/>
+    </search:range>
+  </search:constraint>
 
   <!-- example facet constraint below -->
   <!--
