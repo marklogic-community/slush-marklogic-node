@@ -44,9 +44,10 @@
           mlRest.createDocument($scope.model.demo, {
             format: 'json',
             directory: '/demos/',
-            extension: '.json',
-            'perm:demo-cat-role': 'read',
-            'perm:demo-cat-registered-role': 'update'
+            extension: '.json'
+            // TODO: add read/update permissions here like this:
+            // 'perm:sample-role': 'read',
+            // 'perm:sample-role': 'update'
           }).then(function(data, status, headers, config) {
             win.location.href = '/detail?uri=' + headers('location').replace(/(.*\?uri=)/, '');
           });

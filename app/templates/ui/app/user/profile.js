@@ -31,9 +31,10 @@
             }
           }, {
             format: 'json',
-            uri: '/users/' + $scope.model.user.name + '.json',
-            'perm:demo-cat-role': 'read',
-            'perm:demo-cat-registered-role': 'update'
+            uri: '/users/' + $scope.model.user.name + '.json'
+            // TODO: add read/update permissions here like this:
+            // 'perm:sample-role': 'read',
+            // 'perm:sample-role': 'update'
           }).then(function(data) {
             $location.path('/');
           });
