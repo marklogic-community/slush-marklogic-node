@@ -1,75 +1,115 @@
-<div>
+<div class="create" ng-show="model.user.authenticated">
   <div class="row">
     <div class="col-sm-2"></div>
-    <h2 class="col-sm-10">Create a Demo</h2>
+    <h2 class="col-sm-10">Create a Document</h2>
   </div>
   <form class="form-horizontal">
     <div class="form-group">
       <label class="col-sm-2 control-label">Name</label>
       <div class="col-sm-10">
-        <input type="text" class="form-control" placeholder="name of demo" ng-model="model.demo.name">
+        <input type="text" class="form-control" placeholder="person's name" ng-model="model.person.name">
       </div>
     </div>
     <div class="form-group">
-      <label class="col-sm-2 control-label">Description</label>
+      <label class="col-sm-2 control-label">About</label>
       <div class="col-sm-10">
-        <textarea class="form-control" ckeditor="editorOptions" ng-model="model.demo.description" placeholder="In this section provide an executive summary of what the demo does. Talk about the customer problem that this is demo is addressing, without assuming that your reader is already familiar with the customer."></textarea>
+        <textarea class="form-control" ckeditor="editorOptions" ng-model="model.person.about" placeholder="In this section provide a description of the person."></textarea>
       </div>
     </div>
     <div class="form-group">
-      <label class="col-sm-2 control-label">Hosted at</label>
-      <div class="col-sm-8">
-        <input type="url" class="form-control" ng-model="model.demo.host" placeholder="http://...">
+      <label class="col-sm-2 control-label">Greeting</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" ng-model="model.person.greeting" placeholder="How this person should be greeted on login">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Balance</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" ng-model="model.person.balance" placeholder="">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Picture</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" ng-model="model.person.picture" placeholder="">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Age</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" ng-model="model.person.age" placeholder="">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Eye Color</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" ng-model="model.person.eyeColor" placeholder="">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Gender</label>
+      <div class="col-sm-2">
+        <label class="radio-inline"><input type="radio" value="Female" ng-model="model.person.gender" placeholder="">Female</label>
       </div>
       <div class="col-sm-2">
-        <select class="form-control" ng-model="model.demo.hostType">
-          <option>internal</option>
-          <option>external</option>
-        </select>
+        <label class="radio-inline"><input type="radio" value="Male" ng-model="model.person.gender" placeholder="">Male</label>
       </div>
     </div>
     <div class="form-group">
-      <label class="col-sm-2 control-label">Credentials</label>
-      <label class="col-sm-1 control-label">username</label>
-      <div class="col-sm-4">
-        <input type="text" class="form-control" ng-model="model.demo.username">
-      </div>
-      <label class="col-sm-1 control-label">password</label>
-      <div class="col-sm-4">
-        <input type="password" class="form-control" ng-model="model.demo.password">
+      <label class="col-sm-2 control-label">Company</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" ng-model="model.person.company" placeholder="">
       </div>
     </div>
     <div class="form-group">
-      <label class="col-sm-2 control-label">Targeted Browser(s)</label>
-      <div class="col-sm-3" ng-repeat="browser in model.browserChoices">
-        <label class="checkbox-inline">
-          <input type="checkbox" value="{{browser}}" ng-checked="model.demo.browsers.indexOf(browser) > 1"
-                 ng-click="updateBrowsers(browser)">{{browser}}
+      <label class="col-sm-2 control-label">Email</label>
+      <div class="col-sm-10">
+        <input type="email" class="form-control" ng-model="model.person.email" placeholder="">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Phone</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" ng-model="model.person.phone" placeholder="">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Address</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" ng-model="model.person.address" placeholder="">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Location</label>
+      <div class="col-sm-5">
+        <input type="text" class="form-control" ng-model="model.person.latitude" placeholder="">
+      </div>
+      <div class="col-sm-5">
+        <input type="text" class="form-control" ng-model="model.person.longitude" placeholder="">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Tags</label>
+      <div class="col-sm-10">
+        <input type="text" ng-model="model.newTag"/>
+        <button class="add-feature" ng-click="addTag()">Add</button>
+      </div>
+      <div class="col-sm-10">
+        <div class="tag btn btn-info" ng-repeat="tag in model.person.tags">
+          <span>{{tag}}</span>
+          <span class="glyphicon glyphicon-remove-circle" ng-click="removeFeature(tag)"></span>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Active</label>
+      <div class="col-sm-1">
+        <label class="checkbox">
+          <input type="checkbox" ng-model="model.person.isActive">
         </label>
       </div>
     </div>
-    <features edit-features="model.demo.features" feature-choices="model.featureChoices" edit-type="form" mode="edit"/>
-    <div class="form-group">
-      <label class="col-sm-2 control-label">Code Repository</label>
-      <div class="col-sm-10">
-        <input type="text" class="form-control" placeholder="git@... or svn or http://..." ng-model="model.demo.repo">
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="col-sm-2 control-label">Maintainer</label>
-      <div class="col-sm-5">
-        <input type="text" class="form-control" placeholder="Pat Fixer" ng-model="model.demo.maintainer">
-      </div>
-      <div class="col-sm-5">
-        <input type="email" class="form-control" placeholder="pat.fixer@marklogic.com" ng-model="model.demo.email">
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="col-sm-2 control-label">MarkLogic Version</label>
-      <div class="col-sm-2">
-        <input type="text" class="form-control" placeholder="7.0" ng-model="model.demo.version">
-      </div>
-    </div>
+
     <div class="row">
       <a class="col-sm-offset-9 col-sm-1" href="/">Cancel</a>
       <button class="col-sm-2 btn btn-primary" ng-click="submit()">Submit</button>

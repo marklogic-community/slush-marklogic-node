@@ -2,21 +2,31 @@
   'use strict';
 
   angular.module('sample.create')
-    .controller('CreateCtrl', ['$scope', 'MLRest', 'Features', '$window', function ($scope, mlRest, features, win) {
+    .controller('CreateCtrl', ['$scope', 'MLRest', '$window', 'User', function ($scope, mlRest, win, user) {
       var model = {
-        demo: {
+        person: {
+          isActive: true,
+          balance: 0,
+          picture: 'http://placehold.it/32x32',
+          age: 0,
+          eyeColor: '',
           name: '',
-          description: '',
-          host: '',
-          hostType: 'internal',
-          browsers: [],
-          features: [],
-          languages: [],
-          bugs: [],
-          comments: []
+          gender: '',
+          company: '',
+          email: '',
+          phone: '',
+          address: '',
+          about: '',
+          registered: '',
+          latitude: 0,
+          longitude: 0,
+          tags: [],
+          friends: [],
+          greeting: '',
+          favoriteFruit: ''
         },
-        featureChoices: features.list(),
-        browserChoices: ['Firefox', 'Chrome', 'IE']
+        newTag: '',
+        user: user
       };
 
       angular.extend($scope, {
@@ -25,32 +35,30 @@
           height: '100px',
           toolbarGroups: [
             { name: 'clipboard',   groups: [ 'clipboard', 'undo' ] },
-            { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] }
+            { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
+            { name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ] },
+            { name: 'links' }
           ],
           //override default options
           toolbar: '',
           /* jshint camelcase: false */
           toolbar_full: ''
         },
-        updateBrowsers: function(browser) {
-          var index = $scope.model.demo.browsers.indexOf(browser);
-          if (index > -1) {
-            $scope.model.demo.browsers.splice(index, 1);
-          } else {
-            $scope.model.demo.browsers.push(browser);
-          }
-        },
         submit: function() {
-          mlRest.createDocument($scope.model.demo, {
+          mlRest.createDocument($scope.model.person, {
             format: 'json',
-            directory: '/demos/',
+            directory: '/content/',
             extension: '.json'
             // TODO: add read/update permissions here like this:
             // 'perm:sample-role': 'read',
             // 'perm:sample-role': 'update'
-          }).then(function(data, status, headers, config) {
-            win.location.href = '/detail?uri=' + headers('location').replace(/(.*\?uri=)/, '');
+          }).then(function(response) {
+            win.location.href = '/detail?uri=' + response.headers('location').replace(/(.*\?uri=)/, '');
           });
+        },
+        addTag: function() {
+          model.person.tags.push(model.newTag);
+          model.newTag = '';
         }
       });
     }]);
