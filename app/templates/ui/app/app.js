@@ -1,11 +1,16 @@
 
 angular.module('sample', [
   'ngRoute', 'ngCkeditor', 'sample.user', 'sample.search', 'sample.common', 'sample.detail',
-  'ui.bootstrap', 'gd.ui.jsonexplorer', 'sample.create'
+  'ui.bootstrap', 'gd.ui.jsonexplorer', 'sample.create', 'ml'
 ])
-  .config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
+  .config(['$routeProvider', '$locationProvider', 'mlMapsProvider', function ($routeProvider, $locationProvider, mlMapsProvider) {
 
     'use strict';
+
+    // use google maps, version 3, with the drawing and visualization libraries
+    mlMapsProvider.version(3);
+    mlMapsProvider.addLibrary('drawing');
+    mlMapsProvider.addLibrary('visualization');
 
     $locationProvider.html5Mode(true);
 
