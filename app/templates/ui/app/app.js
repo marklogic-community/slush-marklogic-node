@@ -1,7 +1,7 @@
 
 angular.module('sample', [
   'ngRoute', 'ngCkeditor', 'sample.user', 'sample.search', 'sample.common', 'sample.detail',
-  'ui.bootstrap', 'gd.ui.jsonexplorer', 'sample.create', 'ml'
+  'ui.bootstrap', 'gd.ui.jsonexplorer', 'sample.create', 'ml.utils'
 ])
   .config(['$routeProvider', '$locationProvider', 'mlMapsProvider', function ($routeProvider, $locationProvider, mlMapsProvider) {
 
