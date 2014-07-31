@@ -71,7 +71,8 @@
                 options: options.queryOptions,
                 structuredQuery: getStructuredQuery(),
                 start: start,
-                pageLength: options.pageLength
+                pageLength: options.pageLength,
+                transform: options.transform
               }
             })
           .success(
@@ -182,8 +183,8 @@
           }
 
           if (sort) {
-            // TODO: this assumes that the sort operator is called "sort", but 
-            // that isn't necessarily true. Properly done, we'd get the options 
+            // TODO: this assumes that the sort operator is called "sort", but
+            // that isn't necessarily true. Properly done, we'd get the options
             // from the server and find the operator that contains sort-order
             // elements
             structured.query.queries.push({

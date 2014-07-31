@@ -92,6 +92,29 @@ describe('MLRest', function () {
     expect(actual).toMatch({'operator-state':{'operator-name':'sort','state-name':'blah'}});
   });
 
+  it('sets the transform parameter correctly', function() {
+    var searchContext = mlRest.createSearchContext({
+      transform: 'myTransform'
+    });
+
+    $httpBackend
+      .expectGET(/\/v1\/search\?.*transform=myTransform.*/)
+      .respond({
+        'total': 13,
+        'start': 1,
+        'page-length': 10,
+        'results':[
+          // not relevant to test
+        ],
+        'query': {'and-query':[]}
+      });
+
+    var actual;
+    searchContext.search().then(function(response) { actual = response; });
+    $httpBackend.flush();
+    // the test is whether the .expectGET above matches
+  });
+
   it('selects facets correctly', function() {
     var searchContext = mlRest.createSearchContext();
     // turn the structured query into a JSON string...
