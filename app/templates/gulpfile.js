@@ -16,6 +16,7 @@ var gulp = require('gulp');
 
 var argv = require('yargs').argv;
 var concat = require('gulp-concat');
+var fs = require('fs');
 var jshint = require('gulp-jshint');
 var less = require('gulp-less');
 var karma = require('karma').server;
@@ -80,9 +81,12 @@ gulp.task('autotest', function() {
 });
 
 gulp.task('server', function() {
+  fs.writeFileSync('gulp-server.pid', process.pid.toString(), 'ascii');
   var server = require('./server.js').buildExpress(options);
   server.listen(options.appPort);
 });
 
 // Default Task
-gulp.task('default', ['jshint', 'less', 'scripts', 'watch']);
+gulp.task('default', ['jshint', 'less', 'scripts', 'watch'], function() {
+  fs.writeFileSync('gulp-default.pid', process.pid.toString(), 'ascii');
+});
