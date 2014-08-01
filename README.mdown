@@ -13,10 +13,9 @@ This is a [Slush](https://github.com/klei/slush) generator that produces a skele
 
 - node
 - npm
-- gulp
-- slush
-
-    $ npm install -g slush
+- bower (`$ sudo npm install -g bower`)
+- gulp (`$ sudo npm install -g gulp`)
+- slush (`$ sudo npm install -g slush`)
 
 ## Install the generator
 
