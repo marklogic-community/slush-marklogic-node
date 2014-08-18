@@ -1,5 +1,5 @@
 xquery version "1.0-ml";
-module namespace trns = "http://marklogic.com/transform/to-json";
+module namespace trns = "http://marklogic.com/transform/from-json";
 
 import module namespace json="http://marklogic.com/xdmp/json" at "/MarkLogic/json/json.xqy";
 
