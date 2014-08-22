@@ -1,3 +1,4 @@
 node_modules
 ui/app/bower_components
 *.pid
+ui/app/styles/main.css
