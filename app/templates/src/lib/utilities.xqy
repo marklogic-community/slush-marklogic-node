@@ -4,8 +4,10 @@ module namespace utilities = "http://marklogic.com/utilities";
 
 declare default function namespace "http://www.w3.org/2005/xpath-functions";
 
-declare 
-function utilities:send-notification(
+(:
+ : Wrapper function for sending an email
+ :)
+declare function utilities:send-notification(
   $recipient-name as xs:string,
   $recipient-email as xs:string,
   $subject as  xs:string,
@@ -22,22 +24,22 @@ function utilities:send-notification(
           <em:adrs>no-reply@yihs.marklogic.com</em:adrs>
         </em:Address>
       </rf:from>
-  <rf:to>
-    <em:Address>
-      <em:name>{$recipient-name}</em:name>
-      <em:adrs>{$recipient-email}</em:adrs>
-    </em:Address>
-  </rf:to>
-  <em:content>
-    <html xmlns="http://www.w3.org/1999/xhtml">
-      <head>
-        <title>{$subject}</title>
-      </head>
-      <body>{$message}</body>
-    </html>
-  </em:content>
-</em:Message>)
-  
+      <rf:to>
+        <em:Address>
+          <em:name>{$recipient-name}</em:name>
+          <em:adrs>{$recipient-email}</em:adrs>
+        </em:Address>
+      </rf:to>
+      <em:content>
+        <html xmlns="http://www.w3.org/1999/xhtml">
+          <head>
+            <title>{$subject}</title>
+          </head>
+          <body>{$message}</body>
+        </html>
+      </em:content>
+    </em:Message>
+  )
 };
 
 declare function utilities:highlight($doc, $query) {
