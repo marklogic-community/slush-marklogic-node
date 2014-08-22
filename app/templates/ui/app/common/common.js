@@ -1,13 +1,14 @@
 
-var module = angular.module('sample.common', []);
+angular.module('sample.common', [])
+  .filter('object2Array', function() {
+    'use strict';
 
-module.filter('object2Array', function() {
-  return function(input) {
-    var out = [];
-    for (var name in input) {
-    	input[name].__key = name;
-      out.push(input[name]);
-    }
-    return out;
-  };
+    return function(input) {
+      var out = [];
+      for (var name in input) {
+        input[name].__key = name;
+        out.push(input[name]);
+      }
+      return out;
+    };
 });
