@@ -1,9 +1,9 @@
 
 /*
   Library to use (close to) fluent-style notation to build structured MarkLogic queries..
-  
+
   This:
-  
+
     {
       'or-query': {
         'queries': [
@@ -23,9 +23,9 @@
         ]
       }
     }
-  
+
   Becomes:
-  
+
     qb.orQuery(
       qb.rangeConstraintQuery(
         'PublishedDate', 'LE', new Date().toISOString(),
@@ -33,9 +33,9 @@
       ),
       qb.andQuery()
     )
-  
+
   This:
-  
+
     {
       'or-query': {
         'queries': [{
@@ -55,9 +55,9 @@
         }]
       }
     }
-  
+
   Becomes:
-  
+
     qb.orQuery(
       qb.geospatialConstraintQuery('meridian-geo', [bounds]),
       qb.geospatialConstraintQuery('connect-geo', [bounds]),
@@ -108,7 +108,7 @@
           return {
             'collection-constraint-query': {
               'constraint-name': constraintName,
-              'uri': uris
+              'uri': Array.isArray(uris) ? uris : [ uris ]
             }
           };
         },
