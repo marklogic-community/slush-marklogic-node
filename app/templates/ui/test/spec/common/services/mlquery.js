@@ -64,5 +64,20 @@ describe('MLRest', function () {
     expect(actual['document-query'].uri[1]).toEqual('uri2');
   });
 
+  // or-query tests
+  it('builds an or-query with one sub-query', function() {
+    var actual = qb.orQuery(qb.textQuery('foo'));
 
+    expect(actual['or-query']).toBeDefined();
+    expect(Array.isArray(actual['or-query'].queries)).toBeTruthy();
+    expect(actual['or-query'].queries.length).toEqual(1);
+  });
+
+  it('builds an or-query with multiple sub-queries', function() {
+    var actual = qb.orQuery(qb.textQuery('foo'), qb.textQuery('bar'));
+
+    expect(actual['or-query']).toBeDefined();
+    expect(Array.isArray(actual['or-query'].queries)).toBeTruthy();
+    expect(actual['or-query'].queries.length).toEqual(2);
+  });
 });
