@@ -22,7 +22,7 @@ describe('MLRest', function () {
     expect(actual['collection-constraint-query']['constraint-name']).toEqual('testConstraint');
   });
 
-
+  // Collection Query tests
   it('builds a collection query with one collection', function() {
     var actual = qb.collectionConstraintQuery('testConstraint', 'testCollection');
 
@@ -43,5 +43,26 @@ describe('MLRest', function () {
     expect(actual['collection-constraint-query'].uri[1]).toEqual('collection2');
     expect(actual['collection-constraint-query']['constraint-name']).toEqual('testConstraint');
   });
+
+  // Document query
+  it('builds a document query with one document', function() {
+    var actual = qb.documentQuery('testuri');
+
+    expect(actual['document-query']).toBeDefined();
+    expect(Array.isArray(actual['document-query'].uri)).toBeTruthy();
+    expect(actual['document-query'].uri.length).toEqual(1);
+    expect(actual['document-query'].uri[0]).toEqual('testuri');
+  });
+
+  it('builds a document query with multiple documents', function() {
+    var actual = qb.documentQuery(['uri1', 'uri2']);
+
+    expect(actual['document-query']).toBeDefined();
+    expect(Array.isArray(actual['document-query'].uri)).toBeTruthy();
+    expect(actual['document-query'].uri.length).toEqual(2);
+    expect(actual['document-query'].uri[0]).toEqual('uri1');
+    expect(actual['document-query'].uri[1]).toEqual('uri2');
+  });
+
 
 });

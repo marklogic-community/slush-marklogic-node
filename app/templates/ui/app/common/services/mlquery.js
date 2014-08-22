@@ -132,7 +132,7 @@
         documentQuery: function (uris) {
           return {
             'document-query': {
-              'uri': uris
+              'uri': Array.isArray(uris) ? uris : [ uris ]
             }
           };
         },
