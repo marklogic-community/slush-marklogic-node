@@ -127,6 +127,20 @@ describe('MLRest', function () {
     expect(facetQuery['range-constraint-query'].value[0]).toEqual('bar');
   });
 
+  it('selects multiple facet values correctly', function() {
+    var searchContext = mlRest.createSearchContext();
+    searchContext.selectFacet('foo', 'bar').selectFacet('foo', 'blah');
+    // turn the structured query into a JSON string...
+    var fullQuery = JSON.stringify(searchContext.getStructuredQuery());
+    // ... grab the part I want and turn that back into JSON for easy access.
+    var facetQuery = JSON.parse('{' + fullQuery.match(/"range-constraint-query":\s*{[^}]+}/)[0] + '}');
+    expect(facetQuery['range-constraint-query']['constraint-name']).toEqual('foo');
+    expect(Array.isArray(facetQuery['range-constraint-query'].value)).toBeTruthy();
+    expect(facetQuery['range-constraint-query'].value.length).toEqual(2);
+    expect(facetQuery['range-constraint-query'].value.indexOf('bar')).toNotEqual(-1);
+    expect(facetQuery['range-constraint-query'].value.indexOf('blah')).toNotEqual(-1);
+  });
+
   it('clears a facet correctly', function() {
     var searchContext = mlRest.createSearchContext();
     // make one facet selection:

@@ -209,7 +209,7 @@
 
         return {
           selectFacet: function(facet, value) {
-            if (facetSelections.facet === undefined) {
+            if (facetSelections[facet] === undefined) {
               facetSelections[facet] = [value];
             } else {
               facetSelections[facet].push(value);
