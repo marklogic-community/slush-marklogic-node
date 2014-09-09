@@ -203,12 +203,9 @@ exports.buildExpress = function(options) {
     }
   });
 
-  app.use(express.static('ui/app'));
-  app.use('/', express.static('ui/app'));
-  // for paths that should be handled by AngularJS, add a line here similar to /profile.
-  app.use('/profile', express.static('ui/app'));
-  app.use('/detail', express.static('ui/app'));
-  app.use('/create', express.static('ui/app'));
+  // Redirect all other traffic to Angular
+  app.use(express.static(__dirname + '/ui/app'));
+  app.use('/*', express.static(__dirname + '/ui/app'));
 
   return app;
 };
