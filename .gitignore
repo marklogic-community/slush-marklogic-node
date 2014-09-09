@@ -1,1 +1,5 @@
-node_modules
+app/templates/node_modules
+app/templates/ui/app/bower_components
+app/templates/ui/app/styles/main.css
+app/templates/dist
+app/templates/*.pid
