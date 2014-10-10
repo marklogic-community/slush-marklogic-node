@@ -1,4 +1,5 @@
 <h1>Sample MarkLogic Application</h1>
+<div ng-show="!model.user.authenticated">Please log in to see content</div>
 <div class="row">
   <facets facet-list="model.search.facets" selected="model.selected" class="col-md-3"
           select="selectFacet(facet, value)" clear="clearFacet(facet, value)"></facets>

@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
   </head>
-  <body ng-app="sample" ng-controller="SearchCtrl">
+  <body ng-app="sample">
     <nav class="navbar navbar-default" role="navigation">
       <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
@@ -29,19 +29,11 @@
           <li><a href="/">Search</a></li>
           <li><a href="/create">Create</a></li>
         </ul>
-        <form class="navbar-form navbar-left" role="search">
-          <div class="form-group">
-            <input type="text" class="form-control" placeholder="Search" ng-model="model.text" autocomplete="off"
-              typeahead="suggestion for suggestion in getSuggestions($viewValue)" typeahead-loading="loadingSuggestions">
-            <span ng-show="loadingSuggestions" class="input-group-addon glyphicon glyphicon-refresh"></span>
-          </div>
-          <button type="submit" class="btn btn-default" ng-click="textSearch()">Submit</button>
-        </form>
-        <div ml-user username="model.user.name" password="model.user.password" authenticated="model.user.authenticated" login="login(username, password)" logout="logout()" loginerror="model.user.loginError"/>
+        <search-input class="navbar-form navbar-left"></search-input>
+        <ml-user></ml-user>
       </div><!-- /.navbar-collapse -->
     </nav>
     <!-- Add your site or application content here -->
-    <div ng-show="!model.user.authenticated">Please log in to see content</div>
     <div class="container" ng-view=""></div>
 
     <div id="footer">
@@ -50,6 +42,7 @@
 
     <!-- build:js scripts/plugins.js -->
     <script src="bower_components/jquery/jquery.js"></script>
+    <script src="bower_components/lodash/dist/lodash.min.js"></script>
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/angular-route/angular-route.js"></script>
     <script src="bower_components/angular-cookies/angular-cookies.js"></script>
@@ -78,6 +71,9 @@
     <script src="create/compile.js"></script>
     <script src="common/common.js"></script>
     <script src="common/services/mlrest.js"></script>
+    <script src="search/stateless-search.js"></script>
+    <script src="search/query-service.js"></script>
+    <script src="search/search-input-dir.js"></script>
     <!-- endbuild -->
   </body>
 </html>

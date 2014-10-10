@@ -87,45 +87,40 @@
         }
 
         function buildFacetQuery(queries) {
-          var facet;
-          for (facet in facetSelections) {
-            if (facetSelections.hasOwnProperty(facet) && facetSelections[facet].length > 0) {
-              // TODO: derive constraint type from search options!
-              if (facet === 'Dataset') {
-                queries.push(
-                  {
-                    'collection-constraint-query': {
-                      'constraint-name': 'Dataset',
-                      'uri': [facetSelections[facet]]
-                    }
+          _.forIn( facetSelections, function(facet, facetName) {
+            if ( facet.values.length > 0 ) {
+
+              if (facet.type === 'collection') {
+                queries.push({
+                  'collection-constraint-query': {
+                    'constraint-name': facetName,
+                    'uri': facet.values
                   }
-                );
-              } else if (options.customConstraintNames !== undefined && options.customConstraintNames.indexOf(facet) > -1) {
-                queries.push(
-                  {
-                    'custom-constraint-query' : {
-                      'constraint-name': facet,
-                      'value': facetSelections[facet]
-                    }
-                  }
-                );
-              } else  {
-                queries.push(
-                  {
-                    'range-constraint-query' : {
-                      'constraint-name': facet,
-                      'value': facetSelections[facet]
-                    }
-                  }
-                );
+                });
               }
+              else if ( facet.type === 'custom' || _.contains(options.customConstraintNames, name) ) {
+                queries.push({
+                  'custom-constraint-query' : {
+                    'constraint-name': facetName,
+                    'value': facet.values
+                  }
+                });
+              } else  {
+                queries.push({
+                  'range-constraint-query' : {
+                    'constraint-name': facetName,
+                    'value': facet.values
+                  }
+                });
+              }
+
             }
-          }
+          });
         }
 
         function getStructuredQuery() {
-          var queries = [];
-          var structured;
+          var queries = [],
+              structured;
 
           buildFacetQuery(queries);
 
@@ -182,8 +177,8 @@
           }
 
           if (sort) {
-            // TODO: this assumes that the sort operator is called "sort", but 
-            // that isn't necessarily true. Properly done, we'd get the options 
+            // TODO: this assumes that the sort operator is called "sort", but
+            // that isn't necessarily true. Properly done, we'd get the options
             // from the server and find the operator that contains sort-order
             // elements
             structured.query.queries.push({
@@ -206,17 +201,106 @@
           return structured;
         }
 
-        return {
-          selectFacet: function(facet, value) {
-            if (facetSelections.facet === undefined) {
-              facetSelections[facet] = [value];
-            } else {
-              facetSelections[facet].push(value);
+        function serializeFacetQuery() {
+          var queries = [],
+              facets = [];
+
+          buildFacetQuery(queries);
+
+          _.each(queries, function(query) {
+            var constraint = query[ _.keys(query)[0] ];
+
+            _.each( constraint.value || constraint.uri, function(value) {
+              if (/\s+/.test(value)) {
+                value = '"' + value + '"';
+              }
+              facets.push( constraint['constraint-name'] + ':' + value );
+            });
+          });
+
+          return facets.join(' ');
+        }
+
+        function serializeStructuredQuery() {
+          var facets = serializeFacetQuery(),
+              response = {};
+
+          //TODO: property query, boosting, snippet/other operators, anything else?
+
+          if ( facets ) {
+            response.facets = facets;
+          }
+
+          if ( textQuery ) {
+            response.q = textQuery;
+          }
+
+          if ( sort ) {
+            response.sort = sort;
+          }
+
+          return response;
+        }
+
+        function setFacetFromQuery(query) {
+          var constraintQuery, values, type;
+
+          if ( query['collection-constraint-query'] ) {
+            constraintQuery = query['collection-constraint-query'];
+            type = 'collection';
+          } else if ( query['custom-constraint-query'] ) {
+            constraintQuery = query['custom-constraint-query'];
+            type = 'custom';
+          } else {
+            constraintQuery = query['range-constraint-query'];
+            //TODO: get type from facet object (requires search:response to be saved in searchContext)
+          }
+
+          if ( constraintQuery ) {
+            values = constraintQuery.value || constraintQuery.uri;
+            if ( !_.isArray(values) ) {
+              values = [values];
             }
-            return this;
+
+            _.each( values, function(value) {
+              selectFacet( constraintQuery['constraint-name'], value, type );
+            });
+          }
+        }
+
+        function parseStructuredQuery( q ) {
+          //TODO: other query types (not-query, and-not-query, etc.)
+          q = q['and-query'] || q['or-query'] || q;
+
+          if ( q.queries ) {
+            _.each( q.queries, function( q ) {
+              parseStructuredQuery( q );
+            });
+          } else {
+            setFacetFromQuery( q );
+          }
+        }
+
+        function selectFacet(name, value, type) {
+          if ( facetSelections[name] && !_.contains(facetSelections[name].values, value) ) {
+            facetSelections[name].values.push(value);
+          } else {
+            facetSelections[name] = {
+              type: type,
+              values: [value]
+            };
+          }
+          /*jshint validthis:true */
+          return this;
+        }
+
+        return {
+          getSelectedFacets: function() {
+            return facetSelections;
           },
-          clearFacet: function(facet, value) {
-            facetSelections[facet] = facetSelections[facet].filter( function( facetValue ) {
+          selectFacet: selectFacet,
+          clearFacet: function(name, value) {
+            facetSelections[name].values = _.filter( facetSelections[name].values, function(facetValue) {
               return facetValue !== value;
             });
             return this;
@@ -229,8 +313,13 @@
             return options.queryOptions;
           },
           getStructuredQuery: getStructuredQuery,
+          serializeStructuredQuery: serializeStructuredQuery,
+          parseStructuredQuery: parseStructuredQuery,
           search: function() {
             return runSearch();
+          },
+          getText: function() {
+            return textQuery;
           },
           setText: function(text) {
             if (text !== '') {

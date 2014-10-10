@@ -1,8 +1,10 @@
 <div class="facet-list">
   <div class="chiclets">
-    <div class="btn btn-primary" ng-repeat="chiclet in selected">
-      <span>{{chiclet.facet}}: {{chiclet.value}}</span>
-      <span class="glyphicon glyphicon-remove-circle icon-white" ng-click="clear(chiclet)"></span>
+    <div ng-repeat="(index, chiclet) in selected | object2Array">
+      <div ng-repeat="value in chiclet.values" class="btn btn-primary">
+        <span>{{ chiclet.__key }}: {{ value }}</span>
+        <span class="glyphicon glyphicon-remove-circle icon-white" ng-click="clear({facet: chiclet.__key, value: value})"></span>
+      </div>
     </div>
   </div>
   <div class="facet" ng-repeat="(index, facet) in facets | object2Array">

@@ -1,0 +1,16 @@
+<form ng-submit="search()" class="search form-inline" role="search">
+  <div class="form-group">
+    <input ng-model="query.q" type="text" class="form-control" placeholder="Search" autocomplete="off"
+      typeahead="suggestion for suggestion in suggest($viewValue)" typeahead-loading="loadingSuggestions">
+  </div>
+  <button ng-click="search()" type="submit" class="btn btn-default">
+    <i class="fa fa-search"></i>
+  </button>
+  <button ng-show="query.q" ng-click="clear()" type="reset" class="btn btn-default">
+    <i class="fa fa-times-circle"></i>
+  </button>
+  <span ng-show="loadingSuggestions">
+    <i class="fa fa-refresh fa-spin"></i>
+  </span>
+</form>
+
