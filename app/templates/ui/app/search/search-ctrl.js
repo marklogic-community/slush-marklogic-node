@@ -2,47 +2,59 @@
   'use strict';
 
   angular.module('sample.search')
-    .controller('SearchCtrl', ['$scope', 'MLRest', 'User', '$location', function ($scope, mlRest, user, $location) {
+    .controller('SearchCtrl', ['$scope', 'MLRest', 'User', '$location', 'appConfig', 'StatelessSearch', 'QueryService', function ($scope, mlRest, user, $location, appConfig, statelessSearch, queryService) {
       var model = {
-        selected: [],
-        text: '',
-        user: user
-      };
-
-      var searchContext = mlRest.createSearchContext();
+            selected: {},
+            query: { q: '' },
+            search: {},
+            user: user
+          },
+          searchContext = mlRest.createSearchContext(),
+          stateless = statelessSearch.new(searchContext, model.query);
 
       function updateSearchResults(data) {
         model.search = data;
+        model.query = searchContext.serializeStructuredQuery();
+        model.selected = searchContext.getSelectedFacets();
+        queryService.set(model.query);
+        if ( appConfig.statelessSearch ) {
+          $location.search( model.query );
+        }
       }
 
       (function init() {
-        searchContext
-          .search()
-          .then(updateSearchResults);
+        var unsubscribe = queryService.subscribe(function(query) {
+              if (searchContext.getText() !== query.q) {
+                angular.extend(model.query, query);
+                $scope.textSearch();
+              }
+            });
+
+        $scope.$on('$destroy', unsubscribe);
+
+        searchContext.setText(queryService.get().q);
+
+        if ( appConfig.statelessSearch ) {
+          stateless.update().then(updateSearchResults);
+          $scope.$on('$locationChangeSuccess', function(e, newUrl, oldUrl){
+            stateless.locationChange(newUrl, oldUrl)
+              .then(updateSearchResults);
+          });
+        } else {
+          searchContext.search().then(updateSearchResults);
+        }
       })();
 
       angular.extend($scope, {
         model: model,
         selectFacet: function(facet, value) {
-          var existing = model.selected.filter( function( selectedFacet ) {
-            return selectedFacet.facet === facet && selectedFacet.value === value;
-          });
-          if ( existing.length === 0 ) {
-            model.selected.push({facet: facet, value: value});
-            searchContext
-              .selectFacet(facet, value)
-              .search()
-              .then(updateSearchResults);
-          }
+          var type = model.search.facets[facet].type;
+          searchContext
+            .selectFacet(facet, value, type)
+            .search()
+            .then(updateSearchResults);
         },
         clearFacet: function(facet, value) {
-          var i;
-          for (i = 0; i < model.selected.length; i++) {
-            if (model.selected[i].facet === facet && model.selected[i].value === value) {
-              model.selected.splice(i, 1);
-              break;
-            }
-          }
           searchContext
             .clearFacet(facet, value)
             .search()
@@ -50,21 +62,15 @@
         },
         textSearch: function() {
           searchContext
-            .setText(model.text)
+            .setText(model.query.q)
             .search()
             .then(updateSearchResults);
-          $location.path('/');
         },
         pageChanged: function(page) {
           searchContext
             .setPage(page, model.pageLength)
             .search()
             .then(updateSearchResults);
-        },
-        getSuggestions: function(val) {
-          return mlRest.callExtension('extsuggest', { 'method' : 'GET', 'params' : { 'rs:pqtxt' : val, 'rs:options' : 'all'} }).then(function(res){
-            return res.suggestions;
-          });
         }
       });
 

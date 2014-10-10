@@ -3,7 +3,8 @@ angular.module('sample', [
   'ngRoute', 'ngCkeditor', 'sample.user', 'sample.search', 'sample.common', 'sample.detail',
   'ui.bootstrap', 'gd.ui.jsonexplorer', 'sample.create'
 ])
-  .config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
+  .constant('appConfig', { statelessSearch: false })
+  .config(['$routeProvider', '$locationProvider', 'appConfig', function ($routeProvider, $locationProvider, appConfig) {
 
     'use strict';
 
@@ -11,7 +12,9 @@ angular.module('sample', [
 
     $routeProvider
       .when('/', {
-        templateUrl: '/search/search.html'
+        templateUrl: '/search/search.html',
+        controller: 'SearchCtrl',
+        reloadOnSearch: !appConfig.statelessSearch
       })
       .when('/create', {
         templateUrl: '/create/create.html',
