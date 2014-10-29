@@ -69,7 +69,7 @@
   'use strict';
 
   angular.module('sample.common')
-    .factory('MLQueryBuilder', [function() {
+    .factory('MLSampleQueryBuilder', [function() {
       var andQuery = function () {
         if (arguments.length === 1 && angular.isArray(arguments[0])) {
           return {
