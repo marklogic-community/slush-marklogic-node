@@ -12,15 +12,21 @@
     "marklogic"
   ],
   "dependencies": {
-    "gulp": "3.8.x",
-    "gulp-install": "~0.1.1",
-    "gulp-conflict": "~0.1.1",
-    "gulp-template": "~0.1.1",
-    "underscore.string": "~2.3.3",
-    "gulp-rename": "~1.2.0",
-    "inquirer": "~0.4.1",
+    "assets-middleware": "0.0.3",
+    "cookie-session": "^1.0.2",
     "fetch": "0.3.x",
-    "q": "1.0.x"
+    "gulp": "3.8.x",
+    "gulp-conflict": "~0.1.1",
+    "gulp-install": "~0.1.1",
+    "gulp-rename": "~1.2.0",
+    "gulp-template": "~0.1.1",
+    "inquirer": "~0.4.1",
+    "konphyg": "^1.4.0",
+    "less": "^1.7.5",
+    "q": "1.0.x",
+    "uglify-js": "^2.4.15",
+    "uglifycss": "0.0.9",
+    "underscore.string": "~2.3.3"
   },
   "devDependencies": {
     "readable-stream": "^1.0.27-1",

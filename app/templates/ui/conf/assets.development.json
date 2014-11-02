@@ -1,0 +1,17 @@
+{
+  "dest": "/assets",
+  "force": true,
+  "less": {
+    "importPath": "/styles",
+    "compress": false
+  },
+  "css": {
+    "minify": false
+  },
+  "js": {
+    "minify": false,
+    "mangle": false,
+    "stripify": false,
+    "sourceMap": false
+  }
+}
