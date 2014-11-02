@@ -1,5 +1,5 @@
 /*jshint node: true */
-
+'use strict';
 /*
  * @author Dave Cassel - https://github.com/dmcassel
  *
@@ -10,11 +10,20 @@
 
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
-var expressSession = require('express-session');
+var session = require('cookie-session');
 var http = require('http');
+var path = require('path');
+var appDir = path.join( __dirname + '/ui/app');
+var assets = require('assets-middleware');
+var less = require('less');
+var conf = require('konphyg')(path.join( __dirname + '/ui/conf'));
+var assetConfig = conf('assets');
+var lessConfig = assetConfig.less || {};
+var uglifyCss = require('uglifycss');
+var uglifyJs = require('uglify-js');
+var assetDest = assetConfig.dest ? path.join(appDir,assetConfig.dest) : path.join(appDir,'/assets');
 
 function getAuth(options, session) {
-  'use strict';
 
   if (session.user !== undefined && session.user.name !== undefined) {
     return session.user.name + ':' + session.user.password;
@@ -24,14 +33,13 @@ function getAuth(options, session) {
 }
 
 exports.buildExpress = function(options) {
-  'use strict';
 
   var express = require('express');
   var app = express();
 
   app.use(cookieParser());
   // Change this secret to something unique to your application
-  app.use(expressSession({
+  app.use(session({
     secret: '1234567890QWERTY',
     saveUninitialized: true,
     resave: true
@@ -202,6 +210,126 @@ exports.buildExpress = function(options) {
       proxy(req, res);
     }
   });
+
+  /** Tools for bundling assets **/
+
+  var compileLess = function(content,next) {
+    less.render(content, {
+      paths: [ path.join(appDir, lessConfig.importPath || '/styles') ],
+      compress: lessConfig.compress
+    }, next);
+  };
+
+  var processCss = function(content,file, next) {
+    switch (file.extname) {
+      case '.less':  compileLess(content,next); break;
+      default: next(null,content);
+    }
+  };
+
+  var minifyCss = function(content,next) {
+    try {
+      next(null, uglifyCss.processString(content));
+    } catch(e) {
+      next(e);
+    }
+  };
+  var minifyJs = function(content,next) {
+    try {
+      console.log('minifying js');
+      var result = uglifyJs.minify(content, { fromString: true });
+      console.log('uglified',result.code);
+      next(null, result.code);
+    } catch(e) {
+      next(e);
+    }
+  };
+
+  // our app.css is a less file
+  app.get('/assets/main.css', assets({
+    force: assetConfig.force,
+    dest: path.join(assetDest,'/main.css'),
+    src: [ path.join(appDir, '/styles/main.less') ],
+    pipeline: {
+      prefilter: ['less','css'],
+      mapContent: function(content,file,next) {
+        processCss(content,file,next);
+      }
+    }
+  }));
+
+  // our plugins.css is a combination of files
+  app.get('/assets/plugins.css', assets({
+    force: assetConfig.force,
+    dest: path.join(assetDest,'/plugins.css'),
+    src: [
+      path.join(appDir, '/bower_components/ng-json-explorer/src/gd-ui-jsonexplorer.css'),
+      path.join(appDir, '/bower_components/highlightjs/styles/default.css')
+    ],
+    pipeline: {
+      prefilter: ['less','css'],
+      mapContent: function(content,file,next) {
+        processCss(content,file,next);
+      },
+      postReduceContent: function(content,next) {
+        minifyCss(content,next);
+      }
+    }
+  }));
+
+  app.get('/assets/main.js', assets({
+    force: assetConfig.force,
+    dest: path.join(assetDest,'/main.js'),
+    src: [
+      path.join(appDir, '/app.js'),
+      path.join(appDir, '/search/search.js'),
+      path.join(appDir, '/search/search-ctrl.js'),
+      path.join(appDir, '/search/facets-dir.js'),
+      path.join(appDir, '/search/results-dir.js'),
+      path.join(appDir, '/detail/detail.js'),
+      path.join(appDir, '/detail/detail-ctrl.js'),
+      path.join(appDir, '/user/user.js'),
+      path.join(appDir, '/user/user-dir.js'),
+      path.join(appDir, '/user/user-srv.js'),
+      path.join(appDir, '/user/profile.js'),
+      path.join(appDir, '/create/create.js'),
+      path.join(appDir, '/create/create-ctrl.js'),
+      path.join(appDir, '/create/compile.js'),
+      path.join(appDir, '/common/common.js'),
+      path.join(appDir, '/common/services/mlrest.js')
+    ],
+    pipeline: {
+      prefilter: ['js'],
+      mapContent: function(c,f,next) { next(null,c); },
+      postReduceContent: function(content, next) {
+        if (assetConfig.js.minify) {
+          minifyJs(content,next);
+        } else {
+          next(null,content);
+        }
+      }
+    }
+  }));
+
+  // this bundle is large so we cache it and don't minify it - use minified libraries if you want a minified bundle
+  // NOTE:  restart the express server if any files in this bundled are modified
+  // TODO:  could move this into the app.json config so that minified files could be used in app.production.json and non-minified files everywhere else
+  app.get('/assets/plugins.js', assets({
+    force: false,
+    dest: path.join(assetDest,'/plugins.js'),
+    src: [
+      path.join(appDir, '/bower_components/jquery/jquery.js'),
+      path.join(appDir, '/bower_components/angular/angular.js'),
+      path.join(appDir, '/bower_components/angular-route/angular-route.js'),
+      path.join(appDir, '/bower_components/angular-cookies/angular-cookies.js'),
+      path.join(appDir, '/bower_components/ckeditor/ckeditor.js'),
+      path.join(appDir, '/bower_components/ng-ckeditor/ng-ckeditor.js'),
+      path.join(appDir, '/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js'),
+      path.join(appDir, '/bower_components/ng-json-explorer/src/gd-ui-jsonexplorer.js'),
+      path.join(appDir, '/bower_components/angular-highlightjs/angular-highlightjs.js'),
+      path.join(appDir, '/bower_components/highlightjs/highlight.pack.js')
+    ]
+  }));
 
   app.use(express.static('ui/app'));
   app.use('/', express.static('ui/app'));

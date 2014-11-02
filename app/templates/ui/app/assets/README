@@ -1,0 +1,1 @@
+files in here are dynamically generated via assets-middleware. They are NOT served directly, but instead served via the middleware and cached in this location.
