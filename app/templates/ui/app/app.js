@@ -18,10 +18,10 @@ angular.module('sample', [
 
     'use strict';
 
-    // use google maps, version 3, with the drawing and visualization libraries
-    mlMapsProvider.version(3);
-    mlMapsProvider.addLibrary('drawing');
-    mlMapsProvider.addLibrary('visualization');
+    // to use google maps, version 3, with the drawing and visualization libraries
+    // mlMapsProvider.useVersion(3);
+    // mlMapsProvider.addLibrary('drawing');
+    // mlMapsProvider.addLibrary('visualization');
 
     $locationProvider.html5Mode(true);
 
