@@ -1,7 +1,18 @@
 
 angular.module('sample', [
-  'ngRoute', 'ngCkeditor', 'sample.user', 'sample.search', 'sample.common', 'sample.detail',
-  'ui.bootstrap', 'gd.ui.jsonexplorer', 'sample.create', 'ml.utils'
+  'ngRoute',
+  'ngCkeditor',
+  'ui.bootstrap',
+  'gd.ui.jsonexplorer',
+  'ml.common',
+  'ml.search',
+  'ml.search.tpls',
+  'ml.utils',
+  'sample.user',
+  'sample.search',
+  'sample.common',
+  'sample.detail',
+  'sample.create'
 ])
   .config(['$routeProvider', '$locationProvider', 'mlMapsProvider', function ($routeProvider, $locationProvider, mlMapsProvider) {
 
@@ -16,7 +27,9 @@ angular.module('sample', [
 
     $routeProvider
       .when('/', {
-        templateUrl: '/search/search.html'
+        templateUrl: '/search/search.html',
+        controller: 'SearchCtrl',
+        reloadOnSearch: false
       })
       .when('/create', {
         templateUrl: '/create/create.html',

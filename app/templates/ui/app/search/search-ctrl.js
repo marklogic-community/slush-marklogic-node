@@ -2,77 +2,74 @@
   'use strict';
 
   angular.module('sample.search')
-    .controller('SearchCtrl', ['$scope', 'MLRest', 'User', '$location', function ($scope, mlRest, user, $location) {
-      var model = {
-        selected: [],
-        text: '',
-        user: user
-      };
+    .controller('SearchCtrl', ['$scope', '$location', 'User', 'MLSearchFactory', 'MLRemoteInputService', function ($scope, $location, user, searchFactory, remoteInput) {
+      var mlSearch = searchFactory.newContext(),
+          model = {
+            page: 1,
+            qtext: '',
+            search: {},
+            user: user
+          };
 
-      var searchContext = mlRest.createSearchContext();
+      (function init() {
+        // wire up remote input subscription
+        remoteInput.initCtrl($scope, model, mlSearch, search);
+
+        // run a search when the user logs in
+        $scope.$watch('model.user.authenticated', function() {
+          search();
+        });
+
+        // capture initial URL params in mlSearch and ctrl model
+        mlSearch.fromParams().then(function() {
+          // if there was remote input, capture it instead of param
+          mlSearch.setText(model.qtext);
+          updateSearchResults({});
+        });
+
+        // capture URL params (forward/back, etc.)
+        $scope.$on('$locationChangeSuccess', function(e, newUrl, oldUrl){
+          mlSearch.locationChange( newUrl, oldUrl ).then(function() {
+            search();
+          });
+        });
+      })();
 
       function updateSearchResults(data) {
         model.search = data;
+        model.qtext = mlSearch.getText();
+        model.page = mlSearch.getPage();
+
+        remoteInput.setInput( model.qtext );
+        $location.search( mlSearch.getParams() );
       }
 
-      (function init() {
-        searchContext
+      function search(qtext) {
+        if ( !model.user.authenticated ) {
+          model.search = {};
+          return;
+        }
+
+        if ( arguments.length ) {
+          model.qtext = qtext;
+        }
+
+        mlSearch
+          .setText(model.qtext)
+          .setPage(model.page)
           .search()
           .then(updateSearchResults);
-      })();
+      }
 
       angular.extend($scope, {
         model: model,
-        selectFacet: function(facet, value) {
-          var existing = model.selected.filter( function( selectedFacet ) {
-            return selectedFacet.facet === facet && selectedFacet.value === value;
-          });
-          if ( existing.length === 0 ) {
-            model.selected.push({facet: facet, value: value});
-            searchContext
-              .selectFacet(facet, value)
-              .search()
-              .then(updateSearchResults);
-          }
-        },
-        clearFacet: function(facet, value) {
-          var i;
-          for (i = 0; i < model.selected.length; i++) {
-            if (model.selected[i].facet === facet && model.selected[i].value === value) {
-              model.selected.splice(i, 1);
-              break;
-            }
-          }
-          searchContext
-            .clearFacet(facet, value)
+        search: search,
+        toggleFacet: function toggleFacet(facetName, value) {
+          mlSearch
+            .toggleFacet( facetName, value )
             .search()
             .then(updateSearchResults);
-        },
-        textSearch: function() {
-          searchContext
-            .setText(model.text)
-            .search()
-            .then(updateSearchResults);
-          $location.path('/');
-        },
-        pageChanged: function(page) {
-          searchContext
-            .setPage(page, model.pageLength)
-            .search()
-            .then(updateSearchResults);
-        },
-        getSuggestions: function(val) {
-          return mlRest.callExtension('extsuggest', { 'method' : 'GET', 'params' : { 'rs:pqtxt' : val, 'rs:options' : 'all'} }).then(function(res){
-            return res.suggestions;
-          });
         }
-      });
-
-      $scope.$watch('model.user.authenticated', function(newValue, oldValue) {
-        // authentication status has changed; rerun search
-        searchContext.search().then(updateSearchResults, function(error) {
-          model.search = {};
-        });
       });
 
     }]);
