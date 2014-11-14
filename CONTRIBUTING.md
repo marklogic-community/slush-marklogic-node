@@ -10,8 +10,7 @@ through the process.
  
 ## <a name="question"></a> Got a Question or Problem?
 
-If you have questions about how to use slush-marklogic-node, please direct these to the
-[Roxy Mailing List][mailing list].
+If you have questions about how to use slush-marklogic-node, check our documentation on the [Wiki][wiki]. Alternatively, check [Stack Overflow][mlstack] to see if it has been answered there, and post your question there if not. Please tag it with both MarkLogic and Slush.
 
 ## <a name="issue"></a> Found an Issue?
 
@@ -170,6 +169,8 @@ from the main (upstream) repository:
     git pull --ff upstream master
     ```
 
+[wiki]: https://github.com/marklogic/slush-marklogic-node/wiki
+[mlstack]: http://stackoverflow.com/questions/tagged/marklogic
 [issue tracker]: https://github.com/marklogic/slush-marklogic-node/issues
 [mailing list]: http://developer.marklogic.com/mailman/listinfo/roxy
 [.editorconfig]: http://editorconfig.org/
