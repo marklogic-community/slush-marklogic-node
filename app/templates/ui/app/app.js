@@ -12,6 +12,7 @@ angular.module('sample', [
   'sample.search',
   'sample.common',
   'sample.detail',
+  'sample.esriMap',
   'sample.create'
 ])
   .config(['$routeProvider', '$locationProvider', 'mlMapsProvider', function ($routeProvider, $locationProvider, mlMapsProvider) {
