@@ -3,7 +3,7 @@ angular.module('sample', [
   'ngRoute',
   'ngCkeditor',
   'ui.bootstrap',
-  'gd.ui.jsonexplorer',
+  'ngJsonExplorer',
   'ml.common',
   'ml.search',
   'ml.search.tpls',
