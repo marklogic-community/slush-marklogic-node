@@ -1,5 +1,7 @@
 /* jshint node: true */
 
+'use strict';
+
 var gulp = require('gulp'),
   FetchStream = require('fetch').FetchStream,
   fs = require('fs'),
@@ -12,9 +14,12 @@ var gulp = require('gulp'),
   _ = require('underscore.string')
   ;
 
-function getNameProposal () {
-  'use strict';
+var settings = {
+  includeEsri: false
+};
 
+
+function getNameProposal () {
   var path = require('path');
   try {
     return require(path.join(process.cwd(), 'package.json')).name;
@@ -25,8 +30,6 @@ function getNameProposal () {
 
 // Download the Roxy ml script from GitHub
 function getRoxyScript(appName, appType, branch) {
-  'use strict';
-
   var d = q.defer(),
     out;
 
@@ -62,8 +65,6 @@ function getRoxyScript(appName, appType, branch) {
 
 // Run the Roxy "ml new" command for the new project
 function runRoxy(config) {
-  'use strict';
-
   var scriptName = config.script,
     appName = config.app,
     appType = config.appType,
@@ -92,8 +93,6 @@ function runRoxy(config) {
 
 // Make some changes to Roxy's deploy/build.properties file for the out-of-the-box application
 function configRoxy() {
-  'use strict';
-
   console.log('Configuring Roxy');
 
   try {
@@ -129,39 +128,85 @@ function configRoxy() {
 
 }
 
-gulp.task('default', function (done) {
-  'use strict';
+gulp.task('default', ['init', 'configEsri'], function(done) {
+  gulp.src(['./bower.json', './package.json'])
+   .pipe(install());
+});
 
+gulp.task('configEsri', ['init'], function(done) {
+  if (!settings.includeEsri) {
+    var indexData, appData;
+
+    try {
+      // Update the index.html file.
+      indexData = fs.readFileSync('ui/app/index.html', { encoding: 'utf8' });
+      indexData = indexData.replace(/^.*arcgis.*$[\r\n]/gm, '');
+      indexData = indexData.replace(/^.*esri.*$[\r\n]/gm, '');
+      fs.writeFileSync('ui/app/index.html', indexData);
+    } catch (e) {
+      console.log('failed to update index.html: ' + e.message);
+    }
+
+    try {
+      // Update the app.js file.
+      appData = fs.readFileSync('ui/app/app.js', { encoding: 'utf8' });
+      appData = appData.replace(/^.*esriMap.*$[\r\n]/gm, '');
+      fs.writeFileSync('ui/app/app.js', appData);
+    } catch (e) {
+      console.log('failed to update app.js: ' + e.message);
+    }
+  }
+
+  done();
+});
+
+gulp.task('init', function (done) {
   inquirer.prompt([
     {type: 'input', name: 'name', message: 'Name for the app?', default: getNameProposal()},
     {type: 'rawlist', name: 'appType', message: 'Roxy App Type?', choices: ['rest', 'mvc', 'hybrid'], default: 'rest'},
-    {type: 'input', name: 'branch', message: 'Roxy Branch?', default: 'master'}
+    {type: 'input', name: 'branch', message: 'Roxy Branch?', default: 'master'},
+    {type: 'confirm', name: 'includeEsri', message: 'Include ESRI Maps?', default: false}
   ],
   function (answers) {
-
     answers.nameDashed = _.slugify(answers.name);
     answers.modulename = _.camelize(answers.nameDashed);
+    settings.includeEsri = answers.includeEsri;
 
     getRoxyScript(answers.nameDashed, answers.appType, answers.branch)
       .then(runRoxy)
       .then(function() {
         // Copy over the Angular files
-
         var files = [__dirname + '/app/templates/**'];
+
+        // Adjust files to copy based on whether ESRI Maps are included
+        if (!answers.includeEsri) {
+          files.push('!' + __dirname + '/app/templates/ui/app/esri-map/**');
+          files.push('!' + __dirname + '/app/templates/ui/app/esri-map');
+          files.push('!' + __dirname + '/app/templates/ui/app/detail/detail.html');
+        }
+        else {
+          files.push('!' + __dirname + '/app/templates/ui/app/detail/detail-no-esri.html');
+        }
 
         process.chdir('./' + answers.nameDashed);
 
         configRoxy();
 
         gulp.src(files)
-          // change _foo to .foo
           .pipe(rename(function (file) {
+            // change _foo to .foo
             if (file.basename[0] === '_') {
               file.basename = '.' + file.basename.slice(1);
             }
+
+            // Rename detail file when not using ESRI.
+            else if (!answers.includeEsri && file.basename === 'detail-no-esri' && file.extname === '.html') {
+              console.log('changed name to detail.html');
+              file.basename = 'detail';
+            }
+
           }))
           .pipe(gulp.dest('./')) // Relative to cwd
-          .pipe(install())
           .on('end', function () {
             done(); // Finished!
           });
@@ -174,4 +219,3 @@ gulp.task('default', function (done) {
 
 
 });
-

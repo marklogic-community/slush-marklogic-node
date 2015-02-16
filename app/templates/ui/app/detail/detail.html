@@ -1,5 +1,29 @@
-<div class="row detail">
+<div class="row detail" data-ng-if="!model.detail.latitude || !model.detail.longitude">
   <!-- display JSON data -->
-  <json-explorer json-data="{{model.detail}}"></json-explorer>
-
+  <div class="panel panel-default">
+    <div class="panel-heading">Data</div>
+    <div class="panel-body">
+      <json-explorer json-data="{{model.detail}}"></json-explorer>
+    </div>
+  </div>
+</div>
+<div class="row detail" data-ng-if="model.detail.latitude && model.detail.longitude">
+  <div class="col-sm-8">
+    <!-- display JSON data -->
+    <div class="panel panel-default">
+      <div class="panel-heading">Data</div>
+      <div class="panel-body">
+        <json-explorer json-data="{{model.detail}}"></json-explorer>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-4">
+    <!-- display data on ESRI Map -->
+    <div class="panel panel-default">
+      <div class="panel-heading">Map</div>
+      <div class="panel-body">
+        <esri-map detail="model.detail" container-id="detailMap"></esri-map>
+      </div>
+    </div>
+  </div>
 </div>
