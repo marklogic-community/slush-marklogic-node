@@ -29,15 +29,16 @@ function getNameProposal () {
 }
 
 // Download the Roxy ml script from GitHub
-function getRoxyScript(appName, appType, branch) {
+function getRoxyScript(appName, mlVersion, appType, branch) {
+
   var d = q.defer(),
     out;
 
-  var scriptName = 'ml' + (win32 ? '.bat' : '');
+  var scriptName = (win32 ? '' : './') + 'ml' + (win32 ? '.bat' : '');
 
   console.log('Retrieving Roxy script');
   out = fs.createWriteStream(scriptName);
-  var stream = new FetchStream('https://github.com/marklogic/roxy/raw/master/' + scriptName);
+  var stream = new FetchStream('https://github.com/marklogic/roxy/raw/' + branch + '/' + scriptName);
   stream.pipe(out);
   stream.on('end', function() {
     console.log('Got Roxy script');
@@ -49,10 +50,11 @@ function getRoxyScript(appName, appType, branch) {
         d.reject(err);
       }
       else {
-        console.log ('chmod done; appName=' + appName + '; appType=' + appType + '; branch=' + branch);
+        console.log ('chmod done; appName=' + appName + '; mlVersion=' + mlVersion + '; appType=' + appType + '; branch=' + branch);
         d.resolve({
           'script': scriptName,
           'app': appName,
+          'mlVersion': mlVersion,
           'appType': appType,
           'branch': branch
         });
@@ -67,6 +69,7 @@ function getRoxyScript(appName, appType, branch) {
 function runRoxy(config) {
   var scriptName = config.script,
     appName = config.app,
+    mlVersion = config.mlVersion,
     appType = config.appType,
     branch = config.branch;
 
@@ -75,19 +78,27 @@ function runRoxy(config) {
   var args = [
     'new',
     appName,
+    '--server-version=' + mlVersion,
     '--app-type=' + appType,
-    '--server-version=7',
     '--branch=' + branch
   ];
 
   console.log('Spawning Roxy new command: ' + scriptName + ' ' + args.join(' '));
-  spawn('./' + scriptName, args).on('close', function() {
+  var child = spawn(scriptName, args);
+  
+  child.on('close', function() {
     console.log('done running ml new');
     d.resolve('done');
-  }).stdout.on('data', function (data) {
+  });
+  
+  child.stdout.on('data', function (data) {
     console.log('' + data);
   });
-
+  
+  child.stderr.on('data', function (data) {
+    console.log('' + data);
+  });
+  
   return d.promise;
 }
 
@@ -163,8 +174,9 @@ gulp.task('configEsri', ['init'], function(done) {
 gulp.task('init', function (done) {
   inquirer.prompt([
     {type: 'input', name: 'name', message: 'Name for the app?', default: getNameProposal()},
-    {type: 'rawlist', name: 'appType', message: 'Roxy App Type?', choices: ['rest', 'mvc', 'hybrid'], default: 'rest'},
-    {type: 'input', name: 'branch', message: 'Roxy Branch?', default: 'master'},
+    {type: 'list', name: 'mlVersion', message: 'MarkLogic version?', choices: ['8','7', '6', '5'], default: 0},
+    {type: 'list', name: 'appType', message: 'Roxy App Type?', choices: ['rest', 'mvc', 'hybrid'], default: 0},
+    {type: 'list', name: 'branch', message: 'Roxy Branch?', choices: ['master', 'dev'], default: 0},
     {type: 'confirm', name: 'includeEsri', message: 'Include ESRI Maps?', default: false}
   ],
   function (answers) {
@@ -172,7 +184,7 @@ gulp.task('init', function (done) {
     answers.modulename = _.camelize(answers.nameDashed);
     settings.includeEsri = answers.includeEsri;
 
-    getRoxyScript(answers.nameDashed, answers.appType, answers.branch)
+    getRoxyScript(answers.nameDashed, answers.mlVersion, answers.appType, answers.branch)
       .then(runRoxy)
       .then(function() {
         // Copy over the Angular files
