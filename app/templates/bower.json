@@ -10,7 +10,7 @@
     "jquery": "~2.0.3",
     "ckeditor": "4.3.3",
     "ng-ckeditor": "latest",
-    "ng-json-explorer": "*",
+    "ng-json-explorer": "8c2a0f9104",
     "angular-bootstrap": "~0.11.0",
     "angular-highlightjs": "0.3.0",
     "highlightjs": "8.0.0",
