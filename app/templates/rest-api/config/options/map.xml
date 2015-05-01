@@ -1,0 +1,107 @@
+<search:options xmlns:search="http://marklogic.com/appservices/search">
+  <search:debug>true</search:debug>
+  <search:search-option>unfiltered</search:search-option>
+  <search:page-length>10</search:page-length>
+  <search:additional-query>
+    <cts:not-query xmlns:cts="http://marklogic.com/cts">
+      <cts:directory-query>
+        <cts:uri>/users/</cts:uri>
+      </cts:directory-query>
+    </cts:not-query>
+  </search:additional-query>
+  <search:term apply="term">
+    <search:empty apply="all-results"/>
+    <search:term-option>punctuation-insensitive</search:term-option>
+    <search:term-option>stemmed</search:term-option>
+  </search:term>
+  <search:grammar>
+    <search:quotation>"</search:quotation>
+    <search:implicit>
+      <cts:and-query strength="20" xmlns:cts="http://marklogic.com/cts"/>
+    </search:implicit>
+    <search:starter strength="30" apply="grouping" delimiter=")">(</search:starter>
+    <search:starter strength="40" apply="prefix" element="cts:not-query">-</search:starter>
+    <search:joiner strength="10" apply="infix" element="cts:or-query" tokenize="word">OR</search:joiner>
+    <search:joiner strength="20" apply="infix" element="cts:and-query" tokenize="word">AND</search:joiner>
+    <search:joiner strength="30" apply="infix" element="cts:near-query" tokenize="word">NEAR</search:joiner>
+    <search:joiner strength="30" apply="near2" consume="2" element="cts:near-query">NEAR/</search:joiner>
+    <search:joiner strength="50" apply="constraint">:</search:joiner>
+    <search:joiner strength="50" apply="constraint" compare="LT" tokenize="word">LT</search:joiner>
+    <search:joiner strength="50" apply="constraint" compare="LE" tokenize="word">LE</search:joiner>
+    <search:joiner strength="50" apply="constraint" compare="GT" tokenize="word">GT</search:joiner>
+    <search:joiner strength="50" apply="constraint" compare="GE" tokenize="word">GE</search:joiner>
+    <search:joiner strength="50" apply="constraint" compare="NE" tokenize="word">NE</search:joiner>
+  </search:grammar>
+  <search:sort-order direction="descending">
+    <search:score/>
+  </search:sort-order>
+  <search:transform-results apply="snippet">
+    <search:preferred-elements><search:element ns="" name="body"/></search:preferred-elements>
+    <search:max-matches>1</search:max-matches>
+    <search:max-snippet-chars>150</search:max-snippet-chars>
+    <search:per-match-tokens>20</search:per-match-tokens>
+  </search:transform-results>
+  <search:return-query>1</search:return-query>
+  <search:operator name="results">
+    <search:state name="compact">
+      <search:transform-results apply="snippet">
+        <search:preferred-elements><search:element ns="" name="body"/></search:preferred-elements>
+        <search:max-matches>1</search:max-matches>
+        <search:max-snippet-chars>150</search:max-snippet-chars>
+        <search:per-match-tokens>20</search:per-match-tokens>
+      </search:transform-results>
+    </search:state>
+    <search:state name="detailed">
+      <search:transform-results apply="snippet">
+        <search:preferred-elements><search:element ns="" name="body"/></search:preferred-elements>
+        <search:max-matches>2</search:max-matches>
+        <search:max-snippet-chars>400</search:max-snippet-chars>
+        <search:per-match-tokens>30</search:per-match-tokens>
+      </search:transform-results>
+    </search:state>
+  </search:operator>
+  <search:annotation xmlns="http://marklogic.com/appservices/search">Delta options here</search:annotation>
+  <search:constraint name="eyeColor">
+    <search:range type="xs:string" facet="true" collation="http://marklogic.com/collation/codepoint">
+      <search:facet-option>limit=5</search:facet-option>
+      <search:facet-option>frequency-order</search:facet-option>
+      <search:facet-option>descending</search:facet-option>
+      <search:element ns="http://marklogic.com/xdmp/json/basic" name="eyeColor"/>
+    </search:range>
+  </search:constraint>
+   <search:constraint name="location">
+    <search:geo-elem-pair>
+      <search:parent ns="http://marklogic.com/xdmp/json/basic" name="json"/>
+      <search:lat ns="http://marklogic.com/xdmp/json/basic" name="latitude"/>
+      <search:lon ns="http://marklogic.com/xdmp/json/basic" name="longitude"/>
+    </search:geo-elem-pair>
+  </search:constraint>
+
+  <!-- example facet constraint below -->
+  <!--
+  <search:constraint name="myconstraint">
+    <search:range type="xs:string" facet="true">
+      <search:facet-option>limit=5</search:facet-option>
+      <search:facet-option>frequency-order</search:facet-option>
+      <search:facet-option>descending</search:facet-option>
+      <search:element ns="" name="my-el"/>
+    </search:range>
+  </search:constraint>
+  -->
+
+  <!-- example suggestion-source below -->
+  <!--
+  <search:suggestion-source ref="myconstraint">
+    <search:suggestion-option>frequency-order</search:suggestion-option>
+    <search:suggestion-option>descending</search:suggestion-option>
+    <search:suggestion-option>limit=10</search:suggestion-option>
+  </search:suggestion-source>
+  -->
+
+  <search:extract-metadata>
+    <search:qname elem-ns="http://marklogic.com/xdmp/json/basic" elem-name="latitude"/>
+    <search:qname elem-ns="http://marklogic.com/xdmp/json/basic" elem-name="longitude"/>
+    <search:qname elem-ns="http://marklogic.com/xdmp/json/basic" elem-name="name"/>
+  </search:extract-metadata>
+
+</search:options>

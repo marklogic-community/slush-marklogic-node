@@ -8,21 +8,19 @@ angular.module('sample', [
   'ml.search',
   'ml.search.tpls',
   'ml.utils',
+  'uiGmapgoogle-maps',
+  'sample.searchInput',
   'sample.user',
   'sample.search',
   'sample.common',
   'sample.detail',
-  'sample.esriMap',
+  'sample.detailMap',
+  'sample.searchMap',
   'sample.create'
 ])
-  .config(['$routeProvider', '$locationProvider', 'mlMapsProvider', function ($routeProvider, $locationProvider, mlMapsProvider) {
+  .config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
 
     'use strict';
-
-    // to use google maps, version 3, with the drawing and visualization libraries
-    // mlMapsProvider.useVersion(3);
-    // mlMapsProvider.addLibrary('drawing');
-    // mlMapsProvider.addLibrary('visualization');
 
     $locationProvider.html5Mode(true);
 
@@ -43,6 +41,11 @@ angular.module('sample', [
       .when('/profile', {
         templateUrl: '/user/profile.html',
         controller: 'ProfileCtrl'
+      })
+      .when('/map', {
+        templateUrl: '/search-map/search-map.html',
+        controller: 'SearchMapCtrl',
+        reloadOnSearch: false
       })
       .otherwise({
         redirectTo: '/'

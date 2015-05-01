@@ -16,6 +16,7 @@
     "highlightjs": "8.0.0",
     "ml-utils": "withjam/ml-utils",
     "ml-search-ng": "~0.0.6",
+    "angular-google-maps": "2.1.0-X.10",
     "lodash": "~2.4.1"
   },
   "devDependencies": {

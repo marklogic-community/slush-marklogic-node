@@ -29,9 +29,10 @@
         <ul class="nav navbar-nav">
           <li><a href="/">Search</a></li>
           <li><a href="/create">Create</a></li>
+          <li><a href="/map">Map</a></li>
         </ul>
         <div class="navbar-form navbar-left">
-          <ml-remote-input></ml-remote-input>
+          <search-input></search-input>
         </div>
         <ml-user></ml-user>
       </div><!-- /.navbar-collapse -->
@@ -59,6 +60,7 @@
     <script src="/bower_components/ml-common-ng/dist/ml-common-ng.min.js"></script>
     <script src="/bower_components/ml-search-ng/dist/ml-search-ng.js"></script>
     <script src="/bower_components/ml-search-ng/dist/ml-search-ng-tpls.min.js"></script>
+    <script src='/bower_components/angular-google-maps/dist/angular-google-maps.min.js'></script>
     <!-- endbuild -->
 
     <!-- build:js scripts/scripts.js -->
@@ -67,7 +69,7 @@
     <script src="/search/search-ctrl.js"></script>
     <script src="/detail/detail.js"></script>
     <script src="/detail/detail-ctrl.js"></script>
-    <script src="/esri-map/esri-map.js"></script>
+    <script src="/detail/detail-map-dir.js"></script>
     <script src="/user/user.js"></script>
     <script src="/user/user-dir.js"></script>
     <script src="/user/user-srv.js"></script>
@@ -76,8 +78,12 @@
     <script src="/create/create-ctrl.js"></script>
     <script src="/create/compile.js"></script>
     <script src="/common/common.js"></script>
+    <script src="/common/directives/search-input-dir.js"></script>
+    <script src="/search-map/search-map-ctrl.js"></script>
+
     <!-- endbuild -->
 
     <script src="//js.arcgis.com/3.11/"></script>
+    <script src='//maps.googleapis.com/maps/api/js?sensor=false'></script>
   </body>
 </html>
