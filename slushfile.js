@@ -85,20 +85,20 @@ function runRoxy(config) {
 
   console.log('Spawning Roxy new command: ' + scriptName + ' ' + args.join(' '));
   var child = spawn(scriptName, args);
-  
+
   child.on('close', function() {
     console.log('done running ml new');
     d.resolve('done');
   });
-  
+
   child.stdout.on('data', function (data) {
     console.log('' + data);
   });
-  
+
   child.stderr.on('data', function (data) {
     console.log('' + data);
   });
-  
+
   return d.promise;
 }
 
@@ -126,7 +126,7 @@ function configRoxy() {
       '      <range-element-indexes>\n' +
       '        <range-element-index>\n' +
       '          <scalar-type>string</scalar-type>\n' +
-      '          <namespace-uri>http://marklogic.com/xdmp/json/basic</namespace-uri>\n' +
+      '          <namespace-uri/>\n' +
       '          <localname>eyeColor</localname>\n' +
       '          <collation>http://marklogic.com/collation/codepoint</collation>\n' +
       '          <range-value-positions>false</range-value-positions>\n' +
