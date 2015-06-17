@@ -65,7 +65,7 @@
       <search:facet-option>limit=5</search:facet-option>
       <search:facet-option>frequency-order</search:facet-option>
       <search:facet-option>descending</search:facet-option>
-      <search:element ns="http://marklogic.com/xdmp/json/basic" name="eyeColor"/>
+      <search:json-property>eyeColor</search:json-property>
     </search:range>
   </search:constraint>
 

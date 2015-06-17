@@ -87,6 +87,6 @@ gulp.task('server', function() {
 });
 
 // Default Task
-gulp.task('default', ['jshint', 'less', 'scripts', 'watch'], function() {
+gulp.task('default', ['jshint', 'less', 'scripts', 'server', 'watch'], function() {
   fs.writeFileSync('gulp-default.pid', process.pid.toString(), 'ascii');
 });

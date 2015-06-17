@@ -53,7 +53,7 @@
             // 'perm:sample-role': 'read',
             // 'perm:sample-role': 'update'
           }).then(function(response) {
-            win.location.href = '/detail?uri=' + response.headers('location').replace(/(.*\?uri=)/, '');
+            win.location.href = '/detail?uri=' + response.replace(/(.*\?uri=)/, '');
           });
         },
         addTag: function() {
