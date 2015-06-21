@@ -16,7 +16,8 @@
     "highlightjs": "8.0.0",
     "ml-utils": "withjam/ml-utils",
     "ml-search-ng": "~0.0.6",
-    "lodash": "~2.4.1"
+    "lodash": "~2.4.1",
+    "ml-lodlive": "latest"
   },
   "devDependencies": {
     "angular-mocks": "1.2.14",
