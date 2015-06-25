@@ -15,7 +15,7 @@ var gulp = require('gulp'),
   ;
 
 var settings = {
-  includeEsri: false
+  mapType: 'none'
 };
 
 
@@ -139,14 +139,70 @@ function configRoxy() {
 
 }
 
-gulp.task('default', ['init', 'configEsri'], function(done) {
+gulp.task('default', ['init', 'configMaps'], function(done) {
   gulp.src(['./bower.json', './package.json'])
    .pipe(install());
 });
 
-gulp.task('configEsri', ['init'], function(done) {
-  if (!settings.includeEsri) {
-    var indexData, appData;
+gulp.task('configMaps', ['init'], function(done) {
+  if (settings.mapType === 'esri') {
+    var bowerData, indexData, appData;
+
+    try {
+      // Update the bower.json file.
+      bowerData = fs.readFileSync('bower.json', { encoding: 'utf8' });
+      bowerData = bowerData.replace(/^.*google.*$[\r\n]/gm, '');
+      fs.writeFileSync('bower.json', bowerData);
+    } catch (e) {
+      console.log('failed to update bower.json: ' + e.message);
+    }
+
+    try {
+      // Update the index.html file.
+      indexData = fs.readFileSync('ui/app/index.html', { encoding: 'utf8' });
+      indexData = indexData.replace(/^.*google.*$[\r\n]/gm, '');
+      indexData = indexData.replace(/^.*search-map-ctrl.*$[\r\n]/gm, '');
+      indexData = indexData.replace(/^.*\/map.*$[\r\n]/gm, '');
+      fs.writeFileSync('ui/app/index.html', indexData);
+    } catch (e) {
+      console.log('failed to update index.html: ' + e.message);
+    }
+
+    try {
+      // Update the app.js file.
+      appData = fs.readFileSync('ui/app/app.js', { encoding: 'utf8' });
+      appData = appData.replace(/^.*uiGmapgoogle-maps.*$[\r\n]/gm, '');
+      appData = appData.replace(/^.*sample\.searchMap.*$[\r\n]/gm, '');
+      appData = appData.replace(/^.*\/map[\s\S]*otherwise/gm, '      .otherwise');
+      fs.writeFileSync('ui/app/app.js', appData);
+    } catch (e) {
+      console.log('failed to update app.js: ' + e.message);
+    }
+  }
+  else if (settings.mapType === 'google') {
+    var mlConfig, indexData;
+
+    try {
+      var mlConfig = fs.readFileSync('deploy/ml-config.xml', { encoding: 'utf8' });
+
+      // add an index for the geospatial content
+      mlConfig = mlConfig.replace(/^\s*<geospatial-element-pair-indexes>/m,
+        '      <geospatial-element-pair-indexes>\n' +
+        '        <geospatial-element-pair-index>\n' +
+        '          <parent-namespace-uri>http://marklogic.com/xdmp/json/basic</parent-namespace-uri>\n' +
+        '          <parent-localname>json</parent-localname>\n' +
+        '          <latitude-namespace-uri>http://marklogic.com/xdmp/json/basic</latitude-namespace-uri>\n' +
+        '          <latitude-localname>latitude</latitude-localname>\n' +
+        '          <longitude-namespace-uri>http://marklogic.com/xdmp/json/basic</longitude-namespace-uri>\n' +
+        '          <longitude-localname>longitude</longitude-localname>\n' +
+        '          <coordinate-system>wgs84</coordinate-system>\n' +
+        '          <range-value-positions>true</range-value-positions>\n' +
+        '        </geospatial-element-pair-index>\n');
+
+      fs.writeFileSync('deploy/ml-config.xml', mlConfig);
+    } catch (e) {
+      console.log('failed to add geospatial index configuration: ' + e.message);
+    }
 
     try {
       // Update the index.html file.
@@ -157,11 +213,39 @@ gulp.task('configEsri', ['init'], function(done) {
     } catch (e) {
       console.log('failed to update index.html: ' + e.message);
     }
+  }
+  else {
+    var bowerData, indexData, appData;
+
+    try {
+      // Update the bower.json file.
+      bowerData = fs.readFileSync('bower.json', { encoding: 'utf8' });
+      bowerData = bowerData.replace(/^.*google.*$[\r\n]/gm, '');
+      fs.writeFileSync('bower.json', bowerData);
+    } catch (e) {
+      console.log('failed to update bower.json: ' + e.message);
+    }
+
+    try {
+      // Update the index.html file.
+      indexData = fs.readFileSync('ui/app/index.html', { encoding: 'utf8' });
+      indexData = indexData.replace(/^.*arcgis.*$[\r\n]/gm, '');
+      indexData = indexData.replace(/^.*esri.*$[\r\n]/gm, '');
+      indexData = indexData.replace(/^.*google.*$[\r\n]/gm, '');
+      indexData = indexData.replace(/^.*map.*$[\r\n]/gm, '');
+      fs.writeFileSync('ui/app/index.html', indexData);
+    } catch (e) {
+      console.log('failed to update index.html: ' + e.message);
+    }
 
     try {
       // Update the app.js file.
       appData = fs.readFileSync('ui/app/app.js', { encoding: 'utf8' });
       appData = appData.replace(/^.*esriMap.*$[\r\n]/gm, '');
+      appData = appData.replace(/^.*uiGmapgoogle-maps.*$[\r\n]/gm, '');
+      appData = appData.replace(/^.*sample\.detailMap.*$[\r\n]/gm, '');
+      appData = appData.replace(/^.*sample\.searchMap.*$[\r\n]/gm, '');
+      appData = appData.replace(/^.*\/map[\s\S]*otherwise/gm, '      .otherwise');
       fs.writeFileSync('ui/app/app.js', appData);
     } catch (e) {
       console.log('failed to update app.js: ' + e.message);
@@ -177,12 +261,12 @@ gulp.task('init', function (done) {
     {type: 'list', name: 'mlVersion', message: 'MarkLogic version?', choices: ['8','7', '6', '5'], default: 0},
     {type: 'list', name: 'appType', message: 'Roxy App Type?', choices: ['rest', 'mvc', 'hybrid'], default: 0},
     {type: 'list', name: 'branch', message: 'Roxy Branch?', choices: ['master', 'dev'], default: 0},
-    {type: 'confirm', name: 'includeEsri', message: 'Include ESRI Maps?', default: false}
+    {type: 'list', name: 'mapType', message: 'Map Type?', choices: ['none', 'google', 'esri'], default: 0}
   ],
   function (answers) {
     answers.nameDashed = _.slugify(answers.name);
     answers.modulename = _.camelize(answers.nameDashed);
-    settings.includeEsri = answers.includeEsri;
+    settings.mapType   = answers.mapType;
 
     getRoxyScript(answers.nameDashed, answers.mlVersion, answers.appType, answers.branch)
       .then(runRoxy)
@@ -190,14 +274,25 @@ gulp.task('init', function (done) {
         // Copy over the Angular files
         var files = [__dirname + '/app/templates/**'];
 
-        // Adjust files to copy based on whether ESRI Maps are included
-        if (!answers.includeEsri) {
-          files.push('!' + __dirname + '/app/templates/ui/app/esri-map/**');
-          files.push('!' + __dirname + '/app/templates/ui/app/esri-map');
-          files.push('!' + __dirname + '/app/templates/ui/app/detail/detail.html');
+        // Adjust files to copy based on selected map type
+        if ('esri' === answers.mapType) {
+          files.push('!' + __dirname + '/app/templates/rest-api/config/options/map.xml');
+          files.push('!' + __dirname + '/app/templates/ui/app/detail/detail-no-map.html');
+          files.push('!' + __dirname + '/app/templates/ui/app/detail/detail-map-dir.google.js');
+          files.push('!' + __dirname + '/app/templates/ui/app/search-map/**');
+          files.push('!' + __dirname + '/app/templates/ui/app/search-map');
+        }
+        else if ('google' === answers.mapType) {
+          files.push('!' + __dirname + '/app/templates/ui/app/detail/detail-no-map.html');
+          files.push('!' + __dirname + '/app/templates/ui/app/detail/detail-map-dir.esri.js');
         }
         else {
-          files.push('!' + __dirname + '/app/templates/ui/app/detail/detail-no-esri.html');
+          files.push('!' + __dirname + '/app/templates/rest-api/config/options/map.xml');
+          files.push('!' + __dirname + '/app/templates/ui/app/detail/detail-map-dir.esri.js');
+          files.push('!' + __dirname + '/app/templates/ui/app/detail/detail-map-dir.google.js');
+          files.push('!' + __dirname + '/app/templates/ui/app/search-map/**');
+          files.push('!' + __dirname + '/app/templates/ui/app/search-map');
+          files.push('!' + __dirname + '/app/templates/ui/app/detail/detail.html');
         }
 
         process.chdir('./' + answers.nameDashed);
@@ -210,11 +305,20 @@ gulp.task('init', function (done) {
             if (file.basename[0] === '_') {
               file.basename = '.' + file.basename.slice(1);
             }
-
-            // Rename detail file when not using ESRI.
-            else if (!answers.includeEsri && file.basename === 'detail-no-esri' && file.extname === '.html') {
+            // Rename detail file when not using a map.
+            else if ('none' === answers.mapType && file.basename === 'detail-no-map' && file.extname === '.html') {
               console.log('changed name to detail.html');
               file.basename = 'detail';
+            }
+            // Rename detail-map-directive file when using google
+            else if ('google' === answers.mapType && file.basename === 'detail-map-dir.google' && file.extname === '.js') {
+              console.log('changed name to detail-map-dir.js');
+              file.basename = 'detail-map-dir';
+            }
+            // Rename detail-map-directive file when using esri
+            else if ('esri' === answers.mapType && file.basename === 'detail-map-dir.esri' && file.extname === '.js') {
+              console.log('changed name to detail-map-dir.js');
+              file.basename = 'detail-map-dir';
             }
 
           }))

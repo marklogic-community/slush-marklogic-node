@@ -1,0 +1,13 @@
+<h1>Map</h1>
+<div class="row">
+  <ml-facets class="col-md-2" facets="model.search.facets" toggle="toggleFacet(facet, value)"></ml-facets>
+  <div class="col-md-10">
+    <ui-gmap-google-map center="model.map.center" zoom="model.map.zoom" events="model.map.events" bounds="model.map.bounds" class="map-search">
+      <ui-gmap-markers models="model.markers" coords="'coords'" >
+        <ui-gmap-windows show="show">
+          <div ng-non-bindable><a href='/detail?uri={{id}}'>{{title}}</a></div>
+        </ui-gmap-windows>
+      </ui-gmap-markers>
+    </ui-gmap-google-map>
+  </div>
+</div>

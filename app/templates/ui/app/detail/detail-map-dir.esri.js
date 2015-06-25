@@ -2,18 +2,18 @@
 
   'use strict';
 
-  angular.module('sample.esriMap', [])
-  .directive('esriMap', [function () {
+  angular.module('sample.detailMap', [])
+  .directive('detailMap', [function () {
     return {
       restrict: 'E',
       scope: {
         detail: '='
       },
       template: '<div id="_detailMap" class="map-detail"></div>',
-      controller: 'EsriDetailMapController'
+      controller: 'DetailMapController'
     };
   }])
-  .controller('EsriDetailMapController', ['$scope',
+  .controller('DetailMapController', ['$scope',
     function ($scope) {
       var ctrl = this;
       ctrl.baseMap = 'national-geographic';
@@ -94,4 +94,3 @@
       }
     }]);
 }());
-
