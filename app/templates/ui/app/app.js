@@ -2,20 +2,20 @@
   'use strict';
 
   angular.module('sample', [
-    'ui.router',
-    'ui.tinymce',
-    'ui.bootstrap',
-    'ngJsonExplorer',
     'ml.common',
     'ml.search',
     'ml.search.tpls',
     'ml.utils',
-    'sample.user',
-    'sample.search',
+    'ngJsonExplorer',
+    'sample.create',
     'sample.detail',
     'sample.esriMap',
-    'sample.create',
-    'sample.templates'
+    'sample.search',
+    'sample.templates',
+    'sample.user',
+    'ui.bootstrap',
+    'ui.router',
+    'ui.tinymce'
   ])
     .config(Config);
 
