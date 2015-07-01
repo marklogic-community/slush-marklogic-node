@@ -1,2 +1,0 @@
-
-angular.module('sample.search', []);

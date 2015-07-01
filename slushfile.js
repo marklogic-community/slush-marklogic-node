@@ -150,10 +150,10 @@ gulp.task('configEsri', ['init'], function(done) {
 
     try {
       // Update the index.html file.
-      indexData = fs.readFileSync('ui/app/index.html', { encoding: 'utf8' });
+      indexData = fs.readFileSync('ui/index.html', { encoding: 'utf8' });
       indexData = indexData.replace(/^.*arcgis.*$[\r\n]/gm, '');
       indexData = indexData.replace(/^.*esri.*$[\r\n]/gm, '');
-      fs.writeFileSync('ui/app/index.html', indexData);
+      fs.writeFileSync('ui/index.html', indexData);
     } catch (e) {
       console.log('failed to update index.html: ' + e.message);
     }
