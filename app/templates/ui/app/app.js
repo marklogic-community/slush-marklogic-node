@@ -1,50 +1,109 @@
+(function () {
+  'use strict';
 
-angular.module('sample', [
-  'ngRoute',
-  'ngCkeditor',
-  'ui.bootstrap',
-  'ngJsonExplorer',
-  'ml.common',
-  'ml.search',
-  'ml.search.tpls',
-  'ml.utils',
-  'sample.user',
-  'sample.search',
-  'sample.common',
-  'sample.detail',
-  'sample.esriMap',
-  'sample.create'
-])
-  .config(['$routeProvider', '$locationProvider', 'mlMapsProvider', function ($routeProvider, $locationProvider, mlMapsProvider) {
+  angular.module('sample', [
+    'ui.router',
+    'ui.tinymce',
+    'ui.bootstrap',
+    'ngJsonExplorer',
+    'ml.common',
+    'ml.search',
+    'ml.search.tpls',
+    'ml.utils',
+    'sample.user',
+    'sample.search',
+    'sample.detail',
+    'sample.esriMap',
+    'sample.create',
+    'sample.templates'
+  ])
+    .config(Config);
 
-    'use strict';
+  Config.$inject = [
+    '$stateProvider',
+    '$urlMatcherFactoryProvider',
+    '$urlRouterProvider',
+    '$locationProvider'
+  ];
 
-    // to use google maps, version 3, with the drawing and visualization libraries
-    // mlMapsProvider.useVersion(3);
-    // mlMapsProvider.addLibrary('drawing');
-    // mlMapsProvider.addLibrary('visualization');
+  function Config(
+    $stateProvider,
+    $urlMatcherFactoryProvider,
+    $urlRouterProvider,
+    $locationProvider) {
 
+    $urlRouterProvider.otherwise('/');
     $locationProvider.html5Mode(true);
 
-    $routeProvider
-      .when('/', {
-        templateUrl: '/search/search.html',
+    function valToFromString(val) {
+      return val !== null ? val.toString() : val;
+    }
+
+    function regexpMatches(val) { // jshint validthis:true
+      return this.pattern.test(val);
+    }
+
+    $urlMatcherFactoryProvider.type('path', {
+      encode: valToFromString,
+      decode: valToFromString,
+      is: regexpMatches,
+      pattern: /.+/
+    });
+
+    $stateProvider
+      .state('root', {
+        url: '',
+        // abstract: true,
+        templateUrl: 'app/root/root.html',
+        resolve: {
+          user: function(userService) {
+            return userService.getUser();
+          }
+        }
+      })
+      .state('root.search', {
+        url: '/',
+        templateUrl: 'app/search/search.html',
         controller: 'SearchCtrl',
-        reloadOnSearch: false
+        controllerAs: 'ctrl'
       })
-      .when('/create', {
-        templateUrl: '/create/create.html',
-        controller: 'CreateCtrl'
+      .state('root.create', {
+        url: '/create',
+        templateUrl: 'app/create/create.html',
+        controller: 'CreateCtrl',
+        controllerAs: 'ctrl',
+        resolve: {
+          stuff: function() {
+            console.log('root.create');
+            return null;
+          }
+        }
       })
-      .when('/detail', {
-        templateUrl: '/detail/detail.html',
-        controller: 'DetailCtrl'
+      .state('root.view', {
+        url: '/detail{uri:path}',
+        params: {
+          uri: {
+            squash: true,
+            value: null
+          }
+        },
+        templateUrl: 'app/detail/detail.html',
+        controller: 'DetailCtrl',
+        controllerAs: 'ctrl',
+        resolve: {
+          doc: function(MLRest, $stateParams) {
+            var uri = $stateParams.uri;
+            return MLRest.getDocument(uri, { format: 'json' }).then(function(response) {
+              return response.data;
+            });
+          }
+        }
       })
-      .when('/profile', {
-        templateUrl: '/user/profile.html',
-        controller: 'ProfileCtrl'
-      })
-      .otherwise({
-        redirectTo: '/'
+      .state('root.profile', {
+        url: '/profile',
+        templateUrl: 'app/user/profile.html',
+        controller: 'ProfileCtrl',
+        controllerAs: 'ctrl'
       });
-  }]);
+  }
+}());

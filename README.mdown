@@ -34,8 +34,8 @@ When the generator is finished, start up your application by:
 - edit deploy/build.properties; set the -port properties to available ports (defaults: 8040, 8041)
 - $ ./ml local bootstrap
 - $ ./ml local deploy modules
-- edit gulpfile.js. In the options section near the top, set your desired ports
-- $ gulp # this will watch for changes, compile files, and run the server
+- edit gulp.config.js to set your desired ports
+- $ gulp serve-dev# this will watch the .less file for changes and compile them to .css
 
 # Data
 ## Sample Data
