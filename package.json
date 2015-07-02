@@ -21,7 +21,7 @@
     "inquirer": "~0.4.1",
     "q": "1.0.x",
     "readable-stream": "^1.0.27-1",
-    "underscore.string": "~2.3.3"
+    "underscore.string": "~2.3.3",
     "vows": "0.5.x"
   },
   "engine": "node >= 0.4.1",
