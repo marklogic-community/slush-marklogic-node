@@ -11,7 +11,7 @@
 
     <div ng-if="ctrl.response.total > 0" class="results">
 
-      <pagination ng-model="model.page" ng-change="search()" max-size="10" boundary-links="true"
+      <pagination ng-model="ctrl.page" ng-change="ctrl.search()" max-size="10" boundary-links="true"
                   total-items="ctrl.response.total" items-per-page="ctrl.response['page-length']"></pagination>
 
       <ml-metrics search="ctrl.response"></ml-metrics>
