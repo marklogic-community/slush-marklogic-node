@@ -12,18 +12,16 @@
     "marklogic"
   ],
   "dependencies": {
+    "fetch": "0.3.x",
     "gulp": "3.8.x",
     "gulp-install": "~0.1.1",
     "gulp-conflict": "~0.1.1",
-    "gulp-template": "~0.1.1",
-    "underscore.string": "~2.3.3",
     "gulp-rename": "~1.2.0",
+    "gulp-template": "~0.1.1",
     "inquirer": "~0.4.1",
-    "fetch": "0.3.x",
-    "q": "1.0.x"
-  },
-  "devDependencies": {
+    "q": "1.0.x",
     "readable-stream": "^1.0.27-1",
+    "underscore.string": "~2.3.3",
     "vows": "0.5.x"
   },
   "engine": "node >= 0.4.1",

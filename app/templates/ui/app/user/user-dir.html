@@ -1,22 +1,21 @@
 <div class="pull-right user">
   <!-- form to log in -->
-  <form class="navbar-form navbar-right" ng-hide="user.authenticated"
-    ng-submit="login(user.name, password)">
+  <form class="navbar-form navbar-right" ng-if="!ctrl.currentUser" ng-submit="ctrl.login()">
     <div class="alert alert-danger" ng-show="user.loginError" ng-cloak>Username and/or Password Incorrect</div>
     <div class="form-group">
-      <input type="text" placeholder="Username" class="form-control" ng-model="user.name">
+      <input type="text" placeholder="Username" class="form-control" ng-model="ctrl.username">
     </div>
     <div class="form-group">
-      <input type="password" placeholder="Password" class="form-control" ng-model="password">
+      <input type="password" placeholder="Password" class="form-control" ng-model="ctrl.password">
     </div>
     <button type="submit" class="btn btn-success">Sign in</button>
   </form>
   <!-- display the logged in user -->
-  <div class="welcome" ng-show="user.authenticated">
+  <div class="welcome" ng-if="ctrl.currentUser">
     <div class="navbar-collapse collapse">
-      <span class="glyphicon glyphicon-user"></span> {{user.name}} | <span class="profile-link"><a href="/profile">Account</a></span>
+      <span class="glyphicon glyphicon-user"></span> {{ctrl.currentUser.name}} | <span class="profile-link"><a href="/profile">Account</a></span>
 
-      <button class="btn btn-default btn-xs" type="button" ng-click="logout()">Logout</button>
+      <button class="btn btn-default btn-xs" type="button" ng-click="ctrl.logout()">Logout</button>
 
     </div><!--/.navbar-collapse -->
   </div>

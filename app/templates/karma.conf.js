@@ -1,94 +1,66 @@
+/*jshint node: true */
+
+'use strict';
 /*global module*/
 // Karma configuration
 // http://karma-runner.github.io/0.10/config/configuration-file.html
 
 module.exports = function(config) {
-  'use strict';
+  var gulpConfig = require('./gulp.config')();
 
   config.set({
-    // base path, that will be used to resolve files and exclude
-    basePath: '',
+    // base path that will be used to resolve all patterns (eg. files, exclude)
+    basePath: './',
 
-    // testing framework to use (jasmine/mocha/qunit/...)
-    frameworks: ['jasmine'],
+    // frameworks to use
+    // some available frameworks: https://npmjs.org/browse/keyword/karma-adapter
+    frameworks: ['mocha', 'chai', 'sinon', 'chai-sinon'],
 
     // list of files / patterns to load in the browser
-    files: [
-      // Required libraries
-      'ui/app/bower_components/angular/angular.js',
-      'ui/app/bower_components/angular-route/angular-route.js',
-      'ui/app/bower_components/angular-cookies/angular-cookies.js',
-      'ui/app/bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
-      'ui/app/bower_components/jquery/jquery.js',
-      'ui/app/bower_components/ckeditor/ckeditor.js',
-      'ui/app/bower_components/ng-ckeditor/ng-ckeditor.js',
-      'ui/app/bower_components/mlFacets/dist/ml-facets.js',
-      'ui/app/bower_components/ng-json-explorer/src/gd-ui-jsonexplorer.js',
+    files: gulpConfig.karma.files,
 
-      // App under test
-      'ui/app/app.js',
-      'ui/app/common/common.js',
-      'ui/app/common/**/*.js',
-      'ui/app/create/create.js',
-      'ui/app/create/**/*.js',
-      'ui/app/user/user.js',
-      'ui/app/search/search.js',
-      'ui/app/search/*.js',
-      'ui/app/detail/detail.js',
-      'ui/app/detail/*.js',
+    // list of files to exclude
+    exclude: gulpConfig.karma.exclude,
 
-      // templates
-      'ui/app/**/*.html',
-
-      // Mocks
-      'ui/app/bower_components/angular-mocks/angular-mocks.js',
-
-      // Tests
-      // 'ui/test/**/*.js'
-      'ui/test/helpers.js',
-      'ui/test/spec/common/**/*.js',
-      'ui/test/spec/controllers/*.js',
-      'ui/test/spec/directives/*.js'
-    ],
-
-    // generate js files from html templates
-    preprocessors: {
-      'ui/app/**/*.html': 'ng-html2js'
+    proxies: {
+      '/': 'http://localhost:8888/'
     },
 
-    ngHtml2JsPreprocessor: {
-      stripPrefix: 'ui/app',
-      moduleName: 'app-templates'
-    },
+    // preprocess matching files before serving them to the browser
+    // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
+    preprocessors: gulpConfig.karma.preprocessors,
 
-    // list of files / patterns to exclude
-    exclude: [],
+    // test results reporter to use
+    // possible values: 'dots', 'progress', 'coverage'
+    // available reporters: https://npmjs.org/browse/keyword/karma-reporter
+    reporters: ['progress', 'coverage', 'notify'],
+
+    coverageReporter: {
+      dir: gulpConfig.karma.coverage.dir,
+      reporters: gulpConfig.karma.coverage.reporters
+    },
 
     // web server port
-    port: 15472,
+    port: 9876,
+
+    // enable / disable colors in the output (reporters and logs)
+    colors: true,
 
     // level of logging
-    // possible values: LOG_DISABLE || LOG_ERROR || LOG_WARN || LOG_INFO || LOG_DEBUG
+    // possible values: config.LOG_DISABLE || config.LOG_ERROR ||
+    // config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
     logLevel: config.LOG_INFO,
 
-
     // enable / disable watching file and executing tests whenever any file changes
-    autoWatch: false,
+    autoWatch: true,
 
-
-    // Start these browsers, currently available:
-    // - Chrome
-    // - ChromeCanary
-    // - Firefox
-    // - Opera
-    // - Safari (only Mac)
-    // - PhantomJS
-    // - IE (only Windows)
+    // start these browsers
+    // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
+    //    browsers: ['Chrome', 'ChromeCanary', 'FirefoxAurora', 'Safari', 'PhantomJS'],
     browsers: ['PhantomJS'],
 
-
     // Continuous Integration mode
-    // if true, it capture browsers, run tests and exit
+    // if true, Karma captures browsers, runs the tests and exits
     singleRun: false
   });
 };

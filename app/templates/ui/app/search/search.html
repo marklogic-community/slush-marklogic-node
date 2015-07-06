@@ -1,17 +1,21 @@
 <h1>Sample MarkLogic Application</h1>
-<div ng-show="!model.user.authenticated">Please log in to see content</div>
-<div class="row">
-  <ml-facets class="col-md-3" facets="model.search.facets" toggle="toggleFacet(facet, value)"></ml-facets>
+<div class="row" ng-if="!ctrl.currentUser">Please log in to see content</div>
+<div class="row" ng-if="ctrl.currentUser">
+  <ml-input qtext="ctrl.qtext" search="ctrl.search(qtext)" suggest="ctrl.suggest(val)" template="fa"></ml-input>
+</div>
+
+<div class="row" ng-if="ctrl.currentUser">
+  <ml-facets class="col-md-3" facets="ctrl.response.facets" toggle="ctrl.toggleFacet(facet, value)"></ml-facets>
   <div class="col-md-9">
-    <h3 ng-if="model.search.total === 0">No results to show</h3>
+    <h3 ng-if="ctrl.response.total === 0">No results to show</h3>
 
-    <div ng-if="model.search.total > 0" class="results">
+    <div ng-if="ctrl.response.total > 0" class="results">
 
-      <pagination ng-model="model.page" ng-change="search()" max-size="10" boundary-links="true"
-                  total-items="model.search.total" items-per-page="model.search['page-length']"></pagination>
+      <pagination ng-model="ctrl.page" ng-change="ctrl.search()" max-size="10" boundary-links="true"
+                  total-items="ctrl.response.total" items-per-page="ctrl.response['page-length']"></pagination>
 
-      <ml-metrics search="model.search"></ml-metrics>
-      <ml-results results="model.search.results"></ml-results>
+      <ml-metrics search="ctrl.response"></ml-metrics>
+      <ml-results template="app/search/search-results.html" results="ctrl.response.results"></ml-results>
     </div>
   </div>
 </div>
