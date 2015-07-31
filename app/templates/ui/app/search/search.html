@@ -4,8 +4,8 @@
   <ml-input qtext="ctrl.qtext" search="ctrl.search(qtext)" suggest="ctrl.suggest(val)" template="fa"></ml-input>
 </div>
 
-<div class="row" ng-if="ctrl.currentUser">
-  <ml-facets class="col-md-3" facets="ctrl.response.facets" toggle="ctrl.toggleFacet(facet, value)"></ml-facets>
+<div class="search row" ng-if="ctrl.currentUser">
+  <ml-facets class="col-md-3" facets="ctrl.response.facets" toggle="ctrl.toggleFacet(facet, value)" show-more="ctrl.showMoreFacets(facet, facetName)"></ml-facets>
   <div class="col-md-9">
     <h3 ng-if="ctrl.response.total === 0">No results to show</h3>
 
