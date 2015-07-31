@@ -3,21 +3,58 @@
 'use strict';
 
 var gulp = require('gulp'),
+  colors = require('colors'),
   FetchStream = require('fetch').FetchStream,
   fs = require('fs'),
   inquirer = require('inquirer'),
   install = require('gulp-install'),
   q = require('q'),
   rename = require('gulp-rename'),
+  pkgSettings = require('./package.json'),
   spawn = require('child_process').spawn,
   win32 = process.platform === 'win32',
   _ = require('underscore.string')
   ;
 
+var npmVersion = null;
+
 var settings = {
   includeEsri: false
 };
 
+function printVersionWarning() {
+  if (npmVersion && npmVersion !== pkgSettings.version.trim()) {
+    process.stdout.write('\n------------------------------------\n'.red);
+    process.stdout.write('Slush MarkLogic Node is out of date:\n'.bold.yellow);
+    process.stdout.write( (' * Locally installed version: ' + pkgSettings.version + '\n').yellow );
+    process.stdout.write( (' * Latest version: ' + npmVersion + '\n').yellow );
+    process.stdout.write( ' * Run '.yellow + 'npm install -g slush-marklogic-node'.bold + ' to update\n'.yellow );
+    process.stdout.write('------------------------------------\n\n'.red);
+    npmVersion = null;
+  }
+}
+
+function checkLatestVersion() {
+  var latestVersion = q.defer();
+
+  try {
+    console.log('checking for latest version');
+    var proxy = process.env.PROXY || process.env.http_proxy || null;
+    var request = require('request');
+    request({ url: 'http://registry.npmjs.org/slush-marklogic-node/latest', proxy: proxy }, function(err, res, body) {
+      try {
+        npmVersion = JSON.parse(body).version;
+      }
+      catch(e) {}
+      latestVersion.resolve();
+    });
+  }
+  catch (e) {
+    latestVersion.resolve();
+  }
+
+  return latestVersion.promise;
+}
 
 function getNameProposal () {
   var path = require('path');
@@ -171,7 +208,14 @@ gulp.task('configEsri', ['init'], function(done) {
   done();
 });
 
-gulp.task('init', function (done) {
+gulp.task('checkForUpdates', function(done) {
+  checkLatestVersion().then(function() {
+    printVersionWarning();
+    done();
+  });
+});
+
+gulp.task('init', ['checkForUpdates'], function (done) {
   inquirer.prompt([
     {type: 'input', name: 'name', message: 'Name for the app?', default: getNameProposal()},
     {type: 'list', name: 'mlVersion', message: 'MarkLogic version?', choices: ['8','7', '6', '5'], default: 0},
