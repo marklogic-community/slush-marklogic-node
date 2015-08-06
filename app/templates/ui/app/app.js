@@ -61,8 +61,12 @@
           }
         }
       })
-      .state('root.search', {
+      .state('root.landing', {
         url: '/',
+        templateUrl: 'app/landing/landing.html'
+      })
+      .state('root.search', {
+        url: '/search',
         templateUrl: 'app/search/search.html',
         controller: 'SearchCtrl',
         controllerAs: 'ctrl'
