@@ -1,29 +1,114 @@
 @import "../../bower_components/bootstrap/less/bootstrap.less";
 @import "../../bower_components/font-awesome/less/font-awesome.less";
-
 @icon-font-path:  "/fonts/";
 @FontAwesomePath:    "/fonts/";
 
-.navbar-brand {
-  background-image: url(/images/logo.png);
-  background-repeat: no-repeat;
-  background-position-y: 7px;
-  padding-left: 36px;
+body {
+  background-color: #eee;
 }
 
-#footer {
-  border-top: 1px solid;
-  height: 51px;
-  margin-top: 15px;
+.navbar-brand {
+  text-indent: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  background: url('/images/marklogic.png') no-repeat;
+  background-size: contain;
+  min-height: 30px;
+  height: 30px;
+  margin: .8em;
+  width: 160px;
+  text-indent: 9999px;
+}
 
-  .powered {
-    background-image: url(/images/PoweredByMarkLogic.png);
-    background-repeat: no-repeat;
-    float: right;
-    height: 50px;
-    margin-right: 20px;
-    width: 161px;
+.navbar {
+  margin-bottom: 0;
+}
+
+nav.nav {
+  border-bottom: 1px solid #ccc;
+  border-radius: 0;  
+}
+
+/* user login/logout */
+.user {
+  button {
+    margin-left: 3px;
   }
+  input {
+    margin: 0 2px;
+  }
+}
+
+/*footer*/
+footer {
+  bottom: 0;
+  width: 100%;
+  padding: 1.3em 0;
+  border-top: 1px solid #ccc;
+  color: #555555;
+  text-align: center;
+  background-color: #eee;
+
+  .social-links {
+
+    margin: auto;
+
+    a {
+      width: 25px;
+      height: 25px;
+      display: inline-block;
+      margin-left: 1.5em;
+
+      img { width: 100%; max-height: 100%; }
+      &:first-child{ margin-left: 0 }
+    }
+  }
+
+  .nav {
+    padding: 1em 0;
+
+    li {
+
+      display: inline-block;
+
+      a {
+        color: #555;
+        display: block;
+        padding: 0 0 0 1em;
+
+        &:after {
+          content: '|';
+          display: inline-block;
+          margin-left: 1em;
+        }
+      }
+
+      &:last-child {
+        a {
+          padding-right: 1em;
+        }
+        a:after{ display: none; margin-left: 0; }
+
+      }
+    }
+  }
+
+  .copyright { font-size: 0.9em }
+
+  .nav > li > a:hover, .nav > li > a:focus {
+    text-decoration: none;
+    background-color: #dedede;
+  }
+}
+
+.powered {
+    background: url(/images/MarkLogic-Powered-By.png) 10px 10px no-repeat;
+  }
+
+/*Content well*/
+.content {
+  background-color: #fff;
+  padding: 20px 0;
 }
 
 .detail {
@@ -42,10 +127,6 @@
 
 .facet-list .facet a {
   cursor: pointer;
-}
-
-.search {
-  margin-top: 2em;
 }
 
 .results {
