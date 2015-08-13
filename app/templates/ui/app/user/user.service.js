@@ -7,9 +7,14 @@
   UserService.$inject = ['$http', '$rootScope'];
   function UserService($http, $rootScope) {
     var _currentUser = null;
+    var _loginError = false;
 
     function currentUser() {
       return _currentUser;
+    }
+
+    function loginError() {
+      return _loginError;
     }
 
     function getUser() {
@@ -18,6 +23,12 @@
       }
 
       return $http.get('/api/user/status', {}).then(updateUser);
+    }
+
+    function failLogin(response) {
+      if (response.status === 401){
+        _loginError = true;
+      }
     }
 
     function updateUser(response) {
@@ -45,6 +56,7 @@
       }
 
       $rootScope.$broadcast('auth:login-success', _currentUser);
+      _loginError = false;
       return _currentUser;
     }
 
@@ -54,7 +66,7 @@
           'username': username,
           'password': password
         }
-      }).then(updateUser);
+      }).then(updateUser, failLogin);
     }
 
     function logout() {
@@ -68,6 +80,7 @@
       currentUser: currentUser,
       login: login,
       logout: logout,
+      loginError: loginError,
       getUser: getUser
     };
   }
