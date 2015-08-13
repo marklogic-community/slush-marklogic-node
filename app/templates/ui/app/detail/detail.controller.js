@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  angular.module('sample.detail')
+  angular.module('app.detail')
     .controller('DetailCtrl', DetailCtrl);
 
   DetailCtrl.$inject = ['doc'];

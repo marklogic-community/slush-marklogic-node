@@ -67,7 +67,7 @@ module.exports = function() {
       '**/*.module.js',
       '**/*.js'
     ],
-    less: client + 'styles/main.less',
+    less: client + 'styles/**/*.less',
     report: report,
     root: root,
     server: server,
@@ -103,9 +103,8 @@ module.exports = function() {
     templateCache: {
       file: 'templates.js',
       options: {
-        module: 'sample.templates',
-        root: 'app/',
-        standalone: true
+        module: 'app',
+        root: 'app/'
       }
     },
 
@@ -147,7 +146,7 @@ module.exports = function() {
     /**
      * Node settings
      */
-    nodeServer: './node-server/app.js',
+    nodeServer: './node-server/node-app.js',
     defaultPort: '9070'
   };
 

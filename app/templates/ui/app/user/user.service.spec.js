@@ -13,7 +13,7 @@
     };
 
     beforeEach(function() {
-      bard.appModule('sample.user');
+      bard.appModule('app.user');
       bard.inject('$q', '$http', '$rootScope');
 
       bard.mockService($http, {

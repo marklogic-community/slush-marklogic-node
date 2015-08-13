@@ -158,11 +158,9 @@ gulp.task('wiredep', function() {
 gulp.task('inject', ['wiredep', 'styles', 'templatecache'], function() {
   log('Wire up css into the html, after files are ready');
 
-  var templateCache = config.temp + config.templateCache.file;
   return gulp
     .src(config.index)
     .pipe(inject(config.css))
-    .pipe(inject(templateCache, 'templates'))
     .pipe(gulp.dest(config.client));
 });
 
@@ -508,7 +506,7 @@ function startBrowserSync(isDev, specRunner) {
   if (isDev) {
     gulp.watch([config.less], ['styles'])
       .on('change', changeEvent);
-    gulp.watch([config.html], ['styles', 'inject'])
+    gulp.watch([config.js], ['wiredep'])
       .on('change', changeEvent);
   } else {
     gulp.watch([config.less, config.js, config.html], ['optimize', browserSync.reload])

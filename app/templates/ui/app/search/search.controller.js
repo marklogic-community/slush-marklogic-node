@@ -2,7 +2,7 @@
 (function () {
   'use strict';
 
-  angular.module('sample.search')
+  angular.module('app.search')
     .controller('SearchCtrl', SearchCtrl);
 
   SearchCtrl.$inject = ['$scope', '$location', 'userService', 'MLSearchFactory'];

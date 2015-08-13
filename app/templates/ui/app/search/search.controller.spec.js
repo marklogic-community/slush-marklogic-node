@@ -18,7 +18,7 @@
     ];
 
     beforeEach(function() {
-      bard.appModule('sample.search');
+      bard.appModule('app.search');
       bard.inject('$controller', '$q', '$rootScope', '$location',
         'userService', 'MLSearchFactory', 'MLRest');
 

@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  angular.module('sample.create')
+  angular.module('app.create')
     .controller('CreateCtrl', CreateCtrl);
 
   CreateCtrl.$inject = ['$scope', 'MLRest', '$state', 'userService'];
