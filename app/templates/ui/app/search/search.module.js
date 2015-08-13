@@ -1,5 +1,5 @@
 (function () {
   'use strict';
 
-  angular.module('sample.search', ['ml.search', 'sample.user']);
+  angular.module('app.search', ['ml.search', 'app.user']);
 }());

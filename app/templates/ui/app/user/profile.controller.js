@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  angular.module('sample.user')
+  angular.module('app.user')
     .controller('ProfileCtrl', ProfileCtrl);
 
   ProfileCtrl.$inject = ['$scope', '$state', 'MLRest', 'userService'];

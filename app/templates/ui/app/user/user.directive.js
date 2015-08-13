@@ -2,7 +2,7 @@
 
   'use strict';
 
-  angular.module('sample.user')
+  angular.module('app.user')
     .directive('mlUser', UserDirective)
     .controller('UserController', UserController);
 

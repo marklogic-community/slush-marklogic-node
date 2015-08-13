@@ -13,7 +13,7 @@
     var currentState;
 
     beforeEach(function() {
-      bard.appModule('sample.user');
+      bard.appModule('app.user');
       bard.inject('$controller', '$q', '$rootScope', 'MLRest', '$state', 'userService');
 
       bard.mockService(MLRest, {

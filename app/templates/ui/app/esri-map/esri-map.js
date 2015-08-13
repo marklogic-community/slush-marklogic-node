@@ -2,7 +2,7 @@
 
   'use strict';
 
-  angular.module('sample.esriMap', [])
+  angular.module('app.esriMap', [])
   .directive('esriMap', EsriMapDirective)
   .controller('EsriDetailMapController', EsriDetailMapController);
 

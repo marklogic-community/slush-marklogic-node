@@ -8,7 +8,7 @@
     var doc;
 
     beforeEach(function() {
-      bard.appModule('sample.detail');
+      bard.appModule('app.detail');
       bard.inject('$controller', '$rootScope');
     });
 

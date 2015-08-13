@@ -2,28 +2,25 @@
   "name": "ml-node-seed",
   "version": "0.0.0",
   "dependencies": {
-    "angular": "1.4.1",
-    "angular-bootstrap": "~0.11.0",
-    "angular-cookies": "1.4.1",
-    "angular-highlightjs": "0.3.0",
+    "angular": "~1.4.3",
+    "angular-bootstrap": "~0.13.3",
+    "angular-cookies": "~1.4.3",
+    "angular-highlightjs": "~0.4.3",
     "angular-ui-router": "~0.2.15",
     "angular-ui-tinymce": "~0.0.9",
     "bootstrap": "~3.3.5",
-    "font-awesome": "~4.3.0",
-    "highlightjs": "8.0.0",
+    "font-awesome": "~4.4.0",
+    "highlightjs": "~8.7.0",
     "jquery": "~2.1.4",
-    "lodash": "3.9.3",
+    "lodash": "~3.10.1",
     "ml-search-ng": "0.1.0",
     "ml-utils": "withjam/ml-utils",
-    "ng-json-explorer": "8c2a0f9104"
+    "ng-json-explorer": "8c2a0f9104",
+    "angular-mocks": "~1.4.3"
   },
   "devDependencies": {
-    "angular-mocks": "1.4.1",
-    "sinon": "http://sinonjs.org/releases/sinon-1.12.1.js",
-    "bardjs": "~0.1.0"
-  },
-  "resolutions": {
-    "lodash": "3.9.3",
-    "angular": "1.4.1"
+    "angular-mocks": "1.4.3",
+    "sinon": "http://sinonjs.org/releases/sinon-1.15.4.js",
+    "bardjs": "~0.1.5"
   }
 }

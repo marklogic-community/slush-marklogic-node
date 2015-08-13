@@ -1,5 +1,5 @@
 (function () {
   'use strict';
 
-  angular.module('sample.create', ['ml.common', 'sample.user']);
+  angular.module('app.create', ['ml.common', 'app.user']);
 }());

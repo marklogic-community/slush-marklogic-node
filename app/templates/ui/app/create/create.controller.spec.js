@@ -8,7 +8,7 @@
     var nextState;
 
     beforeEach(function() {
-      bard.appModule('sample.create');
+      bard.appModule('app.create');
       bard.inject('$controller', '$q', '$rootScope', 'MLRest', '$state', 'userService');
 
       bard.mockService(MLRest, {

@@ -1,5 +1,5 @@
 (function () {
   'use strict';
 
-  angular.module('sample.user', ['ml.common']);
+  angular.module('app.user', ['ml.common']);
 }());

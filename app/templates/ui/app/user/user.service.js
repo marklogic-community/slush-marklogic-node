@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  angular.module('sample.user')
+  angular.module('app.user')
     .factory('userService', UserService);
 
   UserService.$inject = ['$http', '$rootScope'];
