@@ -56,12 +56,42 @@ function checkLatestVersion() {
   return latestVersion.promise;
 }
 
-function getNameProposal () {
+function isFlag(arg) {
+  return (arg.indexOf('=') > -1);
+}
+
+function processInput() {
+  var inputs = {appType: 'rest', branch: 'master'};
+  gulp.args.forEach(function(arg) {
+    if (isFlag(arg)) {
+      var splits = arg.split('=');
+      var flag = splits[0];
+      var value = splits[1];
+      if (flag === 'appType') {
+        inputs.appType = value;
+      } else if (flag === 'branch') {
+        inputs.branch = value;
+      } else {
+        var message = arg + '\n is not a supported flag and has been ignored. You can specify appType=<appType> to specify Roxy appType or branch=<branch> to specify a Roxy branch\n';
+        process.stdout.write(message.red);
+      }
+    } else {
+      inputs.appName = arg;
+    }
+  })
+  if (inputs.hasOwnProperty('appName')) {
+    return inputs;
+  } else {
+    throw 'You must supply a name for your application. For example: slush marklogic-node <your-name>';
+  }
+}
+
+function getNameProposal (fallback) {
   var path = require('path');
   try {
     return require(path.join(process.cwd(), 'package.json')).name;
   } catch (e) {
-    return path.basename(process.cwd());
+    return fallback;
   }
 }
 
@@ -216,19 +246,21 @@ gulp.task('checkForUpdates', function(done) {
 });
 
 gulp.task('init', ['checkForUpdates'], function (done) {
+  var clArgs = processInput();
+  var appName = clArgs.appName;
+  var appType = clArgs.appType;
+  var branch =  clArgs.branch;
+
   inquirer.prompt([
-    {type: 'input', name: 'name', message: 'Name for the app?', default: getNameProposal()},
+    {type: 'input', name: 'name', message: 'Name for the app?', default: getNameProposal(appName)},
     {type: 'list', name: 'mlVersion', message: 'MarkLogic version?', choices: ['8','7', '6', '5'], default: 0},
-    {type: 'list', name: 'appType', message: 'Roxy App Type?', choices: ['rest', 'mvc', 'hybrid'], default: 0},
-    {type: 'list', name: 'branch', message: 'Roxy Branch?', choices: ['master', 'dev'], default: 0},
     {type: 'confirm', name: 'includeEsri', message: 'Include ESRI Maps?', default: false}
   ],
   function (answers) {
     answers.nameDashed = _.slugify(answers.name);
-    answers.modulename = _.camelize(answers.nameDashed);
     settings.includeEsri = answers.includeEsri;
 
-    getRoxyScript(answers.nameDashed, answers.mlVersion, answers.appType, answers.branch)
+    getRoxyScript(answers.nameDashed, answers.mlVersion, appType, branch)
       .then(runRoxy)
       .then(function() {
         // Copy over the Angular files
