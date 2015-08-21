@@ -1,4 +1,12 @@
 node_modules
 bower_components
 ui/fonts
+ui/styles/*.css
+deploy/local.properties
+/dist
 .DS_Store
+*.pid
+.idea/
+*.sublime-project
+*.sublime-workspace
+.tmp/
