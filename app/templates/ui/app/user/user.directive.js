@@ -12,38 +12,25 @@
       controller: 'UserController',
       controllerAs: 'ctrl',
       replace: true,
-      scope: {},
+      scope: {
+        showCancel: '=',
+        mode: '@',
+        callback: '&'
+      },
       templateUrl: 'app/user/user-dir.html'
     };
   }
 
-  UserController.$inject = ['$scope', 'userService'];
+  UserController.$inject = ['$scope', 'userService', 'loginService'];
 
-  function UserController($scope, userService) {
+  function UserController($scope, userService, loginService) {
     var ctrl = this;
     angular.extend(ctrl, {
       username: null,
       password: null,
-      currentUser: userService.currentUser(),
-      loginError: userService.loginError(),
-      user: userService,
-      login: login,
-      logout: logout
+      loginService: loginService,
+      userService: userService
     });
-
-    function login() {
-      userService.login(ctrl.username, ctrl.password).then(function(user) {
-        ctrl.currentUser = user;
-        ctrl.loginError = userService.loginError();
-      });
-    }
-
-    function logout() {
-      userService.logout().then(function() {
-        ctrl.currentUser = null;
-        ctrl.loginError = userService.loginError();
-      });
-    }
   }
 
 }());

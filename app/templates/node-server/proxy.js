@@ -18,15 +18,13 @@ var options = {
 // ==================================
 // For any other GET request, proxy it on to MarkLogic.
 router.get('*', function(req, res) {
-  proxy(req, res);
-
-  // To require authentication before getting to see data, use this:
-  // if (req.session.user === undefined) {
-  //   res.send(401, 'Unauthorized');
-  // } else {
-  //   proxy(req, res);
-  // }
-  // -- end of requiring authentication
+  if (req.session.user === undefined) {
+    res.send(401, 'Unauthorized');
+  } else {
+    proxy(req, res);
+  }
+  // To not require authentication, simply use the proxy below:
+  //proxy(req, res);
 });
 
 router.put('*', function(req, res) {

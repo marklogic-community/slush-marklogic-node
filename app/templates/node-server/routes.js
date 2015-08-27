@@ -26,16 +26,22 @@ router.get('/user/status', function(req, res) {
   }
 });
 
-router.get('/user/login', function(req, res) {
+router.post('/user/login', function(req, res) {
   // Attempt to read the user's profile, then check the response code.
   // 404 - valid credentials, but no profile yet
   // 401 - bad credentials
+  var username = req.body.username;
+  var password = req.body.password;
+  var headers = req.headers;
+  // remove content length so ML doesn't wait for request body
+  // that isn't being passed.
+  delete headers['content-length'];
   var login = http.get({
     hostname: options.mlHost,
     port: options.mlPort,
-    path: '/v1/documents?uri=/users/' + req.query.username + '.json',
-    headers: req.headers,
-    auth: req.query.username + ':' + req.query.password
+    path: '/v1/documents?uri=/users/' + username + '.json',
+    headers: headers,
+    auth: username + ':' + password
   }, function(response) {
     if (response.statusCode === 401) {
       res.statusCode = 401;
@@ -43,20 +49,20 @@ router.get('/user/login', function(req, res) {
     } else if (response.statusCode === 404) {
       // authentication successful, but no profile defined
       req.session.user = {
-        name: req.query.username,
-        password: req.query.password
+        name: username,
+        password: password
       };
       res.send(200, {
         authenticated: true,
-        username: req.query.username
+        username: username
       });
     } else {
       console.log('code: ' + response.statusCode);
       if (response.statusCode === 200) {
         // authentication successful, remember the username
         req.session.user = {
-          name: req.query.username,
-          password: req.query.password
+          name: username,
+          password: password
         };
         response.on('data', function(chunk) {
           var json = JSON.parse(chunk);
@@ -67,7 +73,7 @@ router.get('/user/login', function(req, res) {
             };
             res.send(200, {
               authenticated: true,
-              username: req.query.username,
+              username: username,
               profile: req.session.user.profile
             });
           } else {
