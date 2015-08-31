@@ -28,5 +28,6 @@
     it('should have the doc we gave it', function() {
       expect(controller.doc).to.eq(doc);
     });
+
   });
 }());

@@ -1,4 +1,9 @@
 <div class="row detail">
-  <!-- display JSON data -->
-  <json-explorer data="ctrl.doc"></json-explorer>
+  <div class="col-sm-9">
+	<!-- display JSON data -->
+	<json-explorer data="ctrl.doc"></json-explorer>
+  </div>
+  <div class="col-sm-3">
+    <ml-similar uri="{{ctrl.uri}}" limit="5"></ml-similar>
+  </div>
 </div>
