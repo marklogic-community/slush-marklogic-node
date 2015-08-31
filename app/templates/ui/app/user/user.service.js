@@ -26,7 +26,7 @@
     }
 
     function failLogin(response) {
-      if (response.status === 401){
+      if (response.status === 401) {
         _loginError = true;
       }
     }
