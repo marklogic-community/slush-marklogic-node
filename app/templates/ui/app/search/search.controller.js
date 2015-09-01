@@ -22,5 +22,11 @@
     $scope.$watch(userService.currentUser, function(newValue) {
       ctrl.currentUser = newValue;
     });
+
+    $scope.setSnippet = function(type) {
+      mlSearch.setSnippet(type);
+      ctrl.search();
+    };
+
   }
 }());
