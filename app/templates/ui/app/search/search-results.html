@@ -1,6 +1,6 @@
 <div ng-repeat="result in results">
   <h4>
-    <a ui-sref="root.view({uri: result.uri})">{{ result.title || result.uri }}</a>
+    <a ui-sref="root.view({uri: result.uri})">{{ result.uri }}</a>
   </h4>
   <div class="matches">
     <div class="match" ng-repeat="match in result.matches">
