@@ -4,17 +4,12 @@
   angular.module('app.user')
     .factory('userService', UserService);
 
-  UserService.$inject = ['$http', '$rootScope'];
-  function UserService($http, $rootScope) {
+  UserService.$inject = ['$http', '$rootScope', 'loginService'];
+  function UserService($http, $rootScope, loginService) {
     var _currentUser = null;
-    var _loginError = false;
 
     function currentUser() {
       return _currentUser;
-    }
-
-    function loginError() {
-      return _loginError;
     }
 
     function getUser() {
@@ -23,12 +18,6 @@
       }
 
       return $http.get('/api/user/status', {}).then(updateUser);
-    }
-
-    function failLogin(response) {
-      if (response.status === 401) {
-        _loginError = true;
-      }
     }
 
     function updateUser(response) {
@@ -55,32 +44,19 @@
         }
       }
 
-      $rootScope.$broadcast('auth:login-success', _currentUser);
-      _loginError = false;
       return _currentUser;
     }
 
-    function login(username, password) {
-      return $http.get('/api/user/login', {
-        params: {
-          'username': username,
-          'password': password
-        }
-      }).then(updateUser, failLogin);
-    }
+    $rootScope.$on('loginService:login-success', function(e, user) {
+      updateUser({ data: user });
+    });
 
-    function logout() {
-      return $http.get('/api/user/logout').then(function(response) {
-        _currentUser = null;
-        return _currentUser;
-      });
-    }
+    $rootScope.$on('loginService:logout-success', function() {
+      _currentUser = null;
+    });
 
     return {
       currentUser: currentUser,
-      login: login,
-      logout: logout,
-      loginError: loginError,
       getUser: getUser
     };
   }

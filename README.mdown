@@ -57,6 +57,8 @@ Install additional dependencies using the bower package manager:
 
     bower install
 
+Edit the `_loginMode` variable in `ui/app/login/login.service.js` to change the login mode of the application. The default is set to `full`. The other options are `top-right` or `modal`.
+
 ## Run your application
 
 Edit `gulp.config.js` to set your desired ports
