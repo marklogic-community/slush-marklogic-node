@@ -19,6 +19,11 @@
 
     ctrl.init();
 
+    ctrl.setSnippet = function(type) {
+      mlSearch.setSnippet(type);
+      ctrl.search();
+    };
+
     $scope.$watch(userService.currentUser, function(newValue) {
       ctrl.currentUser = newValue;
     });
