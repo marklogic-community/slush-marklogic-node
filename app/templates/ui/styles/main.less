@@ -3,21 +3,25 @@
 @icon-font-path:  "/fonts/";
 @FontAwesomePath:    "/fonts/";
 
+/* for the uiux pieces */
+@import "uiux.less";
+
+/* Blue design
+@import "blues.less";
+@import "blues-variables.less";
+*/
+
+/* MLU design
+@import "mlu.less";
+*/
+
 body {
   background-color: #eee;
 }
 
+/*header*/
 .navbar-brand {
-  text-indent: 100%;
-  white-space: nowrap;
-  overflow: hidden;
-  background: url('/images/marklogic.png') no-repeat;
-  background-size: contain;
-  min-height: 30px;
-  height: 30px;
-  margin: .8em;
-  width: 160px;
-  text-indent: 9999px;
+  padding: 5px 10px 0 25px;
 }
 
 .navbar {
@@ -27,6 +31,18 @@ body {
 nav.nav {
   border-bottom: 1px solid #ccc;
   border-radius: 0;  
+}
+
+#logo {
+  text-indent: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  background: url('/images/marklogic.png') no-repeat;
+  background-size: contain;
+  min-height: 30px;
+  height: 30px;
+  margin: 0.3em 0;
+  width: 160px;
 }
 
 .error {
@@ -41,6 +57,13 @@ nav.nav {
   input {
     margin: 0 2px;
   }
+}
+
+/* side bar */
+.right-col h3 {
+  color: @brand-primary;
+  border-bottom: 2px solid @brand-primary;
+  padding-top: 15px;
 }
 
 /* landing page */
@@ -120,7 +143,7 @@ footer {
 }
 
 .powered {
-    background: url(/images/MarkLogic-Powered-By.png) 10px 10px no-repeat;
+    background: url(/images/MarkLogic-Powered-By.png) 10px 10px no-repeat transparent;
   }
 
 /*Content well*/
