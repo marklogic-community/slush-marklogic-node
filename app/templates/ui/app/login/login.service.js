@@ -35,9 +35,9 @@
         'username': username,
         'password': password
       }).then(function(response) {
-        $rootScope.$broadcast('loginService:login-success', response.data);
         _loginError = null;
         _isAuthenticated = true;
+        $rootScope.$broadcast('loginService:login-success', response.data);
         return response;
       }, failLogin);
     }
@@ -110,6 +110,8 @@
       return _protectedRoutes.indexOf(route) > -1;
     }
 
+    var deregisterLoginSuccess;
+
     $rootScope.$on('$stateChangeStart', function(event, next, nextParams) {
       if (next.name !== 'root.login') {
         _toStateName = next.name;
@@ -118,6 +120,17 @@
       if (!isAuthenticated() && routeIsProtected(next.name)) {
         event.preventDefault();
         loginPrompt();
+        if (_loginMode !== 'full') {
+          if (deregisterLoginSuccess) {
+            deregisterLoginSuccess();
+            deregisterLoginSuccess = null;
+          }
+          deregisterLoginSuccess = $rootScope.$on('loginService:login-success', function() {
+            deregisterLoginSuccess();
+            deregisterLoginSuccess = null;
+            $state.go(next.name, nextParams);
+          });
+        }
       }
     });
 
