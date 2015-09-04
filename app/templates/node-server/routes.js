@@ -7,7 +7,6 @@ var four0four = require('./utils/404')();
 var http = require('http');
 var config = require('../gulp.config')();
 
-
 var options = {
   appPort: process.env.APP_PORT || config.defaultPort,
   mlHost: process.env.ML_HOST || config.marklogic.host,
@@ -17,6 +16,7 @@ var options = {
 };
 
 router.get('/user/status', function(req, res) {
+  res.append('Cache-Control', 'no-cache');
   if (req.session.user === undefined) {
     res.send('{"authenticated": false}');
   } else {
@@ -35,6 +35,9 @@ router.post('/user/login', function(req, res) {
   var username = req.body.username;
   var password = req.body.password;
   var headers = req.headers;
+  //make sure login isn't cached
+  res.append('Cache-Control', 'no-cache');
+
   // remove content length so ML doesn't wait for request body
   // that isn't being passed.
   delete headers['content-length'];
@@ -93,6 +96,7 @@ router.post('/user/login', function(req, res) {
 });
 
 router.get('/user/logout', function(req, res) {
+  res.append('Cache-Control', 'no-cache');
   delete req.session.user;
   res.send();
 });

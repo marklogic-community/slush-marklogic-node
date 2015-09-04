@@ -18,6 +18,7 @@ var options = {
 // ==================================
 // For any other GET request, proxy it on to MarkLogic.
 router.get('*', function(req, res) {
+  res.append('Cache-Control', 'no-cache');
   if (req.session.user === undefined) {
     res.send(401, 'Unauthorized');
   } else {
@@ -28,6 +29,7 @@ router.get('*', function(req, res) {
 });
 
 router.put('*', function(req, res) {
+  res.append('Cache-Control', 'no-cache');
   // For PUT requests, require authentication
   if (req.session.user === undefined) {
     res.send(401, 'Unauthorized');
@@ -46,6 +48,7 @@ router.put('*', function(req, res) {
 
 // Require authentication for POST requests
 router.post('*', function(req, res) {
+  res.append('Cache-Control', 'no-cache');
   if (req.session.user === undefined) {
     res.send(401, 'Unauthorized');
   } else {
