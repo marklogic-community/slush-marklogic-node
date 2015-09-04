@@ -1,0 +1,12 @@
+import
+
+-input_file_path
+sample-data.zip
+
+-input_compressed
+
+-output_collections
+data,data/people
+
+-output_permissions
+@ml.default-user:read,@ml.default-user:update
