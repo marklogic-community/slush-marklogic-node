@@ -19,14 +19,20 @@ components:
 - [gulp](http://gulpjs.com/): Javascript task automation (`npm install -g
   gulp`)
 - [Slush](http://slushjs.github.io/): Application generation tool (`npm install
-  -g slush`)
+  -g slush`) - only needed if you are generating the initial code
 - [Bower](http://bower.io/): A package manager for front-end libraries (`npm
   install -g bower`)
 - [Git](https://git-scm.com/) - Roxy depends on this version control system
+- [Ruby](https://www.ruby-lang.org/en/documentation/installation/) - Roxy
+  depends on Ruby in order to run server configuration scripts
 
 ## Install the generator
 
     npm install -g slush-marklogic-node
+
+If you prefer to use the latest code under development:
+
+    npm install -g git://github.com/marklogic/slush-marklogic-node.git
 
 ## Run the generator
 
@@ -53,6 +59,11 @@ server, an app-user, and a role for that user).
     ./ml local bootstrap
     ./ml local deploy modules
 
+On Windows, that would be:
+
+    ml.bat local bootstrap
+    ml.bat local deploy modules
+
 Install additional dependencies using the bower package manager:
 
     bower install
@@ -61,9 +72,11 @@ Edit the `_loginMode` variable in `ui/app/login/login.service.js` to change the 
 
 ## Run your application
 
-Edit `gulp.config.js` to set your desired ports
-
     gulp serve-dev # this will watch the .less file for changes, compile them to .css, and run the node server
+
+You can set some settings to match your setup in the Roxy properties files. For example:
+
+    gulp serve-dev --ml-host=<your-host> --ml-port=8234 --app-port=9234 --nosync
 
 # Next Steps
 
@@ -92,6 +105,10 @@ You can load them with
 (MLCP)[https://docs.marklogic.com/guide/ingestion/content-pump] like this:
 
     ./ml local mlcp import -input_file_path sample-data -document_type json
+
+Or on Windows:
+
+    ml.bat local mlcp import -input_file_path sample-data -document_type json
 
 ## General Data Information
 
