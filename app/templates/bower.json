@@ -13,7 +13,7 @@
     "highlightjs": "~8.7.0",
     "jquery": "~2.1.4",
     "lodash": "~3.10.1",
-    "ml-search-ng": "~0.1.0",
+    "ml-search-ng": "~0.2.0",
     "ml-utils": "withjam/ml-utils",
     "ng-json-explorer": "8c2a0f9104",
     "angular-mocks": "~1.4.4"
