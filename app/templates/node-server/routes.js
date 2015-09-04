@@ -5,13 +5,15 @@
 var router = require('express').Router();
 var four0four = require('./utils/404')();
 var http = require('http');
+var config = require('../gulp.config')();
+
 
 var options = {
-  appPort: process.env.APP_PORT || 9070,
-  mlHost: process.env.ML_HOST || 'localhost',
-  mlPort: process.env.ML_PORT || '8040',
-  defaultUser: 'admin',
-  defaultPass: 'admin'
+  appPort: process.env.APP_PORT || config.defaultPort,
+  mlHost: process.env.ML_HOST || config.marklogic.host,
+  mlPort: process.env.ML_PORT || config.marklogic.port,
+  defaultUser: config.marklogic.user,
+  defaultPass: config.marklogic.password
 };
 
 router.get('/user/status', function(req, res) {

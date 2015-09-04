@@ -482,9 +482,9 @@ function getNodeOptions(isDev) {
     env: {
       'PORT': port,
       'NODE_ENV': isDev ? 'dev' : 'build',
-      'APP_PORT': args['app-port'] || 9070,
+      'APP_PORT': args['app-port'] || config.defaultPort,
       'ML_HOST': args['ml-host'] || 'localhost',
-      'ML_PORT': args['ml-port'] || '8040'
+      'ML_PORT': args['ml-port'] || config.marklogic.port
     },
     watch: [config.server]
   };
