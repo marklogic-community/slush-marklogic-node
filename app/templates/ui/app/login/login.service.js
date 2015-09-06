@@ -9,9 +9,10 @@
   function LoginService($http, $modal, $q, $rootScope, $state, $stateParams, messageBoardService) {
     var _loginMode = 'full'; // 'modal', 'top-right', or 'full'
     var _loginError;
-    var _isAuthenticated = false;
     var _toStateName;
     var _toStateParams;
+    var _isAuthenticated = isLoggedIn();
+
 
     function loginMode(mode) {
       if (mode === undefined) {
@@ -30,14 +31,32 @@
       return _loginError;
     }
 
+    function isLoggedIn() {
+      return $http.get('/api/user/status', {}).then(function(response){
+        if (response.data.authenticated === false) {
+          _isAuthenticated = false;
+          return false;
+        }
+        else
+        {
+          loginSuccess(response);
+          return true;
+        }
+      });
+    }
+
+    function loginSuccess(response){
+      _loginError = null;
+      _isAuthenticated = true;
+      $rootScope.$broadcast('loginService:login-success', response.data);
+    }
+
     function login(username, password) {
       return $http.post('/api/user/login', {
         'username': username,
         'password': password
       }).then(function(response) {
-        _loginError = null;
-        _isAuthenticated = true;
-        $rootScope.$broadcast('loginService:login-success', response.data);
+        loginSuccess(response);
         return response;
       }, failLogin);
     }

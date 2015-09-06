@@ -17,7 +17,8 @@
         return _currentUser;
       }
 
-      return $http.get('/api/user/status', {}).then(updateUser);
+      console.warn('should never really call this unless failed auth?');
+      return currentUser();
     }
 
     function updateUser(response) {
