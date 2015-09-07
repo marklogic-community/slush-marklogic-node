@@ -16,7 +16,7 @@ var options = {
 };
 
 router.get('/user/status', function(req, res) {
-  res.append('Cache-Control', 'no-cache');
+  noCache(res);
   if (req.session.user === undefined) {
     res.send('{"authenticated": false}');
   } else {
@@ -36,7 +36,7 @@ router.post('/user/login', function(req, res) {
   var password = req.body.password;
   var headers = req.headers;
   //make sure login isn't cached
-  res.append('Cache-Control', 'no-cache');
+  noCache(res);
 
   // remove content length so ML doesn't wait for request body
   // that isn't being passed.
@@ -96,11 +96,17 @@ router.post('/user/login', function(req, res) {
 });
 
 router.get('/user/logout', function(req, res) {
-  res.append('Cache-Control', 'no-cache');
+  noCache(res);
   delete req.session.user;
   res.send();
 });
 
 router.get('/*', four0four.notFoundMiddleware);
+
+function noCache(response){
+  response.append('Cache-Control', 'no-cache, must-revalidate');//HTTP 1.1 - must-revalidate
+  response.append('Pragma', 'no-cache');//HTTP 1.0
+  response.append('Expires', 'Sat, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+}
 
 module.exports = router;
