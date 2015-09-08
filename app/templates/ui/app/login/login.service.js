@@ -11,8 +11,7 @@
     var _loginError;
     var _toStateName;
     var _toStateParams;
-    var _isAuthenticated = isLoggedIn();
-
+    var _isAuthenticated;
 
     function loginMode(mode) {
       if (mode === undefined) {
@@ -31,21 +30,23 @@
       return _loginError;
     }
 
-    function isLoggedIn() {
-      return $http.get('/api/user/status', {}).then(function(response){
+    function getAuthenticatedStatus() {
+      if (_isAuthenticated) {
+        return _isAuthenticated;
+      }
+
+      return $http.get('/api/user/status', {}).then(function(response) {
         if (response.data.authenticated === false) {
           _isAuthenticated = false;
-          return false;
         }
         else
         {
           loginSuccess(response);
-          return true;
         }
       });
     }
 
-    function loginSuccess(response){
+    function loginSuccess(response) {
       _loginError = null;
       _isAuthenticated = true;
       $rootScope.$broadcast('loginService:login-success', response.data);
@@ -129,6 +130,22 @@
       return _protectedRoutes.indexOf(route) > -1;
     }
 
+    function blockRoute(event, next, nextParams) {
+      event.preventDefault();
+      loginPrompt();
+      if (_loginMode !== 'full') {
+        if (deregisterLoginSuccess) {
+          deregisterLoginSuccess();
+          deregisterLoginSuccess = null;
+        }
+        deregisterLoginSuccess = $rootScope.$on('loginService:login-success', function() {
+          deregisterLoginSuccess();
+          deregisterLoginSuccess = null;
+          $state.go(next.name, nextParams);
+        });
+      }
+    }
+
     var deregisterLoginSuccess;
 
     $rootScope.$on('$stateChangeStart', function(event, next, nextParams) {
@@ -137,19 +154,7 @@
         _toStateParams = nextParams;
       }
       if (!isAuthenticated() && routeIsProtected(next.name)) {
-        event.preventDefault();
-        loginPrompt();
-        if (_loginMode !== 'full') {
-          if (deregisterLoginSuccess) {
-            deregisterLoginSuccess();
-            deregisterLoginSuccess = null;
-          }
-          deregisterLoginSuccess = $rootScope.$on('loginService:login-success', function() {
-            deregisterLoginSuccess();
-            deregisterLoginSuccess = null;
-            $state.go(next.name, nextParams);
-          });
-        }
+        blockRoute(event, next, nextParams);
       }
     });
 
@@ -160,6 +165,7 @@
       loginError: loginError,
       loginMode: loginMode,
       isAuthenticated: isAuthenticated,
+      getAuthenticatedStatus: getAuthenticatedStatus,
       protectedRoutes: protectedRoutes
     };
   }

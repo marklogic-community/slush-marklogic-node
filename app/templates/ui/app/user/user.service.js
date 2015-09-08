@@ -4,8 +4,8 @@
   angular.module('app.user')
     .factory('userService', UserService);
 
-  UserService.$inject = ['$http', '$rootScope', 'loginService'];
-  function UserService($http, $rootScope, loginService) {
+  UserService.$inject = ['$rootScope', 'loginService'];
+  function UserService($rootScope, loginService) {
     var _currentUser = null;
 
     function currentUser() {
@@ -17,8 +17,8 @@
         return _currentUser;
       }
 
-      console.warn('should never really call this unless failed auth?');
-      return currentUser();
+      console.warn('LoginService should be initialized already..');
+      return loginService.getAuthenticatedStatus().then(currentUser);
     }
 
     function updateUser(response) {
