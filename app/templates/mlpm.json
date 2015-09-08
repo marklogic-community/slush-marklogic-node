@@ -1,0 +1,8 @@
+{
+  "name": "sample-app",
+  "version": "0.0.1",
+  "description": "Sample app generated with slush-marklogic-node",
+  "private": true,
+  "dependencies": {
+  }
+}
