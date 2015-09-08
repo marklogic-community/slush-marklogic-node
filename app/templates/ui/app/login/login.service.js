@@ -43,6 +43,7 @@
         {
           loginSuccess(response);
         }
+        return isAuthenticated();
       });
     }
 
@@ -153,8 +154,24 @@
         _toStateName = next.name;
         _toStateParams = nextParams;
       }
-      if (!isAuthenticated() && routeIsProtected(next.name)) {
-        blockRoute(event, next, nextParams);
+
+      if (routeIsProtected(next.name)) {
+        var auth = getAuthenticatedStatus();
+
+        if (angular.isFunction(auth.then)) {
+          auth.then(function() {
+            if (!isAuthenticated()) {
+              //this does NOT block requests in a timely fashion...
+              blockRoute(event, next, nextParams);
+            }
+          });
+        }
+        else {
+          if (!auth) {
+            blockRoute(event, next, nextParams);
+          }
+        }
+
       }
     });
 
