@@ -37,7 +37,8 @@
         plugins : 'advlist autolink link image lists charmap print preview'
       },
       submit: submit,
-      addTag: addTag
+      addTag: addTag,
+      removeTag: removeTag
     });
 
     function submit() {
@@ -54,8 +55,14 @@
     }
 
     function addTag() {
-      ctrl.person.tags.push(ctrl.newTag);
-      ctrl.newTag = null;
+      if (ctrl.newTag && ctrl.newTag !== '' && ctrl.person.tags.indexOf(ctrl.newTag) < 0) {
+        ctrl.person.tags.push(ctrl.newTag);
+      }
+      delete ctrl.newTag;
+    }
+
+    function removeTag(index) {
+      ctrl.person.tags.splice(index, 1);
     }
 
     $scope.$watch(userService.currentUser, function(newValue) {
