@@ -4,20 +4,18 @@
 
   <!-- Limit all searches to this additional query -->
   <additional-query>
-    <cts:not-query xmlns:cts="http://marklogic.com/cts">
-      <cts:directory-query>
-        <cts:uri>/users/</cts:uri>
-      </cts:directory-query>
-    </cts:not-query>
+    <cts:collection-query xmlns:cts="http://marklogic.com/cts">
+      <cts:uri>data</cts:uri>
+    </cts:collection-query>
   </additional-query>
-  
+
   <!-- Full-text search options -->
   <term apply="term">
     <empty apply="all-results"/>
     <term-option>punctuation-insensitive</term-option>
     <term-option>stemmed</term-option>
   </term>
-  
+
   <!-- Default grammer -->
   <grammar>
     <quotation>"</quotation>
@@ -37,12 +35,12 @@
     <joiner strength="50" apply="constraint" compare="GE" tokenize="word">GE</joiner>
     <joiner strength="50" apply="constraint" compare="NE" tokenize="word">NE</joiner>
   </grammar>
-  
+
   <!-- Default sort order. You can also associate states with sort orders to allow switching sort orders -->
   <sort-order direction="descending">
     <score/>
   </sort-order>
-  
+
   <!-- Not used, but the default snippeting behavior if no state (see compact/detailed below) was specified -->
   <transform-results apply="snippet">
     <preferred-elements><element ns="" name="body"/></preferred-elements>
@@ -50,9 +48,9 @@
     <max-snippet-chars>150</max-snippet-chars>
     <per-match-tokens>20</per-match-tokens>
   </transform-results>
-  
+
   <return-query>1</return-query>
-  
+
   <!-- This controls the snippet size toggle -->
   <operator name="results">
     <state name="compact">

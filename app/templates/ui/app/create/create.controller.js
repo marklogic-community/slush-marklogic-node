@@ -45,7 +45,8 @@
       mlRest.createDocument(ctrl.person, {
         format: 'json',
         directory: '/content/',
-        extension: '.json'
+        extension: '.json',
+        collection: ['data','data/people']
         // TODO: add read/update permissions here like this:
         // 'perm:sample-role': 'read',
         // 'perm:sample-role': 'update'
