@@ -6,10 +6,24 @@
 
 **Implemented enhancements:**
 
+- More diversity in sample-data.. [\#169](https://github.com/marklogic/slush-marklogic-node/issues/169)
+- Add a collection facet \(with prefix?\) [\#160](https://github.com/marklogic/slush-marklogic-node/issues/160)
+- Larger sample-data set [\#159](https://github.com/marklogic/slush-marklogic-node/issues/159)
+- Provide a bare mlpm.json to make mlpm install for deps easier [\#148](https://github.com/marklogic/slush-marklogic-node/issues/148)
+- Similar items only shown in no-esri details [\#147](https://github.com/marklogic/slush-marklogic-node/issues/147)
+- Add toggle for snippet types [\#132](https://github.com/marklogic/slush-marklogic-node/issues/132)
+- Add Negation Support [\#124](https://github.com/marklogic/slush-marklogic-node/issues/124)
+- Separate User Service? [\#119](https://github.com/marklogic/slush-marklogic-node/issues/119)
+- Landing Page [\#105](https://github.com/marklogic/slush-marklogic-node/issues/105)
+- Ports Specified Via Prompts [\#103](https://github.com/marklogic/slush-marklogic-node/issues/103)
 - rename sample to app [\#102](https://github.com/marklogic/slush-marklogic-node/issues/102)
 - add show more to facets [\#99](https://github.com/marklogic/slush-marklogic-node/issues/99)
 - move search box to the body [\#98](https://github.com/marklogic/slush-marklogic-node/issues/98)
 - check for updates when generator is run [\#97](https://github.com/marklogic/slush-marklogic-node/issues/97)
+- Add default robots.txt's [\#85](https://github.com/marklogic/slush-marklogic-node/issues/85)
+- Fix analyze-data to work with JSON [\#84](https://github.com/marklogic/slush-marklogic-node/issues/84)
+- Upgrade bower dependencies to latest [\#77](https://github.com/marklogic/slush-marklogic-node/issues/77)
+- Create new release [\#68](https://github.com/marklogic/slush-marklogic-node/issues/68)
 - Switch to ui-router [\#62](https://github.com/marklogic/slush-marklogic-node/issues/62)
 - Eliminate common/ [\#57](https://github.com/marklogic/slush-marklogic-node/issues/57)
 - Add default favicon [\#56](https://github.com/marklogic/slush-marklogic-node/issues/56)
@@ -17,34 +31,31 @@
 
 **Fixed bugs:**
 
+- Don't ask for required input [\#133](https://github.com/marklogic/slush-marklogic-node/issues/133)
 - CSS @import no longer working [\#120](https://github.com/marklogic/slush-marklogic-node/issues/120)
+- .gitignore dist folder [\#114](https://github.com/marklogic/slush-marklogic-node/issues/114)
+- Error feedback [\#111](https://github.com/marklogic/slush-marklogic-node/issues/111)
+- Login Feedback [\#107](https://github.com/marklogic/slush-marklogic-node/issues/107)
+- Browser reload/Minification Loop [\#104](https://github.com/marklogic/slush-marklogic-node/issues/104)
+- Ignore bower\_components in jshint and watch [\#96](https://github.com/marklogic/slush-marklogic-node/issues/96)
+- default app user cannot use the app [\#95](https://github.com/marklogic/slush-marklogic-node/issues/95)
 - Glyphicon for loading suggestions shown below search box [\#40](https://github.com/marklogic/slush-marklogic-node/issues/40)
 
 **Closed issues:**
 
-- Provide a bare mlpm.json to make mlpm install for deps easier [\#148](https://github.com/marklogic/slush-marklogic-node/issues/148)
 - no context around search hit highlight [\#138](https://github.com/marklogic/slush-marklogic-node/issues/138)
-- Don't ask for required input [\#133](https://github.com/marklogic/slush-marklogic-node/issues/133)
-- Add toggle for snippet types [\#132](https://github.com/marklogic/slush-marklogic-node/issues/132)
-- Add Negation Support [\#124](https://github.com/marklogic/slush-marklogic-node/issues/124)
-- Separate User Service? [\#119](https://github.com/marklogic/slush-marklogic-node/issues/119)
-- .gitignore dist folder [\#114](https://github.com/marklogic/slush-marklogic-node/issues/114)
-- Login Feedback [\#107](https://github.com/marklogic/slush-marklogic-node/issues/107)
-- Landing Page [\#105](https://github.com/marklogic/slush-marklogic-node/issues/105)
-- Browser reload/Minification Loop [\#104](https://github.com/marklogic/slush-marklogic-node/issues/104)
-- Ports Specified Via Prompts [\#103](https://github.com/marklogic/slush-marklogic-node/issues/103)
-- Ignore bower\_components in jshint and watch [\#96](https://github.com/marklogic/slush-marklogic-node/issues/96)
-- default app user cannot use the app [\#95](https://github.com/marklogic/slush-marklogic-node/issues/95)
 - Improve install guide [\#89](https://github.com/marklogic/slush-marklogic-node/issues/89)
-- Fix analyze-data to work with JSON [\#84](https://github.com/marklogic/slush-marklogic-node/issues/84)
-- Upgrade bower dependencies to latest [\#77](https://github.com/marklogic/slush-marklogic-node/issues/77)
-- Create new release [\#68](https://github.com/marklogic/slush-marklogic-node/issues/68)
 - Write a getting started [\#58](https://github.com/marklogic/slush-marklogic-node/issues/58)
 
 **Merged pull requests:**
 
 - Fixed \#84: minor patch for analyze-data to support JSON [\#173](https://github.com/marklogic/slush-marklogic-node/pull/173) ([grtjn](https://github.com/grtjn))
+- Fixed \#85: added robots.txt [\#172](https://github.com/marklogic/slush-marklogic-node/pull/172) ([grtjn](https://github.com/grtjn))
+- Fixed \#144: fixed issue with add/remove tags on create page [\#166](https://github.com/marklogic/slush-marklogic-node/pull/166) ([grtjn](https://github.com/grtjn))
+- Fixed \#147: added similar sidebar to esri details, synched presentation between esri/no-esri [\#165](https://github.com/marklogic/slush-marklogic-node/pull/165) ([grtjn](https://github.com/grtjn))
 - Fixed \#148: stub mlpm.json to make mlpm install slightly easier [\#164](https://github.com/marklogic/slush-marklogic-node/pull/164) ([grtjn](https://github.com/grtjn))
+- Fixes \#160: added collection facet, added comments, removed verbose search: prefix [\#163](https://github.com/marklogic/slush-marklogic-node/pull/163) ([grtjn](https://github.com/grtjn))
+- Added more sample docs [\#157](https://github.com/marklogic/slush-marklogic-node/pull/157) ([hunterwilliams](https://github.com/hunterwilliams))
 - Adds a favicon and adds it to index.html [\#155](https://github.com/marklogic/slush-marklogic-node/pull/155) ([hunterwilliams](https://github.com/hunterwilliams))
 - Update installation instructions in README [\#154](https://github.com/marklogic/slush-marklogic-node/pull/154) ([patrickmcelwee](https://github.com/patrickmcelwee))
 - Do not ask for appname twice [\#153](https://github.com/marklogic/slush-marklogic-node/pull/153) ([patrickmcelwee](https://github.com/patrickmcelwee))
@@ -74,7 +85,9 @@
 **Implemented enhancements:**
 
 - Update code/samples to use Native Json [\#90](https://github.com/marklogic/slush-marklogic-node/issues/90)
+- Use extspell.xqy [\#86](https://github.com/marklogic/slush-marklogic-node/issues/86)
 - Prompt user for MarkLogic version [\#73](https://github.com/marklogic/slush-marklogic-node/issues/73)
+- Add ESRI Map Display in Detail View [\#69](https://github.com/marklogic/slush-marklogic-node/issues/69)
 - Unnecessary redirects in server.js [\#45](https://github.com/marklogic/slush-marklogic-node/issues/45)
 - Add example dictionary for use together with extspell [\#43](https://github.com/marklogic/slush-marklogic-node/issues/43)
 - Move JSON samples to sample-data [\#42](https://github.com/marklogic/slush-marklogic-node/issues/42)
@@ -98,6 +111,9 @@
 
 **Fixed bugs:**
 
+- Sample data not loaded correctly? [\#92](https://github.com/marklogic/slush-marklogic-node/issues/92)
+- ML Server version not being reflected accurately in default.properties file [\#88](https://github.com/marklogic/slush-marklogic-node/issues/88)
+- Detail view is not showing data [\#79](https://github.com/marklogic/slush-marklogic-node/issues/79)
 - Template fails on Windows [\#75](https://github.com/marklogic/slush-marklogic-node/issues/75)
 - Module 'gd.ui.jsonexplorer' is not available [\#71](https://github.com/marklogic/slush-marklogic-node/issues/71)
 - Details of sample data not showing [\#66](https://github.com/marklogic/slush-marklogic-node/issues/66)
@@ -114,11 +130,6 @@
 
 **Closed issues:**
 
-- Sample data not loaded correctly? [\#92](https://github.com/marklogic/slush-marklogic-node/issues/92)
-- ML Server version not being reflected accurately in default.properties file [\#88](https://github.com/marklogic/slush-marklogic-node/issues/88)
-- Use extspell.xqy [\#86](https://github.com/marklogic/slush-marklogic-node/issues/86)
-- Detail view is not showing data [\#79](https://github.com/marklogic/slush-marklogic-node/issues/79)
-- Add ESRI Map Display in Detail View [\#69](https://github.com/marklogic/slush-marklogic-node/issues/69)
 - Add a CONTRIBUTING.md file [\#53](https://github.com/marklogic/slush-marklogic-node/issues/53)
 
 **Merged pull requests:**
