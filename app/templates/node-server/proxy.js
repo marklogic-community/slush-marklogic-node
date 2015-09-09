@@ -56,6 +56,16 @@ router.post('*', function(req, res) {
   }
 });
 
+// (#176) Require authentication for DELETE requests
+router.delete('*', function(req, res) {
+  noCache(res);
+  if (req.session.user === undefined) {
+    res.send(401, 'Unauthorized');
+  } else {
+    proxy(req, res);
+  }
+});
+
 function getAuth(options, session) {
   var auth = null;
   if (session.user !== undefined && session.user.name !== undefined) {
@@ -86,10 +96,9 @@ function proxy(req, res) {
 
     res.statusCode = response.statusCode;
 
-    // some requests (POST /v1/documents) return a location header. Make sure
-    // that gets back to the client.
-    if (response.headers.location) {
-      res.header('location', response.headers.location);
+    // [GJo] (#67) forward all headers from MarkLogic
+    for (var header in response.headers) {
+      res.header(header, response.headers[header]);
     }
 
     response.on('data', function(chunk) {
