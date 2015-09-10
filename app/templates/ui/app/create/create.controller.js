@@ -46,7 +46,7 @@
         format: 'json',
         directory: '/content/',
         extension: '.json',
-        collection: ['data','data/people']
+        collection: ['data', 'data/people']
         // TODO: add read/update permissions here like this:
         // 'perm:sample-role': 'read',
         // 'perm:sample-role': 'update'
@@ -59,7 +59,7 @@
       if (ctrl.newTag && ctrl.newTag !== '' && ctrl.person.tags.indexOf(ctrl.newTag) < 0) {
         ctrl.person.tags.push(ctrl.newTag);
       }
-      delete ctrl.newTag;
+      ctrl.newTag = null;
     }
 
     function removeTag(index) {
