@@ -18,6 +18,7 @@
     "gulp-conflict": "~0.1.1",
     "gulp-install": "~0.1.1",
     "gulp-rename": "~1.2.0",
+    "gulp-replace": "~0.5.4",
     "gulp-template": "~0.1.1",
     "inquirer": "~0.4.1",
     "q": "1.0.x",
