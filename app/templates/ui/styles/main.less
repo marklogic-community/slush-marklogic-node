@@ -12,9 +12,8 @@
 @import "blues-variables.less";
 */
 
-/* MLU design
+/* MLU design */
 @import "mlu.less";
-*/
 
 body {
   background-color: #eee;
@@ -65,6 +64,33 @@ nav.nav {
   color: @brand-primary;
   border-bottom: 2px solid @brand-primary;
   padding-top: 15px;
+}
+
+.chiclet {
+  margin: 3px;
+}
+
+/* negated and added chiclets */
+.chiclet  {
+    position: relative;
+}
+/* set up the added one first */
+.chiclet:before {
+    content: "\f055";
+    font-family: FontAwesome;
+    font-style: normal;
+    font-weight: normal;
+    text-decoration: inherit;
+    color: #fff;
+    font-size: 10px;
+    padding-right: 0.5em;
+    position: absolute;
+    top: 0px;
+    left: 2px;
+}
+/* replace for negated */  
+.chiclet.negated:before {
+    content: "\f05e";
 }
 
 /* landing page */
