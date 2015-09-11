@@ -10,6 +10,7 @@ var gulp = require('gulp'),
   install = require('gulp-install'),
   q = require('q'),
   rename = require('gulp-rename'),
+  replace = require('gulp-replace'),
   pkgSettings = require('./package.json'),
   spawn = require('child_process').spawn,
   win32 = process.platform === 'win32',
@@ -344,6 +345,7 @@ gulp.task('init', ['checkForUpdates'], function (done) {
             }
 
           }))
+          .pipe(replace('@sample-app',answers.nameDashed))
           .pipe(gulp.dest('./')) // Relative to cwd
           .on('end', function () {
             done(); // Finished!
