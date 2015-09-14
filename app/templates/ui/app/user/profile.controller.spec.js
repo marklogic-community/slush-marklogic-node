@@ -46,11 +46,23 @@
       expect(controller).to.be.defined;
     });
 
-    it('should add an email', function() {
+    it('should not add a blank email', function() {
+      var newEmail = '';
+      controller.newEmail = newEmail;
+      expect(controller.user.emails.length).to.eq(0);
+      controller.addEmail();
+      $rootScope.$apply();
+      expect(controller.user.emails.length).to.eq(0);
+    });
+
+    it('should add a nonblank email', function() {
+      var newEmail = 'test@test.com';
+      controller.newEmail = newEmail;
       expect(controller.user.emails.length).to.eq(0);
       controller.addEmail();
       $rootScope.$apply();
       expect(controller.user.emails.length).to.eq(1);
+      expect(controller.user.emails[0]).to.eq(newEmail);
     });
 
     it('should remove an email', function() {
@@ -66,10 +78,19 @@
       expect(controller.user.emails[0]).to.eq('abc@def.com');
     });
 
+    it('should not update the profile if form errors', function() {
+      var form = {$valid:false};
+      controller.submit(form);
+      $rootScope.$apply();
+      expect(currentState).to.not.be.defined;
+    });
+
     it('should update the profile', function() {
-      controller.submit();
+      var form = {$valid:true};
+      controller.submit(form);
       $rootScope.$apply();
       expect(currentState).to.eq('root');
     });
+
   });
 }());
