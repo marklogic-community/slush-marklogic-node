@@ -5,19 +5,34 @@
   angular.module('app.search')
     .controller('SearchCtrl', SearchCtrl);
 
-  SearchCtrl.$inject = ['$scope', '$location', 'userService', 'MLSearchFactory'];
+  SearchCtrl.$inject = ['$scope', '$location', 'userService', 'searchContextService',
+   'MLSearchFactory'];
 
   // inherit from MLSearchController
   var superCtrl = MLSearchController.prototype;
   SearchCtrl.prototype = Object.create(superCtrl);
 
-  function SearchCtrl($scope, $location, userService, searchFactory) {
+  function SearchCtrl($scope, $location, userService, searchContextService, searchFactory) {
     var ctrl = this;
-    var mlSearch = searchFactory.newContext();
+    var initialRun = false;
+
+    if (!searchContextService.currentSearchContext()) {
+      initialRun = true;
+      searchContextService.updateSearchContext(searchFactory.newContext());
+    }
+
+    var mlSearch = searchContextService.currentSearchContext();
 
     superCtrl.constructor.call(ctrl, $scope, $location, mlSearch);
 
-    ctrl.init();
+    if (initialRun) {
+      ctrl.init();
+    }
+    else
+    {
+      ctrl.updateURLParams();
+      ctrl.search();
+    }
 
     ctrl.setSnippet = function(type) {
       mlSearch.setSnippet(type);
