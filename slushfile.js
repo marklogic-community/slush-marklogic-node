@@ -10,8 +10,10 @@ var gulp = require('gulp'),
   install = require('gulp-install'),
   q = require('q'),
   rename = require('gulp-rename'),
+  replace = require('gulp-replace'),
   pkgSettings = require('./package.json'),
   spawn = require('child_process').spawn,
+  uuid = require('node-uuid'),
   win32 = process.platform === 'win32',
   _ = require('underscore.string')
   ;
@@ -206,7 +208,7 @@ function configRoxy(appPort,xccPort) {
 
 }
 
-gulp.task('default', ['init', 'configGulp', 'configNodeExService', 'configEsri'], function(done) {
+gulp.task('default', ['init', 'generateSecret', 'configGulp', 'configNodeExService', 'configEsri'], function(done) {
   gulp.src(['./bower.json', './package.json'])
    .pipe(install());
 });
@@ -233,6 +235,23 @@ gulp.task('configEsri', ['init'], function(done) {
     } catch (e) {
       console.log('failed to update app.js: ' + e.message);
     }
+  }
+
+  done();
+});
+
+gulp.task('generateSecret', ['init'], function(done) {
+  try {
+
+    var nodeApp = fs.readFileSync('node-server/node-app.js', { encoding: 'utf8' });
+
+    //generate new uuid
+    var secret = uuid.v4();
+    nodeApp = nodeApp.replace(/\bsecret: '\b.*\b'/m, 'secret: \'' + secret + '\'');
+
+    fs.writeFileSync('node-server/node-app.js', nodeApp);
+  } catch (e) {
+    console.log('failed to update SECRET in node-server/node-app.js: ' + e.message);
   }
 
   done();
@@ -344,6 +363,7 @@ gulp.task('init', ['checkForUpdates'], function (done) {
             }
 
           }))
+          .pipe(replace('@sample-app',answers.nameDashed))
           .pipe(gulp.dest('./')) // Relative to cwd
           .on('end', function () {
             done(); // Finished!
