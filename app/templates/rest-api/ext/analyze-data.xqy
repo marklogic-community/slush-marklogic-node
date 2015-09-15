@@ -16,7 +16,7 @@ declare option xdmp:mapping "false";
 declare variable $ns-map := map:map();
 
 declare variable $analyze-sample-only := false();
-declare variable $use-path-indexes := false();
+declare variable $use-path-indexes := true();
 
 (:
  :)
@@ -513,7 +513,7 @@ declare function ext:path($node) {
       return
         concat($prefix, ':'),
 
-      local-name($node)
+      local-name-from-QName(node-name($node))
     )
   else ()
 };

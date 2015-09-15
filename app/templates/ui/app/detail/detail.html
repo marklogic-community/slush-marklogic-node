@@ -1,9 +1,20 @@
 <div class="row detail" data-ng-if="!ctrl.doc.latitude || !ctrl.doc.longitude">
-  <!-- display JSON data -->
-  <div class="panel panel-default">
-    <div class="panel-heading">Data</div>
-    <div class="panel-body">
-      <json-explorer data="ctrl.doc"></json-explorer>
+  <div class="col-sm-8">
+    <!-- display JSON data -->
+    <div class="panel panel-default">
+      <div class="panel-heading">Data</div>
+      <div class="panel-body">
+        <json-explorer data="ctrl.doc"></json-explorer>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-4">
+    <!-- show (links to) similar documents -->
+    <div class="panel panel-default">
+      <div class="panel-heading">Similar</div>
+      <div class="panel-body">
+        <ml-similar uri="{{ctrl.uri}}" limit="5"></ml-similar>
+      </div>
     </div>
   </div>
 </div>
@@ -23,6 +34,13 @@
       <div class="panel-heading">Map</div>
       <div class="panel-body">
         <esri-map detail="ctrl.doc" container-id="detailMap"></esri-map>
+      </div>
+    </div>
+    <!-- show (links to) similar documents -->
+    <div class="panel panel-default">
+      <div class="panel-heading">Similar</div>
+      <div class="panel-body">
+        <ml-similar uri="{{ctrl.uri}}" limit="5"></ml-similar>
       </div>
     </div>
   </div>

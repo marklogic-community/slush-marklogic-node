@@ -1,5 +1,5 @@
 {
-  "name": "ml-node-seed",
+  "name": "@sample-app",
   "version": "0.0.0",
   "dependencies": {
     "angular": "~1.4.4",
@@ -22,5 +22,6 @@
     "angular-mocks": "~1.4.4",
     "sinon": "http://sinonjs.org/releases/sinon-1.16.1.js",
     "bardjs": "~0.1.8"
-  }
+  },
+  "private": true
 }

@@ -10,8 +10,10 @@ var gulp = require('gulp'),
   install = require('gulp-install'),
   q = require('q'),
   rename = require('gulp-rename'),
+  replace = require('gulp-replace'),
   pkgSettings = require('./package.json'),
   spawn = require('child_process').spawn,
+  uuid = require('node-uuid'),
   win32 = process.platform === 'win32',
   _ = require('underscore.string')
   ;
@@ -78,20 +80,16 @@ function processInput() {
     } else {
       inputs.appName = arg;
     }
-  })
-  if (inputs.hasOwnProperty('appName')) {
-    return inputs;
-  } else {
-    throw 'You must supply a name for your application. For example: slush marklogic-node <your-name>';
-  }
+  });
+  return inputs;
 }
 
-function getNameProposal (fallback) {
+function getNameProposal() {
   var path = require('path');
   try {
     return require(path.join(process.cwd(), 'package.json')).name;
   } catch (e) {
-    return fallback;
+    return path.basename(process.cwd());
   }
 }
 
@@ -210,7 +208,7 @@ function configRoxy(appPort,xccPort) {
 
 }
 
-gulp.task('default', ['init', 'configGulp', 'configNodeExService', 'configEsri'], function(done) {
+gulp.task('default', ['init', 'generateSecret', 'configGulp', 'configNodeExService', 'configEsri'], function(done) {
   gulp.src(['./bower.json', './package.json'])
    .pipe(install());
 });
@@ -237,6 +235,23 @@ gulp.task('configEsri', ['init'], function(done) {
     } catch (e) {
       console.log('failed to update app.js: ' + e.message);
     }
+  }
+
+  done();
+});
+
+gulp.task('generateSecret', ['init'], function(done) {
+  try {
+
+    var nodeApp = fs.readFileSync('node-server/node-app.js', { encoding: 'utf8' });
+
+    //generate new uuid
+    var secret = uuid.v4();
+    nodeApp = nodeApp.replace(/\bsecret: '\b.*\b'/m, 'secret: \'' + secret + '\'');
+
+    fs.writeFileSync('node-server/node-app.js', nodeApp);
+  } catch (e) {
+    console.log('failed to update SECRET in node-server/node-app.js: ' + e.message);
   }
 
   done();
@@ -291,16 +306,25 @@ gulp.task('init', ['checkForUpdates'], function (done) {
   var appType = clArgs.appType;
   var branch =  clArgs.branch;
 
-  inquirer.prompt([
-    {type: 'input', name: 'name', message: 'Name for the app?', default: getNameProposal(appName)},
+  var prompts = [
     {type: 'input', name: 'nodePort', message: 'Node app port?', default: 9070},
     {type: 'input', name: 'appPort', message: 'MarkLogic App/Rest port?', default: 8040},
     {type: 'input', name: 'xccPort', message: 'XCC port?', default:8041},
     {type: 'list', name: 'mlVersion', message: 'MarkLogic version?', choices: ['8','7', '6', '5'], default: 0},
     {type: 'confirm', name: 'includeEsri', message: 'Include ESRI Maps?', default: false}
-  ],
-  function (answers) {
-    answers.nameDashed = _.slugify(answers.name);
+  ];
+
+  if (typeof appName === 'undefined') {
+    prompts.unshift(
+      {type: 'input', name: 'name', message: 'Name for the app?', default: getNameProposal()});
+  }
+
+  inquirer.prompt(prompts, function (answers) {
+    if (typeof appName === 'undefined') {
+      answers.nameDashed = _.slugify(answers.name);
+    } else {
+      answers.nameDashed = _.slugify(appName);
+    }
     settings.nodePort = answers.nodePort;
     settings.appPort = answers.appPort;
     settings.includeEsri = answers.includeEsri;
@@ -339,6 +363,7 @@ gulp.task('init', ['checkForUpdates'], function (done) {
             }
 
           }))
+          .pipe(replace('@sample-app',answers.nameDashed))
           .pipe(gulp.dest('./')) // Relative to cwd
           .on('end', function () {
             done(); // Finished!

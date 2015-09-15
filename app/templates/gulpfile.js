@@ -15,8 +15,6 @@ var _ = require('lodash');
 var $ = require('gulp-load-plugins')({lazy: true});
 /* jshint ignore:end */
 
-var port = process.env.PORT || config.defaultPort;
-
 /**
  * yargs variables can be passed in to alter the behavior, when present.
  * Example: gulp serve-dev
@@ -448,7 +446,7 @@ function serve(isDev, specRunner) {
   var debugMode = '--debug';
   var nodeOptions = getNodeOptions(isDev);
 
-  nodeOptions.nodeArgs = [debugMode + '=5858'];
+  nodeOptions.nodeArgs = (args.debug || args.debugBrk) ? [debugMode + '=5858'] : [];
 
   if (args.verbose) {
     console.log(nodeOptions);
@@ -476,15 +474,16 @@ function serve(isDev, specRunner) {
 }
 
 function getNodeOptions(isDev) {
+  var port = args['app-port'] || process.env.PORT || config.defaultPort || 9070;
   return {
     script: config.nodeServer,
     delayTime: 1,
     env: {
       'PORT': port,
       'NODE_ENV': isDev ? 'dev' : 'build',
-      'APP_PORT': args['app-port'] || config.defaultPort,
-      'ML_HOST': args['ml-host'] || 'localhost',
-      'ML_PORT': args['ml-port'] || config.marklogic.port
+      'APP_PORT': port,
+      'ML_HOST': args['ml-host'] || process.env.ML_HOST || config.marklogic.host || 'localhost',
+      'ML_PORT': args['ml-port'] || process.env.ML_PORT || config.marklogic.port || 8040
     },
     watch: [config.server]
   };
@@ -495,11 +494,13 @@ function getNodeOptions(isDev) {
  * --nosync will avoid browserSync
  */
 function startBrowserSync(isDev, specRunner) {
+  var nodeOptions = getNodeOptions(isDev);
+  
   if (args.nosync || browserSync.active) {
     return;
   }
 
-  log('Starting BrowserSync on port ' + port);
+  log('Starting BrowserSync on port ' + nodeOptions.env.APP_PORT);
 
   // If build: watches the files, builds, and restarts browser-sync.
   // If dev: watches less, compiles it to css, browser-sync handles reload
@@ -514,7 +515,7 @@ function startBrowserSync(isDev, specRunner) {
   }
 
   var options = {
-    proxy: 'localhost:' + port,
+    proxy: 'localhost:' + nodeOptions.env.APP_PORT,
     port: 3000,
     files: isDev ? [
       config.client + '**/*.*',
