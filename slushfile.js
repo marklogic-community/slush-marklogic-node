@@ -168,7 +168,7 @@ function runRoxy(config) {
 }
 
 // Make some changes to Roxy's deploy/build.properties file for the out-of-the-box application
-function configRoxy(appPort,xccPort) {
+function configRoxy() {
   console.log('Configuring Roxy');
 
   try {
@@ -178,13 +178,42 @@ function configRoxy(appPort,xccPort) {
     // set the authentication-method property to digestbasic
     properties = properties.replace(/^authentication\-method=digest/m, 'authentication-method=digestbasic');
 
-    //set the ports
-    properties = properties.replace(/^app\-port=\b\d*\b/m, 'app-port=' + appPort);
-    properties = properties.replace(/^xcc\-port=\b\d*\b/m, 'xcc-port=' + xccPort);
-
     fs.writeFileSync('deploy/build.properties', properties);
   } catch (e) {
     console.log('failed to update properties: ' + e.message);
+  }
+
+  try {
+    var localProperties = '#################################################################\n' +
+      '# This file contains overrides to values in build.properties\n' +
+      '# These only affect your local environment and should not be checked in\n' +
+      '#################################################################\n' +
+      '\n' +
+      '#\n' +
+      '# The ports used by your application\n' +
+      '#\n' +
+      'app-port=' + settings.appPort + '\n';
+    if (settings.mlVersion < 8) {
+      localProperties += 'xcc-port=' + settings.xccPort + '\n';
+    }
+    else
+    {
+      localProperties += '# Taking advantage of not needing a XCC Port for ML8\n' +
+      'xcc-port=${app-port}\n' +
+      'install-xcc=false\n';
+    }
+
+    localProperties += '\n' +
+      '#\n' +
+      '# the uris or IP addresses of your servers\n' +
+      '# WARNING: if you are running these scripts on WINDOWS you may need to change localhost to 127.0.0.1\n' +
+      '# There have been reported issues with dns resolution when localhost wasn\'t in the hosts file.\n' +
+      '#\n' +
+      'local-server=' + settings.marklogicHost + '\n';
+
+    fs.writeFileSync('deploy/local.properties', localProperties, {encoding: 'utf8'});
+  } catch (e) {
+    console.log('failed to write roxy local.properties');
   }
 
   try {
@@ -208,7 +237,7 @@ function configRoxy(appPort,xccPort) {
 
 }
 
-gulp.task('default', ['init', 'generateSecret', 'configGulp', 'configNodeExService', 'configEsri'], function(done) {
+gulp.task('default', ['init', 'generateSecret', 'configGulp', 'configEsri'], function(done) {
   gulp.src(['./bower.json', './package.json'])
    .pipe(install());
 });
@@ -260,34 +289,19 @@ gulp.task('generateSecret', ['init'], function(done) {
 gulp.task('configGulp', ['init'], function(done) {
 
   try {
+    var configJSON = {};
+    configJSON['ml-host'] = settings.marklogicHost;
+    configJSON['ml-http-port'] = settings.appPort;
+    configJSON['node-port'] = settings.nodePort;
 
-    var config = fs.readFileSync('gulp.config.js', { encoding: 'utf8' });
+    if (settings.mlVersion < 8) {
+      configJSON['ml-xcc-port'] = settings.xccPort;
+    }
 
-    //set the ports
-    config = config.replace(/\bdefaultPort: '\b\d*\b'/m, 'defaultPort: \'' + settings.nodePort + '\'');
-    config = config.replace(/\bport: '\b\d*\b'/m, 'port: \'' + settings.appPort + '\'');
-
-    fs.writeFileSync('gulp.config.js', config);
+    var configString = JSON.stringify(configJSON, null, 2) + '\n';
+    fs.writeFileSync('gulp-local.json', configString, { encoding: 'utf8' });
   } catch (e) {
-    console.log('failed to update gulp.config.js: ' + e.message);
-  }
-
-  done();
-});
-
-gulp.task('configNodeExService', ['init'], function(done) {
-
-  try {
-
-    var nodeService = fs.readFileSync('etc/init.d/node-express-service', { encoding: 'utf8' });
-
-    //set the ports
-    nodeService = nodeService.replace(/\bAPP_PORT=\b\d*\b/m, 'APP_PORT=' + settings.nodePort);
-    nodeService = nodeService.replace(/\bML_PORT=\b\d*\b/m, 'ML_PORT=' + settings.appPort);
-
-    fs.writeFileSync('etc/init.d/node-express-service', nodeService);
-  } catch (e) {
-    console.log('failed to update node-express-service: ' + e.message);
+    console.log('failed to write gulp.local.json: ' + e.message);
   }
 
   done();
@@ -307,10 +321,11 @@ gulp.task('init', ['checkForUpdates'], function (done) {
   var branch =  clArgs.branch;
 
   var prompts = [
+    {type: 'list', name: 'mlVersion', message: 'MarkLogic version?', choices: ['8','7', '6', '5'], default: 0},
+    {type: 'input', name: 'marklogicHost', message: 'MarkLogic Host?', default: 'localhost'},
     {type: 'input', name: 'nodePort', message: 'Node app port?', default: 9070},
     {type: 'input', name: 'appPort', message: 'MarkLogic App/Rest port?', default: 8040},
-    {type: 'input', name: 'xccPort', message: 'XCC port?', default:8041},
-    {type: 'list', name: 'mlVersion', message: 'MarkLogic version?', choices: ['8','7', '6', '5'], default: 0},
+    {type: 'input', name: 'xccPort', message: 'XCC port?', default:8041, when: function(answers){return answers.mlVersion < 8;}},
     {type: 'confirm', name: 'includeEsri', message: 'Include ESRI Maps?', default: false}
   ];
 
@@ -325,8 +340,11 @@ gulp.task('init', ['checkForUpdates'], function (done) {
     } else {
       answers.nameDashed = _.slugify(appName);
     }
+    settings.mlVersion = answers.mlVersion;
+    settings.marklogicHost = answers.marklogicHost;
     settings.nodePort = answers.nodePort;
     settings.appPort = answers.appPort;
+    settings.xccPort = answers.xccPort || null;
     settings.includeEsri = answers.includeEsri;
 
     getRoxyScript(answers.nameDashed, answers.mlVersion, appType, branch)
@@ -347,7 +365,7 @@ gulp.task('init', ['checkForUpdates'], function (done) {
 
         process.chdir('./' + answers.nameDashed);
 
-        configRoxy(answers.appPort, answers.xccPort);
+        configRoxy();
 
         gulp.src(files)
           .pipe(rename(function (file) {

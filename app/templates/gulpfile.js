@@ -168,7 +168,7 @@ gulp.task('inject', ['wiredep', 'styles', 'templatecache'], function() {
  */
 gulp.task('serve-specs', ['build-specs'], function(done) {
   log('run the spec runner');
-  serve(true /* isDev */, true /* specRunner */);
+  serve('local' /* env */, true /* specRunner */);
   done();
 });
 
@@ -342,21 +342,30 @@ gulp.task('autotest', function(done) {
 });
 
 /**
+ * serve the local environment
+ * --debug-brk or --debug
+ * --nosync
+ */
+gulp.task('serve-local', ['inject', 'fonts'], function() {
+  serve('local' /*env*/);
+});
+
+/**
  * serve the dev environment
  * --debug-brk or --debug
  * --nosync
  */
 gulp.task('serve-dev', ['inject', 'fonts'], function() {
-  serve(true /*isDev*/);
+  serve('dev' /*env*/);
 });
 
 /**
- * serve the build environment
+ * serve the prod environment
  * --debug-brk or --debug
  * --nosync
  */
-gulp.task('serve-dist', ['build'], function() {
-  serve(false /*isDev*/);
+gulp.task('serve-prod', ['build'], function() {
+  serve('prod' /*env*/);
 });
 
 /**
@@ -439,12 +448,12 @@ function orderSrc (src, order) {
  * serve the code
  * --debug-brk or --debug
  * --nosync
- * @param  {Boolean} isDev - dev or build mode
+ * @param  {String} env - 'dev','test', or 'prod'
  * @param  {Boolean} specRunner - server spec runner html
  */
-function serve(isDev, specRunner) {
+function serve(env, specRunner) {
   var debugMode = '--debug';
-  var nodeOptions = getNodeOptions(isDev);
+  var nodeOptions = getNodeOptions(env);
 
   nodeOptions.nodeArgs = (args.debug || args.debugBrk) ? [debugMode + '=5858'] : [];
 
@@ -463,7 +472,7 @@ function serve(isDev, specRunner) {
     })
     .on('start', function () {
       log('*** nodemon started');
-      startBrowserSync(isDev, specRunner);
+      startBrowserSync(env, specRunner);
     })
     .on('crash', function () {
       log('*** nodemon crashed: script crashed for some reason');
@@ -473,17 +482,35 @@ function serve(isDev, specRunner) {
     });
 }
 
-function getNodeOptions(isDev) {
-  var port = args['app-port'] || process.env.PORT || config.defaultPort || 9070;
+/**
+ * Determine whether the enviornment requires dev mode'
+ * @param {String} env - 'local', 'dev', or 'prod'
+ * @return {Boolean} - true if env==='local'
+ */
+function isDevMode(env) {
+  return env === 'local';
+}
+
+function getNodeOptions(env) {
+  var envJson;
+  var envFile = 'gulp-' + env + '.json';
+    try {
+      envJson = require(envFile);
+    }
+    catch (e) {
+      envJson = {};
+      console.log('Info: ' + envFile + ' - may not exist. Did you mean to create one?');
+    }
+  var port = args['app-port'] || process.env.PORT || envJson['node-port'] || config.defaultPort;
   return {
     script: config.nodeServer,
     delayTime: 1,
     env: {
       'PORT': port,
-      'NODE_ENV': isDev ? 'dev' : 'build',
+      'NODE_ENV': isDevMode(env) ? 'dev' : 'build',
       'APP_PORT': port,
-      'ML_HOST': args['ml-host'] || process.env.ML_HOST || config.marklogic.host || 'localhost',
-      'ML_PORT': args['ml-port'] || process.env.ML_PORT || config.marklogic.port || 8040
+      'ML_HOST': args['ml-host'] || process.env.ML_HOST || envJson['ml-host'] || config.marklogic.host,
+      'ML_PORT': args['ml-port'] || process.env.ML_PORT || envJson['ml-http-port'] || config.marklogic.port
     },
     watch: [config.server]
   };
@@ -493,9 +520,9 @@ function getNodeOptions(isDev) {
  * Start BrowserSync
  * --nosync will avoid browserSync
  */
-function startBrowserSync(isDev, specRunner) {
-  var nodeOptions = getNodeOptions(isDev);
-  
+function startBrowserSync(env, specRunner) {
+  var nodeOptions = getNodeOptions(env);
+
   if (args.nosync || browserSync.active) {
     return;
   }
@@ -504,7 +531,7 @@ function startBrowserSync(isDev, specRunner) {
 
   // If build: watches the files, builds, and restarts browser-sync.
   // If dev: watches less, compiles it to css, browser-sync handles reload
-  if (isDev) {
+  if (isDevMode(env)) {
     gulp.watch([config.less], ['styles'])
       .on('change', changeEvent);
     gulp.watch([config.js], ['wiredep'])
@@ -517,7 +544,7 @@ function startBrowserSync(isDev, specRunner) {
   var options = {
     proxy: 'localhost:' + nodeOptions.env.APP_PORT,
     port: 3000,
-    files: isDev ? [
+    files: isDevMode(env) ? [
       config.client + '**/*.*',
       '!' + config.less,
       config.temp + '**/*.css'
