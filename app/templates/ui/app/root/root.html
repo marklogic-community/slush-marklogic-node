@@ -6,13 +6,17 @@
       <span class="icon-bar"></span>
       <span class="icon-bar"></span>
     </button>
+    <!-- not using ui-sref here on purpose -->
     <a class="navbar-brand" href="/"><h1 id="logo">Sample App</h1></a>
   </div>
   <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
     <ul class="nav navbar-nav">
-      <li><a href="/">Home</a></li>
-      <li><a href="/search">Search</a></li>
-      <li><a href="/create">Create</a></li>
+      <li><a ui-sref="root">Home</a></li>
+      <!-- flush search params when clicking Search when already on Search -->
+      <li ng-if="ctrl.currentState === 'root.search'"><a href="/search">Search</a></li>
+      <!-- preserve state when navigating back to Search from elsewhere -->
+      <li ng-if="ctrl.currentState !== 'root.search'"><a ui-sref="root.search">Search</a></li>
+      <li><a ui-sref="root.create">Create</a></li>
     </ul>
     <ml-user mode="inline"></ml-user>
   </div><!-- /.navbar-collapse -->
