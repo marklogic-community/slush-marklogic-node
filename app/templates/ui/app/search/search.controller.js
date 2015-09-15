@@ -27,8 +27,9 @@
 
     superCtrl.constructor.call(ctrl, $scope, $location, mlSearch);
 
-    //ctrl.init();
     (function init() {
+      //do not inherit method on purpose due to if statement
+
       // monitor URL params changes (forward/back, etc.)
       ctrl.$scope.$on('$locationChangeSuccess', ctrl.locationChange.bind(ctrl));
 
@@ -38,7 +39,7 @@
       }
 
       if (searchModel.response) {
-        ctrl.response = searchModel.response;
+        ctrl.updateSearchResults(searchModel.response);
         ctrl.updateURLParams();
       } else {
         ctrl.mlSearch.fromParams().then( ctrl._search.bind(ctrl) );
@@ -46,11 +47,8 @@
     })();
 
     ctrl.updateSearchResults = function updateSearchResults(data) {
+      superCtrl.updateSearchResults.apply(ctrl, arguments);
       searchModel.response = data;
-      this.searchPending = false;
-      this.response = data;
-      this.qtext = this.mlSearch.getText();
-      this.page = this.mlSearch.getPage();
       return this;
     };
 
