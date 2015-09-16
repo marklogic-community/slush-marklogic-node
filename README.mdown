@@ -72,11 +72,11 @@ Edit the `_loginMode` variable in `ui/app/login/login.service.js` to change the 
 
 ## Run your application
 
-    gulp serve-dev # this will watch the .less file for changes, compile them to .css, and run the node server
+    gulp serve-local # this will watch the .less file for changes, compile them to .css, and run the node server
 
 You can set some settings to match your setup in the Roxy properties files. For example:
 
-    gulp serve-dev --ml-host=<your-host> --ml-port=8234 --app-port=9234 --nosync
+    gulp serve-local --ml-host=<your-host> --ml-http-port=8234 --app-port=9234 --nosync
 
 # Next Steps
 

@@ -42,9 +42,9 @@ On Windows:
 
     ml.bat local deploy content
 
-Edit `gulp.config.js` to set your desired ports
+Edit `./gulp-local.json` to set your desired ports
 
-    gulp serve-dev # this will watch the .less file for changes, compile them to .css, and run the node server
+    gulp serve-local # this will watch the .less file for changes, compile them to .css, and run the node server
 
 # Installing as service
 
