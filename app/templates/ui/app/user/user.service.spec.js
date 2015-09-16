@@ -47,7 +47,7 @@
       expect(service.currentUser()).to.not.be.defined;
     });
 
-    it('should get the current logged in user', function () {
+    it('should get the current logged in user - if loginService not init', function () {
       service.getUser().then(function(user) {
         expect(user).to.deep.eq({ name: 'bob' });
       });

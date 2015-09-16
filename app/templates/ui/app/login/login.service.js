@@ -9,9 +9,9 @@
   function LoginService($http, $modal, $q, $rootScope, $state, $stateParams, messageBoardService) {
     var _loginMode = 'full'; // 'modal', 'top-right', or 'full'
     var _loginError;
-    var _isAuthenticated = false;
     var _toStateName;
     var _toStateParams;
+    var _isAuthenticated;
 
     function loginMode(mode) {
       if (mode === undefined) {
@@ -30,14 +30,35 @@
       return _loginError;
     }
 
+    function getAuthenticatedStatus() {
+      if (_isAuthenticated) {
+        return _isAuthenticated;
+      }
+
+      return $http.get('/api/user/status', {}).then(function(response) {
+        if (response.data.authenticated === false) {
+          _isAuthenticated = false;
+        }
+        else
+        {
+          loginSuccess(response);
+        }
+        return isAuthenticated();
+      });
+    }
+
+    function loginSuccess(response) {
+      _loginError = null;
+      _isAuthenticated = true;
+      $rootScope.$broadcast('loginService:login-success', response.data);
+    }
+
     function login(username, password) {
       return $http.post('/api/user/login', {
         'username': username,
         'password': password
       }).then(function(response) {
-        _loginError = null;
-        _isAuthenticated = true;
-        $rootScope.$broadcast('loginService:login-success', response.data);
+        loginSuccess(response);
         return response;
       }, failLogin);
     }
@@ -110,6 +131,22 @@
       return _protectedRoutes.indexOf(route) > -1;
     }
 
+    function blockRoute(event, next, nextParams) {
+      event.preventDefault();
+      loginPrompt();
+      if (_loginMode !== 'full') {
+        if (deregisterLoginSuccess) {
+          deregisterLoginSuccess();
+          deregisterLoginSuccess = null;
+        }
+        deregisterLoginSuccess = $rootScope.$on('loginService:login-success', function() {
+          deregisterLoginSuccess();
+          deregisterLoginSuccess = null;
+          $state.go(next.name, nextParams);
+        });
+      }
+    }
+
     var deregisterLoginSuccess;
 
     $rootScope.$on('$stateChangeStart', function(event, next, nextParams) {
@@ -117,20 +154,24 @@
         _toStateName = next.name;
         _toStateParams = nextParams;
       }
-      if (!isAuthenticated() && routeIsProtected(next.name)) {
-        event.preventDefault();
-        loginPrompt();
-        if (_loginMode !== 'full') {
-          if (deregisterLoginSuccess) {
-            deregisterLoginSuccess();
-            deregisterLoginSuccess = null;
-          }
-          deregisterLoginSuccess = $rootScope.$on('loginService:login-success', function() {
-            deregisterLoginSuccess();
-            deregisterLoginSuccess = null;
-            $state.go(next.name, nextParams);
+
+      if (routeIsProtected(next.name)) {
+        var auth = getAuthenticatedStatus();
+
+        if (angular.isFunction(auth.then)) {
+          auth.then(function() {
+            if (!isAuthenticated()) {
+              //this does NOT block requests in a timely fashion...
+              blockRoute(event, next, nextParams);
+            }
           });
         }
+        else {
+          if (!auth) {
+            blockRoute(event, next, nextParams);
+          }
+        }
+
       }
     });
 
@@ -141,6 +182,7 @@
       loginError: loginError,
       loginMode: loginMode,
       isAuthenticated: isAuthenticated,
+      getAuthenticatedStatus: getAuthenticatedStatus,
       protectedRoutes: protectedRoutes
     };
   }
