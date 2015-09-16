@@ -111,16 +111,23 @@
       modalOpened = false;
     }));
 
+    afterEach(inject(function($rootScope) {
+      $rootScope.$apply();
+    }));
+
     it('should be defined', function () {
       expect(service).to.be.defined;
     });
 
     it('should be logged in already', function() {
       expect(service.isAuthenticated()).to.be.not.defined;
-      service.getAuthenticatedStatus().then(function(done) {
-        expect(done).to.be.eq(100);
+
+      var isLoggedIn = false;
+      service.getAuthenticatedStatus($rootScope).then(function(done) {
+        isLoggedIn = service.isAuthenticated();
+        expect(isLoggedIn).to.eq(true);
       });
-      fail('');
+
     });
   });
 }());
