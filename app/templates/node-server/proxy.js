@@ -8,7 +8,7 @@ var config = require('../gulp.config')();
 
 var options = {
   mlHost: process.env.ML_HOST || config.marklogic.host,
-  mlPort: process.env.ML_PORT || config.marklogic.port,
+  mlHttpPort: process.env.ML_PORT || config.marklogic.httpPort,
   defaultUser: config.marklogic.user,
   defaultPass: config.marklogic.password
 };
@@ -34,8 +34,8 @@ router.put('*', function(req, res) {
   if (req.session.user === undefined) {
     res.send(401, 'Unauthorized');
   } else if (req.path === '/v1/documents' &&
-    req.query.uri.match('/users/') &&
-    req.query.uri.match(new RegExp('/users/[^(' + req.session.user.name + ')]+.json'))) {
+    req.query.uri.match('/api/users/') &&
+    req.query.uri.match(new RegExp('/api/users/[^(' + req.session.user.name + ')]+.json'))) {
     // The user is try to PUT to a profile document other than his/her own. Not allowed.
     res.send(403, 'Forbidden');
   } else {
@@ -74,10 +74,10 @@ function proxy(req, res) {
   var path = '/v1' + req.path + (queryString ? '?' + queryString : '');
   console.log(
     req.method + ' ' + req.path + ' proxied to ' +
-    options.mlHost + ':' + options.mlPort + path);
+    options.mlHost + ':' + options.mlHttpPort + path);
   var mlReq = http.request({
     hostname: options.mlHost,
-    port: options.mlPort,
+    port: options.mlHttpPort,
     method: req.method,
     path: path,
     headers: req.headers,

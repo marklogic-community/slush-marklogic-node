@@ -38,7 +38,7 @@
         if ( _.isArray(data.profile.emails) ) {
           _currentUser.emails = data.profile.emails;
         }
-        else {
+        else if (data.profile.emails) {
           // wrap single value in array, needed for repeater
           _currentUser.emails = [data.profile.emails];
         }
