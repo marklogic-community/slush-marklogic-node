@@ -44,7 +44,7 @@ router.post('/user/login', function(req, res) {
   var login = http.get({
     hostname: options.mlHost,
     port: options.mlPort,
-    path: '/v1/documents?uri=/users/' + username + '.json',
+    path: '/v1/documents?uri=/api/users/' + username + '.json',
     headers: headers,
     auth: username + ':' + password
   }, function(response) {
