@@ -10,7 +10,7 @@ var config = require('../gulp.config')();
 var options = {
   appPort: process.env.APP_PORT || config.defaultPort,
   mlHost: process.env.ML_HOST || config.marklogic.host,
-  mlPort: process.env.ML_PORT || config.marklogic.port,
+  mlHttpPort: process.env.ML_PORT || config.marklogic.httpPort,
   defaultUser: config.marklogic.user,
   defaultPass: config.marklogic.password
 };
@@ -43,7 +43,7 @@ router.post('/user/login', function(req, res) {
   delete headers['content-length'];
   var login = http.get({
     hostname: options.mlHost,
-    port: options.mlPort,
+    port: options.mlHttpPort,
     path: '/v1/documents?uri=/api/users/' + username + '.json',
     headers: headers,
     auth: username + ':' + password

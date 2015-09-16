@@ -6,6 +6,7 @@ var args = require('yargs').argv;
 var browserSync = require('browser-sync');
 var config = require('./gulp.config')();
 var del = require('del');
+var fs = require('fs');
 var glob = require('glob');
 var gulp = require('gulp');
 var path = require('path');
@@ -160,6 +161,31 @@ gulp.task('inject', ['wiredep', 'styles', 'templatecache'], function() {
     .src(config.index)
     .pipe(inject(config.css))
     .pipe(gulp.dest(config.client));
+});
+
+
+/**
+ * Creates a sample gulp-local.json; can be used as model for other environments
+ */
+gulp.task('init-local', function() {
+  //copy from slushfile - config gulp - with modifications to use config instead
+  log('Creating gulp-local.json sample document with values drawn from gulp.config.js');
+  try {
+    var configJSON = {};
+    configJSON['ml-version'] = config.marklogic.version;
+    configJSON['ml-host'] = config.marklogic.host;
+    configJSON['ml-http-port'] = config.marklogic.httpPort;
+    configJSON['node-port'] = config.defaultPort;
+
+    if (config.marklogic.version < 8) {
+      configJSON['ml-xcc-port'] = config.marklogic.xccPort;
+    }
+
+    var configString = JSON.stringify(configJSON, null, 2) + '\n';
+    fs.writeFileSync('gulp-local.json', configString, { encoding: 'utf8' });
+  } catch (e) {
+    console.log('failed to write gulp-local.json: ' + e.message);
+  }
 });
 
 /**
@@ -448,7 +474,7 @@ function orderSrc (src, order) {
  * serve the code
  * --debug-brk or --debug
  * --nosync
- * @param  {String} env - 'dev','test', or 'prod'
+ * @param  {String} env - local | dev | prod
  * @param  {Boolean} specRunner - server spec runner html
  */
 function serve(env, specRunner) {
@@ -484,7 +510,7 @@ function serve(env, specRunner) {
 
 /**
  * Determine whether the enviornment requires dev mode'
- * @param {String} env - 'local', 'dev', or 'prod'
+ * @param {String} env - local | dev | prod
  * @return {Boolean} - true if env==='local'
  */
 function isDevMode(env) {
@@ -493,13 +519,14 @@ function isDevMode(env) {
 
 function getNodeOptions(env) {
   var envJson;
-  var envFile = 'gulp-' + env + '.json';
+  var envFile = './gulp-' + env + '.json';
     try {
       envJson = require(envFile);
     }
     catch (e) {
       envJson = {};
-      console.log('Info: ' + envFile + ' - may not exist. Did you mean to create one?');
+      console.log('Couldn\'t find ' + envFile + '; you can create this file to override properties - ' +
+        '`gulp init-local` creates gulp-local.json which can be modified for other environments as well');
     }
   var port = args['app-port'] || process.env.PORT || envJson['node-port'] || config.defaultPort;
   return {
@@ -510,7 +537,9 @@ function getNodeOptions(env) {
       'NODE_ENV': isDevMode(env) ? 'dev' : 'build',
       'APP_PORT': port,
       'ML_HOST': args['ml-host'] || process.env.ML_HOST || envJson['ml-host'] || config.marklogic.host,
-      'ML_PORT': args['ml-port'] || process.env.ML_PORT || envJson['ml-http-port'] || config.marklogic.port
+      'ML_PORT': args['ml-http-port'] || process.env.ML_PORT || envJson['ml-http-port'] || config.marklogic.httpPort,
+      'ML_XCC_PORT': args['ml-xcc-port'] || process.env.ML_XCC_PORT || envJson['ml-xcc-port'] || config.marklogic.xccPort,
+      'ML_VERSION': args['ml-version'] || process.env.ML_VERSION || envJson['ml-version'] || config.marklogic.version
     },
     watch: [config.server]
   };

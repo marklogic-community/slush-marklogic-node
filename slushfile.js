@@ -290,6 +290,7 @@ gulp.task('configGulp', ['init'], function(done) {
 
   try {
     var configJSON = {};
+    configJSON['ml-version'] = settings.mlVersion;
     configJSON['ml-host'] = settings.marklogicHost;
     configJSON['ml-http-port'] = settings.appPort;
     configJSON['node-port'] = settings.nodePort;
@@ -301,7 +302,7 @@ gulp.task('configGulp', ['init'], function(done) {
     var configString = JSON.stringify(configJSON, null, 2) + '\n';
     fs.writeFileSync('gulp-local.json', configString, { encoding: 'utf8' });
   } catch (e) {
-    console.log('failed to write gulp.local.json: ' + e.message);
+    console.log('failed to write gulp-local.json: ' + e.message);
   }
 
   done();

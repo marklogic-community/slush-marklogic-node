@@ -8,7 +8,7 @@ var config = require('../gulp.config')();
 
 var options = {
   mlHost: process.env.ML_HOST || config.marklogic.host,
-  mlPort: process.env.ML_PORT || config.marklogic.port,
+  mlHttpPort: process.env.ML_PORT || config.marklogic.httpPort,
   defaultUser: config.marklogic.user,
   defaultPass: config.marklogic.password
 };
@@ -74,10 +74,10 @@ function proxy(req, res) {
   var path = '/v1' + req.path + (queryString ? '?' + queryString : '');
   console.log(
     req.method + ' ' + req.path + ' proxied to ' +
-    options.mlHost + ':' + options.mlPort + path);
+    options.mlHost + ':' + options.mlHttpPort + path);
   var mlReq = http.request({
     hostname: options.mlHost,
-    port: options.mlPort,
+    port: options.mlHttpPort,
     method: req.method,
     path: path,
     headers: req.headers,

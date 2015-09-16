@@ -76,7 +76,7 @@ Edit the `_loginMode` variable in `ui/app/login/login.service.js` to change the 
 
 You can set some settings to match your setup in the Roxy properties files. For example:
 
-    gulp serve-local --ml-host=<your-host> --ml-port=8234 --app-port=9234 --nosync
+    gulp serve-local --ml-host=<your-host> --ml-http-port=8234 --app-port=9234 --nosync
 
 # Next Steps
 
