@@ -111,6 +111,7 @@
       modalOpened = false;
     }));
 
+    //needs to be present for logged in already test
     afterEach(inject(function($rootScope) {
       $rootScope.$apply();
     }));

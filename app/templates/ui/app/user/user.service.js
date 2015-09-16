@@ -17,7 +17,6 @@
         return _currentUser;
       }
 
-      console.warn('LoginService should be initialized already..');
       return loginService.getAuthenticatedStatus().then(currentUser);
     }
 
