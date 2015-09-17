@@ -11,8 +11,8 @@ var options = {
   appPort: process.env.APP_PORT || config.defaultPort,
   mlHost: process.env.ML_HOST || config.marklogic.host,
   mlHttpPort: process.env.ML_PORT || config.marklogic.httpPort,
-  defaultUser: config.marklogic.user,
-  defaultPass: config.marklogic.password
+  defaultUser: process.env.ML_APP_USER || config.marklogic.user,
+  defaultPass: process.env.ML_APP_PASS || config.marklogic.password
 };
 
 router.get('/user/status', function(req, res) {

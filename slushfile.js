@@ -209,7 +209,12 @@ function configRoxy() {
       '# WARNING: if you are running these scripts on WINDOWS you may need to change localhost to 127.0.0.1\n' +
       '# There have been reported issues with dns resolution when localhost wasn\'t in the hosts file.\n' +
       '#\n' +
-      'local-server=' + settings.marklogicHost + '\n';
+      'local-server=' + settings.marklogicHost + '\n' +
+      '#\n' +
+      '# Admin username/password that will exist on the local/dev/prod servers\n' +
+      '#\n' +
+      'user=' + settings.marklogicAdminUser + '\n' +
+      'password=' + settings.marklogicAdminPass + '\n';
 
     fs.writeFileSync('deploy/local.properties', localProperties, {encoding: 'utf8'});
   } catch (e) {
@@ -292,6 +297,10 @@ gulp.task('configGulp', ['init'], function(done) {
     var configJSON = {};
     configJSON['ml-version'] = settings.mlVersion;
     configJSON['ml-host'] = settings.marklogicHost;
+    configJSON['ml-admin-user'] = settings.marklogicAdminUser;
+    configJSON['ml-admin-pass'] = settings.marklogicAdminPass;
+    configJSON['ml-app-user'] = settings.marklogicAdminUser; //THIS NEEDS TO CHANGE
+    configJSON['ml-app-pass'] = settings.marklogicAdminPass; //THIS NEEDS TO CHANGE
     configJSON['ml-http-port'] = settings.appPort;
     configJSON['node-port'] = settings.nodePort;
 
@@ -300,9 +309,9 @@ gulp.task('configGulp', ['init'], function(done) {
     }
 
     var configString = JSON.stringify(configJSON, null, 2) + '\n';
-    fs.writeFileSync('gulp-local.json', configString, { encoding: 'utf8' });
+    fs.writeFileSync('local.json', configString, { encoding: 'utf8' });
   } catch (e) {
-    console.log('failed to write gulp-local.json: ' + e.message);
+    console.log('failed to write local.json: ' + e.message);
   }
 
   done();
@@ -324,6 +333,8 @@ gulp.task('init', ['checkForUpdates'], function (done) {
   var prompts = [
     {type: 'list', name: 'mlVersion', message: 'MarkLogic version?', choices: ['8','7', '6', '5'], default: 0},
     {type: 'input', name: 'marklogicHost', message: 'MarkLogic Host?', default: 'localhost'},
+    {type: 'input', name: 'marklogicAdminUser', message: 'MarkLogic Admin User?', default: 'admin'},
+    {type: 'input', name: 'marklogicAdminPass', message: 'MarkLogic Admin Password?', default: 'admin'},
     {type: 'input', name: 'nodePort', message: 'Node app port?', default: 9070},
     {type: 'input', name: 'appPort', message: 'MarkLogic App/Rest port?', default: 8040},
     {type: 'input', name: 'xccPort', message: 'XCC port?', default:8041, when: function(answers){return answers.mlVersion < 8;}},
@@ -343,6 +354,8 @@ gulp.task('init', ['checkForUpdates'], function (done) {
     }
     settings.mlVersion = answers.mlVersion;
     settings.marklogicHost = answers.marklogicHost;
+    settings.marklogicAdminUser = answers.marklogicAdminUser;
+    settings.marklogicAdminPass = answers.marklogicAdminPass;
     settings.nodePort = answers.nodePort;
     settings.appPort = answers.appPort;
     settings.xccPort = answers.xccPort || null;

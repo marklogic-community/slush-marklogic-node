@@ -165,15 +165,19 @@ gulp.task('inject', ['wiredep', 'styles', 'templatecache'], function() {
 
 
 /**
- * Creates a sample gulp-local.json; can be used as model for other environments
+ * Creates a sample local.json; can be used as model for dev.json and prod.json
  */
 gulp.task('init-local', function() {
   //copy from slushfile - config gulp - with modifications to use config instead
-  log('Creating gulp-local.json sample document with values drawn from gulp.config.js');
+  log('Creating local.json sample document with values drawn from gulp.config.js');
   try {
     var configJSON = {};
     configJSON['ml-version'] = config.marklogic.version;
     configJSON['ml-host'] = config.marklogic.host;
+    configJSON['ml-admin-user'] = config.marklogic.username;
+    configJSON['ml-admin-pass'] = config.marklogic.password;
+    configJSON['ml-app-user'] = config.marklogic.username;
+    configJSON['ml-app-pass'] = config.marklogic.password;
     configJSON['ml-http-port'] = config.marklogic.httpPort;
     configJSON['node-port'] = config.defaultPort;
 
@@ -182,9 +186,9 @@ gulp.task('init-local', function() {
     }
 
     var configString = JSON.stringify(configJSON, null, 2) + '\n';
-    fs.writeFileSync('gulp-local.json', configString, { encoding: 'utf8' });
+    fs.writeFileSync('local.json', configString, { encoding: 'utf8' });
   } catch (e) {
-    console.log('failed to write gulp-local.json: ' + e.message);
+    console.log('failed to write local.json: ' + e.message);
   }
 });
 
@@ -537,6 +541,8 @@ function getNodeOptions(env) {
       'NODE_ENV': isDevMode(env) ? 'dev' : 'build',
       'APP_PORT': port,
       'ML_HOST': args['ml-host'] || process.env.ML_HOST || envJson['ml-host'] || config.marklogic.host,
+      'ML_APP_USER': args['ml-app-user'] || process.env.ML_APP_USER || envJson['ml-app-user'] || config.marklogic.user,
+      'ML_APP_PASS': args['ml-app-pass'] || process.env.ML_APP_PASS || envJson['ml-app-pass'] || config.marklogic.password,
       'ML_PORT': args['ml-http-port'] || process.env.ML_PORT || envJson['ml-http-port'] || config.marklogic.httpPort,
       'ML_XCC_PORT': args['ml-xcc-port'] || process.env.ML_XCC_PORT || envJson['ml-xcc-port'] || config.marklogic.xccPort,
       'ML_VERSION': args['ml-version'] || process.env.ML_VERSION || envJson['ml-version'] || config.marklogic.version
