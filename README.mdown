@@ -107,11 +107,11 @@ You can load them with
 **NOTE:** Change $app-role in import-sample-data.options to your app's role
 (You can discover that with `./ml local info`)
 
-    ./ml local mlcp -option_file import-sample-data.options
+    ./ml local mlcp -options_file import-sample-data.options
 
 Or on Windows:
 
-    ml.bat local mlcp -option_file import-sample-data.options
+    ml.bat local mlcp -options_file import-sample-data.options
 
 ## General Data Information
 
