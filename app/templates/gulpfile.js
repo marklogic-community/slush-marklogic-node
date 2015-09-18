@@ -523,14 +523,14 @@ function isDevMode(env) {
 
 function getNodeOptions(env) {
   var envJson;
-  var envFile = './gulp-' + env + '.json';
+  var envFile = './' + env + '.json';
     try {
       envJson = require(envFile);
     }
     catch (e) {
       envJson = {};
       console.log('Couldn\'t find ' + envFile + '; you can create this file to override properties - ' +
-        '`gulp init-local` creates gulp-local.json which can be modified for other environments as well');
+        '`gulp init-local` creates local.json which can be modified for other environments as well');
     }
   var port = args['app-port'] || process.env.PORT || envJson['node-port'] || config.defaultPort;
   return {
