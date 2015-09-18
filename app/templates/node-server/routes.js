@@ -57,7 +57,7 @@ router.post('/user/login', function(req, res) {
         name: username,
         password: password
       };
-      res.send(200, {
+      res.status(200).send({
         authenticated: true,
         username: username
       });
@@ -76,7 +76,7 @@ router.post('/user/login', function(req, res) {
               fullname: json.user.fullname,
               emails: json.user.emails
             };
-            res.send(200, {
+            res.status(200).send({
               authenticated: true,
               username: username,
               profile: req.session.user.profile
