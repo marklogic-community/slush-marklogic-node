@@ -382,7 +382,7 @@ gulp.task('init', ['checkForUpdates'], function (done) {
             }
 
           }))
-          .pipe(replace('@sample-app',answers.nameDashed))
+          .pipe(replace('@sample-app', answers.nameDashed, {skipBinary:true}))
           .pipe(gulp.dest('./')) // Relative to cwd
           .on('end', function () {
             done(); // Finished!
