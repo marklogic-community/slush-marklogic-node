@@ -247,9 +247,10 @@ gulp.task('build', ['optimize', 'images', 'fonts', 'tinymce'], function() {
     subtitle: 'Deployed to the build folder',
     message: 'Running `gulp serve-dist`'
   };
-  del(config.temp);
-  log(msg);
-  notify(msg);
+  del(config.temp).then(function(){
+    log(msg);
+    notify(msg);
+  });
 });
 
 /**
@@ -262,13 +263,13 @@ gulp.task('optimize', ['inject', 'test'], function() {
 
   var assets = $.useref.assets({searchPath: './'});
   // Filters are named for the gulp-useref path
-  var cssFilter = $.filter('**/*.css');
-  var jsAppFilter = $.filter('**/' + config.optimized.app);
-  var jslibFilter = $.filter('**/' + config.optimized.lib);
+  var cssFilter = $.filter('**/*.css', {restore: true});
+  var jsAppFilter = $.filter('**/' + config.optimized.app, {restore: true});
+  var jslibFilter = $.filter('**/' + config.optimized.lib, {restore: true});
 
   var templateCache = config.temp + config.templateCache.file;
 
-  return gulp
+  var combined = gulp
     .src(config.index)
     .pipe($.plumber())
     .pipe(inject(templateCache, 'templates'))
@@ -277,18 +278,18 @@ gulp.task('optimize', ['inject', 'test'], function() {
     // Get the css
     .pipe(cssFilter)
     .pipe($.minifyCss({processImportFrom:['!fonts.googleapis.com']}))
-    .pipe(cssFilter.restore())
+    .pipe(cssFilter.restore)
 
     // Get the custom javascript
     .pipe(jsAppFilter)
     .pipe($.ngAnnotate({add: true}))
     .pipe($.uglify())
-    .pipe(jsAppFilter.restore())
+    .pipe(jsAppFilter.restore)
 
     // Get the vendor javascript
     .pipe(jslibFilter)
     .pipe($.uglify()) // another option is to override wiredep to use min files
-    .pipe(jslibFilter.restore())
+    .pipe(jslibFilter.restore)
 
     // Take inventory of the file names for future rev numbers
     .pipe($.rev())
@@ -298,61 +299,64 @@ gulp.task('optimize', ['inject', 'test'], function() {
     // Replace the file names in the html with rev numbers
     .pipe($.revReplace())
     .pipe(gulp.dest(config.build));
+
+    combined.on('error', console.error.bind(console));
+  return combined;
 });
 
 /**
  * Remove all files from the build, temp, and reports folders
  * @param  {Function} done - callback when complete
  */
-gulp.task('clean', ['clean-fonts'], function(done) {
+gulp.task('clean', ['clean-fonts'], function() {
   var delconfig = [].concat(config.build, config.temp, config.report);
   log('Cleaning: ' + $.util.colors.blue(delconfig));
-  del(delconfig, done);
+  return del(delconfig);
 });
 
 /**
  * Remove all fonts from the build folder
  * @param  {Function} done - callback when complete
  */
-gulp.task('clean-fonts', function(done) {
+gulp.task('clean-fonts', function() {
   var files = [].concat(
     config.build + 'fonts/**/*.*',
     config.client + 'fonts'
   );
-  clean(files, done);
+  return clean(files);
 });
 
 /**
  * Remove all images from the build folder
  * @param  {Function} done - callback when complete
  */
-gulp.task('clean-images', function(done) {
-  clean(config.build + 'images/**/*.*', done);
+gulp.task('clean-images', function() {
+  return clean(config.build + 'images/**/*.*');
 });
 
 /**
  * Remove all styles from the build and temp folders
  * @param  {Function} done - callback when complete
  */
-gulp.task('clean-styles', function(done) {
+gulp.task('clean-styles', function() {
   var files = [].concat(
     config.temp + '**/*.css',
     config.build + 'styles/**/*.css'
   );
-  clean(files, done);
+  return clean(files);
 });
 
 /**
  * Remove all js and html from the build and temp folders
  * @param  {Function} done - callback when complete
  */
-gulp.task('clean-code', function(done) {
+gulp.task('clean-code', function() {
   var files = [].concat(
     config.temp + '**/*.js',
     config.build + 'js/**/*.js',
     config.build + '**/*.html'
   );
-  clean(files, done);
+  return clean(files);
 });
 
 /**
@@ -443,11 +447,10 @@ function changeEvent(event) {
 /**
  * Delete all files in a given path
  * @param  {Array}   path - array of paths to delete
- * @param  {Function} done - callback when complete
  */
-function clean(path, done) {
+function clean(path) {
   log('Cleaning: ' + $.util.colors.blue(path));
-  del(path, done);
+  return del(path);
 }
 
 /**
@@ -645,7 +648,7 @@ function startTests(singleRun, done) {
   var child;
   var excludeFiles = [];
   var fork = require('child_process').fork;
-  var karma = require('karma').server;
+  var Server = require('karma').Server;
   var serverSpecs = config.serverIntegrationSpecs;
 
   if (args.startServers) {
@@ -660,12 +663,11 @@ function startTests(singleRun, done) {
     }
   }
 
-  karma.start({
+  new Server({
     configFile: __dirname + '/karma.conf.js',
     exclude: excludeFiles,
     singleRun: !!singleRun
-  }, karmaCompleted);
-
+  }, karmaCompleted).start();
   ////////////////
 
   function karmaCompleted(karmaResult) {
