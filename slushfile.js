@@ -334,7 +334,8 @@ gulp.task('init', ['checkForUpdates'], function (done) {
     {type: 'list', name: 'mlVersion', message: 'MarkLogic version?', choices: ['8','7', '6', '5'], default: 0},
     {type: 'input', name: 'marklogicHost', message: 'MarkLogic Host?', default: 'localhost'},
     {type: 'input', name: 'marklogicAdminUser', message: 'MarkLogic Admin User?', default: 'admin'},
-    {type: 'input', name: 'marklogicAdminPass', message: 'MarkLogic Admin Password?', default: 'admin'},
+    {type: 'input', name: 'marklogicAdminPass', message: '\nNote: consider keeping the following blank, ' +
+      'you will be asked to enter it at appropriate commands.\n[?] MarkLogic Admin Password?', default: ''},
     {type: 'input', name: 'nodePort', message: 'Node app port?', default: 9070},
     {type: 'input', name: 'appPort', message: 'MarkLogic App/Rest port?', default: 8040},
     {type: 'input', name: 'xccPort', message: 'XCC port?', default:8041, when: function(answers){return answers.mlVersion < 8;}},
