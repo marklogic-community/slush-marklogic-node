@@ -4,8 +4,8 @@
   angular.module('app.user')
     .factory('userService', UserService);
 
-  UserService.$inject = ['$http', '$rootScope', 'loginService'];
-  function UserService($http, $rootScope, loginService) {
+  UserService.$inject = ['$rootScope', 'loginService'];
+  function UserService($rootScope, loginService) {
     var _currentUser = null;
 
     function currentUser() {
@@ -17,7 +17,7 @@
         return _currentUser;
       }
 
-      return $http.get('/api/user/status', {}).then(updateUser);
+      return loginService.getAuthenticatedStatus().then(currentUser);
     }
 
     function updateUser(response) {
@@ -38,7 +38,7 @@
         if ( _.isArray(data.profile.emails) ) {
           _currentUser.emails = data.profile.emails;
         }
-        else {
+        else if (data.profile.emails) {
           // wrap single value in array, needed for repeater
           _currentUser.emails = [data.profile.emails];
         }

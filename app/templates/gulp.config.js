@@ -30,8 +30,10 @@ module.exports = function() {
 
   var config = {
     marklogic: {
+      version: 8,
       host: 'localhost',
-      port: '8040',
+      httpPort: '8040',
+      xccPort: '8041',
       user: 'admin',
       password: 'admin'
     },

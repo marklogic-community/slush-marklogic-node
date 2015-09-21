@@ -94,7 +94,7 @@
         <input type="text" ng-model="ctrl.newTag"/>
         <button class="add-feature btn btn-default btn-sm" ng-click="ctrl.addTag()">Add</button>
       </div>
-      <div class="col-sm-10">
+      <div class="col-sm-10 col-sm-offset-2">
         <div class="tag btn btn-info" ng-repeat="tag in ctrl.person.tags">
           <span>{{tag}}</span>
           <span class="glyphicon glyphicon-remove-circle" ng-click="ctrl.removeTag($index)"></span>

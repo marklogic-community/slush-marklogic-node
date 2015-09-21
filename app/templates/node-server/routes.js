@@ -10,9 +10,9 @@ var config = require('../gulp.config')();
 var options = {
   appPort: process.env.APP_PORT || config.defaultPort,
   mlHost: process.env.ML_HOST || config.marklogic.host,
-  mlPort: process.env.ML_PORT || config.marklogic.port,
-  defaultUser: config.marklogic.user,
-  defaultPass: config.marklogic.password
+  mlHttpPort: process.env.ML_PORT || config.marklogic.httpPort,
+  defaultUser: process.env.ML_APP_USER || config.marklogic.user,
+  defaultPass: process.env.ML_APP_PASS || config.marklogic.password
 };
 
 router.get('/user/status', function(req, res) {
@@ -43,8 +43,8 @@ router.post('/user/login', function(req, res) {
   delete headers['content-length'];
   var login = http.get({
     hostname: options.mlHost,
-    port: options.mlPort,
-    path: '/v1/documents?uri=/users/' + username + '.json',
+    port: options.mlHttpPort,
+    path: '/v1/documents?uri=/api/users/' + username + '.json',
     headers: headers,
     auth: username + ':' + password
   }, function(response) {
@@ -57,7 +57,7 @@ router.post('/user/login', function(req, res) {
         name: username,
         password: password
       };
-      res.send(200, {
+      res.status(200).send({
         authenticated: true,
         username: username
       });
@@ -76,7 +76,7 @@ router.post('/user/login', function(req, res) {
               fullname: json.user.fullname,
               emails: json.user.emails
             };
-            res.send(200, {
+            res.status(200).send({
               authenticated: true,
               username: username,
               profile: req.session.user.profile

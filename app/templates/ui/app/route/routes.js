@@ -3,7 +3,7 @@
 
   angular.module('app')
     .run(['loginService', function(loginService) {
-      loginService.protectedRoutes(['root.create', 'root.profile']);
+      loginService.protectedRoutes(['root.search', 'root.create', 'root.profile']);
     }])
     .config(Config);
 
