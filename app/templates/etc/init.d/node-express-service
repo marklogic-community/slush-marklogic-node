@@ -29,7 +29,7 @@ SERVICE=${0##*/}
 NAME=${0##*/}
 
 # default location of your project's root
-SOURCE_DIR=/space/projects/$NAME
+SOURCE_DIR=/space/projects/$NAME.live
 
 # default js entry point
 SOURCE_FILE=boot.js
