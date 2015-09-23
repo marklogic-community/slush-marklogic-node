@@ -4,14 +4,7 @@
 
 var router = require('express').Router();
 var http = require('http');
-var config = require('../gulp.config')();
-
-var options = {
-  mlHost: process.env.ML_HOST || config.marklogic.host,
-  mlHttpPort: process.env.ML_PORT || config.marklogic.httpPort,
-  defaultUser: process.env.ML_APP_USER || config.marklogic.user,
-  defaultPass: process.env.ML_APP_PASS || config.marklogic.password
-};
+var options = require('./utils/options')();
 
 // ==================================
 // MarkLogic REST API endpoints

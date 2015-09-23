@@ -5,15 +5,7 @@
 var router = require('express').Router();
 var four0four = require('./utils/404')();
 var http = require('http');
-var config = require('../gulp.config')();
-
-var options = {
-  appPort: process.env.APP_PORT || config.defaultPort,
-  mlHost: process.env.ML_HOST || config.marklogic.host,
-  mlHttpPort: process.env.ML_PORT || config.marklogic.httpPort,
-  defaultUser: process.env.ML_APP_USER || config.marklogic.user,
-  defaultPass: process.env.ML_APP_PASS || config.marklogic.password
-};
+var options = require('./utils/options')();
 
 router.get('/user/status', function(req, res) {
   noCache(res);
