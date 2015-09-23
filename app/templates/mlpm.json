@@ -1,5 +1,5 @@
 {
-  "name": "@sample-app",
+  "name": "@sample-app-name",
   "version": "0.0.0",
   "description": "Sample app generated with slush-marklogic-node",
   "private": true,

@@ -13,7 +13,7 @@ var four0four = require('./utils/404')();
 var environment = process.env.NODE_ENV;
 
 app.use(expressSession({
-  name: '@sample-app',
+  name: '@sample-app-name',
   secret: '1234567890QWERTY',
   saveUninitialized: true,
   resave: true
