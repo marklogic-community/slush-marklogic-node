@@ -4,36 +4,19 @@
 
 var router = require('express').Router();
 var http = require('http');
-var config = require('../gulp.config')();
-
-var options = {
-  mlHost: process.env.ML_HOST || config.marklogic.host,
-  mlHttpPort: process.env.ML_PORT || config.marklogic.httpPort,
-  defaultUser: process.env.ML_APP_USER || config.marklogic.user,
-  defaultPass: process.env.ML_APP_PASS || config.marklogic.password
-};
+var options = require('./utils/options')();
+var auth = require('./utils/auth');
 
 // ==================================
 // MarkLogic REST API endpoints
 // ==================================
 // For any other GET request, proxy it on to MarkLogic.
-router.get('*', function(req, res) {
-  noCache(res);
-  if (req.session.user === undefined) {
-    res.status(401).send('Unauthorized');
-  } else {
-    proxy(req, res);
-  }
-  // To not require authentication, simply use the proxy below:
-  //proxy(req, res);
-});
+router.get('*', auth.isAuthenticated, noCacheProxy);
 
-router.put('*', function(req, res) {
+router.put('*', auth.isAuthenticated, function(req, res) {
   noCache(res);
   // For PUT requests, require authentication
-  if (req.session.user === undefined) {
-    res.status(401).send('Unauthorized');
-  } else if (req.path === '/v1/documents' &&
+  if (req.path === '/v1/documents' &&
     req.query.uri.match('/api/users/') &&
     req.query.uri.match(new RegExp('/api/users/[^(' + req.session.user.name + ')]+.json'))) {
     // The user is try to PUT to a profile document other than his/her own. Not allowed.
@@ -47,35 +30,14 @@ router.put('*', function(req, res) {
 });
 
 // Require authentication for POST requests
-router.post('*', function(req, res) {
-  noCache(res);
-  if (req.session.user === undefined) {
-    res.status(401).send('Unauthorized');
-  } else {
-    proxy(req, res);
-  }
-});
+router.post('*', auth.isAuthenticated, noCacheProxy);
 
 // (#176) Require authentication for DELETE requests
-router.delete('*', function(req, res) {
+router.delete('*', auth.isAuthenticated, noCacheProxy);
+
+function noCacheProxy(req, res){
   noCache(res);
-  if (req.session.user === undefined) {
-    res.status(401).send('Unauthorized');
-  } else {
-    proxy(req, res);
-  }
-});
-
-function getAuth(options, session) {
-  var auth = null;
-  if (session.user !== undefined && session.user.name !== undefined) {
-    auth =  session.user.name + ':' + session.user.password;
-  }
-  else {
-    auth = options.defaultUser + ':' + options.defaultPass;
-  }
-
-  return auth;
+  proxy(req, res);
 }
 
 // Generic proxy function used by multiple HTTP verbs
@@ -91,7 +53,7 @@ function proxy(req, res) {
     method: req.method,
     path: path,
     headers: req.headers,
-    auth: getAuth(options, req.session)
+    auth: auth.getAuth(req)
   }, function(response) {
 
     res.statusCode = response.statusCode;
