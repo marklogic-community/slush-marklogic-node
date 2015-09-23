@@ -20,9 +20,7 @@ var gulp = require('gulp'),
 
 var npmVersion = null;
 
-var settings = {
-  includeEsri: false
-};
+var settings = {};
 
 function printVersionWarning() {
   if (npmVersion && npmVersion !== pkgSettings.version.trim()) {
@@ -242,36 +240,9 @@ function configRoxy() {
 
 }
 
-gulp.task('default', ['init', 'generateSecret', 'configGulp', 'configEsri'], function(done) {
+gulp.task('default', ['init', 'generateSecret', 'configGulp'], function(done) {
   gulp.src(['./bower.json', './package.json'])
    .pipe(install());
-});
-
-gulp.task('configEsri', ['init'], function(done) {
-  if (!settings.includeEsri) {
-    var indexData, appData;
-
-    try {
-      // Update the index.html file.
-      indexData = fs.readFileSync('ui/index.html', { encoding: 'utf8' });
-      indexData = indexData.replace(/^.*arcgis.*$[\r\n]/gm, '');
-      indexData = indexData.replace(/^.*esri.*$[\r\n]/gm, '');
-      fs.writeFileSync('ui/index.html', indexData);
-    } catch (e) {
-      console.log('failed to update index.html: ' + e.message);
-    }
-
-    try {
-      // Update the app.js file.
-      appData = fs.readFileSync('ui/app/app.js', { encoding: 'utf8' });
-      appData = appData.replace(/^.*esriMap.*$[\r\n]/gm, '');
-      fs.writeFileSync('ui/app/app.js', appData);
-    } catch (e) {
-      console.log('failed to update app.js: ' + e.message);
-    }
-  }
-
-  done();
 });
 
 gulp.task('generateSecret', ['init'], function(done) {
@@ -338,8 +309,7 @@ gulp.task('init', ['checkForUpdates'], function (done) {
       'you will be asked to enter it at appropriate commands.\n[?] MarkLogic Admin Password?', default: ''},
     {type: 'input', name: 'nodePort', message: 'Node app port?', default: 9070},
     {type: 'input', name: 'appPort', message: 'MarkLogic App/Rest port?', default: 8040},
-    {type: 'input', name: 'xccPort', message: 'XCC port?', default:8041, when: function(answers){return answers.mlVersion < 8;}},
-    {type: 'confirm', name: 'includeEsri', message: 'Include ESRI Maps?', default: false}
+    {type: 'input', name: 'xccPort', message: 'XCC port?', default:8041, when: function(answers){return answers.mlVersion < 8;}}
   ];
 
   if (typeof appName === 'undefined') {
@@ -360,23 +330,12 @@ gulp.task('init', ['checkForUpdates'], function (done) {
     settings.nodePort = answers.nodePort;
     settings.appPort = answers.appPort;
     settings.xccPort = answers.xccPort || null;
-    settings.includeEsri = answers.includeEsri;
 
     getRoxyScript(answers.nameDashed, answers.mlVersion, appType, branch)
       .then(runRoxy)
       .then(function() {
         // Copy over the Angular files
         var files = [__dirname + '/app/templates/**'];
-
-        // Adjust files to copy based on whether ESRI Maps are included
-        if (!answers.includeEsri) {
-          files.push('!' + __dirname + '/app/templates/ui/app/esri-map/**');
-          files.push('!' + __dirname + '/app/templates/ui/app/esri-map');
-          files.push('!' + __dirname + '/app/templates/ui/app/detail/detail.html');
-        }
-        else {
-          files.push('!' + __dirname + '/app/templates/ui/app/detail/detail-no-esri.html');
-        }
 
         process.chdir('./' + answers.nameDashed);
 
@@ -387,12 +346,6 @@ gulp.task('init', ['checkForUpdates'], function (done) {
             // change _foo to .foo
             if (file.basename[0] === '_') {
               file.basename = '.' + file.basename.slice(1);
-            }
-
-            // Rename detail file when not using ESRI.
-            else if (!answers.includeEsri && file.basename === 'detail-no-esri' && file.extname === '.html') {
-              console.log('changed name to detail.html');
-              file.basename = 'detail';
             }
 
           }))

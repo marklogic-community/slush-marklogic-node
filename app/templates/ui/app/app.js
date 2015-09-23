@@ -10,7 +10,6 @@
     'app.create',
     'app.detail',
     'app.error',
-    'app.esriMap',
     'app.login',
     'app.root',
     'app.search',
