@@ -12,7 +12,6 @@
     "angular-x2js": "https://github.com/janmichaelyu/angular-x2js.git",
     "bootstrap": "~3.3.5",
     "font-awesome": "~4.4.0",
-    "highlightjs": "~8.7.0",
     "jquery": "~2.1.4",
     "lodash": "~3.10.1",
     "ml-common-ng": "~0.0.6",
@@ -21,6 +20,11 @@
     "ng-json-explorer": "8c2a0f9104",
     "angular-mocks": "~1.4.3",
     "vkbeautify-wrapper": "*"
+  },
+  "overrides": {
+    "angular-highlightjs": {
+      "dependencies": {"angular" : ">1.0.8", "highlightjs":"~8.7.0"}
+    }
   },
   "devDependencies": {
     "angular-mocks": "~1.4.4",
