@@ -12,12 +12,12 @@
     "angular-x2js": "https://github.com/janmichaelyu/angular-x2js.git",
     "bootstrap": "~3.3.5",
     "font-awesome": "~4.4.0",
+    "highlightjs":"~8.7.0",
     "jquery": "~2.1.4",
     "lodash": "~3.10.1",
     "ml-search-ng": "~0.2.0",
     "ml-utils": "withjam/ml-utils",
     "ng-json-explorer": "8c2a0f9104",
-    "angular-mocks": "~1.4.3",
     "vkbeautify-wrapper": "*"
   },
   "overrides": {

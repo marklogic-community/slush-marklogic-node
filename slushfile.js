@@ -240,8 +240,13 @@ function configRoxy() {
 
 }
 
-gulp.task('default', ['init', 'generateSecret', 'configGulp'], function(done) {
-  gulp.src(['./bower.json', './package.json'])
+gulp.task('npmInstall', ['init', 'generateSecret', 'configGulp'], function(done) {
+  return gulp.src(['./package.json'])
+   .pipe(install());
+});
+
+gulp.task('default', ['npmInstall'], function(done) {
+  return gulp.src(['./bower.json'])
    .pipe(install());
 });
 
