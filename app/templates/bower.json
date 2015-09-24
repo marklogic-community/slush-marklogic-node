@@ -10,13 +10,17 @@
     "angular-ui-tinymce": "~0.0.9",
     "bootstrap": "~3.3.5",
     "font-awesome": "~4.4.0",
-    "highlightjs": "~8.7.0",
     "jquery": "~2.1.4",
     "lodash": "~3.10.1",
     "ml-search-ng": "~0.2.0",
     "ml-utils": "withjam/ml-utils",
     "ng-json-explorer": "8c2a0f9104",
     "angular-mocks": "~1.4.4"
+  },
+  "overrides": {
+    "angular-highlightjs": {
+      "dependencies": {"angular" : ">1.0.8", "highlightjs":"~8.7.0"}
+    }
   },
   "devDependencies": {
     "angular-mocks": "~1.4.4",
