@@ -44,7 +44,7 @@ switch (environment){
       four0four.send404(req, res);
     });
     // Any deep link calls should return index.html
-    app.use('/*', express.static('./build/index.html'));
+    app.use('/*', express.static('./dist/index.html'));
     break;
   default:
     console.log('** DEV **');
