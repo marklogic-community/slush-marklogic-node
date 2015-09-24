@@ -1,11 +1,14 @@
 <div class="row detail">
   <div class="col-sm-8">
-    <!-- display JSON data -->
-    <div class="panel panel-default">
-      <div class="panel-heading">Data</div>
-      <div class="panel-body">
-        <json-explorer data="ctrl.doc"></json-explorer>
+    <tabset type="pills">
+    <tab heading="XML" active="true">
+      <div class="col-sm-9">
+        <pre class="pre-xml">{{ctrl.xml}}</pre>
       </div>
+    </tab>
+    <tab heading="JSON">
+    <div class="col-sm-9">
+      <json-explorer data="ctrl.json"></json-explorer>
     </div>
   </div>
   <div class="col-sm-4">
@@ -17,4 +20,5 @@
       </div>
     </div>
   </div>
+</div>
 </div>
