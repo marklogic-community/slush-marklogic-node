@@ -271,7 +271,7 @@ gulp.task('optimize', ['inject', 'test'], function() {
 
     // Get the css
     .pipe(cssFilter)
-    .pipe($.minifyCss())
+    .pipe($.minifyCss({processImportFrom:['!fonts.googleapis.com']}))
     .pipe(cssFilter.restore())
 
     // Get the custom javascript
