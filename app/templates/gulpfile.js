@@ -163,7 +163,6 @@ gulp.task('inject', ['wiredep', 'styles', 'templatecache'], function() {
     .pipe(gulp.dest(config.client));
 });
 
-
 /**
  * Creates a sample local.json; can be used as model for dev.json and prod.json
  */
@@ -524,14 +523,14 @@ function isDevMode(env) {
 function getNodeOptions(env) {
   var envJson;
   var envFile = './' + env + '.json';
-    try {
-      envJson = require(envFile);
-    }
-    catch (e) {
-      envJson = {};
-      console.log('Couldn\'t find ' + envFile + '; you can create this file to override properties - ' +
-        '`gulp init-local` creates local.json which can be modified for other environments as well');
-    }
+  try {
+    envJson = require(envFile);
+  }
+  catch (e) {
+    envJson = {};
+    console.log('Couldn\'t find ' + envFile + '; you can create this file to override properties - ' +
+      '`gulp init-local` creates local.json which can be modified for other environments as well');
+  }
   var port = args['app-port'] || process.env.PORT || envJson['node-port'] || config.defaultPort;
   return {
     script: config.nodeServer,
@@ -569,9 +568,8 @@ function startBrowserSync(env, specRunner) {
   if (isDevMode(env)) {
     gulp.watch([config.less], ['styles'])
       .on('change', changeEvent);
-    gulp.watch([config.js], ['wiredep'])
-      .on('change', changeEvent);
-  } else {
+  }
+  else {
     gulp.watch([config.less, config.js, config.html], ['optimize', browserSync.reload])
       .on('change', changeEvent);
   }
