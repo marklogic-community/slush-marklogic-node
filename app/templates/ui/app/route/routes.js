@@ -84,7 +84,7 @@
           doc: function(MLRest, $stateParams) {
             var uri = $stateParams.uri;
             return MLRest.getDocument(uri, { format: 'json' }).then(function(response) {
-              return response.data;
+              return response;
             });
           }
         }
