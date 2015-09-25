@@ -44,6 +44,10 @@
       if (form.$valid) {
         addEmail();
 
+        if (ctrl.user.emails) {
+          _.pull(ctrl.user.emails, '');
+        }
+
         mlRest.updateDocument({
           user: {
             'fullname': ctrl.user.fullname,
