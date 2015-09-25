@@ -1,5 +1,6 @@
 node_modules
 bower_components
+coverage
 ui/fonts
 ui/styles/*.css
 deploy/local.properties
