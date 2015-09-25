@@ -42,6 +42,13 @@ router.get('/user/status', function(req, res) {
             console.log('did not find chunk.user');
           }
         });
+      } else if (response.statusCode === 404) {
+        //no profile yet for user
+        res.status(200).send({
+          authenticated: true,
+          username: req.session.user.name,
+          profile: {}
+        });
       } else {
         res.send({authenticated: false});
       }
