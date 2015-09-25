@@ -33,14 +33,10 @@ router.get('/user/status', function(req, res) {
         response.on('data', function(chunk) {
           var json = JSON.parse(chunk);
           if (json.user !== undefined) {
-            var profile = {
-              fullname: json.user.fullname,
-              emails: json.user.emails
-            };
             res.status(200).send({
               authenticated: true,
               username: req.session.user.name,
-              profile: profile
+              profile: json.user
             });
           } else {
             console.log('did not find chunk.user');
@@ -102,14 +98,10 @@ router.post('/user/login', function(req, res) {
         response.on('data', function(chunk) {
           var json = JSON.parse(chunk);
           if (json.user !== undefined) {
-            req.session.user.profile = {
-              fullname: json.user.fullname,
-              emails: json.user.emails
-            };
             res.status(200).send({
               authenticated: true,
               username: username,
-              profile: req.session.user.profile
+              profile: json.user
             });
           } else {
             console.log('did not find chunk.user');
