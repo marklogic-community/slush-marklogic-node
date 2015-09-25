@@ -59,6 +59,7 @@
       loginService.login('test', 'abc').then(function(response) {
         expect(response.data).to.deep.eq({ authenticated: true, username: 'bob' });
         expect(service.currentUser()).to.deep.eq({ name: 'bob' });
+        expect(service.getUser()).to.deep.eq({ name: 'bob' });
       });
       expect($http.post).to.have.been.calledOnce;
       $rootScope.$apply();

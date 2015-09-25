@@ -16,14 +16,44 @@ var options = {
 };
 
 router.get('/user/status', function(req, res) {
+  var headers = req.headers;
   noCache(res);
   if (req.session.user === undefined) {
-    res.send('{"authenticated": false}');
+    res.send({authenticated: false});
   } else {
-    res.send({
-      authenticated: true,
-      username: req.session.user.name,
-      profile: req.session.user.profile
+    delete headers['content-length'];
+    var status = http.get({
+      hostname: options.mlHost,
+      port: options.mlHttpPort,
+      path: '/v1/documents?uri=/api/users/' + req.session.user.name + '.json',
+      headers: headers,
+      auth: req.session.user.name + ':' + req.session.user.password
+    }, function(response) {
+      if (response.statusCode === 200) {
+        response.on('data', function(chunk) {
+          var json = JSON.parse(chunk);
+          if (json.user !== undefined) {
+            var profile = {
+              fullname: json.user.fullname,
+              emails: json.user.emails
+            };
+            res.status(200).send({
+              authenticated: true,
+              username: req.session.user.name,
+              profile: profile
+            });
+          } else {
+            console.log('did not find chunk.user');
+          }
+        });
+      } else {
+        res.send({authenticated: false});
+      }
+    });
+
+    status.on('error', function(e) {
+      console.log(JSON.stringify(e));
+      console.log('status check failed: ' + e.statusCode);
     });
   }
 });
