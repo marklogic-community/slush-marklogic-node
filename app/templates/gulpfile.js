@@ -596,7 +596,8 @@ function startBrowserSync(env, specRunner) {
     logLevel: 'debug',
     logPrefix: 'gulp-patterns',
     notify: true,
-    reloadDelay: 0 //1000
+    reloadDelay: 0, //1000
+    ui: false
   } ;
   if (specRunner) {
     options.startPath = config.specRunnerFile;
