@@ -7,7 +7,19 @@
 </div>
 
 <div class="search row" ng-if="ctrl.currentUser">
-  <ml-facets class="col-md-3 right-col" facets="ctrl.response.facets" toggle="ctrl.toggleFacet(facet, value)" active-facets="ctrl.mlSearch.activeFacets" negate="ctrl.toggleNegatedFacet(facet,value)"></ml-facets>
+  <div class="col-md-3 right-col">
+    <div class="facet" ng-repeat="(constraintName, constraint) in ctrl.dateTimeConstraints">
+      <h3>{{constraintName}}</h3>
+      <div class="input-daterange input-group">
+        <input ng-model="ctrl.pickerDateStart[constraintName]" type="text" class="input-sm form-control ng-valid-date" title="Constrain results to entries beginning on selected date" datepicker-popup="yyyy-MM-dd" ng-model-onblur-onenter ng-click="ctrl.openStartDatePicker(constraintName, $event)" is-open="ctrl.dateStartOpened[constraintName]" name="start" parse-strict="parseStrict" close-text="Close" />
+        <span class="input-group-addon">to</span>
+        <input ng-model="ctrl.pickerDateEnd[constraintName]" type="text" class="input-sm form-control ng-valid-date" ng-click="ctrl.openEndDatePicker(constraintName, $event)" title="Constrain results to entries ending on selected date" datepicker-popup="yyyy-MM-dd" ng-model-onblur-onenter is-open="ctrl.dateEndOpened[constraintName]" parse-strict="parseStrict" close-text="Close" />
+      </div>
+      <button type="button" class="btn btn-primary btn-sm" ng-click="ctrl.applyDateFilter(constraintName)">Apply Date Filter</button>
+      <button type="button" class="btn btn-default btn-sm" ng-click="ctrl.clearDateFilter(constraintName)">Clear</button>
+    </div>
+    <ml-facets facets="ctrl.response.facets" toggle="ctrl.toggleFacet(facet, value)" active-facets="ctrl.mlSearch.activeFacets" negate="ctrl.toggleNegatedFacet(facet,value)"></ml-facets>
+  </div>
   <div class="col-md-9">
     <h4 ng-if="ctrl.response.total === 0">No results to show</h4>
 
