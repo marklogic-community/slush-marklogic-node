@@ -13,6 +13,7 @@ var four0four = require('./utils/404')();
 var environment = process.env.NODE_ENV;
 
 app.use(expressSession({
+  name: '@sample-app-name',
   secret: '1234567890QWERTY',
   saveUninitialized: true,
   resave: true
@@ -43,7 +44,7 @@ switch (environment){
       four0four.send404(req, res);
     });
     // Any deep link calls should return index.html
-    app.use('/*', express.static('./build/index.html'));
+    app.use('/*', express.static('./dist/index.html'));
     break;
   default:
     console.log('** DEV **');

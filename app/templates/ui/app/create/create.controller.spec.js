@@ -36,9 +36,13 @@
     });
 
     it('should add tags', function() {
+      var tagValue = 'testTag';
       expect(controller.person.tags.length).to.eq(0);
+      controller.newTag = tagValue;
       controller.addTag();
       expect(controller.person.tags.length).to.eq(1);
+      expect(controller.person.tags[0]).to.eq(tagValue);
+      expect(controller.newTag).to.eq.null;
     });
 
     it('should show the detail view when submitted', function() {

@@ -6,7 +6,7 @@
       <span class="icon-bar"></span>
       <span class="icon-bar"></span>
     </button>
-    <a class="navbar-brand" href="/">Sample App</a>
+    <a class="navbar-brand" href="/"><h1 id="logo">Sample App</h1></a>
   </div>
   <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
     <ul class="nav navbar-nav">
@@ -14,13 +14,16 @@
       <li><a href="/search">Search</a></li>
       <li><a href="/create">Create</a></li>
     </ul>
-    <ml-user></ml-user>
+    <ml-user mode="inline"></ml-user>
   </div><!-- /.navbar-collapse -->
 </nav>
 <!-- Add your site or application content here -->
 <div class=" content">
   <div class="container">
-    <ui-view></ui-view>
+    <message-board msg="ctrl.messageBoardService.message()"></message-board>
+    <div ng-hide="ctrl.messageBoardService.message()">
+      <ui-view></ui-view>
+    </div>
   </div>
 </div>
 

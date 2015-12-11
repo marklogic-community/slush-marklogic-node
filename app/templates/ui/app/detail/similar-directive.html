@@ -1,0 +1,8 @@
+<div class='similar-items'>
+  <!--h3>Similar Documents</h3-->
+  <ul>
+    <li ng-repeat="uri in similar">
+      <a ui-sref="root.view({uri: uri})">{{ uri }}</a>
+    </li>
+  </ul>
+</div>

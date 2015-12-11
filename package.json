@@ -1,6 +1,6 @@
 {
   "name": "slush-marklogic-node",
-  "version": "0.1.2",
+  "version": "1.0.1",
   "description": "A slush generator for AngularJS/node.js/MarkLogic",
   "main": "slushfile.js",
   "author": "David Cassel <dmcassel@gmail.com>",
@@ -18,8 +18,10 @@
     "gulp-conflict": "~0.1.1",
     "gulp-install": "~0.1.1",
     "gulp-rename": "~1.2.0",
+    "gulp-replace": "~0.5.4",
     "gulp-template": "~0.1.1",
     "inquirer": "~0.4.1",
+    "node-uuid": "~1.4.3",
     "q": "1.0.x",
     "readable-stream": "^1.0.27-1",
     "request": "^2.60.0",
@@ -34,7 +36,7 @@
     "type": "git",
     "url": "https://github.com/marklogic/slush-marklogic-node"
   },
-  "license": "Apache v2",
+  "license": "Apache-v2.0",
   "bugs": {
     "url": "https://github.com/marklogic/slush-marklogic-node/issues"
   },

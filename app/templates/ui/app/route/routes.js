@@ -2,6 +2,9 @@
   'use strict';
 
   angular.module('app')
+    .run(['loginService', function(loginService) {
+      loginService.protectedRoutes(['root.search', 'root.create', 'root.profile']);
+    }])
     .config(Config);
 
   Config.$inject = ['$stateProvider', '$urlMatcherFactoryProvider',
@@ -37,6 +40,8 @@
         url: '',
         // abstract: true,
         templateUrl: 'app/root/root.html',
+        controller: 'RootCtrl',
+        controllerAs: 'ctrl',
         resolve: {
           user: function(userService) {
             return userService.getUser();
@@ -79,7 +84,7 @@
           doc: function(MLRest, $stateParams) {
             var uri = $stateParams.uri;
             return MLRest.getDocument(uri, { format: 'json' }).then(function(response) {
-              return response.data;
+              return response;
             });
           }
         }
@@ -88,6 +93,12 @@
         url: '/profile',
         templateUrl: 'app/user/profile.html',
         controller: 'ProfileCtrl',
+        controllerAs: 'ctrl'
+      })
+      .state('root.login', {
+        url: '/login?state&params',
+        templateUrl: 'app/login/login-full.html',
+        controller: 'LoginFullCtrl',
         controllerAs: 'ctrl'
       });
   }

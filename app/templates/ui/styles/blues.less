@@ -1,0 +1,101 @@
+@import url("https://fonts.googleapis.com/css?family=Lato:300,400,700");
+@import "blues-variables.less";
+
+html {
+	background-color: #4e5d6c;
+}
+
+body {
+  font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.42857143;
+  color: #fff;
+  background-color: #2b3e50;
+
+  .content {
+  	background-color: #2b3e50;
+  }
+}
+
+h1#logo {
+  text-indent: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  background: url('/images/MarkLogic-white.png') no-repeat;
+  background-size: contain;
+  min-height: 30px;
+  height: 30px;
+  margin: 0.3em 0;
+  width: 160px;
+}
+
+nav.nav {
+  background-color: #4e5d6c;
+  border-color: transparent;
+  height: 65px;
+}
+
+.navbar-default .navbar-nav > li > a,
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:visited,
+.navbar-default .navbar-nav > li > a:active  {
+    color: #fff;
+}
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:active  {
+    color: #ccc;
+}
+
+.blues i {
+  color: @body-bg;;
+}
+
+.user > form {
+  padding: 10px;
+}
+
+.welcome {
+  color: @body-bg;;
+}
+
+footer#footer {
+  background-color: #4e5d6c;
+  border: none;
+
+  .nav li a {
+  	color: @body-bg;;
+  }
+
+  .social-links a {
+  	width: 28px;
+  	height: 28px;
+  	background-color: #2b3e50;
+  	border: 2px solid #2b3e50;
+  	border-radius: 3px;
+	}
+}
+
+/* adjustments for the dark bckground*/
+.table th {
+  background-color: inherit;
+}
+
+.example {
+  background-color: initial;
+}
+
+.footnote {
+  color: #222;
+}
+
+footer.powered {
+  background: none;
+}
+
+.search-input-icon {
+  color: #2b3e50;
+}
+
+.ml-input .search-input-clear {
+  right: 38px;
+}

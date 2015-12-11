@@ -1,0 +1,140 @@
+body {
+  background-color: #eee;
+}
+
+/*header*/
+.navbar-brand {
+  padding: 5px 10px 0 25px;
+}
+
+nav.nav {
+  background-color: #222222;
+  border-color: #080808;
+}
+
+h1#logo {
+  text-indent: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  background: url('/images/MarkLogic-white.png') no-repeat;
+  background-size: contain;
+  min-height: 30px;
+  height: 30px;
+  margin: 0.3em 0;
+  width: 160px;
+}
+
+nav {
+  background-color: #222;
+  border-bottom: solid 1px #020202;
+
+  &:after {
+    display: block;
+    content: '';
+    background: -webkit-linear-gradient(90deg, #222150 0%, #4466ab 45%, #4466ab 55%, #222150 100%);
+    background: -moz-linear-gradient(90deg, #222150 0%, #4466ab 45%, #4466ab 55%, #222150 100%);
+    background: -o-linear-gradient(90deg, #222150 0%, #4466ab 45%, #4466ab 55%, #222150 100%);
+    background: linear-gradient(90deg, #222150 0%, #4466ab 45%, #4466ab 55%, #222150 100%);
+    height: 0.94em;
+    width: 100%;
+  }
+  .navbar-header { max-width: 50% }
+}
+
+.navbar-default .navbar-nav > li > a,
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:visited,
+.navbar-default .navbar-nav > li > a:active  {
+    color: #fff;
+}
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:active  {
+    color: #ccc;
+}
+
+.items {
+  letter-spacing: 0.15em;
+}
+
+/* Logged in */
+.welcome {
+  color: #fff;
+}
+.welcome.authenticated {
+  font-size: 80%;
+}
+
+/*style picker*/
+.css-picker i {
+  font-size: small;
+  font-weight: normal;
+  color: #fff;
+  padding: 4px;
+}
+
+/*footer*/
+footer {
+  bottom: 0;
+  width: 100%;
+  padding: 1.3em 0;
+  border-top: 1px solid #999999;
+  color: #555555;
+  text-align: center;
+  background-color: #eee;
+
+  .social-links {
+
+    margin: auto;
+
+    a {
+      width: 25px;
+      height: 25px;
+      display: inline-block;
+      margin-left: 1.5em;
+
+      img { width: 100%; max-height: 100%; }
+      &:first-child{ margin-left: 0 }
+    }
+  }
+
+  .nav {
+
+    padding: 1em 0;
+
+    li {
+
+      display: inline-block;
+
+      a {
+        color: #555;
+        display: block;
+        padding: 0 0 0 1em;
+
+        &:after {
+          content: '|';
+          display: inline-block;
+          margin-left: 1em;
+        }
+      }
+
+      &:last-child {
+        a {
+          padding-right: 1em;
+        }
+        a:after{ display: none; margin-left: 0; }
+
+      }
+    }
+  }
+
+  .copyright { font-size: 0.9em }
+}
+
+#footer {
+  border-top: 1px solid;
+  height: 51px;
+}
+
+footer#footer.powered {
+  height: 60px;
+}

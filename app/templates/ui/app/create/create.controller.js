@@ -37,14 +37,16 @@
         plugins : 'advlist autolink link image lists charmap print preview'
       },
       submit: submit,
-      addTag: addTag
+      addTag: addTag,
+      removeTag: removeTag
     });
 
     function submit() {
       mlRest.createDocument(ctrl.person, {
         format: 'json',
         directory: '/content/',
-        extension: '.json'
+        extension: '.json',
+        collection: ['data', 'data/people']
         // TODO: add read/update permissions here like this:
         // 'perm:sample-role': 'read',
         // 'perm:sample-role': 'update'
@@ -54,8 +56,14 @@
     }
 
     function addTag() {
-      ctrl.person.tags.push(ctrl.newTag);
+      if (ctrl.newTag && ctrl.newTag !== '' && ctrl.person.tags.indexOf(ctrl.newTag) < 0) {
+        ctrl.person.tags.push(ctrl.newTag);
+      }
       ctrl.newTag = null;
+    }
+
+    function removeTag(index) {
+      ctrl.person.tags.splice(index, 1);
     }
 
     $scope.$watch(userService.currentUser, function(newValue) {

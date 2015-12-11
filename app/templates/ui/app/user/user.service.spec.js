@@ -14,11 +14,23 @@
 
     beforeEach(function() {
       bard.appModule('app.user');
-      bard.inject('$q', '$http', '$rootScope');
+      bard.inject('$q', '$http', '$rootScope', '$state', 'loginService');
 
       bard.mockService($http, {
         _default: $q.when([]),
-        get: $q.when(_user)
+        get: $q.when(_user),
+        post: $q.when(_user)
+      });
+
+      bard.mockService($state, {
+        current: { name: 'root.search', params: {} },
+        go: function(stateName, stateParams) {
+          this.current = { name: stateName, params: stateParams };
+          return $q.when();
+        },
+        reload: function() {
+          return $q.when();
+        }
       });
 
     });
@@ -35,7 +47,7 @@
       expect(service.currentUser()).to.not.be.defined;
     });
 
-    it('should get the current logged in user', function () {
+    it('should get the current logged in user - if loginService not init', function () {
       service.getUser().then(function(user) {
         expect(user).to.deep.eq({ name: 'bob' });
       });
@@ -43,33 +55,35 @@
       $rootScope.$apply();
     });
 
-    it('should logon with valid credentials', function () {
-      service.login('test', 'abc').then(function(user) {
-        expect(user).to.deep.eq({ name: 'bob' });
+    it('should set user with valid credentials', function () {
+      loginService.login('test', 'abc').then(function(response) {
+        expect(response.data).to.deep.eq({ authenticated: true, username: 'bob' });
         expect(service.currentUser()).to.deep.eq({ name: 'bob' });
+        expect(service.getUser()).to.deep.eq({ name: 'bob' });
       });
-      expect($http.get).to.have.been.calledOnce;
+      expect($http.post).to.have.been.calledOnce;
       $rootScope.$apply();
     });
 
-    it('should not logon with invalid credentials', function () {
+    it('should not set user with invalid credentials', function () {
       _user.data.authenticated = false;
-      service.login('test', 'abcd').then(function(user) {
-        expect(user).to.be.a('null');
+      loginService.login('test', 'abcd').then(function(response) {
+        expect(response.data.authenticated).to.be.false;
+        expect(service.currentUser()).to.not.be.defined;
       });
-      expect($http.get).to.have.been.calledOnce;
+      expect($http.post).to.have.been.calledOnce;
       $rootScope.$apply();
     });
 
-    it('should logout', function () {
+    it('should clear user after logout', function () {
       expect(service.currentUser()).to.not.be.defined;
       _user.data.authenticated = true;
-      service.login('test', 'abcd').then(function(user) {
-        expect(user).to.deep.eq({ name: 'bob' });
+      loginService.login('test', 'abcd').then(function(response) {
+        expect(response.data).to.deep.eq({ authenticated: true, username: 'bob' });
         expect(service.currentUser()).to.deep.eq({ name: 'bob' });
 
-        service.logout().then(function(user) {
-          expect(user).to.be.a('null');
+        loginService.logout().then(function(response) {
+          expect(loginService.isAuthenticated()).to.be.false;
           expect(service.currentUser()).to.not.be.defined;
         });
       });

@@ -28,7 +28,7 @@ function ext:get(
 (:
  :)
 declare
-%roxy:params("uir=xs:string", "limit=xs:int?")
+%roxy:params("uri=xs:string", "limit=xs:int?")
 function ext:post(
   $context as map:map,
   $params  as map:map,
@@ -38,11 +38,13 @@ function ext:post(
   let $output-types := map:put($context, "output-types", "application/json")
   let $uri := map:get($params, "uri")
   let $limit := xs:int((map:get($params, "limit"), '5')[1])
+  let $collections := xdmp:document-get-collections($uri)
+  let $collection-q := if (fn:exists($collections)) then cts:collection-query($collections) else ()
   let $content :=
     if (exists($uri)) then
       json:to-array(
         (
-          for $doc in cts:search(collection(), cts:similar-query(doc($uri)))
+          for $doc in cts:search(collection(), cts:and-query(($collection-q,cts:similar-query(doc($uri)))))
           let $similar-uri := base-uri($doc)
           where $similar-uri != $uri
           return $similar-uri

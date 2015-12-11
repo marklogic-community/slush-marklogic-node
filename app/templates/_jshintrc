@@ -17,6 +17,8 @@
     "angular": false,
     "google": false,
     "$": false,
-    "_": false
+    "_": false,
+    "vkbeautify" : false,
+    "X2JS" : false
   }
 }

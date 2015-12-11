@@ -6,6 +6,7 @@ var args = require('yargs').argv;
 var browserSync = require('browser-sync');
 var config = require('./gulp.config')();
 var del = require('del');
+var fs = require('fs');
 var glob = require('glob');
 var gulp = require('gulp');
 var path = require('path');
@@ -14,8 +15,6 @@ var path = require('path');
 var _ = require('lodash');
 var $ = require('gulp-load-plugins')({lazy: true});
 /* jshint ignore:end */
-
-var port = process.env.PORT || config.defaultPort;
 
 /**
  * yargs variables can be passed in to alter the behavior, when present.
@@ -165,12 +164,40 @@ gulp.task('inject', ['wiredep', 'styles', 'templatecache'], function() {
 });
 
 /**
+ * Creates a sample local.json; can be used as model for dev.json and prod.json
+ */
+gulp.task('init-local', function() {
+  //copy from slushfile - config gulp - with modifications to use config instead
+  log('Creating local.json sample document with values drawn from gulp.config.js');
+  try {
+    var configJSON = {};
+    configJSON['ml-version'] = config.marklogic.version;
+    configJSON['ml-host'] = config.marklogic.host;
+    configJSON['ml-admin-user'] = config.marklogic.username;
+    configJSON['ml-admin-pass'] = config.marklogic.password;
+    configJSON['ml-app-user'] = config.marklogic.username;
+    configJSON['ml-app-pass'] = config.marklogic.password;
+    configJSON['ml-http-port'] = config.marklogic.httpPort;
+    configJSON['node-port'] = config.defaultPort;
+
+    if (config.marklogic.version < 8) {
+      configJSON['ml-xcc-port'] = config.marklogic.xccPort;
+    }
+
+    var configString = JSON.stringify(configJSON, null, 2) + '\n';
+    fs.writeFileSync('local.json', configString, { encoding: 'utf8' });
+  } catch (e) {
+    console.log('failed to write local.json: ' + e.message);
+  }
+});
+
+/**
  * Run the spec runner
  * @return {Stream}
  */
 gulp.task('serve-specs', ['build-specs'], function(done) {
   log('run the spec runner');
-  serve(true /* isDev */, true /* specRunner */);
+  serve('local' /* env */, true /* specRunner */);
   done();
 });
 
@@ -244,7 +271,7 @@ gulp.task('optimize', ['inject', 'test'], function() {
 
     // Get the css
     .pipe(cssFilter)
-    .pipe($.minifyCss())
+    .pipe($.minifyCss({processImportFrom:['!fonts.googleapis.com']}))
     .pipe(cssFilter.restore())
 
     // Get the custom javascript
@@ -344,21 +371,30 @@ gulp.task('autotest', function(done) {
 });
 
 /**
+ * serve the local environment
+ * --debug-brk or --debug
+ * --nosync
+ */
+gulp.task('serve-local', ['inject', 'fonts'], function() {
+  serve('local' /*env*/);
+});
+
+/**
  * serve the dev environment
  * --debug-brk or --debug
  * --nosync
  */
 gulp.task('serve-dev', ['inject', 'fonts'], function() {
-  serve(true /*isDev*/);
+  serve('dev' /*env*/);
 });
 
 /**
- * serve the build environment
+ * serve the prod environment
  * --debug-brk or --debug
  * --nosync
  */
-gulp.task('serve-dist', ['build'], function() {
-  serve(false /*isDev*/);
+gulp.task('serve-prod', ['build'], function() {
+  serve('prod' /*env*/);
 });
 
 /**
@@ -441,14 +477,14 @@ function orderSrc (src, order) {
  * serve the code
  * --debug-brk or --debug
  * --nosync
- * @param  {Boolean} isDev - dev or build mode
+ * @param  {String} env - local | dev | prod
  * @param  {Boolean} specRunner - server spec runner html
  */
-function serve(isDev, specRunner) {
+function serve(env, specRunner) {
   var debugMode = '--debug';
-  var nodeOptions = getNodeOptions(isDev);
+  var nodeOptions = getNodeOptions(env);
 
-  nodeOptions.nodeArgs = [debugMode + '=5858'];
+  nodeOptions.nodeArgs = (args.debug || args.debugBrk) ? [debugMode + '=5858'] : [];
 
   if (args.verbose) {
     console.log(nodeOptions);
@@ -465,7 +501,7 @@ function serve(isDev, specRunner) {
     })
     .on('start', function () {
       log('*** nodemon started');
-      startBrowserSync(isDev, specRunner);
+      startBrowserSync(env, specRunner);
     })
     .on('crash', function () {
       log('*** nodemon crashed: script crashed for some reason');
@@ -475,16 +511,40 @@ function serve(isDev, specRunner) {
     });
 }
 
-function getNodeOptions(isDev) {
+/**
+ * Determine whether the enviornment requires dev mode'
+ * @param {String} env - local | dev | prod
+ * @return {Boolean} - true if env==='local'
+ */
+function isDevMode(env) {
+  return env === 'local';
+}
+
+function getNodeOptions(env) {
+  var envJson;
+  var envFile = './' + env + '.json';
+  try {
+    envJson = require(envFile);
+  }
+  catch (e) {
+    envJson = {};
+    console.log('Couldn\'t find ' + envFile + '; you can create this file to override properties - ' +
+      '`gulp init-local` creates local.json which can be modified for other environments as well');
+  }
+  var port = args['app-port'] || process.env.PORT || envJson['node-port'] || config.defaultPort;
   return {
     script: config.nodeServer,
     delayTime: 1,
     env: {
       'PORT': port,
-      'NODE_ENV': isDev ? 'dev' : 'build',
-      'APP_PORT': args['app-port'] || 9070,
-      'ML_HOST': args['ml-host'] || 'localhost',
-      'ML_PORT': args['ml-port'] || '8040'
+      'NODE_ENV': isDevMode(env) ? 'dev' : 'build',
+      'APP_PORT': port,
+      'ML_HOST': args['ml-host'] || process.env.ML_HOST || envJson['ml-host'] || config.marklogic.host,
+      'ML_APP_USER': args['ml-app-user'] || process.env.ML_APP_USER || envJson['ml-app-user'] || config.marklogic.user,
+      'ML_APP_PASS': args['ml-app-pass'] || process.env.ML_APP_PASS || envJson['ml-app-pass'] || config.marklogic.password,
+      'ML_PORT': args['ml-http-port'] || process.env.ML_PORT || envJson['ml-http-port'] || config.marklogic.httpPort,
+      'ML_XCC_PORT': args['ml-xcc-port'] || process.env.ML_XCC_PORT || envJson['ml-xcc-port'] || config.marklogic.xccPort,
+      'ML_VERSION': args['ml-version'] || process.env.ML_VERSION || envJson['ml-version'] || config.marklogic.version
     },
     watch: [config.server]
   };
@@ -494,29 +554,30 @@ function getNodeOptions(isDev) {
  * Start BrowserSync
  * --nosync will avoid browserSync
  */
-function startBrowserSync(isDev, specRunner) {
+function startBrowserSync(env, specRunner) {
+  var nodeOptions = getNodeOptions(env);
+
   if (args.nosync || browserSync.active) {
     return;
   }
 
-  log('Starting BrowserSync on port ' + port);
+  log('Starting BrowserSync on port ' + nodeOptions.env.APP_PORT);
 
   // If build: watches the files, builds, and restarts browser-sync.
   // If dev: watches less, compiles it to css, browser-sync handles reload
-  if (isDev) {
+  if (isDevMode(env)) {
     gulp.watch([config.less], ['styles'])
       .on('change', changeEvent);
-    gulp.watch([config.js], ['wiredep'])
-      .on('change', changeEvent);
-  } else {
+  }
+  else {
     gulp.watch([config.less, config.js, config.html], ['optimize', browserSync.reload])
       .on('change', changeEvent);
   }
 
   var options = {
-    proxy: 'localhost:' + port,
+    proxy: 'localhost:' + nodeOptions.env.APP_PORT,
     port: 3000,
-    files: isDev ? [
+    files: isDevMode(env) ? [
       config.client + '**/*.*',
       '!' + config.less,
       config.temp + '**/*.css'
@@ -532,7 +593,8 @@ function startBrowserSync(isDev, specRunner) {
     logLevel: 'debug',
     logPrefix: 'gulp-patterns',
     notify: true,
-    reloadDelay: 0 //1000
+    reloadDelay: 0, //1000
+    ui: false
   } ;
   if (specRunner) {
     options.startPath = config.specRunnerFile;

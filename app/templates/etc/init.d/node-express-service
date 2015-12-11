@@ -1,0 +1,137 @@
+#!/bin/bash
+#
+# Service script for a Node.js application running under Forever.
+#
+# 1) Forever starts its own watchdog process, and keeps its own configuration data
+# in /var/run/forever.
+#
+# 2) If the process dies, Forever will restart it: if it fails but continues to run,
+# it won't be restarted.
+#
+# chkconfig: 2345 20 20
+# description: Script to start node application
+
+
+# Source function library.
+. /etc/init.d/functions
+
+
+##############################################################################
+# SERVICE CONFIGURATION
+#
+
+# name of the service
+SERVICE=${0##*/}
+
+# SERVICE DEFAULTS
+
+# default name of the project
+NAME=${0##*/}
+
+# default location of your project's root
+SOURCE_DIR=/space/projects/$NAME.live
+
+# default js entry point
+SOURCE_FILE=boot.js
+
+# default port at which node server should be listening
+APP_PORT=9040
+
+# default MarkLogic host to which node server should proxy
+ML_HOST=localhost
+
+# default MarkLogic port to which node server should proxy
+ML_PORT=8040
+
+# Node environment.  This should be 'build' for distribution or 'dev' for iterative development
+NODE_ENV=build
+
+# read local service configuration overrides
+. /etc/$SERVICE/conf.sh
+
+PIDFILE=/var/run/$SERVICE.pid
+LOGFILE=/var/log/$SERVICE.log
+FOREVER_DIR=/var/run/forever
+
+# Set up a default search path. node, forever, and sed need to be in this path
+PATH="/sbin:/usr/sbin:/bin:/usr/bin:/usr/local/bin"
+export PATH
+
+#
+##############################################################################
+
+
+start() {
+  echo -n "Starting $SERVICE node instance: "
+  if [ -f $PIDFILE ]; then
+    echo "Already started.."
+    RETVAL=0
+  else
+    # Launch forever using daemon
+    echo ""
+    daemon --user=root \
+      forever start -p $FOREVER_DIR --pidFile $PIDFILE -l $LOGFILE -o $LOGFILE \
+        -e $LOGFILE -a -d -v --sourceDir=$SOURCE_DIR $SOURCE_FILE \
+          --app-port=$APP_PORT --ml-host=$ML_HOST --ml-port=$ML_PORT \
+            --server-script=$SERVER_SCRIPT --node-env=$NODE_ENV
+    RETVAL=$?
+    echo ""
+  fi
+}
+
+stop() {
+  echo -n "Shutting down $SERVICE node instance : "
+  if [ -f $PIDFILE ]; then
+    # Send a stop signal to forever
+    echo ""
+    forever stop -p $FOREVER_DIR --pidFile $PIDFILE -l $LOGFILE -o $LOGFILE \
+      -e $LOGFILE -a -d -v --sourceDir=$SOURCE_DIR $SOURCE_FILE
+    RETVAL=$?
+    # Get rid of pid file if process was dead
+    if [ -f $PIDFILE ]; then
+      rm $PIDFILE
+    fi
+    echo ""
+  else
+    echo "Instance is not running..";
+    RETVAL=0
+  fi
+}
+
+case "$1" in
+  restart)
+    stop
+    start
+    ;;
+  start)
+    start
+    ;;
+  stop)
+    stop
+    ;;
+  status)
+    status -p $PIDFILE
+    ;;
+  info)
+    echo "SERVICE:       $SERVICE"
+    echo ""
+    echo "FOREVER_DIR:   $FOREVER_DIR"
+    echo "PIDFILE:       $PIDFILE"
+    echo "LOGFILE:       $LOGFILE"
+    echo ""
+    echo "NAME:          $NAME"
+    echo "SOURCE_DIR:    $SOURCE_DIR"
+    echo "SOURCE_FILE:   $SOURCE_FILE"
+    echo "SERVER_SCRIPT: $SERVER_SCRIPT"
+    echo "APP_PORT:      $APP_PORT"
+    echo "ML_HOST:       $ML_HOST"
+    echo "ML_PORT:       $ML_PORT"
+    echo ""
+    status -p $PIDFILE
+    ;;
+  *)
+    echo "Usage:  {info|restart|start|stop|status}"
+    exit 1
+    ;;
+esac
+exit $RETVAL

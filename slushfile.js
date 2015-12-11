@@ -10,17 +10,17 @@ var gulp = require('gulp'),
   install = require('gulp-install'),
   q = require('q'),
   rename = require('gulp-rename'),
+  replace = require('gulp-replace'),
   pkgSettings = require('./package.json'),
   spawn = require('child_process').spawn,
+  uuid = require('node-uuid'),
   win32 = process.platform === 'win32',
   _ = require('underscore.string')
   ;
 
 var npmVersion = null;
 
-var settings = {
-  includeEsri: false
-};
+var settings = {};
 
 function printVersionWarning() {
   if (npmVersion && npmVersion !== pkgSettings.version.trim()) {
@@ -78,20 +78,16 @@ function processInput() {
     } else {
       inputs.appName = arg;
     }
-  })
-  if (inputs.hasOwnProperty('appName')) {
-    return inputs;
-  } else {
-    throw 'You must supply a name for your application. For example: slush marklogic-node <your-name>';
-  }
+  });
+  return inputs;
 }
 
-function getNameProposal (fallback) {
+function getNameProposal() {
   var path = require('path');
   try {
     return require(path.join(process.cwd(), 'package.json')).name;
   } catch (e) {
-    return fallback;
+    return path.basename(process.cwd());
   }
 }
 
@@ -186,6 +182,44 @@ function configRoxy() {
   }
 
   try {
+    var localProperties = '#################################################################\n' +
+      '# This file contains overrides to values in build.properties\n' +
+      '# These only affect your local environment and should not be checked in\n' +
+      '#################################################################\n' +
+      '\n' +
+      '#\n' +
+      '# The ports used by your application\n' +
+      '#\n' +
+      'app-port=' + settings.appPort + '\n';
+    if (settings.mlVersion < 8) {
+      localProperties += 'xcc-port=' + settings.xccPort + '\n';
+    }
+    else
+    {
+      localProperties += '# Taking advantage of not needing a XCC Port for ML8\n' +
+      'xcc-port=${app-port}\n' +
+      'install-xcc=false\n';
+    }
+
+    localProperties += '\n' +
+      '#\n' +
+      '# the uris or IP addresses of your servers\n' +
+      '# WARNING: if you are running these scripts on WINDOWS you may need to change localhost to 127.0.0.1\n' +
+      '# There have been reported issues with dns resolution when localhost wasn\'t in the hosts file.\n' +
+      '#\n' +
+      'local-server=' + settings.marklogicHost + '\n' +
+      '#\n' +
+      '# Admin username/password that will exist on the local/dev/prod servers\n' +
+      '#\n' +
+      'user=' + settings.marklogicAdminUser + '\n' +
+      'password=' + settings.marklogicAdminPass + '\n';
+
+    fs.writeFileSync('deploy/local.properties', localProperties, {encoding: 'utf8'});
+  } catch (e) {
+    console.log('failed to write roxy local.properties');
+  }
+
+  try {
     var foo = fs.readFileSync('deploy/ml-config.xml', { encoding: 'utf8' });
 
     // add an index for the default content
@@ -206,33 +240,54 @@ function configRoxy() {
 
 }
 
-gulp.task('default', ['init', 'configEsri'], function(done) {
-  gulp.src(['./bower.json', './package.json'])
+gulp.task('npmInstall', ['init', 'generateSecret', 'configGulp'], function(done) {
+  return gulp.src(['./package.json'])
    .pipe(install());
 });
 
-gulp.task('configEsri', ['init'], function(done) {
-  if (!settings.includeEsri) {
-    var indexData, appData;
+gulp.task('default', ['npmInstall'], function(done) {
+  return gulp.src(['./bower.json'])
+   .pipe(install());
+});
 
-    try {
-      // Update the index.html file.
-      indexData = fs.readFileSync('ui/index.html', { encoding: 'utf8' });
-      indexData = indexData.replace(/^.*arcgis.*$[\r\n]/gm, '');
-      indexData = indexData.replace(/^.*esri.*$[\r\n]/gm, '');
-      fs.writeFileSync('ui/index.html', indexData);
-    } catch (e) {
-      console.log('failed to update index.html: ' + e.message);
+gulp.task('generateSecret', ['init'], function(done) {
+  try {
+
+    var nodeApp = fs.readFileSync('node-server/node-app.js', { encoding: 'utf8' });
+
+    //generate new uuid
+    var secret = uuid.v4();
+    nodeApp = nodeApp.replace(/\bsecret: '\b.*\b'/m, 'secret: \'' + secret + '\'');
+
+    fs.writeFileSync('node-server/node-app.js', nodeApp);
+  } catch (e) {
+    console.log('failed to update SECRET in node-server/node-app.js: ' + e.message);
+  }
+
+  done();
+});
+
+gulp.task('configGulp', ['init'], function(done) {
+
+  try {
+    var configJSON = {};
+    configJSON['ml-version'] = settings.mlVersion;
+    configJSON['ml-host'] = settings.marklogicHost;
+    configJSON['ml-admin-user'] = settings.marklogicAdminUser;
+    configJSON['ml-admin-pass'] = settings.marklogicAdminPass;
+    configJSON['ml-app-user'] = settings.marklogicAdminUser; //THIS NEEDS TO CHANGE
+    configJSON['ml-app-pass'] = settings.marklogicAdminPass; //THIS NEEDS TO CHANGE
+    configJSON['ml-http-port'] = settings.appPort;
+    configJSON['node-port'] = settings.nodePort;
+
+    if (settings.mlVersion < 8) {
+      configJSON['ml-xcc-port'] = settings.xccPort;
     }
 
-    try {
-      // Update the app.js file.
-      appData = fs.readFileSync('ui/app/app.js', { encoding: 'utf8' });
-      appData = appData.replace(/^.*esriMap.*$[\r\n]/gm, '');
-      fs.writeFileSync('ui/app/app.js', appData);
-    } catch (e) {
-      console.log('failed to update app.js: ' + e.message);
-    }
+    var configString = JSON.stringify(configJSON, null, 2) + '\n';
+    fs.writeFileSync('local.json', configString, { encoding: 'utf8' });
+  } catch (e) {
+    console.log('failed to write local.json: ' + e.message);
   }
 
   done();
@@ -251,30 +306,41 @@ gulp.task('init', ['checkForUpdates'], function (done) {
   var appType = clArgs.appType;
   var branch =  clArgs.branch;
 
-  inquirer.prompt([
-    {type: 'input', name: 'name', message: 'Name for the app?', default: getNameProposal(appName)},
+  var prompts = [
     {type: 'list', name: 'mlVersion', message: 'MarkLogic version?', choices: ['8','7', '6', '5'], default: 0},
-    {type: 'confirm', name: 'includeEsri', message: 'Include ESRI Maps?', default: false}
-  ],
-  function (answers) {
-    answers.nameDashed = _.slugify(answers.name);
-    settings.includeEsri = answers.includeEsri;
+    {type: 'input', name: 'marklogicHost', message: 'MarkLogic Host?', default: 'localhost'},
+    {type: 'input', name: 'marklogicAdminUser', message: 'MarkLogic Admin User?', default: 'admin'},
+    {type: 'input', name: 'marklogicAdminPass', message: '\nNote: consider keeping the following blank, ' +
+      'you will be asked to enter it at appropriate commands.\n[?] MarkLogic Admin Password?', default: ''},
+    {type: 'input', name: 'nodePort', message: 'Node app port?', default: 9070},
+    {type: 'input', name: 'appPort', message: 'MarkLogic App/Rest port?', default: 8040},
+    {type: 'input', name: 'xccPort', message: 'XCC port?', default:8041, when: function(answers){return answers.mlVersion < 8;}}
+  ];
+
+  if (typeof appName === 'undefined') {
+    prompts.unshift(
+      {type: 'input', name: 'name', message: 'Name for the app?', default: getNameProposal()});
+  }
+
+  inquirer.prompt(prompts, function (answers) {
+    if (typeof appName === 'undefined') {
+      answers.nameDashed = _.slugify(answers.name);
+    } else {
+      answers.nameDashed = _.slugify(appName);
+    }
+    settings.mlVersion = answers.mlVersion;
+    settings.marklogicHost = answers.marklogicHost;
+    settings.marklogicAdminUser = answers.marklogicAdminUser;
+    settings.marklogicAdminPass = answers.marklogicAdminPass;
+    settings.nodePort = answers.nodePort;
+    settings.appPort = answers.appPort;
+    settings.xccPort = answers.xccPort || null;
 
     getRoxyScript(answers.nameDashed, answers.mlVersion, appType, branch)
       .then(runRoxy)
       .then(function() {
         // Copy over the Angular files
         var files = [__dirname + '/app/templates/**'];
-
-        // Adjust files to copy based on whether ESRI Maps are included
-        if (!answers.includeEsri) {
-          files.push('!' + __dirname + '/app/templates/ui/app/esri-map/**');
-          files.push('!' + __dirname + '/app/templates/ui/app/esri-map');
-          files.push('!' + __dirname + '/app/templates/ui/app/detail/detail.html');
-        }
-        else {
-          files.push('!' + __dirname + '/app/templates/ui/app/detail/detail-no-esri.html');
-        }
 
         process.chdir('./' + answers.nameDashed);
 
@@ -287,13 +353,9 @@ gulp.task('init', ['checkForUpdates'], function (done) {
               file.basename = '.' + file.basename.slice(1);
             }
 
-            // Rename detail file when not using ESRI.
-            else if (!answers.includeEsri && file.basename === 'detail-no-esri' && file.extname === '.html') {
-              console.log('changed name to detail.html');
-              file.basename = 'detail';
-            }
-
           }))
+          .pipe(replace('@sample-app-name', answers.nameDashed, {skipBinary:true}))
+          .pipe(replace('@sample-app-role', answers.nameDashed + '-role', {skipBinary:true}))
           .pipe(gulp.dest('./')) // Relative to cwd
           .on('end', function () {
             done(); // Finished!
