@@ -253,3 +253,25 @@ form[name=profileForm] {
   white-space: -o-pre-wrap;    /* Opera 7 */
   word-wrap: break-word;       /* Internet Explorer 5.5+ */
 }
+
+// to override default hljs generated <pre/> tag creating a well
+pre {
+  display: block;
+  padding: 0px;
+  margin: 0 0 10px;
+  font-size: 13px;
+  line-height: 1.42857143;
+  word-break: break-all;
+  word-wrap: break-word;
+  color: #FFFFFF;
+  background-color: #FFFFFF;
+  border: 0px solid #cccccc;
+  border-radius: 0px;
+}
+
+.hljs {
+  background-color: white;
+  border-width : 0;
+  font-family: monospace;
+  font-size: 1.1em;
+}

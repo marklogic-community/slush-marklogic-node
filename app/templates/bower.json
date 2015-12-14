@@ -28,6 +28,12 @@
   "overrides": {
     "angular-highlightjs": {
       "dependencies": {"angular" : ">1.0.8", "highlightjs":"~8.7.0"}
+    },
+    "highlightjs": {
+      "main": [
+        "highlight.pack.js",
+        "styles/github.css"
+      ]
     }
   },
   "devDependencies": {
