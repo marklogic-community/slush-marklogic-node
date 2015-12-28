@@ -3,6 +3,8 @@
 'use strict';
 
 var router = require('express').Router();
+
+var authHelper = require('./utils/auth-helper');
 var bodyParser = require('body-parser');
 var four0four = require('./utils/404')();
 var http = require('http');
@@ -146,6 +148,9 @@ router.post('/user/login', function(req, res) {
 router.get('/user/logout', function(req, res) {
   noCache(res);
   delete req.session.user;
+  if (req.session.authenticator) {
+    delete req.session.authenticator;
+  }
   res.send();
 });
 

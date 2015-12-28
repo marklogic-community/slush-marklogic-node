@@ -3,6 +3,7 @@
 'use strict';
 
 var router = require('express').Router();
+var authHelper = require('./auth-helper');
 var http = require('http');
 var options = require('./utils/options')();
 
@@ -98,29 +99,33 @@ function proxy(req, res) {
   console.log(
     req.method + ' ' + req.path + ' proxied to ' +
     options.mlHost + ':' + options.mlHttpPort + path);
-  var mlReq = http.request({
-    hostname: options.mlHost,
-    port: options.mlHttpPort,
-    method: req.method,
-    path: path,
-    headers: req.headers,
-    auth: getAuth(options, req.session)
-  }, function(response) {
-
-    res.statusCode = response.statusCode;
-
-    // [GJo] (#67) forward all headers from MarkLogic
-    for (var header in response.headers) {
-      res.header(header, response.headers[header]);
+  var reqOptions = {
+      hostname: options.mlHost,
+      port: options.mlHttpPort,
+      method: req.method,
+      path: path,
+      headers: req.headers
+    };
+  var makeRequest = function(authorization) {
+    if (authorization) {
+      reqOptions.headers.Authorization = authorization;
     }
+    var mlReq = http.request(reqOptions, function(response) {
 
-    response.on('data', function(chunk) {
-      res.write(chunk);
+      res.statusCode = response.statusCode;
+
+      // [GJo] (#67) forward all headers from MarkLogic
+      for (var header in response.headers) {
+        res.header(header, response.headers[header]);
+      }
+
+      response.on('data', function(chunk) {
+        res.write(chunk);
+      });
+      response.on('end', function() {
+        res.end();
+      });
     });
-    response.on('end', function() {
-      res.end();
-    });
-  });
 
   req.pipe(mlReq);
   req.on('end', function() {

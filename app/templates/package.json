@@ -6,7 +6,10 @@
     "express": "^4.4.1",
     "express-session": "^1.5.0",
     "helmet": "^2.0.0",
-    "morgan": "^1.6.0"
+    "morgan": "^1.6.0",
+    "q": "^1.4.1",
+    "underscore": "^1.8.3",
+    "www-authenticate": "^0.6.2"
   },
   "devDependencies": {
     "browser-sync": "^2.7.12",
