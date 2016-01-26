@@ -1,11 +1,15 @@
 @import "../../bower_components/bootstrap/less/bootstrap.less";
 @import "../../bower_components/font-awesome/less/font-awesome.less";
 @import "../../bower_components/ml-search-ng/dist/ml-search-ng-tpls.less";
-@icon-font-path:  "/fonts/";
+@icon-font-path:    "/fonts/";
 @FontAwesomePath:    "/fonts/";
 
 /* for the uiux pieces */
 @import "uiux.less";
+
+/* Admin design - icons for top nativation
+@import "admin.less";
+*/
 
 /* Blue design 
 @import "blues.less";
@@ -67,8 +71,18 @@ nav.nav {
   padding-top: 15px;
 }
 
+/* to get cursor for facet links */
+.facet > div {
+  cursor: hand;
+  cursor: pointer;
+}
+
 .chiclet {
   margin: 3px;
+}
+
+.facet-icon-pos.facet-add-pos {
+  content: "\f041";
 }
 
 /* negated and added chiclets */
@@ -91,7 +105,7 @@ nav.nav {
 }
 /* replace for negated */
 .chiclet.negated:before {
-    content: "\f05e";
+    content: "\f056";
 }
 
 /* landing page */
@@ -201,6 +215,10 @@ footer {
 .results {
   ul.pagination {
     margin: 0;
+
+    + div.btn-group {
+      margin-top: -3px;
+    }
   }
 
   .search-metrics {
