@@ -14,8 +14,12 @@
 
     beforeEach(function () {
       // stub the document
+      var headers = function() { return 'application/json'; };
       doc = {
-        name: 'hi'
+        headers: headers,
+        data: {
+          name: 'hi'
+        }
       };
       controller = $controller('DetailCtrl', { doc: doc });
       $rootScope.$apply();
@@ -25,8 +29,8 @@
       expect(controller).to.be.defined;
     });
 
-    it('should have the doc we gave it', function() {
-      expect(controller.doc).to.eq(doc);
+    it('should have the doc data we gave it', function() {
+      expect(controller.doc).to.eq(doc.data);
     });
 
   });
