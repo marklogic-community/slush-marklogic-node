@@ -356,6 +356,8 @@ gulp.task('init', ['checkForUpdates'], function (done) {
           }))
           .pipe(replace('@sample-app-name', answers.nameDashed, {skipBinary:true}))
           .pipe(replace('@sample-app-role', answers.nameDashed + '-role', {skipBinary:true}))
+          .pipe(replace('@node-port', answers.nodePort, {skipBinary:true}))
+          .pipe(replace('@ml-http-port', answers.appPort, {skipBinary:true}))
           .pipe(gulp.dest('./')) // Relative to cwd
           .on('end', function () {
             done(); // Finished!
