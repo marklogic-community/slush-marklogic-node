@@ -4,18 +4,21 @@
 
 var router = require('express').Router();
 var http = require('http');
-var config = require('../gulp.config')();
-
-var options = {
-  mlHost: process.env.ML_HOST || config.marklogic.host,
-  mlHttpPort: process.env.ML_PORT || config.marklogic.httpPort,
-  defaultUser: process.env.ML_APP_USER || config.marklogic.user,
-  defaultPass: process.env.ML_APP_PASS || config.marklogic.password
-};
+var options = require('./utils/options')();
 
 // ==================================
 // MarkLogic REST API endpoints
 // ==================================
+
+//
+// To not require authentication for a specific route, simply use the route below.
+// Copy and change according to your needs.
+//
+//router.get('/my/route', function(req, res) {
+//  noCache(res);
+//  proxy(req, res);
+//});
+
 // For any other GET request, proxy it on to MarkLogic.
 router.get('*', function(req, res) {
   noCache(res);
@@ -24,10 +27,9 @@ router.get('*', function(req, res) {
   } else {
     proxy(req, res);
   }
-  // To not require authentication, simply use the proxy below:
-  //proxy(req, res);
 });
 
+// PUT requires special treatment, as a user could be trying to PUT a profile update..
 router.put('*', function(req, res) {
   noCache(res);
   // For PUT requests, require authentication
@@ -36,11 +38,12 @@ router.put('*', function(req, res) {
   } else if (req.path === '/v1/documents' &&
     req.query.uri.match('/api/users/') &&
     req.query.uri.match(new RegExp('/api/users/[^(' + req.session.user.name + ')]+.json'))) {
-    // The user is try to PUT to a profile document other than his/her own. Not allowed.
+    // The user is trying to PUT to a profile document other than his/her own. Not allowed.
     res.status(403).send('Forbidden');
   } else {
     if (req.path === '/v1/documents' && req.query.uri.match('/users/')) {
-      // TODO: The user is updating the profile. Update the session info.
+      var json = req.body.user ? req.body : JSON.parse(req.body);
+      req.session.user.profile = json.user;
     }
     proxy(req, res);
   }
@@ -122,9 +125,9 @@ function proxy(req, res) {
 }
 
 function noCache(response){
-  response.append('Cache-Control', 'no-cache, must-revalidate');//HTTP 1.1 - must-revalidate
-  response.append('Pragma', 'no-cache');//HTTP 1.0
-  response.append('Expires', 'Sat, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+  response.append('Cache-Control', 'no-cache, must-revalidate');     // HTTP 1.1 - must-revalidate
+  response.append('Pragma',        'no-cache');                      // HTTP 1.0
+  response.append('Expires',       'Sat, 26 Jul 1997 05:00:00 GMT'); // Date in the past
 }
 
 module.exports = router;
