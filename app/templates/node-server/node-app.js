@@ -2,6 +2,7 @@
 'use strict';
 
 var express = require('express');
+var helmet = require('helmet');
 var expressSession = require('express-session');
 var app = express();
 var logger = require('morgan');
@@ -10,6 +11,9 @@ var four0four = require('./utils/404')();
 var options = require('./utils/options')();
 var port = options.appPort;
 var environment = options.env;
+
+// Making this middle-tier slightly more secure: https://www.npmjs.com/package/helmet#how-it-works
+app.use(helmet());
 
 app.use(expressSession({
   name: '@sample-app-name',
