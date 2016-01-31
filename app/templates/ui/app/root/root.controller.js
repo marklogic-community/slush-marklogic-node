@@ -9,7 +9,8 @@
   function RootCtrl(messageBoardService) {
     var ctrl = this;
     angular.extend(ctrl, {
-      messageBoardService: messageBoardService
+      messageBoardService: messageBoardService,
+      currentYear: new Date().getUTCFullYear()
     });
   }
 }());
