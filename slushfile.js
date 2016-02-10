@@ -354,6 +354,7 @@ gulp.task('init', ['checkForUpdates'], function (done) {
             }
 
           }))
+          .pipe(replace('@slush-version', pkgSettings.version.trim(), {skipBinary:true}))
           .pipe(replace('@sample-app-name', answers.nameDashed, {skipBinary:true}))
           .pipe(replace('@sample-app-role', answers.nameDashed + '-role', {skipBinary:true}))
           .pipe(replace('@node-port', answers.nodePort, {skipBinary:true}))
