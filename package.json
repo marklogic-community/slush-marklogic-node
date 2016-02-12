@@ -27,7 +27,7 @@
   "dependencies": {
     "colors": "^1.1.2",
     "fetch": "^1.0.0",
-    "gulp": "^3.9.0",
+    "gulp": "^3.8.0",
     "gulp-conflict": "^0.4.0",
     "gulp-install": "^0.6.0",
     "gulp-rename": "^1.2.0",
@@ -35,9 +35,9 @@
     "gulp-template": "^3.0.0",
     "inquirer": "^0.12.0",
     "node-uuid": "^1.4.3",
-    "q": "^1.4.0",
+    "q": "^1.0.0",
     "readable-stream": "^2.0.2",
-    "request": "^2.62.0",
+    "request": "^2.60.0",
     "underscore.string": "^3.2.2",
     "vows": "^0.8.0"
   },
