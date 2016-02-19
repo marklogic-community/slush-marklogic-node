@@ -66,10 +66,15 @@ gulp.task('plato', function(done) {
 gulp.task('styles', ['clean-styles'], function() {
   log('Compiling Less --> CSS');
 
+  var less = $.less().on('error',function(e){
+    $.util.log($.util.colors.red(e));
+    this.emit('end', e);
+  });
+
   return gulp
     .src(config.less)
     .pipe($.plumber()) // exit gracefully if something fails after this
-    .pipe($.less())
+    .pipe(less)
     .pipe($.autoprefixer({browsers: ['last 2 version', '> 5%']}))
     .pipe(gulp.dest(config.temp));
 });
@@ -187,7 +192,7 @@ gulp.task('init-local', function() {
     var configString = JSON.stringify(configJSON, null, 2) + '\n';
     fs.writeFileSync('local.json', configString, { encoding: 'utf8' });
   } catch (e) {
-    console.log('failed to write local.json: ' + e.message);
+    log('failed to write local.json: ' + e.message);
   }
 });
 
@@ -487,7 +492,7 @@ function serve(env, specRunner) {
   nodeOptions.nodeArgs = (args.debug || args.debugBrk) ? [debugMode + '=5858'] : [];
 
   if (args.verbose) {
-    console.log(nodeOptions);
+    log(nodeOptions);
   }
 
   return $.nodemon(nodeOptions)
@@ -528,7 +533,7 @@ function getNodeOptions(env) {
   }
   catch (e) {
     envJson = {};
-    console.log('Couldn\'t find ' + envFile + '; you can create this file to override properties - ' +
+    log('Couldn\'t find ' + envFile + '; you can create this file to override properties - ' +
       '`gulp init-local` creates local.json which can be modified for other environments as well');
   }
   var port = args['app-port'] || process.env.PORT || envJson['node-port'] || config.defaultPort;
