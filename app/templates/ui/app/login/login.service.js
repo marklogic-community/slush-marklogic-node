@@ -12,6 +12,8 @@
     var _toStateName;
     var _toStateParams;
     var _isAuthenticated;
+    var _protectedRoutes = [];
+    var deregisterLoginSuccess;
 
     function loginMode(mode) {
       if (mode === undefined) {
@@ -114,8 +116,6 @@
       });
     }
 
-    var _protectedRoutes = [];
-
     function isAuthenticated() {
       return _isAuthenticated;
     }
@@ -146,8 +146,6 @@
         });
       }
     }
-
-    var deregisterLoginSuccess;
 
     $rootScope.$on('$stateChangeStart', function(event, next, nextParams) {
       if (next.name !== 'root.login') {
