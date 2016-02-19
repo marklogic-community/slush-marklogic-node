@@ -147,7 +147,13 @@ function runRoxy(config) {
   ];
 
   console.log('Spawning Roxy new command: ' + scriptName + ' ' + args.join(' '));
-  var child = spawn(scriptName, args);
+  var child = spawn(scriptName, args, {
+    stdio: [
+      0, // Use parents stdin for child
+      'pipe', // Pipe child's stdout to parent (default)
+      'pipe' // Pipe child's stderr to parent (default)
+    ]
+  });
 
   child.on('close', function() {
     console.log('done running ml new');
