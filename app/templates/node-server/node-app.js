@@ -43,7 +43,6 @@ switch (environment){
   default:
     console.log('** DEV **');
     app.use(express.static('./ui/'));
-    app.use(express.static('./'));
     app.use(express.static('./tmp'));
     // Any invalid calls for templateUrls are under app/* and should return 404
     app.use('/app/*', function(req, res, next) {

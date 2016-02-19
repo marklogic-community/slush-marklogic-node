@@ -300,7 +300,6 @@ gulp.task('optimize', ['inject', 'test'], function() {
   var cssFilter = $.filter('**/*.css', {restore: true});
   var jsAppFilter = $.filter('**/' + config.optimized.app, {restore: true});
   var jslibFilter = $.filter('**/' + config.optimized.lib, {restore: true});
-  var indexFilter = $.filter('**/index*.html', {restore: true});
 
   var templateCache = config.temp + config.templateCache.file;
 
@@ -314,34 +313,37 @@ gulp.task('optimize', ['inject', 'test'], function() {
 
     // Get the css
     .pipe(cssFilter)
+    // Take inventory of the css file names for future rev numbers
+    .pipe($.rev())
     .pipe($.sourcemaps.init())
     .pipe($.cssnano({safe: true}))
+    // write sourcemap for css
     .pipe($.sourcemaps.write('.'))
     .pipe(cssFilter.restore)
 
     // Get the custom javascript
     .pipe(jsAppFilter)
+    // Take inventory of the js app file name for future rev numbers
+    .pipe($.rev())
     .pipe($.sourcemaps.init())
     .pipe($.ngAnnotate({add: true}))
     .pipe($.uglify())
+    // write sourcemap for js app
     .pipe($.sourcemaps.write('.'))
     .pipe(jsAppFilter.restore)
 
     // Get the vendor javascript
     .pipe(jslibFilter)
+    // Take inventory of the js lib file name for future rev numbers
+    .pipe($.rev())
     .pipe($.sourcemaps.init())
     .pipe($.uglify()) // another option is to override wiredep to use min files
+    // write sourcemap for js lib
     .pipe($.sourcemaps.write('.'))
     .pipe(jslibFilter.restore)
 
-    // Take inventory of the file names for future rev numbers
-    .pipe($.rev())
-    // Replace the file names in the html with rev numbers
+    // Rename the recorded file names in the steam, and in the html to append rev numbers
     .pipe($.revReplace())
-    // Undo rename of index.html
-    .pipe(indexFilter)
-    .pipe($.rename('index.html'))
-    .pipe(indexFilter.restore)
     
     // copy result to dist/, and print some logging..
     .pipe(gulp.dest(config.build))
@@ -388,7 +390,8 @@ gulp.task('clean-images', function() {
 gulp.task('clean-styles', function() {
   var files = [].concat(
     config.temp + '**/*.css',
-    config.build + 'styles/**/*.css'
+    config.build + 'styles/**/*.css',
+    config.build + 'styles/**/*.css.map'
   );
   return clean(files);
 });
@@ -401,6 +404,7 @@ gulp.task('clean-code', function() {
   var files = [].concat(
     config.temp + '**/*.js',
     config.build + 'js/**/*.js',
+    config.build + 'js/**/*.js.map',
     config.build + '**/*.html'
   );
   return clean(files);
@@ -443,7 +447,7 @@ gulp.task('serve-local', ['inject', 'fonts'], function() {
  * --nosync
  * @return {Stream}
  */
-gulp.task('serve-dev', ['inject', 'fonts'], function() {
+gulp.task('serve-dev', ['build'], function() {
   return serve('dev' /*env*/);
 });
 
