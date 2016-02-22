@@ -9,6 +9,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var port = process.env.PORT || 8001;
 var four0four = require('./utils/404')();
+var passport = require('passport');
 
 var environment = process.env.NODE_ENV;
 
@@ -22,6 +23,9 @@ app.use(expressSession({
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use(logger('dev'));
 
 app.use('/api', require('./routes'));
