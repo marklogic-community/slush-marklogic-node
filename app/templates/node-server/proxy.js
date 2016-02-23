@@ -109,13 +109,15 @@ function proxy(req, res) {
     });
   });
 
-  if (req.body !== undefined) {
-    mlReq.write(JSON.stringify(req.body));
+  req.pipe(mlReq);
+  req.on('end', function() {
     mlReq.end();
-  }
+  });
 
   mlReq.on('error', function(e) {
     console.log('Problem with request: ' + e.message);
+    res.statusCode = 500;
+    res.end();
   });
 }
 
