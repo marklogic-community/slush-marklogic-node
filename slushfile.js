@@ -323,7 +323,21 @@ gulp.task('init', ['checkForUpdates'], function (done) {
       'you will be asked to enter it at appropriate commands.\n? MarkLogic Admin Password?', default: ''},
     {type: 'input', name: 'nodePort', message: 'Node app port?', default: 9070},
     {type: 'input', name: 'appPort', message: 'MarkLogic App/Rest port?', default: 8040},
-    {type: 'input', name: 'xccPort', message: 'XCC port?', default:8041, when: function(answers){return answers.mlVersion < 8;}}
+    {type: 'input', name: 'xccPort', message: 'XCC port?', default:8041, when: function(answers){return answers.mlVersion < 8;},
+    {type:'list', name: 'template', message: 'Select Template', choices: [
+      { name: 'default', value: 'default' },
+      { name: '3-columns', value: '3column' },
+      { name: 'Dashboard', value: 'dashboard' },
+      { name: 'Full-screen map', value: 'map' },
+      { name: 'I don\'t know', value: 'unsure' }
+    ]},
+    {type:'list', name: 'theme', message: 'What is the main focus?', when: function(ans) { return ans.template === 'unsure'; }, choices: [
+      { name: 'Semantics', value: '3column' },
+      { name: 'Charts', value: 'dashboard' },
+      { name: 'Map/Graph', value: 'map' },
+      { name: 'Documents', value: '3column' },
+      { name: 'Other', value: 'default' }
+    ]}
   ];
 
   if (typeof appName === 'undefined') {
@@ -349,7 +363,7 @@ gulp.task('init', ['checkForUpdates'], function (done) {
       .then(runRoxy)
       .then(function() {
         // Copy over the Angular files
-        var files = [__dirname + '/app/templates/**'];
+        var files = [__dirname + '/app/templates/**', __dirname + '/app/themes/' + (answers.theme || answers.template) + '/**'];
 
         process.chdir('./' + answers.nameDashed);
 

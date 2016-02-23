@@ -1,0 +1,16 @@
+<div class="user pull-right">
+  <!-- form to log in -->
+  <div class="navbar-form navbar-right" ng-if="!ctrl.userService.currentUser()" >
+    <login ng-if="ctrl.loginService.loginMode() === 'top-right'" mode="inline"></login>
+    <span ng-if="ctrl.loginService.loginMode() !== 'top-right'" class="profile-link"><a href ng-click="ctrl.loginService.loginPrompt()" class="btn btn-primary btn-sm">Login</a></span>
+  </div>
+  <!-- display the logged in user -->
+  <div class="welcome" ng-if="ctrl.userService.currentUser()">
+    <div class="navbar-collapse collapse">
+      <span class="glyphicon glyphicon-user"></span> {{ctrl.userService.currentUser().name}} | <span class="profile-link"><a href="/profile">Account</a></span>
+
+      <button class="btn btn-danger btn-xs" type="button" ng-click="ctrl.loginService.logout()">Logout</button>
+
+    </div><!--/.navbar-collapse -->
+  </div>
+</div>

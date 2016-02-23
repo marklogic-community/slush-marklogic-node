@@ -1,0 +1,37 @@
+<div class="row detail">
+  <div class="col-sm-8">
+    <tabset type="pills">
+      <tab active="true">
+        <tab-heading>{{ctrl.type | uppercase}}</tab-heading>
+        <div class="col-sm-9">
+          <json-explorer ng-if="ctrl.type==='json'" data="ctrl.json"></json-explorer>
+          <pre ng-if="ctrl.type!=='json'" class="pre-xml">{{ctrl.xml}}</pre>
+
+          <a ng-if="ctrl.type==='binary'" target="_blank" ng-href="/v1/documents?uri={{ctrl.uri}}&transform=download" class="btn btn-default">Download</a>
+
+        </div>
+      </tab>
+      <tab ng-if="ctrl.type!=='json'">
+        <tab-heading>JSON</tab-heading>
+        <div class="col-sm-9">
+          <json-explorer data="ctrl.json"></json-explorer>
+        </div>
+      </tab>
+      <tab ng-if="ctrl.type==='json'">
+        <tab-heading >XML</tab-heading>
+        <div class="col-sm-9">
+          <pre class="pre-xml">{{ctrl.xml}}</pre>
+        </div>
+      </tab>
+    </tabset>
+  </div>
+  <div class="col-sm-4">
+    <!-- show (links to) similar documents -->
+    <div class="panel panel-default">
+      <div class="panel-heading">Similar</div>
+      <div class="panel-body">
+        <ml-similar uri="{{ctrl.uri}}" limit="5"></ml-similar>
+      </div>
+    </div>
+  </div>
+</div>

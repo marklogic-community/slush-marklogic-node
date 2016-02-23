@@ -1,0 +1,118 @@
+<div class="create" ng-if="ctrl.currentUser">
+  <div class="row">
+    <div class="col-sm-2"></div>
+    <h2 class="col-sm-10">Create a Document</h2>
+  </div>
+  <form class="form-horizontal">
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Name</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" placeholder="person's name" ng-model="ctrl.person.name">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">About</label>
+      <div class="col-sm-10">
+        <textarea class="form-control" ui-tinymce="ctrl.editorOptions" ng-model="ctrl.person.about"></textarea>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Greeting</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" ng-model="ctrl.person.greeting" placeholder="How this person should be greeted on login">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Balance</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" ng-model="ctrl.person.balance" placeholder="">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Picture</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" ng-model="ctrl.person.picture" placeholder="">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Age</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" ng-model="ctrl.person.age" placeholder="">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Eye Color</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" ng-model="ctrl.person.eyeColor" placeholder="">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Gender</label>
+      <div class="col-sm-1">
+        <label class="radio-inline"><input type="radio" value="Female" ng-model="ctrl.person.gender" placeholder="">Female</label>
+      </div>
+      <div class="col-sm-1">
+        <label class="radio-inline"><input type="radio" value="Male" ng-model="ctrl.person.gender" placeholder="">Male</label>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Company</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" ng-model="ctrl.person.company" placeholder="">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Email</label>
+      <div class="col-sm-10">
+        <input type="email" class="form-control" ng-model="ctrl.person.email" placeholder="">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Phone</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" ng-model="ctrl.person.phone" placeholder="">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Address</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" ng-model="ctrl.person.address" placeholder="">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Location</label>
+      <div class="col-sm-5">
+        <input type="text" class="form-control" ng-model="ctrl.person.latitude" placeholder="">
+      </div>
+      <div class="col-sm-5">
+        <input type="text" class="form-control" ng-model="ctrl.person.longitude" placeholder="">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Tags</label>
+      <div class="col-sm-10">
+        <input type="text" ng-model="ctrl.newTag"/>
+        <button class="add-feature btn btn-default btn-sm" ng-click="ctrl.addTag()">Add</button>
+      </div>
+      <div class="col-sm-10 col-sm-offset-2">
+        <div class="tag btn btn-info" ng-repeat="tag in ctrl.person.tags">
+          <span>{{tag}}</span>
+          <span class="glyphicon glyphicon-remove-circle" ng-click="ctrl.removeTag($index)"></span>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Active</label>
+      <div class="col-sm-1">
+        <label class="checkbox">
+          <input type="checkbox" ng-model="ctrl.person.isActive">
+        </label>
+      </div>
+    </div>
+
+    <div class="row">
+      <a class="col-sm-offset-10 btn btn-default" ui-sref="root">Cancel</a>
+      <button class="btn btn-primary" ng-click="ctrl.submit()">Submit</button>
+    </div>
+  </form>
+</div>

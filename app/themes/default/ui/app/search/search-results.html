@@ -1,0 +1,13 @@
+<div ng-repeat="result in results">
+  <h4>
+    <a ui-sref="root.view({uri: result.uri})">{{ result.label || result.uri }}</a>
+  </h4>
+  <div class="matches">
+    <div class="match" ng-repeat="match in result.matches">
+      <em ng-repeat="text in match['match-text'] track by $index">
+        <span ng-class="{ highlight: !!text.highlight }">{{ text.highlight || text }}</span>
+      </em>
+    </div>
+  </div>
+  <hr/>
+</div>

@@ -1,0 +1,24 @@
+<h1>Sample MarkLogic Application</h1>
+<div class="row" ng-if="!ctrl.currentUser">Please log in to see content</div>
+<div class="row" ng-if="ctrl.currentUser">
+  <div class="col-md-12">
+    <ml-input qtext="ctrl.qtext" search="ctrl.search(qtext)" suggest="ctrl.suggest(val)" template="fa" class="search"></ml-input>
+  </div>
+</div>
+
+<div class="search row" ng-if="ctrl.currentUser">
+  <ml-facets class="col-md-3 right-col" facets="ctrl.response.facets" toggle="ctrl.toggleFacet(facet, value)" active-facets="ctrl.mlSearch.activeFacets" negate="ctrl.toggleNegatedFacet(facet,value)"></ml-facets>
+  <div class="col-md-9">
+    <h4 ng-if="ctrl.response.total === 0">No results to show</h4>
+
+    <div ng-if="ctrl.response.total > 0" class="results">
+      <div class="pagination-ctrls">
+        <pagination class="pagination pagination-sm" ng-model="ctrl.page" ng-change="ctrl.search()" max-size="10" boundary-links="true" total-items="ctrl.response.total" items-per-page="ctrl.response['page-length']">
+        </pagination>
+        <ml-snippet set-snippet="ctrl.setSnippet(type)"></ml-snippet>
+      </div>
+      <ml-metrics search="ctrl.response" ></ml-metrics>
+      <ml-results template="app/search/search-results.html" results="ctrl.response.results"></ml-results>
+    </div>
+  </div>
+</div>
