@@ -248,7 +248,9 @@ function configRoxy() {
 
 gulp.task('npmInstall', ['init', 'generateSecret', 'configGulp'], function(done) {
   return gulp.src(['./package.json'])
-   .pipe(install());
+   .pipe(install({
+      args: ['--msvs_version=2013' ] // npm install --msvs_version=2013 // node-gyph depends on Visual C++ on Win
+    }));
 });
 
 gulp.task('default', ['npmInstall'], function(done) {
