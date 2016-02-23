@@ -11,6 +11,7 @@ components:
 
 # Getting Started
 
+Microsoft Windows users should read the [additional requirements documentation](WINDOWS.mdown)
 ## Install Required Dependencies
 
 - [node.js](http://nodejs.org/download/)
