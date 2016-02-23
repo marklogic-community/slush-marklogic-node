@@ -70,7 +70,7 @@ module.exports = function() {
       '**/*.module.js',
       '**/*.js'
     ],
-    less: client + 'styles/**/*.less',
+    less: client + 'styles/**/main.less',
     report: report,
     root: root,
     server: server,
