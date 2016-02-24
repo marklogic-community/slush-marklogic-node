@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "dependencies": {
     "angular": "~1.4.4",
-    "angular-bootstrap": "~0.13.3",
+    "angular-bootstrap": "~0.14.0",
     "angular-cookies": "~1.4.4",
     "angular-highlightjs": "~0.4.3",
     "angular-mocks": "~1.4.4",
