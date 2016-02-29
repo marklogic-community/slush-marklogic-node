@@ -5,7 +5,6 @@ var express = require('express');
 var expressSession = require('express-session');
 var app = express();
 var bodyParser = require('body-parser');
-var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var port = process.env.PORT || 8001;
 var four0four = require('./utils/404')();
@@ -19,7 +18,6 @@ app.use(expressSession({
   resave: true
 }));
 
-app.use(cookieParser());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(logger('dev'));
