@@ -3,6 +3,7 @@
 'use strict';
 
 var router = require('express').Router();
+var bodyParser = require('body-parser');
 var four0four = require('./utils/404')();
 var http = require('http');
 var config = require('../gulp.config')();
@@ -14,6 +15,10 @@ var options = {
   defaultUser: process.env.ML_APP_USER || config.marklogic.user,
   defaultPass: process.env.ML_APP_PASS || config.marklogic.password
 };
+
+// [GJo] (#31) Moved bodyParsing inside routing, otherwise it might try to parse uploaded binaries as json..
+router.use(bodyParser.urlencoded({extended: true}));
+router.use(bodyParser.json());
 
 router.get('/user/status', function(req, res) {
   var headers = req.headers;
@@ -114,6 +119,9 @@ router.post('/user/login', function(req, res) {
             console.log('did not find chunk.user');
           }
         });
+      } else {
+        res.statusCode = response.statusCode;
+        res.send(response.statusMessage);
       }
     }
   });

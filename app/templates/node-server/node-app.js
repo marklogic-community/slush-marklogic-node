@@ -4,7 +4,6 @@
 var express = require('express');
 var expressSession = require('express-session');
 var app = express();
-var bodyParser = require('body-parser');
 var logger = require('morgan');
 var port = process.env.PORT || 8001;
 var four0four = require('./utils/404')();
@@ -18,13 +17,10 @@ app.use(expressSession({
   resave: true
 }));
 
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(bodyParser.json());
 app.use(logger('dev'));
 
-app.use('/api', require('./routes'));
-
 app.use('/v1', require('./proxy'));
+app.use('/api', require('./routes'));
 
 app.use('/create', express.static('./build/index.html'));
 app.use('/profile', express.static('./build/index.html'));
