@@ -119,6 +119,9 @@ router.post('/user/login', function(req, res) {
             console.log('did not find chunk.user');
           }
         });
+      } else {
+        res.statusCode = response.statusCode;
+        res.send(response.statusMessage);
       }
     }
   });
