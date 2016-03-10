@@ -13,8 +13,8 @@
 
     <div ng-if="ctrl.response.total > 0" class="results">
       <div class="pagination-ctrls">
-        <pagination class="pagination pagination-sm" ng-model="ctrl.page" ng-change="ctrl.search()" max-size="10" boundary-links="true" total-items="ctrl.response.total" items-per-page="ctrl.response['page-length']">
-        </pagination>
+        <uib-pagination class="pagination-sm" ng-model="ctrl.page" ng-change="ctrl.search()" max-size="10" boundary-links="true" total-items="ctrl.response.total" items-per-page="ctrl.response['page-length']">
+        </uib-pagination>
         <ml-snippet set-snippet="ctrl.setSnippet(type)"></ml-snippet>
       </div>
       <ml-metrics search="ctrl.response" ></ml-metrics>

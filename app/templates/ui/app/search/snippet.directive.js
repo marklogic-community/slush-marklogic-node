@@ -13,7 +13,6 @@
       controllerAs: 'ctrl',
       replace: true,
       scope: {
-        snippetType: '=',
         setSnippet: '&'
       },
       templateUrl: 'app/search/snippet.html'
