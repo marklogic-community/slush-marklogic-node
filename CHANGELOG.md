@@ -1,5 +1,30 @@
 # Change Log
 
+## [1.0.3](https://github.com/marklogic/slush-marklogic-node/tree/1.0.3) (2016-03-10)
+[Full Changelog](https://github.com/marklogic/slush-marklogic-node/compare/1.0.2...1.0.3)
+
+**Implemented enhancements:**
+
+- Drop cookieParser [\#295](https://github.com/marklogic/slush-marklogic-node/issues/295)
+- minified build needs sourcemaps [\#268](https://github.com/marklogic/slush-marklogic-node/issues/268)
+- Upgrade npm dependencies to latest [\#200](https://github.com/marklogic/slush-marklogic-node/issues/200)
+- Fixes \#319 - Angular bootstrap directive changes [\#321](https://github.com/marklogic/slush-marklogic-node/pull/321) ([Audarth](https://github.com/Audarth))
+
+**Fixed bugs:**
+
+- variable @link-color is undefined [\#323](https://github.com/marklogic/slush-marklogic-node/issues/323)
+- Angular bootstrap directive changes [\#319](https://github.com/marklogic/slush-marklogic-node/issues/319)
+- Gulp serve-dev gives 404 in browser [\#312](https://github.com/marklogic/slush-marklogic-node/issues/312)
+- `gulp build` breaks `gulp serve-dev` [\#272](https://github.com/marklogic/slush-marklogic-node/issues/272)
+- REST API proxy doesn't support multipart requests [\#270](https://github.com/marklogic/slush-marklogic-node/issues/270)
+- Issue with proxying data to ML [\#31](https://github.com/marklogic/slush-marklogic-node/issues/31)
+
+**Merged pull requests:**
+
+- Hunterwilliams npm updates [\#305](https://github.com/marklogic/slush-marklogic-node/pull/305) ([grtjn](https://github.com/grtjn))
+- Fixed \#295: removed cookie-parser in favor of newer express-session [\#300](https://github.com/marklogic/slush-marklogic-node/pull/300) ([grtjn](https://github.com/grtjn))
+- Fixed \#31: moved bodyparsing to allow upload of non-json [\#189](https://github.com/marklogic/slush-marklogic-node/pull/189) ([grtjn](https://github.com/grtjn))
+
 ## [1.0.2](https://github.com/marklogic/slush-marklogic-node/tree/1.0.2) (2016-02-29)
 [Full Changelog](https://github.com/marklogic/slush-marklogic-node/compare/1.0.1...1.0.2)
 
