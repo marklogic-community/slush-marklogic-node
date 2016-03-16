@@ -323,7 +323,7 @@ gulp.task('init', ['checkForUpdates'], function (done) {
       'you will be asked to enter it at appropriate commands.\n? MarkLogic Admin Password?', default: ''},
     {type: 'input', name: 'nodePort', message: 'Node app port?', default: 9070},
     {type: 'input', name: 'appPort', message: 'MarkLogic App/Rest port?', default: 8040},
-    {type: 'input', name: 'xccPort', message: 'XCC port?', default:8041, when: function(answers){return answers.mlVersion < 8;},
+    {type: 'input', name: 'xccPort', message: 'XCC port?', default:8041, when: function(answers){return answers.mlVersion < 8;} },
     {type:'list', name: 'template', message: 'Select Template', choices: [
       { name: 'default', value: 'default' },
       { name: '3-columns', value: '3column' },
@@ -363,7 +363,10 @@ gulp.task('init', ['checkForUpdates'], function (done) {
       .then(runRoxy)
       .then(function() {
         // Copy over the Angular files
-        var files = [__dirname + '/app/templates/**', __dirname + '/app/themes/' + (answers.theme || answers.template) + '/**'];
+        var files = [__dirname + '/app/templates/**'];
+        if (answers.theme !== 'default') { // overlay the theme if not the default theme chosen
+          files.push( __dirname + '/app/themes/' + (answers.theme || answers.template) + '/**');
+        }
 
         process.chdir('./' + answers.nameDashed);
 

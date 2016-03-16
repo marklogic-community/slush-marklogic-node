@@ -344,7 +344,7 @@ gulp.task('optimize', ['inject', 'test'], function() {
 
     // Rename the recorded file names in the steam, and in the html to append rev numbers
     .pipe($.revReplace())
-    
+
     // copy result to dist/, and print some logging..
     .pipe(gulp.dest(config.build))
     .pipe($.if(args.verbose, $.print()));
@@ -449,6 +449,12 @@ gulp.task('serve-local', ['inject', 'fonts'], function() {
  */
 gulp.task('serve-dev', ['build'], function() {
   return serve('dev' /*env*/);
+});
+
+gulp.task('develop', ['inject','styles','less-watcher'], function() {
+    //skip the build and the browser sync
+    var nodeOptions = getNodeOptions('local');
+    $.nodemon(nodeOptions);
 });
 
 /**
