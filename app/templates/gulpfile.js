@@ -451,12 +451,6 @@ gulp.task('serve-dev', ['build'], function() {
   return serve('dev' /*env*/);
 });
 
-gulp.task('develop', ['inject','styles','less-watcher'], function() {
-    //skip the build and the browser sync
-    var nodeOptions = getNodeOptions('local');
-    $.nodemon(nodeOptions);
-});
-
 /**
  * serve the prod environment
  * --debug-brk or --debug
