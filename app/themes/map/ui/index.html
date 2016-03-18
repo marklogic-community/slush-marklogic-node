@@ -21,7 +21,7 @@
   </head>
   <body ng-app="app">
 
-    <ui-view></ui-view>
+    <ui-view/>
 
     <!-- build:js js/lib.js -->
     <!-- bower:js -->
@@ -36,6 +36,10 @@
     <!-- inject:templates:js -->
     <!-- endinject -->
     <!-- endbuild -->
+    <script>
+      // add the map module dependency
+      angular.module('app').requires.push('uiGmapgoogle-maps');
+    </script>
 
   </body>
 </html>
