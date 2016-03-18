@@ -344,7 +344,7 @@ gulp.task('optimize', ['inject', 'test'], function() {
 
     // Rename the recorded file names in the steam, and in the html to append rev numbers
     .pipe($.revReplace())
-    
+
     // copy result to dist/, and print some logging..
     .pipe(gulp.dest(config.build))
     .pipe($.if(args.verbose, $.print()));
