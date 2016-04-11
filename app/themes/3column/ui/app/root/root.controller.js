@@ -8,6 +8,7 @@
 
   function RootCtrl(messageBoardService, userService, $scope) {
     var ctrl = this;
+    ctrl.currentYear = new Date().getUTCFullYear();
     ctrl.messageBoardService = messageBoardService;
 
     $scope.user = userService;

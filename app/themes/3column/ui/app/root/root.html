@@ -19,7 +19,25 @@
   <!-- Add your site or application content here -->
   <div class="container-fluid" ui-view></div>
 
-  <div id="footer">
-    <div class="text-right"><small>Powered by MarkLogic</small></div>
-  </div>
+  <footer id="footer" class="powered">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12">
+          <ul id="menu-footer-navigation-logged-in" class="nav">
+            <li id="menu-item-140" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-140">
+              <a target="_blank" href="http://www.marklogic.com">MarkLogic.com</a>
+            </li>
+            <li id="menu-item-71" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-71">
+              <a target="_blank" href="http://developer.marklogic.com">MarkLogic Developers</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="row copyright">
+        <div class="col-sm-12 text-muted">
+          Copyright <sup>&copy;</sup> {{ ctrl.currentYear }} MarkLogic Corporation. MARKLOGIC <sup>&reg;</sup> is a registered trademark of MarkLogic Corporation.
+        </div>
+      </div>
+    </div>
+  </footer>
 </div>

@@ -1,5 +1,5 @@
-@primary: red;
-@secondary: black;
+@primary: #fff;
+@secondary: #000;
 
 html { height: 100% }
 
@@ -20,13 +20,6 @@ i {
 
 .nav > li > a {
   color:#787878;
-}
-
-footer {
-  margin-top:20px;
-  padding-top:20px;
-  padding-bottom:20px;
-  background-color:#efefef;
 }
 
 /* count indicator near icons */
@@ -102,6 +95,8 @@ footer {
     font-size: 12px;
     color: #ff8702;
 
+    .welcome { margin-top: -1px; }
+
     a {
       color: #FFF
     }
@@ -174,19 +169,25 @@ footer {
 
 #footer {
   border: none;
-  height: 30px;
-  margin-top: 20px;
+  height: auto;
   background-color: @primary;
+  margin-top:20px;
+  padding-top:20px;
+  padding-bottom:20px;
+  color: #000;
 
   .powered {
     background-image: url(/images/PoweredByMarkLogic.png);
     background-repeat: no-repeat;
     background-size: contain;
+    background-position-y: 30px;
     float: right;
     height: 30px;
     margin-right: 20px;
     width: 150px;
   }
+
+  .nav li a, .text-muted { color: #000; }
 }
 
 .preview {
