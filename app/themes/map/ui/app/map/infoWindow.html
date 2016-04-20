@@ -1,20 +1,14 @@
   <div class="map-info-window" ng-class="{ isShown: parameter.showMe }">
     <section class="heading">
-      <span class="ranking">{{ parameter.ranking }}</span>
       <h4 class="window-title">{{ parameter.name }}</h4>
     </section>
     <section class="window-content">
-      <div class="photo"><img ng-src="images/photos/{{parameter.photo}}" ng-attr-alt="{{parameter.name}}"></div>
+      <div class="photo" ng-if="parameter.photo"><img ng-src="images/photos/{{parameter.photo}}" ng-attr-alt="{{parameter.name}}"></div>
       <div class="details">
         <addr>{{ parameter.address }} - {{ parameter.city}}</addr>
         <dl class="dl-horizontal">
-          <dt>Oordeel jury</dt><dd>{{ parameter.grade }}</dd>
-          <dt>Gewicht per bol</dt><dd>{{ parameter.weight }}</dd>
-          <dt>Prijs per bol</dt><dd>{{ parameter.price }}</dd>
-          <!--dt>Aanbieding</dt><dd>{{ parameter.offer }}</dd-->
-          <dt>Vet percentage</dt><dd>{{ parameter.fatPercentage }}</dd>
-  <!--        <dt>DPTG percentage</dt><dd>{{ parameter.dptg }}</dd>-->
+          <dt>Metadata Field 1</dt><dd>{{ parameter.field1 }}</dd>
+          <dt>Metadata Field 2</dt><dd>{{ parameter.field2 }}</dd>
         </dl>
-        <p><strong>Conclusie</strong> {{ parameter.conclusion }}</p>
       </div>
     </section>

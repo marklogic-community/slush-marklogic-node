@@ -44,6 +44,7 @@
   function RootCtrl(messageBoardService, $rootScope, $scope, $templateRequest, $compile, rootUtils) {
     var ctrl = this;
     ctrl.messageBoardService = messageBoardService;
+    ctrl.currentYear = new Date().getUTCFullYear()
 
     var miw = window.jQuery('#app-mobile-info-window').get(0);
     var miwscope = $rootScope.$new(), mobileWin;
