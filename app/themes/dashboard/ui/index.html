@@ -25,7 +25,7 @@
       <header class="main-header">
 
         <!-- Logo -->
-        <a ui-sref="home" class="logo">
+        <a ui-sref="root.landing" class="logo">
           <!-- mini logo for sidebar mini 50x50 pixels -->
           <span class="logo-mini"><b>ML</b></span>
           <!-- logo for regular state and mobile devices -->
@@ -41,13 +41,13 @@
             </ul>
             <ul class="nav navbar-nav" ng-if="topnav.currentUser">
               <li>
-                <a ui-sref="dashboard.overview">
+                <a ui-sref="root.landing">
                   <i class="fa fa-dashboard"></i>
                   Dashboard
                 </a>
               </li>
               <li>
-                <a ui-sref="search">
+                <a ui-sref="root.search">
                   <i class="fa fa-search"></i>
                   Search
                 </a>
@@ -84,12 +84,12 @@
       <ui-view></ui-view>
 
 
-      <footer id="footer" class="powered">
+      <footer id="footer" class="powered" ng-controller="FooterCtrl as footer">
         <div class="container">
           <div class="row">
           <div class="row copyright">
             <div class="col-sm-12 text-muted">
-              Copyright <sup>&copy;</sup> 2015 MarkLogic Corporation. MARKLOGIC <sup>&reg;</sup> is a registered trademark of MarkLogic Corporation.
+              Copyright <sup>&copy;</sup> {{ footer.currentYear }} MarkLogic Corporation. MARKLOGIC <sup>&reg;</sup> is a registered trademark of MarkLogic Corporation.
             </div>
           </div>
         </div>

@@ -2,7 +2,12 @@
   'use strict';
 
   angular.module('app.root')
+    .controller('FooterCtrl', FooterCtrl)
     .controller('RootCtrl', RootCtrl);
+
+  function FooterCtrl() {
+    this.currentYear = new Date().getUTCFullYear();
+  }
 
   RootCtrl.$inject = ['messageBoardService', 'navService', '$state'];
 
