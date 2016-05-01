@@ -45,5 +45,10 @@
       <a class="col-md-offset-7 btn btn-default" href="/">Cancel</a>
       <button class="btn btn-primary" ng-click="ctrl.submit(profileForm)">Submit</button>
     </div>
+    <div class="row">
+      <p class="col-sm-offset-2 col-sm-8 text-info" ng-if="ctrl.message">
+        <alert type="info"><strong>{{ctrl.message}}</strong></alert>
+      </p>
+    </div>
   </form>
 </div>

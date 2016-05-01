@@ -33,11 +33,11 @@ router.put('*', function(req, res) {
   // For PUT requests, require authentication
   if (req.session.user === undefined) {
     res.status(401).send('Unauthorized');
-  } else if (req.path === '/v1/documents' &&
-    req.query.uri.match('/api/users/') &&
-    req.query.uri.match(new RegExp('/api/users/[^(' + req.session.user.name + ')]+.json'))) {
-    // The user is try to PUT to a profile document other than his/her own. Not allowed.
-    res.status(403).send('Forbidden');
+  // } else if (req.path === '/v1/documents' &&
+  //   req.query.uri.match('/api/users/') &&
+  //   req.query.uri.match(new RegExp('/api/users/[^(' + req.session.user.name + ')]+.json'))) {
+  //   // The user is try to PUT to a profile document other than his/her own. Not allowed.
+  //   res.status(403).send('Forbidden');
   } else {
     if (req.path === '/v1/documents' && req.query.uri.match('/users/')) {
       // TODO: The user is updating the profile. Update the session info.

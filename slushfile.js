@@ -240,7 +240,11 @@ function configRoxy() {
       '          <range-value-positions>false</range-value-positions>\n' +
       '        </range-element-index>\n');
 
+    // TODO: add amps for profile and user-model
+
     fs.writeFileSync('deploy/ml-config.xml', foo);
+
+
   } catch (e) {
     console.log('failed to update configuration: ' + e.message);
   }
