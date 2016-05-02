@@ -39,7 +39,6 @@ router.get('/user/status', function(req, res) {
       headers: headers,
       auth: username + ':' + password
     }, function(response) {
-    console.log('login response : ' + response);
     if (response.statusCode === 401) {
       res.statusCode = 401;
       res.send('Unauthenticated');
