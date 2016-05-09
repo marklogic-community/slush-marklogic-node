@@ -2,6 +2,7 @@
   "name": "@sample-app-name",
   "version": "0.0.0",
   "dependencies": {
+    "jquery": "~2.1.4",
     "angular": "~1.4.4",
     "angular-bootstrap": "^1.1",
     "angular-cookies": "~1.4.4",
@@ -13,7 +14,6 @@
     "bootstrap": "~3.3.5",
     "font-awesome": "~4.4.0",
     "highlightjs":"~8.7.0",
-    "jquery": "~2.1.4",
     "lodash": "~3.10.1",
     "ml-search-ng": "~0.2.0",
     "ml-utils": "withjam/ml-utils",

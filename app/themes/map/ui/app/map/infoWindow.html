@@ -1,0 +1,14 @@
+  <div class="map-info-window" ng-class="{ isShown: parameter.showMe }">
+    <section class="heading">
+      <h4 class="window-title">{{ parameter.name }}</h4>
+    </section>
+    <section class="window-content">
+      <div class="photo" ng-if="parameter.photo"><img ng-src="images/photos/{{parameter.photo}}" ng-attr-alt="{{parameter.name}}"></div>
+      <div class="details">
+        <addr>{{ parameter.address }} - {{ parameter.city}}</addr>
+        <dl class="dl-horizontal">
+          <dt>Metadata Field 1</dt><dd>{{ parameter.field1 }}</dd>
+          <dt>Metadata Field 2</dt><dd>{{ parameter.field2 }}</dd>
+        </dl>
+      </div>
+    </section>
