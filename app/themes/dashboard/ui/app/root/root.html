@@ -1,0 +1,19 @@
+<aside class="main-sidebar">
+   <section class="sidebar" style="height: auto;">
+    <!-- search form -->
+    <form class="sidebar-form">
+      <div class="input-group">
+        <ml-input qtext="ctrl.qtext" search="ctrl.search(qtext)" suggest="ctrl.suggest(val)" template="fa" class="search"></ml-input>
+      </div>
+    </form>
+    <!-- /.search form -->
+    <!-- sidebar menu: : style can be found in sidebar.less -->
+    <ul class="sidebar-menu">
+      <li ng-repeat="link in ctrl.navService.getLinks('dashboard')" ng-class="{ active: ctrl.navService.isActive(link.state) }"><a ng-click="ctrl.navService.gotoLink(link)"><i class="fa" ng-class="link.label.navClass"></i> <span>{{ link.label.text }}</span></a></li>
+    </ul>
+  </section>
+</aside>
+
+<div class="content-wrapper" style="min-height:800px">
+  <ui-view></ui-view>
+</div>
