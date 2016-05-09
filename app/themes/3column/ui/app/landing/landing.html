@@ -1,0 +1,63 @@
+<div class="row">
+  <div class="col-sm-3">
+    <div class="panel panel-default">
+      <div class="panel-heading"><h4><strong>Helpful Links</strong><!--<small class="pull-right"><a ng-click="clearAll()">clear all</a></small>--></h4></div>
+      <div class="panel-body">
+        <div class="facet-list">
+          <div class="facet">
+            <div>
+              <h3>Guides</h3>
+              <div><a href="https://github.com/marklogic/slush-marklogic-node">Slush Generator Home</a></div>
+              <div><a href="https://github.com/marklogic/slush-marklogic-node/issues">Current Issues</a></div>
+              <div><a href="https://github.com/marklogic/slush-marklogic-node/wiki">Wiki</a></div>
+            </div>
+
+            <div>
+              <h3>Technology</h3>
+              <div><a href="http://docs.marklogic.com">MarkLogic</a></div>
+              <div><a href="https://github.com/marklogic/roxy">Roxy</a></div>
+              <div><a href="http://gulpjs.com/">Gulp</a></div>
+              <div><a href="http://expressjs.com/">ExpressJS</a></div>
+              <div><a href="https://angularjs.org/">AngularJS</a></div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-5">
+    <div class="panel panel-default">
+      <div class="panel-heading"><h1>Successful Deployment!</h1></div>
+      <div class="panel-body">
+        <p>
+        You can go check out the sample application once you've logged in! If you loaded the documents from the <em>data</em> directory via the instructions in the readme, you should also be able to <a href="/search">search</a> over the included dictionary. The application allows you to <a href="/create">create</a> various people that you can then <a href="/search">search</a>. If you fill out all the fields, you'll be able to use the built-in <em>faceting</em> and <em>typeahead</em> features!
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-4">
+    <uib-accordion close-others="false" ng-init="icons.open = true">
+
+      <uib-accordion-group is-open="icons.open">
+        <uib-accordion-heading>
+          <strong>File Icon Examples</strong>
+          <a class="pull-right"><span class="glyphicon" ng-class="{'glyphicon-chevron-down': locations.open, 'glyphicon-chevron-right': !locations.open}"></span></a>
+        </uib-accordion-heading>
+          <div class="text-center">
+            <span class="document-type-icon document-type-icon-sm" document-content-type="application/msword"></span>
+            <span class="document-type-icon document-type-icon-sm" document-content-type="application/vnd.ms-excel"></span>
+            <span class="document-type-icon document-type-icon-sm" document-content-type="application/xml"></span>
+            <span class="document-type-icon document-type-icon-sm" document-content-type="image/jpeg"></span>
+            <span class="document-type-icon document-type-icon-sm" document-content-type="image/gif"></span>
+            <span class="document-type-icon document-type-icon-sm" document-content-type="audio/mpeg"></span>
+            <span class="document-type-icon document-type-icon-sm" document-content-type="application/pdf"></span>
+            <span class="document-type-icon document-type-icon-sm" document-content-type="application/psd"></span>
+          </div>
+      </uib-accordion-group>
+
+    </uib-accordion>
+  </div>
+</div>
