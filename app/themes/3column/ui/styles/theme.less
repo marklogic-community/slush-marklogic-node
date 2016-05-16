@@ -95,6 +95,10 @@ i {
     font-size: 12px;
     color: #ff8702;
 
+    button {
+      margin-top: -4px;
+    }
+
     .welcome { margin-top: -1px; }
 
     a {
@@ -168,7 +172,7 @@ i {
 }
 
 #footer {
-  border: none;
+  border-top: 1px solid #ddd;
   height: auto;
   background-color: @primary;
   margin-top:20px;
@@ -289,6 +293,19 @@ i {
     width: 100px;
   }
 
+  .col-sm-8 {
+    background: #fff;
+    margin-top: 6px;
+    border: 1px solid #ddd;
+  }
+  
+  .tab-content {
+    border: none;
+  }
+
+  .nav-pills {
+    padding-top: 20px;
+  }
 }
 
 .map-detail {
@@ -345,24 +362,6 @@ i {
     margin-bottom: 5px;
   }
 
-  .vo-ship {
-    .label-info;
-    margin-bottom: 5px;
-    float: left;
-  }
-
-  .vo-area {
-    .label-success;
-    margin-bottom: 5px;
-    float: left;
-  }
-
-  .vo-keyword {
-    .label-warning;
-    margin-bottom: 5px;
-    float: left;
-  }
-
   .metadata {
     margin: 5px 0 0 0;
   }
@@ -401,18 +400,6 @@ form[name=profileForm] {
     border-width: 1px;
     border-color: #428bca;//#0a43d1;
     margin-right: 5px;
-  }
-
-  .vo-ship {
-    .label-info;
-  }
-
-  .vo-area {
-    .label-success;
-  }
-
-  .vo-keyword {
-    .label-warning;
   }
 
   dl.dl-horizontal {
@@ -515,20 +502,38 @@ form[name=profileForm] {
   }
 }
 
-vo-ship {
-  vo-ship-info {
-    display:none;
-  }
-    .label-info;
- }
+.right-col .facet h3 {
+  padding: 0 0 0 5px;
+}
 
-vo-area {
-  vo-area-info {
-    display:none;
+.search {
+  .facet {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    margin: 0 0 20px;
+    padding-bottom: 20px;
   }
-    .label-success;
- }
+  i {
+    font-size: inherit;
+  }
+  .col-md-9 {
+    background: #fff;
+    border: 1px solid #ddd;
+  }
+}
 
-vo-keyword {
-  .label-warning;
+.panel-group .panel {
+  border-radius: 0;
+}
+
+.top-nav.pull-right {
+    margin: 15px 95px;
+    
+    .btn {
+     margin-right: 20px;
+  }
+}
+
+.navbar .user {
+  color: #d43f3a;
 }
