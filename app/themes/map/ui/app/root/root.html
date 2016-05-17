@@ -20,7 +20,17 @@
   </div>
   <div id="logo"></div>
 
-  <div id="map-controls"><ui-view></ui-view></div>
+  <div id="map-controls" class="container">
+    <div class="row">
+      <div class="col-sm-12">
+        <ul class="nav navbar-nav">
+          <a class="btn btn-primary btn-xs" href="/">Home</a>
+          <a class="btn btn-primary btn-xs" href="/search">Search</a>
+          <a class="btn btn-primary btn-xs" href="/create">Create</a>
+        </ul>
+      </div>
+    </div>
+    <ui-view></ui-view></div>
 
   <div id="powered-by"></div>
 
