@@ -13,13 +13,13 @@
       </uib-tab>
       <uib-tab ng-if="ctrl.type!=='json'">
         <uib-tab-heading>JSON</uib-tab-heading>
-        <div class="col-sm-9">
+        <div class="col-sm-12">
           <json-explorer data="ctrl.json"></json-explorer>
         </div>
       </uib-tab>
       <uib-tab ng-if="ctrl.type==='json'">
         <uib-tab-heading >XML</uib-tab-heading>
-        <div class="col-sm-9">
+        <div class="col-sm-12">
           <pre class="pre-xml">{{ctrl.xml}}</pre>
         </div>
       </uib-tab>
