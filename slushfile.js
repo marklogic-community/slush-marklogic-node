@@ -147,7 +147,13 @@ function runRoxy(config) {
   ];
 
   console.log('Spawning Roxy new command: ' + scriptName + ' ' + args.join(' '));
-  var child = spawn(scriptName, args);
+  var child = spawn(scriptName, args, {
+    stdio: [
+      0, // Use parents stdin for child
+      'pipe', // Pipe child's stdout to parent (default)
+      'pipe' // Pipe child's stderr to parent (default)
+    ]
+  });
 
   child.on('close', function() {
     console.log('done running ml new');
@@ -208,6 +214,7 @@ function configRoxy() {
       '# There have been reported issues with dns resolution when localhost wasn\'t in the hosts file.\n' +
       '#\n' +
       'local-server=' + settings.marklogicHost + '\n' +
+      '\n' +
       '#\n' +
       '# Admin username/password that will exist on the local/dev/prod servers\n' +
       '#\n' +
@@ -242,7 +249,9 @@ function configRoxy() {
 
 gulp.task('npmInstall', ['init', 'generateSecret', 'configGulp'], function(done) {
   return gulp.src(['./package.json'])
-   .pipe(install());
+   .pipe(install({
+      args: ['--msvs_version=2013' ] // npm install --msvs_version=2013 // node-gyph depends on Visual C++ on Win
+    }));
 });
 
 gulp.task('default', ['npmInstall'], function(done) {
@@ -310,11 +319,25 @@ gulp.task('init', ['checkForUpdates'], function (done) {
     {type: 'list', name: 'mlVersion', message: 'MarkLogic version?', choices: ['8','7', '6', '5'], default: 0},
     {type: 'input', name: 'marklogicHost', message: 'MarkLogic Host?', default: 'localhost'},
     {type: 'input', name: 'marklogicAdminUser', message: 'MarkLogic Admin User?', default: 'admin'},
-    {type: 'input', name: 'marklogicAdminPass', message: '\nNote: consider keeping the following blank, ' +
-      'you will be asked to enter it at appropriate commands.\n[?] MarkLogic Admin Password?', default: ''},
+    {type: 'input', name: 'marklogicAdminPass', message: 'Note: consider keeping the following blank, ' +
+      'you will be asked to enter it at appropriate commands.\n? MarkLogic Admin Password?', default: ''},
     {type: 'input', name: 'nodePort', message: 'Node app port?', default: 9070},
     {type: 'input', name: 'appPort', message: 'MarkLogic App/Rest port?', default: 8040},
-    {type: 'input', name: 'xccPort', message: 'XCC port?', default:8041, when: function(answers){return answers.mlVersion < 8;}}
+    {type: 'input', name: 'xccPort', message: 'XCC port?', default:8041, when: function(answers){return answers.mlVersion < 8;} },
+    {type:'list', name: 'template', message: 'Select Template', choices: [
+      { name: 'default', value: 'default' },
+      { name: '3-columns', value: '3column' },
+      { name: 'Dashboard', value: 'dashboard' },
+      { name: 'Full-screen map', value: 'map' },
+      { name: 'I don\'t know', value: 'unsure' }
+    ]},
+    {type:'list', name: 'theme', message: 'What is the main focus?', when: function(ans) { return ans.template === 'unsure'; }, choices: [
+      { name: 'Semantics', value: '3column' },
+      { name: 'Charts', value: 'dashboard' },
+      { name: 'Map/Graph', value: 'map' },
+      { name: 'Documents', value: '3column' },
+      { name: 'Other', value: 'default' }
+    ]}
   ];
 
   if (typeof appName === 'undefined') {
@@ -341,6 +364,9 @@ gulp.task('init', ['checkForUpdates'], function (done) {
       .then(function() {
         // Copy over the Angular files
         var files = [__dirname + '/app/templates/**'];
+        if (answers.theme !== 'default') { // overlay the theme if not the default theme chosen
+          files.push( __dirname + '/app/themes/' + (answers.theme || answers.template) + '/**');
+        }
 
         process.chdir('./' + answers.nameDashed);
 
@@ -354,8 +380,11 @@ gulp.task('init', ['checkForUpdates'], function (done) {
             }
 
           }))
+          .pipe(replace('@slush-version', pkgSettings.version.trim(), {skipBinary:true}))
           .pipe(replace('@sample-app-name', answers.nameDashed, {skipBinary:true}))
           .pipe(replace('@sample-app-role', answers.nameDashed + '-role', {skipBinary:true}))
+          .pipe(replace('@node-port', answers.nodePort, {skipBinary:true}))
+          .pipe(replace('@ml-http-port', answers.appPort, {skipBinary:true}))
           .pipe(gulp.dest('./')) // Relative to cwd
           .on('end', function () {
             done(); // Finished!

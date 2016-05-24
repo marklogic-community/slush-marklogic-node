@@ -4,14 +4,16 @@
   angular.module('app.login')
     .factory('loginService', LoginService);
 
-  LoginService.$inject = ['$http', '$modal', '$q', '$rootScope', '$state',
+  LoginService.$inject = ['$http', '$uibModal', '$q', '$rootScope', '$state',
     '$stateParams', 'messageBoardService'];
-  function LoginService($http, $modal, $q, $rootScope, $state, $stateParams, messageBoardService) {
+  function LoginService($http, $uibModal, $q, $rootScope, $state, $stateParams, messageBoardService) {
     var _loginMode = 'full'; // 'modal', 'top-right', or 'full'
     var _loginError;
     var _toStateName;
     var _toStateParams;
     var _isAuthenticated;
+    var _protectedRoutes = [];
+    var deregisterLoginSuccess;
 
     function loginMode(mode) {
       if (mode === undefined) {
@@ -66,8 +68,8 @@
     function loginPrompt() {
       var d = $q.defer();
       if (_loginMode === 'modal') {
-        $modal.open({
-          controller: ['$modalInstance', function($modalInstance) {
+        $uibModal.open({
+          controller: ['$uibModalInstance', function($uibModalInstance) {
             var ctrl = this;
             ctrl.showCancel = $state.current.name !== 'root.landing';
             ctrl.close = function(user) {
@@ -77,7 +79,7 @@
                 d.reject();
                 $state.go('root.landing');
               }
-              return $modalInstance.close();
+              return $uibModalInstance.close();
             };
           }],
           controllerAs: 'ctrl',
@@ -114,8 +116,6 @@
       });
     }
 
-    var _protectedRoutes = [];
-
     function isAuthenticated() {
       return _isAuthenticated;
     }
@@ -146,8 +146,6 @@
         });
       }
     }
-
-    var deregisterLoginSuccess;
 
     $rootScope.$on('$stateChangeStart', function(event, next, nextParams) {
       if (next.name !== 'root.login') {

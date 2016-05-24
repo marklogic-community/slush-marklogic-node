@@ -1,5 +1,96 @@
 # Change Log
 
+## [1.0.3](https://github.com/marklogic/slush-marklogic-node/tree/1.0.3) (2016-03-10)
+[Full Changelog](https://github.com/marklogic/slush-marklogic-node/compare/1.0.2...1.0.3)
+
+**Implemented enhancements:**
+
+- Drop cookieParser [\#295](https://github.com/marklogic/slush-marklogic-node/issues/295)
+- minified build needs sourcemaps [\#268](https://github.com/marklogic/slush-marklogic-node/issues/268)
+- Upgrade npm dependencies to latest [\#200](https://github.com/marklogic/slush-marklogic-node/issues/200)
+- Fixes \#319 - Angular bootstrap directive changes [\#321](https://github.com/marklogic/slush-marklogic-node/pull/321) ([Audarth](https://github.com/Audarth))
+
+**Fixed bugs:**
+
+- variable @link-color is undefined [\#323](https://github.com/marklogic/slush-marklogic-node/issues/323)
+- Angular bootstrap directive changes [\#319](https://github.com/marklogic/slush-marklogic-node/issues/319)
+- Gulp serve-dev gives 404 in browser [\#312](https://github.com/marklogic/slush-marklogic-node/issues/312)
+- `gulp build` breaks `gulp serve-dev` [\#272](https://github.com/marklogic/slush-marklogic-node/issues/272)
+- REST API proxy doesn't support multipart requests [\#270](https://github.com/marklogic/slush-marklogic-node/issues/270)
+- Issue with proxying data to ML [\#31](https://github.com/marklogic/slush-marklogic-node/issues/31)
+
+**Merged pull requests:**
+
+- Hunterwilliams npm updates [\#305](https://github.com/marklogic/slush-marklogic-node/pull/305) ([grtjn](https://github.com/grtjn))
+- Fixed \#295: removed cookie-parser in favor of newer express-session [\#300](https://github.com/marklogic/slush-marklogic-node/pull/300) ([grtjn](https://github.com/grtjn))
+- Fixed \#31: moved bodyparsing to allow upload of non-json [\#189](https://github.com/marklogic/slush-marklogic-node/pull/189) ([grtjn](https://github.com/grtjn))
+
+## [1.0.2](https://github.com/marklogic/slush-marklogic-node/tree/1.0.2) (2016-02-29)
+[Full Changelog](https://github.com/marklogic/slush-marklogic-node/compare/1.0.1...1.0.2)
+
+**Implemented enhancements:**
+
+- gulpfile should be made more explicit [\#271](https://github.com/marklogic/slush-marklogic-node/issues/271)
+- lint/test errors shouldn't always abort the build [\#267](https://github.com/marklogic/slush-marklogic-node/issues/267)
+- Dynamic copyright year [\#296](https://github.com/marklogic/slush-marklogic-node/issues/296)
+- List slush version somewhere [\#257](https://github.com/marklogic/slush-marklogic-node/issues/257)
+- Add geospatial component [\#9](https://github.com/marklogic/slush-marklogic-node/issues/9)
+- Css update [\#282](https://github.com/marklogic/slush-marklogic-node/pull/282) ([jenbreese](https://github.com/jenbreese))
+
+**Fixed bugs:**
+
+- app-port empty by default in local.properties [\#275](https://github.com/marklogic/slush-marklogic-node/issues/275)
+- JSHint fails: 'deregisterLoginSuccess' was used before it was defined [\#307](https://github.com/marklogic/slush-marklogic-node/issues/307)
+- detail router stripping '/' from uri on page refresh [\#303](https://github.com/marklogic/slush-marklogic-node/issues/303)
+- 'marklogic-node' not found! [\#290](https://github.com/marklogic/slush-marklogic-node/issues/290)
+- Search page error: $q.resolve is not a function   [\#286](https://github.com/marklogic/slush-marklogic-node/issues/286)
+- Need to run gulp build twice [\#283](https://github.com/marklogic/slush-marklogic-node/issues/283)
+- Windows - slush marklogic-node \<app-name\> "generator issue" [\#274](https://github.com/marklogic/slush-marklogic-node/issues/274)
+- included init scripts and forever.js not working [\#269](https://github.com/marklogic/slush-marklogic-node/issues/269)
+- Less compile error should not break gulp [\#264](https://github.com/marklogic/slush-marklogic-node/issues/264)
+- Error when running gulp watch: EMFILE, readdir [\#263](https://github.com/marklogic/slush-marklogic-node/issues/263)
+- Running slush from within an existing Roxy project 'hangs' [\#262](https://github.com/marklogic/slush-marklogic-node/issues/262)
+- creating Admin user account breaks login [\#258](https://github.com/marklogic/slush-marklogic-node/issues/258)
+- Remove static links to arcgis in index.html [\#254](https://github.com/marklogic/slush-marklogic-node/issues/254)
+- Unsuitable resolution declared for angular: 1.4.6 [\#251](https://github.com/marklogic/slush-marklogic-node/issues/251)
+- Unable To Build Out of Box/Detail Controller Test Fails [\#248](https://github.com/marklogic/slush-marklogic-node/issues/248)
+- Bump Task Broken [\#247](https://github.com/marklogic/slush-marklogic-node/issues/247)
+- Npm install of browser-sync seems to break on Windows \(7\) [\#206](https://github.com/marklogic/slush-marklogic-node/issues/206)
+
+**Closed issues:**
+
+- esri JS and CSS hardcoded in index.html [\#279](https://github.com/marklogic/slush-marklogic-node/issues/279)
+- Npm install failes with nosup message [\#277](https://github.com/marklogic/slush-marklogic-node/issues/277)
+
+**Merged pull requests:**
+
+- Removed ESRI imports [\#281](https://github.com/marklogic/slush-marklogic-node/pull/281) ([daveegrant](https://github.com/daveegrant))
+- changing the icon to a minus per \#255. Also made added a link cursor … [\#256](https://github.com/marklogic/slush-marklogic-node/pull/256) ([jenbreese](https://github.com/jenbreese))
+- Version 1.0.2 [\#322](https://github.com/marklogic/slush-marklogic-node/pull/322) ([grtjn](https://github.com/grtjn))
+- Issue \#274 - added additional documentation to allow Microsoft Windows… [\#317](https://github.com/marklogic/slush-marklogic-node/pull/317) ([bluetorch](https://github.com/bluetorch))
+- Fixed \#264: added error handler to less [\#315](https://github.com/marklogic/slush-marklogic-node/pull/315) ([grtjn](https://github.com/grtjn))
+- Fixed \#307: moved var up to prevent JSHint complaint [\#314](https://github.com/marklogic/slush-marklogic-node/pull/314) ([grtjn](https://github.com/grtjn))
+- Fixed \#262: making sure stdin reaches Roxy to overcome queries from Roxy [\#313](https://github.com/marklogic/slush-marklogic-node/pull/313) ([grtjn](https://github.com/grtjn))
+- Fixed \#206: add ms visual studio flag for compiling [\#306](https://github.com/marklogic/slush-marklogic-node/pull/306) ([grtjn](https://github.com/grtjn))
+- Fix uri resolution on the detail page [\#304](https://github.com/marklogic/slush-marklogic-node/pull/304) ([patrickmcelwee](https://github.com/patrickmcelwee))
+- Fixed \#296: copyright year based on Date. getUTCFullYear [\#299](https://github.com/marklogic/slush-marklogic-node/pull/299) ([grtjn](https://github.com/grtjn))
+- Fixed \#257: addes slush-version.txt with placeholder replacement [\#297](https://github.com/marklogic/slush-marklogic-node/pull/297) ([grtjn](https://github.com/grtjn))
+- Fixed \#269: fixed init script, and added docs/scripts for server deployment [\#294](https://github.com/marklogic/slush-marklogic-node/pull/294) ([grtjn](https://github.com/grtjn))
+- Fixed \#286: more flexible angular resolution [\#293](https://github.com/marklogic/slush-marklogic-node/pull/293) ([grtjn](https://github.com/grtjn))
+- Added missing bump dependency [\#250](https://github.com/marklogic/slush-marklogic-node/pull/250) ([hunterwilliams](https://github.com/hunterwilliams))
+- Fixes \#248 detail controller test breaking build [\#249](https://github.com/marklogic/slush-marklogic-node/pull/249) ([hunterwilliams](https://github.com/hunterwilliams))
+
+## [1.0.1](https://github.com/marklogic/slush-marklogic-node/tree/1.0.1) (2015-10-13)
+[Full Changelog](https://github.com/marklogic/slush-marklogic-node/compare/1.0.0...1.0.1)
+
+**Fixed bugs:**
+
+- Spacing on highlights  [\#252](https://github.com/marklogic/slush-marklogic-node/issues/252)
+
+**Merged pull requests:**
+
+- Fixing the spacing as described in \#252 [\#253](https://github.com/marklogic/slush-marklogic-node/pull/253) ([jenbreese](https://github.com/jenbreese))
+
 ## [1.0.0](https://github.com/marklogic/slush-marklogic-node/tree/1.0.0) (2015-09-25)
 [Full Changelog](https://github.com/marklogic/slush-marklogic-node/compare/v0.1.2...1.0.0)
 
@@ -75,7 +166,6 @@
 - server.js should honor Content-Disposition and pass-through header [\#67](https://github.com/marklogic/slush-marklogic-node/issues/67)
 - Generate new \(random\) secret key for expressSession [\#64](https://github.com/marklogic/slush-marklogic-node/issues/64)
 - Glyphicon for loading suggestions shown below search box [\#40](https://github.com/marklogic/slush-marklogic-node/issues/40)
-- Issue with proxying data to ML [\#31](https://github.com/marklogic/slush-marklogic-node/issues/31)
 
 **Closed issues:**
 

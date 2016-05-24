@@ -15,7 +15,7 @@
 
     beforeEach(function() {
       bard.appModule('app.login');
-      bard.inject('$q', '$http', '$modal', '$rootScope', '$state', '$stateParams');
+      bard.inject('$q', '$http', '$uibModal', '$rootScope', '$state', '$stateParams');
 
       bard.mockService($http, {
         _default: $q.when([]),
@@ -30,7 +30,7 @@
         }
       });
 
-      bard.mockService($modal, {
+      bard.mockService($uibModal, {
         open: function() {
           modalOpened = true;
           return { result: angular.noop };
@@ -81,7 +81,7 @@
 
     beforeEach(function() {
       bard.appModule('app.login');
-      bard.inject('$q', '$http', '$modal', '$rootScope', '$state', '$stateParams');
+      bard.inject('$q', '$http', '$uibModal', '$rootScope', '$state', '$stateParams');
 
       bard.mockService($http, {
         _default: $q.when([]),
@@ -96,7 +96,7 @@
         }
       });
 
-      bard.mockService($modal, {
+      bard.mockService($uibModal, {
         open: function() {
           modalOpened = true;
           return { result: angular.noop };

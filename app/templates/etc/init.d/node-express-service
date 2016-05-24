@@ -71,7 +71,7 @@ start() {
     echo ""
     daemon --user=root \
       forever start -p $FOREVER_DIR --pidFile $PIDFILE -l $LOGFILE -o $LOGFILE \
-        -e $LOGFILE -a -d -v --sourceDir=$SOURCE_DIR $SOURCE_FILE \
+        -e $LOGFILE -a -d -v --sourceDir=$SOURCE_DIR --uid=$NAME $SOURCE_FILE \
           --app-port=$APP_PORT --ml-host=$ML_HOST --ml-port=$ML_PORT \
             --server-script=$SERVER_SCRIPT --node-env=$NODE_ENV
     RETVAL=$?
@@ -85,7 +85,7 @@ stop() {
     # Send a stop signal to forever
     echo ""
     forever stop -p $FOREVER_DIR --pidFile $PIDFILE -l $LOGFILE -o $LOGFILE \
-      -e $LOGFILE -a -d -v --sourceDir=$SOURCE_DIR $SOURCE_FILE
+      -e $LOGFILE -a -d -v --sourceDir=$SOURCE_DIR $NAME
     RETVAL=$?
     # Get rid of pid file if process was dead
     if [ -f $PIDFILE ]; then

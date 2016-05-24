@@ -46,37 +46,9 @@ Edit `./local.json` to set your desired ports
 
     gulp serve-local # this will watch the .less file for changes, compile them to .css, and run the node server
 
-# Installing as service
+# Installation and deployment on server
 
-The code includes a service script, and a service config to make installing express server service as easy as possible. The following files are involved:
-
-- etc/init.d/node-express-service (generic express server service script)
-- etc/{app}/conf.sh (application specific service configuration, any application name allowed)
-- boot.js (entry point for express service, calls out to server.js)
-- node-app.js (required by boot.js)
-
-The conf.sh is 'sourced' by the service script, and allows overriding the built-in defaults. Usually you only need to override SOURCE\_DIR, APP\_PORT, and ML\_PORT. Make sure they match the appropriate environment.
-
-Next install [forever](https://www.npmjs.com/package/forever) globally if it is not already installed.
-
-- `$ [sudo] npm install forever -g`
-
-Next, push all source files to the appropriate server. The following assumes it was dropped under /space/projects/ in a folder called slush-app.live. Take these steps to install the services:
-
-- cd /space/projects/slush-app.live
-- gulp build # this will create the ./dist/ folder with all the required assests and code
-- cd /etc
-- sudo ln -s /space/projects/slush-app.live/etc/{env} slush-app
-- cd /etc/init.d
-- sudo ln -s /space/projects/slush-app.live/etc/init.d/node-express-service slush-app
-- sudo chkconfig --add slush-app
-- sudo chkconfig --levels 2345 slush-app on
-
-Next to start it, use the following commands (from any directory):
-
-- sudo service slush-app start
-
-These services will also print usage without param, but they support info, restart, start, status, and stop. The info param is very useful to check the settings.
+See etc/INSTALL.md
 
 # Data
 
@@ -94,7 +66,6 @@ Or on Windows:
 
 ## General Data Information
 
-The application assumes that you're storing JSON data. This shows up in the
-default format request for the MLRest service's `searchContext`, the
-`detailController`'s (`detail-ctrl.js`) request to get a document, and in the
-out-of-the-box detail view.
+The application comes with a sample set of JSON data. The detail controller,
+the part that handles showing your data, can not only handle JSON, but also
+XML, Binary, and Text data out of the box.
