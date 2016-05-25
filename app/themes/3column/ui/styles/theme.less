@@ -298,7 +298,7 @@ i {
     margin-top: 6px;
     border: 1px solid #ddd;
   }
-  
+
   .tab-content {
     border: none;
   }
@@ -506,6 +506,13 @@ form[name=profileForm] {
   padding: 0 0 0 5px;
 }
 
+.border-radius(@radius){
+    .border-top-radius(@radius);
+    .border-right-radius(@radius);
+    .border-bottom-radius(@radius);
+    .border-left-radius(@radius);
+}
+
 .search {
   .facet {
     background-color: #fff;
@@ -519,16 +526,31 @@ form[name=profileForm] {
   .col-md-9 {
     background: #fff;
     border: 1px solid #ddd;
+    margin: 0 0 20px;
   }
 }
 
-.panel-group .panel {
-  border-radius: 0;
+.row {
+  [class*='col-'] {
+    .border-radius(4px);
+  }
+  [class*='facet'] {
+    .border-radius(4px);
+  }
 }
+
+.panel {
+  .border-radius(4px);
+}
+
+//removing so that file icon panel shows rounded corners
+// .panel-group .panel {
+//   border-radius: 0;
+// }
 
 .top-nav.pull-right {
     margin: 15px 95px;
-    
+
     .btn {
      margin-right: 20px;
   }
@@ -537,3 +559,5 @@ form[name=profileForm] {
 .navbar .user {
   color: #d43f3a;
 }
+
+

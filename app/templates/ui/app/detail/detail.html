@@ -8,13 +8,14 @@
           <pre ng-if="ctrl.type!=='json'" class="pre-xml">{{ctrl.xml}}</pre>
 
           <a ng-if="ctrl.type==='binary'" target="_blank" ng-href="/v1/documents?uri={{ctrl.uri}}&transform=download" class="btn btn-default">Download</a>
-
+          <p>&nbsp;</p>
         </div>
       </uib-tab>
       <uib-tab ng-if="ctrl.type!=='json'">
         <uib-tab-heading>JSON</uib-tab-heading>
         <div class="col-sm-9">
           <json-explorer data="ctrl.json"></json-explorer>
+          <p>&nbsp;</p>
         </div>
       </uib-tab>
       <uib-tab ng-if="ctrl.type==='json'">
