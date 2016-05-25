@@ -3,19 +3,17 @@
     <uib-tabset type="pills">
       <uib-tab active="true">
         <uib-tab-heading>{{ctrl.type | uppercase}}</uib-tab-heading>
-        <div class="col-sm-9">
+        <div class="col-sm-9 bottom-buffer">
           <json-explorer ng-if="ctrl.type==='json'" data="ctrl.json"></json-explorer>
           <pre ng-if="ctrl.type!=='json'" class="pre-xml">{{ctrl.xml}}</pre>
 
           <a ng-if="ctrl.type==='binary'" target="_blank" ng-href="/v1/documents?uri={{ctrl.uri}}&transform=download" class="btn btn-default">Download</a>
-          <p>&nbsp;</p>
         </div>
       </uib-tab>
       <uib-tab ng-if="ctrl.type!=='json'">
         <uib-tab-heading>JSON</uib-tab-heading>
-        <div class="col-sm-9">
+        <div class="col-sm-9 bottom-buffer">
           <json-explorer data="ctrl.json"></json-explorer>
-          <p>&nbsp;</p>
         </div>
       </uib-tab>
       <uib-tab ng-if="ctrl.type==='json'">
