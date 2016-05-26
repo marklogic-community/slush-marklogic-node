@@ -13,7 +13,9 @@
 
   function SearchCtrl($scope, $location, userService, searchFactory, mlMapManager) {
     var ctrl = this;
-    var mlSearch = searchFactory.newContext();
+    var mlSearch = searchFactory.newContext({
+        queryOptions: 'map'
+    });
 
     superCtrl.constructor.call(ctrl, $scope, $location, mlSearch);
 
