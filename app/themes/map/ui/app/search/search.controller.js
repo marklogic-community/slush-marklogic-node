@@ -13,9 +13,7 @@
 
   function SearchCtrl($scope, $location, userService, searchFactory, mlMapManager) {
     var ctrl = this;
-    var mlSearch = searchFactory.newContext({
-        queryOptions: 'map'
-    });
+    var mlSearch = searchFactory.newContext();
 
     superCtrl.constructor.call(ctrl, $scope, $location, mlSearch);
 
@@ -26,7 +24,6 @@
       var markers = [];
       for (var i =0; i < resp.results.length; i++) {
         var r = resp.results[i].extracted.content[0]; // FIXME: this should be customized to match the data coming back from search results
-        console.log(r);
         if (r.latitude && r.longitude) {
           var m = {
             latitude: r.latitude,

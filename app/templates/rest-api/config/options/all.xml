@@ -113,4 +113,9 @@
   </suggestion-source>
   -->
 
+  <!-- This will extract the latitude and longitude from the search. -->
+  <extract-document-data>
+    <extract-path>[//latitude,//longitude]</extract-path>
+  </extract-document-data>
+
 </options>
