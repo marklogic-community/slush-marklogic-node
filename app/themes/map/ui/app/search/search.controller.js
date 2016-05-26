@@ -34,7 +34,7 @@
             title: r.name,
             id: i,
             content: r,
-            icon: getCategoryIcon(r.newCategory)
+            icon: 'http://maps.google.com/mapfiles/ms/icons/orange-dot.png'
           };
           markers.push(m);
         }
