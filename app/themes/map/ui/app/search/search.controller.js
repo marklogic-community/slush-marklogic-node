@@ -24,7 +24,6 @@
       var markers = [];
       for (var i =0; i < resp.results.length; i++) {
         var r = resp.results[i].extracted.content[0]; // FIXME: this should be customized to match the data coming back from search results
-        console.log(r);
         if (r.latitude && r.longitude) {
           var m = {
             latitude: r.latitude,
@@ -32,7 +31,7 @@
             title: r.name,
             id: i,
             content: r,
-            icon: getCategoryIcon(r.newCategory)
+            icon: 'http://maps.google.com/mapfiles/ms/icons/orange-dot.png'
           };
           markers.push(m);
         }
