@@ -1,23 +1,31 @@
 (function () {
-    var app = angular.module('app');
+  'use strict';
 
-    app.service('mlMapManager', MapManager);
+  var app = angular.module('app');
 
-    function MapManager() {
-      var service = {};
+  app.service('mlMapManager', MapManager);
 
-      service.markers = [];
+  function MapManager() {
+    var service = {};
 
-      service.setMarkers = function(m) {
-        // replace our markers
-        service.markers = m;
-      }
+    service.markers = [];
+    service.bounds = null;
 
-      service.addMarkers = function(m) {
-        // add these markers to our copy
-        service.markers = service.markers.concat(m);
-      }
+    service.setMarkers = function(m) {
+      // replace our markers
+      service.markers = m;
+    };
 
-      return service;
-    }
+    service.addMarkers = function(m) {
+      // add these markers to our copy
+      service.markers = service.markers.concat(m);
+    };
+
+    service.setBounds = function(b) {
+      // replace current bounds
+      service.bounds = b;
+    };
+
+    return service;
+  }
 })();
