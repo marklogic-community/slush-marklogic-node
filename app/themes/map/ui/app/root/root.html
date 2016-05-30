@@ -1,3 +1,23 @@
+<nav class="navbar navbar-default navbar-fixed-top nav" role="navigation">
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#sidebar" ng-click="ctrl.toggleControls()">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="/"><h1 id="logo">Sample App</h1></a>
+  </div>
+  <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    <ul class="nav navbar-nav"> 
+      <li><a href="/">Home</a></li>
+      <li><a href="/search">Search</a></li>
+      <li><a href="/create">Create</a></li>
+    </ul>
+    <ml-user mode="inline"></ml-user>
+  </div><!-- /.navbar-collapse -->
+</nav>
+
 <div>
   <ui-gmap-google-map center="ctrl.map.center" zoom="ctrl.map.zoom" draggable="true" options="ctrl.options" bounds="ctrl.map.bounds" events="ctrl.map.events">
     <ui-gmap-markers models="ctrl.markers" coords="'self'" icon="'icon'" fit="false" click="ctrl.markerClick">
@@ -8,36 +28,20 @@
             templateUrl='ctrl.infoWindow.templateUrl'
             templateParameter='ctrl.infoWindow.data'
             options='ctrl.infoWindow.options'
-            closeClick='ctrl.closeClick'
-            >
+            closeClick='ctrl.closeClick'>
     </ui-gmap-window>
   </ui-gmap-google-map>
-
-  </div>
-
-  <div id="hamburger" ng-click="ctrl.toggleControls()">
-    <span class="glyphicon glyphicon-menu-hamburger"></span>
-  </div>
-  <div id="logo"></div>
-
-  <div id="map-controls" class="container">
-    <div class="row">
-      <div class="col-sm-12">
-        <ul class="nav navbar-nav">
-          <a class="btn btn-primary btn-xs" href="/">Home</a>
-          <a class="btn btn-primary btn-xs" href="/search">Search</a>
-          <a class="btn btn-primary btn-xs" href="/create">Create</a>
-          <a class="btn btn-primary btn-xs" href="/profile">Profile</a>
-          <a ng-click="topnav.logout()" class="btn btn-danger btn-xs">Logout</a>
-        </ul>
-      </div>
-    </div>
-    <ui-view></ui-view></div>
-
-  <div id="powered-by"></div>
-
-  <div id="mobile-info-window"></div>
-
-  <div id="map-copyright">Copyright <sup>&copy;</sup> {{ ctrl.currentYear }} MarkLogic Corporation. MARKLOGIC <sup>&reg;</sup> is a registered trademark of MarkLogic Corporation.</div>
-
 </div>
+<!-- Add your site or application content here -->
+<div id="sidebar">
+  <div id="map-controls" class="container">
+    <ui-view></ui-view>
+  </div>
+</div>
+
+<footer id="footer" class="powered-by">
+  <div class="copyright text-muted">
+    Copyright <sup>&copy;</sup> {{ ctrl.currentYear }} MarkLogic Corporation. MARKLOGIC <sup>&reg;</sup> is a registered trademark of MarkLogic Corporation.
+  </div>
+</footer>
+
