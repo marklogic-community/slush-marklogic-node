@@ -19,7 +19,7 @@
     <!-- endbuild -->
 
   </head>
-  <body ng-app="app" class="skin-black">
+  <body ng-app="app" class="skin-black sidebar-mini sidebar-open">
 
     <div class="wrapper">
       <header class="main-header">
@@ -33,6 +33,9 @@
         </a>
 
         <nav class="navbar navbar-static-top" role="navigation" ng-controller="topnavCtrl as topnav" ng-cloak>
+          <a class="sidebar-toggle" role="button" data-toggle="offcanvas" href="#" ng-click="topnav.toggleSidebar()">
+            <span class="sr-only">Toggle navigation</span>
+          </a>
           <!-- Navbar Right Menu -->
           <div class="navbar-custom-menu">
             <ul class="nav navbar-nav" ng-if="!topnav.currentUser">

@@ -1,4 +1,5 @@
 (function () {
+  'use strict';
 
   var app = angular.module('app');
 
@@ -50,9 +51,11 @@
       };
 
       service.toXSDateTime = function(jsDate) {
-        if (!jsDate) return;
+        if (!jsDate) {
+          return;
+        }
         var xsd = jsDate.toISOString();
-        return xsd.slice(0,-1);
+        return xsd.slice(0, -1);
         //xsd += '+' + (jsDate.getTimezoneOffset() / 60) + ':00';
         //return xsd;
       };
@@ -69,15 +72,24 @@
       return service;
     }
 
-    TopNavCtrl.$injector = ['$scope', 'userService'];
-    function TopNavCtrl($scope, userService) {
-      var ctrl = this;
+  TopNavCtrl.$injector = ['$scope', 'userService', '$document'];
 
-      ctrl.currentUser = userService.getUser();
+  function TopNavCtrl($scope, userService, $document) {
+    var ctrl = this;
 
-      $scope.$watch(userService.currentUser, function(newValue) {
-        ctrl.currentUser = newValue;
-      });
-    }
+    ctrl.currentUser = userService.getUser();
+
+    $scope.$watch(userService.currentUser, function(newValue) {
+      ctrl.currentUser = newValue;
+    });
+
+    ctrl.toggleSidebar = function() {
+      var body = angular.element($document[0].body);
+      var states = { collapsed: 'sidebar-collapse', open: 'sidebar-open' };
+      var collapsed = body.hasClass(states.collapsed);
+      body.removeClass(collapsed ? states.collapsed : states.open);
+      body.addClass(collapsed ? states.open : states.collapsed);
+    };
+  }
 
 })();
