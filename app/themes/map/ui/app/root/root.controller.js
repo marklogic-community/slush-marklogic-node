@@ -124,6 +124,14 @@
     $scope.$watch(function() { return mlMapManager.markers; }, function(newVal) {
       ctrl.markers = newVal;
     });
+    
+    // watch for changes to the center of the map
+    $scope.$watch(function() { return mlMapManager.center; }, function(center) {
+      if(center) {
+        ctrl.map.center.latitude = center.latitude;
+        ctrl.map.center.longitude = center.longitude;
+      }
+    });
 
     ctrl.markerClick = function(inst,evt,marker) {
       if (!pixelOffset) {
@@ -190,5 +198,11 @@
     $timeout(function() {
       resetMap = false;
     }, 2000);
+    
+    //close info window if the user navigates to a different page
+    $rootScope.$on('$stateChangeStart', 
+      function(event, toState, toParams, fromState, fromParams){ 
+    	ctrl.infoWindow.shown = false;
+	});
   }
 }());
