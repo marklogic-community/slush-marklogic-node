@@ -3,8 +3,8 @@
   angular.module('app.detail')
   .controller('DetailCtrl', DetailCtrl);
 
-  DetailCtrl.$inject = ['doc', '$stateParams'];
-  function DetailCtrl(doc, $stateParams) {
+  DetailCtrl.$inject = ['doc', '$stateParams', 'mlMapManager'];
+  function DetailCtrl(doc, $stateParams, mlMapManager) {
     var ctrl = this;
 
     var uri = $stateParams.uri;
@@ -36,10 +36,31 @@
       ctrl.xml = 'Error occured determining document type.';
       ctrl.json = {'Error' : 'Error occured determining document type.'};
     }
+    
+    ctrl.showMarker = function(latitude, longitude, content, name) {
+		var markers = [];
+		var m = {
+	        latitude: latitude,
+	        longitude: longitude,
+	        title: name,
+	        id: 1,
+	        content: content,
+	        icon: 'images/green-dot-marker.png'
+	    };
+		markers.push(m);
+		mlMapManager.setMarkers(markers);
+		mlMapManager.setCenter(latitude, longitude);
+    };
 
     angular.extend(ctrl, {
       doc : doc.data,
       uri : uri
     });
+    
+    if(ctrl.type === 'json' || ctrl.type === 'xml') {
+    	//note that this should be matched with the exact data
+    	ctrl.showMarker(ctrl.json.location.latitude, ctrl.json.location.longitude, 
+    			ctrl.json, ctrl.json.name);
+    }
   }
 }());

@@ -124,15 +124,27 @@
     $scope.$watch(function() { return mlMapManager.markers; }, function(newVal) {
       ctrl.markers = newVal;
     });
+    
+    // watch for changes to the center of the map
+    $scope.$watch(function() { return mlMapManager.center; }, function(center) {
+      if(center) {
+        ctrl.map.center.latitude = center.latitude;
+        ctrl.map.center.longitude = center.longitude;
+      }
+    });
 
     ctrl.markerClick = function(inst,evt,marker) {
       if (!pixelOffset) {
         pixelOffset = new google.maps.Size(0, -30);
         ctrl.infoWindow.options = { pixelOffset: pixelOffset };
       }
+      
+      var lat = inst.getPosition().lat() + 20;
+      var lng = inst.getPosition().lng();
+      var position = new google.maps.LatLng(lat, lng, true);
 
       if (! marker.content) {
-        inst.map.setCenter(inst.getPosition());
+        inst.map.setCenter(position);
       } else if (rootUtils.isMobile()) {
         if (!mobileWin) {
           mobileWin = new google.maps.InfoWindow({ content: '<span>' + marker.title + '</span>' });
@@ -154,7 +166,7 @@
         miwscope.parameter = marker.content;
         miwscope.parameter.showMe = shown;
         shownMarker = marker.title;
-        inst.map.setCenter(inst.getPosition());
+        inst.map.setCenter(position);
 
       } else {
 
@@ -168,7 +180,8 @@
           };
           ctrl.infoWindow.shown = true;
           ctrl.infoWindow.data = marker.content;
-          inst.map.setCenter(inst.getPosition());
+          
+          inst.map.setCenter(position);
         }
       }
     };
@@ -185,5 +198,11 @@
     $timeout(function() {
       resetMap = false;
     }, 2000);
+    
+    //close info window if the user navigates to a different page
+    $rootScope.$on('$stateChangeStart', 
+      function(event, toState, toParams, fromState, fromParams){ 
+    	ctrl.infoWindow.shown = false;
+	});
   }
 }());
