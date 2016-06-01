@@ -69,12 +69,22 @@
         $state.go(link.state);
       };
 
+      service.state = true;
+
+      service.toggleSidebar = function () {
+        service.state = !service.state;
+      };
+
+      service.getState = function () {
+        return service.state;
+      };
+
       return service;
     }
 
-  TopNavCtrl.$injector = ['$scope', 'userService', '$document'];
+  TopNavCtrl.$injector = ['$scope', 'userService', '$document', 'navService'];
 
-  function TopNavCtrl($scope, userService, $document) {
+  function TopNavCtrl($scope, userService, $document, navService) {
     var ctrl = this;
 
     ctrl.currentUser = userService.getUser();
@@ -84,11 +94,7 @@
     });
 
     ctrl.toggleSidebar = function() {
-      var body = angular.element($document[0].body);
-      var states = { collapsed: 'sidebar-collapse', open: 'sidebar-open' };
-      var collapsed = body.hasClass(states.collapsed);
-      body.removeClass(collapsed ? states.collapsed : states.open);
-      body.addClass(collapsed ? states.open : states.collapsed);
+      navService.toggleSidebar();
     };
   }
 
