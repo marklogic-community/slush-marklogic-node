@@ -18,10 +18,6 @@ i {
   font-size:16px;
 }
 
-.nav > li > a {
-  color:#787878;
-}
-
 /* count indicator near icons */
 .nav>li .count {
   position: absolute;
@@ -58,16 +54,29 @@ i {
 
   &.navbar-default {
     background-color: #FFF;
+
+    .nav > li > a {
+      color: #ffffff;
+      margin-right: 20px;
+      .btn;
+      .btn-success;
+      .btn-sm
+    }
   }
 
   .navbar-brand {
-    background-image: url(/images/marklogic.png);
-    background-repeat: no-repeat;
-    background-position-y: 0px;
-    background-position-x: 0px;
-    background-size: 200px auto;
-    margin: 10px 0 0 16px;
-    width: 215px;
+    padding: 5px 10px 0 16px;
+
+    #logo {
+      background-image: url(/images/marklogic.png);
+      background-repeat: no-repeat;
+      background-position-y: 0px;
+      background-position-x: 0px;
+      background-size: 200px auto;
+      margin: 5px 0 0 0px;
+      width: 215px;
+      height: inherit;
+    }
   }
 
   .navbar-form .form-control {
@@ -109,8 +118,6 @@ i {
 
     .navbar-form { margin-top: 34px; }
   }
-
-
 }
 
 .panel {
@@ -179,6 +186,10 @@ i {
   padding-top:20px;
   padding-bottom:20px;
   color: #000;
+
+  .social-links {
+    display: none;
+  }
 
   .powered {
     background-image: url(/images/PoweredByMarkLogic.png);
@@ -429,79 +440,6 @@ form[name=profileForm] {
     }
 }
 
-.spinner {
-  display: inline-block;
-  opacity: 0;
-  width: 0;
-
-  -webkit-transition: opacity 0.25s, width 0.25s;
-  -moz-transition: opacity 0.25s, width 0.25s;
-  -o-transition: opacity 0.25s, width 0.25s;
-  transition: opacity 0.25s, width 0.25s;
-}
-
-.has-spinner.active {
-  cursor:progress;
-}
-
-.has-spinner.active .spinner {
-  opacity: 1;
-  width: auto; /* This doesn't work, just fix for unkown width elements */
-}
-
-.has-spinner.btn-mini.active .spinner {
-    width: 10px;
-}
-
-.has-spinner.btn-small.active .spinner {
-    width: 13px;
-}
-
-.has-spinner.btn.active .spinner {
-    width: 16px;
-}
-
-.has-spinner.btn-large.active .spinner {
-    width: 19px;
-}
-
-.icon-spin {
-  -webkit-animation: spin 1.5s infinite linear;
-  -moz-animation: spin 1.5s infinite linear;
-  -o-animation: spin 1.5s infinite linear;
-  animation: spin 1.5s infinite linear;
-     -webkit-transform-origin: 50% 50%;
-         transform-origin:50% 50%;
-         -ms-transform-origin:50% 50%; /* IE 9 */
-}
-
-@-moz-keyframes spin {
-  from {
-    -moz-transform: rotate(0deg);
-  }
-  to {
-    -moz-transform: rotate(360deg);
-  }
-}
-
-@-webkit-keyframes spin {
-  from {
-    -webkit-transform: rotate(0deg);
-  }
-  to {
-    -webkit-transform: rotate(360deg);
-  }
-}
-
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 .right-col .facet h3 {
   padding: 0 0 0 5px;
 }
@@ -548,12 +486,8 @@ form[name=profileForm] {
 //   border-radius: 0;
 // }
 
-.top-nav.pull-right {
-    margin: 15px 95px;
-
-    .btn {
-     margin-right: 20px;
-  }
+.navbar-nav {
+  margin: 15px 95px;
 }
 
 .navbar .user {
