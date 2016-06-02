@@ -53,7 +53,7 @@
       newMarkers.push(m);
       mlMapManager.setMarkers('detail', newMarkers);
       mlMapManager.markerMode = 'detail';
-      mlMapManager.center({ latitude: latitude, longitude: longitude });
+      mlMapManager.center = { latitude: latitude, longitude: longitude };
     };
 
     angular.extend(ctrl, {
