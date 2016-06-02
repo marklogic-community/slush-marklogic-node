@@ -1,23 +1,41 @@
 (function () {
-    var app = angular.module('app');
+  'use strict';
 
-    app.service('mlMapManager', MapManager);
+  var app = angular.module('app');
 
-    function MapManager() {
-      var service = {};
+  app.service('mlMapManager', MapManager);
 
-      service.markers = [];
+  function MapManager() {
+    var service = {};
 
-      service.setMarkers = function(m) {
-        // replace our markers
-        service.markers = m;
+    service.markers = [];
+    service.bounds = null;
+    service.center = null;
+
+    service.setMarkers = function(m) {
+      // replace our markers
+      service.markers = m;
+    };
+
+    service.addMarkers = function(m) {
+      // add these markers to our copy
+      service.markers = service.markers.concat(m);
+    };
+
+    service.setBounds = function(b) {
+      // replace current bounds
+      service.bounds = b;
+    };
+    
+    service.setCenter = function(latitude, longitude) {
+	  // replace the center of the map
+      var center = {
+        latitude: latitude,
+        longitude: longitude
       }
+      service.center = center;
+    };
 
-      service.addMarkers = function(m) {
-        // add these markers to our copy
-        service.markers = service.markers.concat(m);
-      }
-
-      return service;
-    }
+    return service;
+  }
 })();

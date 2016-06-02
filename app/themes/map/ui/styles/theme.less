@@ -15,18 +15,11 @@ body, html {
     margin-right: auto;
 }
 
-#logo {
-  position: absolute;
-  top: 0;
-  left: 0;
-  background-image: url('../images/cendris-logo.png');
-  background-size: contain;
-  width: 60%;
-  height: 38%;
-  max-height: 90px;
-  max-width: 235px;
+h1#logo {
+  width: 100%;
   background-repeat: no-repeat;
   z-index: 600;
+  margin: 0px;
 }
 
 #map-controls {
@@ -85,7 +78,7 @@ body, html {
 
     img { width: 100%; height: auto; margin-top: 10px; }
   }
-  .details { display: inline-block; width: 50%; margin-left: 1%}
+  .details { display: inline-block; margin-left: 1%}
 
   addr { display: block; font-weight: bold; padding: 5px 0; }
 
@@ -95,34 +88,12 @@ body, html {
   }
 }
 
-#powered-by {
-  display: block;
-  position: fixed;
-  top: 6px;
-  right: 0;
-  background-image: url('../images/MarkLogic-Powered-By.png');
-  background-repeat: no-repeat;
-  background-size: contain;
-  width: 23%;
-  height: 23%;
-  max-width: 99px;
-  max-height: 34px;
-  z-index: 500;
-}
-
-#mobile-info-window { display: none; }
-
-#hamburger { display: none; }
-
 @media(max-width: 992px) {
 
   #logo { left: 25px; }
 
   #hamburger {
     display: block;
-    position: absolute;
-    top: 24px;
-    left: 10px;
     font-size: 1.5em;
   }
 
@@ -133,65 +104,10 @@ body, html {
       margin-top: -25px;
     }
   }
-
-  #mobile-info-window {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    height: 0;
-    display: block;
-
-    .info-window {
-      position: relative;
-      margin-top: -250px;
-      height: 250px;
-      background-color: #FFF;
-      width: 100%;
-      z-index: 600;
-      overflow: auto;
-      display: none;
-
-      &.isShown {
-        display: block;
-      }
-
-      .photo {
-        position: absolute;
-        right: 15px;
-        top: 65px;
-        z-index: 599;
-      }
-
-      .heading {
-        position: fixed;
-        bottom: 222px;
-        width: 100%;
-        z-index: 600;
-      }
-
-      .window-content {
-        padding-top: 31px;
-
-        .details { width: 100%; }
-        .dl-horizontal dt { width: 50%; }
-      }
-    }
-  }
-}
-
-#map-copyright { 
-  background-color: #f0f8ff;
-  color: #333; 
-  font-size: .8em; 
-  margin-left: 100px; 
-  position: fixed; 
-  bottom: 1px; 
-  padding: 0 5px;
 }
 
 #map-controls {
-  max-height: 75%;
+  max-height: 85%;
   overflow: scroll;
   background-color: #ffffff;
   padding: 10px;
@@ -214,4 +130,49 @@ body, html {
   font-weight: normal;
   padding: 10px;
   margin: 10px 15px;
+}
+
+a.navbar-brand {
+  width: 100px;
+  padding: 5px;
+  height: 20px;
+}
+
+nav.navbar {
+  padding: 5px 20px;
+  min-height: 20px;
+}
+
+nav > .navbar-collapse > .navbar-nav > li > a {
+  padding: 5px;
+}
+
+.navbar-toggle {
+  display: block;
+  margin: 0px 5px;
+  padding: 6px;
+}
+
+nav .welcome {
+  margin-top: 5px;
+}
+
+.powered-by {
+  background: url(/images/MarkLogic-Powered-By.png) no-repeat transparent;
+  background-size: 80px;
+  border-top: 0px;
+  padding: 5px;
+}
+
+.search .facet h3 {
+  padding-top: 0px;
+}
+
+.gm-style-iw {
+  overflow: auto !important;
+  max-height:300px;
+}
+
+footer {
+  position: fixed;
 }
