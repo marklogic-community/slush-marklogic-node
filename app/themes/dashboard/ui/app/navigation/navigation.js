@@ -82,9 +82,9 @@
       return service;
     }
 
-  TopNavCtrl.$injector = ['$scope', 'userService', '$document', 'navService'];
+  TopNavCtrl.$injector = ['$scope', 'userService', '$document', 'navService', 'loginService'];
 
-  function TopNavCtrl($scope, userService, $document, navService) {
+  function TopNavCtrl($scope, userService, $document, navService, loginService) {
     var ctrl = this;
 
     ctrl.currentUser = userService.getUser();
@@ -95,6 +95,10 @@
 
     ctrl.toggleSidebar = function() {
       navService.toggleSidebar();
+    };
+
+    ctrl.logout = function() {
+      loginService.logout();
     };
   }
 
