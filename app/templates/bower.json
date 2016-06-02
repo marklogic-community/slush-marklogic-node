@@ -20,7 +20,7 @@
     "ng-json-explorer": "8c2a0f9104",
     "vkbeautify-wrapper": "*",
     "highcharts": "^4.2",
-    "angular-google-maps": "^2.2",
+    "angular-google-maps": "2.3.2",
     "angular-component.js": "^0.0.8",
     "ngToast": "ngtoast#^2.0.0",
     "angular-animate": "^1.5.5"
