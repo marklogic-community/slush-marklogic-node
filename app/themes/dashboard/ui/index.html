@@ -19,11 +19,10 @@
     <!-- endbuild -->
 
   </head>
-  <body ng-app="app" class="skin-black sidebar-mini" ng-controller="SidebarController" sidebar-directive="sidebarState">
+  <body ng-app="app">
     <toast></toast>
-    <div class="wrapper">
+    <div ng-class="sidebarClass" ng-controller="SidebarController">
       <header class="main-header">
-
         <!-- Logo -->
         <a ui-sref="root.landing" class="logo">
           <!-- mini logo for sidebar mini 50x50 pixels -->
