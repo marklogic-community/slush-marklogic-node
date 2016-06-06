@@ -37,7 +37,7 @@
       ctrl.xml = 'Error occured determining document type.';
       ctrl.json = {'Error' : 'Error occured determining document type.'};
     }
-    
+
     ctrl.showMarker = function(latitude, longitude, content, name) {
       var newMarkers = [];
       var m = {
@@ -60,7 +60,7 @@
       doc : doc.data,
       uri : uri
     });
-    
+
     if (ctrl.type === 'json' || ctrl.type === 'xml') {
       //note that this should be matched with the exact data
       ctrl.showMarker(ctrl.json.location.latitude, ctrl.json.location.longitude,

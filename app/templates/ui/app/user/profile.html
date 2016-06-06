@@ -1,4 +1,4 @@
-<div ng-if="ctrl.user">
+<div ng-if="ctrl.user" class="profile">
   <div class="row">
     <div class="col-md-2"></div>
     <h2 class="col-md-10">Edit your profile</h2>
@@ -6,7 +6,9 @@
   <form class="form-horizontal" name="profileForm">
     <div class="form-group">
       <div class="row">
-        <label class="col-md-2 control-label">Full name</label>
+        <div class="col-md-2">
+          <label class="control-label">Full name</label>
+        </div>
         <div class="col-md-2">
           <input type="text" class="form-control" placeholder="full name of user" ng-model="ctrl.user.fullname">
         </div>
@@ -15,7 +17,9 @@
     <div class="form-group">
       <!-- show empty field if no emails yet -->
       <div class="row">
-        <label class="col-md-2 control-label">E-mail(s)</label>
+        <div class="col-md-2">
+          <label class="control-label">E-mail(s)</label>
+        </div>
         <div class="col-md-6">
           <input type="email" name="newEmail" class="form-control" placeholder="e-mail of user" ng-model="ctrl.newEmail">
         </div>
@@ -26,7 +30,7 @@
         </div>
       </div>
       <div class="row valid-email">
-        <div class="col-md-offset-2 col-md-6 error text-danger" ng-if="profileForm.newEmail.$error.email">Not valid email!</div>
+        <div class="col-md-offset-2 col-md-6 error bg-danger" ng-if="profileForm.newEmail.$error.email">Not valid email!</div>
       </div>
       <!-- always show add button -->
       <!-- repeat if there are emails -->
@@ -42,8 +46,10 @@
       </div>
     </div>
     <div class="row">
-      <a class="col-md-offset-7 btn btn-default" href="/">Cancel</a>
-      <button class="btn btn-primary" ng-click="ctrl.submit(profileForm)">Submit</button>
+      <div class="col-md-offset-7 col-md-5">
+        <a class="btn btn-default" href="/">Cancel</a>
+        <button class="btn btn-primary" ng-click="ctrl.submit(profileForm)">Submit</button>
+      </div>
     </div>
   </form>
 </div>

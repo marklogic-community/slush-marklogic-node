@@ -41,7 +41,9 @@
     };
 
     service.isActive = function(stateName, areaName) {
-      return (areaName) ? activeLabel.area === areaName && active === stateName : active === stateName;
+      return (areaName) ?
+        activeLabel.area === areaName && active === stateName :
+          active === stateName;
     };
 
     service.getLinks = function(area) {

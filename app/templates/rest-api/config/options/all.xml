@@ -100,7 +100,6 @@
       <lon ns="" name="longitude"/>
       <geo-option>boundaries-included</geo-option>
       <geo-option>score-function=reciprocal</geo-option>
-      <facet-option>empties</facet-option>
       <heatmap s="-90" w="-180" n="90" e="180" latdivs="4" londivs="4"/>
     </geo-elem-pair>
   </constraint>

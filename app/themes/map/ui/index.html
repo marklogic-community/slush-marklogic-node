@@ -36,9 +36,23 @@
     <!-- inject:templates:js -->
     <!-- endinject -->
     <!-- endbuild -->
+
     <script>
       // add the map module dependency
       angular.module('app').requires.push('uiGmapgoogle-maps');
+      
+      angular.module('app')
+      .config(['uiGmapGoogleMapApiProvider', function(uiGmapGoogleMapApiProvider) {
+        var libs = uiGmapGoogleMapApiProvider.options.libraries;
+        if (libs === "") {
+          libs = "drawing";
+        } else {
+          libs = libs.split(',').push('drawing').join(',');
+        }
+        uiGmapGoogleMapApiProvider.configure({
+          libraries: libs
+        });
+      }]);
     </script>
 
   </body>
