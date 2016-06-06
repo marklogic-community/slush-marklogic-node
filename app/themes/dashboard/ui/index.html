@@ -20,8 +20,9 @@
 
   </head>
   <body ng-app="app">
-    <toast></toast>
+
     <div ng-class="sidebarClass" ng-controller="SidebarController">
+      <toast></toast>
       <header class="main-header">
         <!-- Logo -->
         <a ui-sref="root.landing" class="logo">
@@ -52,6 +53,12 @@
                 <a ui-sref="root.search">
                   <i class="fa fa-search"></i>
                   Search
+                </a>
+              </li>
+              <li>
+                <a ui-sref="root.create">
+                  <i class="fa fa-create"></i>
+                  Create
                 </a>
               </li>
               <li class="dropdown user user-menu">
