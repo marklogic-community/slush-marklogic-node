@@ -69,22 +69,18 @@
         $state.go(link.state);
       };
 
-      service.state = true;
+      service.showSidebar = true;
 
       service.toggleSidebar = function () {
-        service.state = !service.state;
-      };
-
-      service.getState = function () {
-        return service.state;
+        service.showSidebar = !service.showSidebar;
       };
 
       return service;
     }
 
-  TopNavCtrl.$injector = ['$scope', 'userService', '$document', 'navService', 'loginService'];
+  TopNavCtrl.$injector = ['$scope', 'userService', '$document', 'loginService'];
 
-  function TopNavCtrl($scope, userService, $document, navService, loginService) {
+  function TopNavCtrl($scope, userService, $document, loginService) {
     var ctrl = this;
 
     ctrl.currentUser = userService.getUser();
@@ -92,10 +88,6 @@
     $scope.$watch(userService.currentUser, function(newValue) {
       ctrl.currentUser = newValue;
     });
-
-    ctrl.toggleSidebar = function() {
-      navService.toggleSidebar();
-    };
 
     ctrl.logout = function() {
       loginService.logout();
