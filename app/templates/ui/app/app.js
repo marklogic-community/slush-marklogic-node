@@ -17,8 +17,7 @@
     'ui.bootstrap',
     'ui.router',
     'ui.tinymce',
-    'ngToast',
-    'ngSanitize'
+    'ngToast'
   ]);
 
 }());

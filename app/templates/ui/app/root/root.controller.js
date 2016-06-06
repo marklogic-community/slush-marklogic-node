@@ -11,10 +11,8 @@
     ctrl.currentYear = new Date().getUTCFullYear();
     ctrl.messageBoardService = messageBoardService;
 
-    $scope.user = userService;
-
-    $scope.$watch('user.authenticated', function(newVal) {
-      // do things that you care about
+    $scope.$watch(userService.currentUser, function(newValue) {
+      ctrl.currentUser = newValue;
     });
   }
 }());

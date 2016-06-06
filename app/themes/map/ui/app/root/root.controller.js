@@ -37,12 +37,19 @@
     return service;
   }
 
-  RootCtrl.$inject = ['messageBoardService', '$rootScope', '$scope','$templateRequest', '$compile', 'rootUtils', 'MLUiGmapManager'];
+  RootCtrl.$inject = ['messageBoardService', 'userService', '$scope',
+    '$rootScope', '$templateRequest', '$compile', 'rootUtils', 'MLUiGmapManager'];
 
-  function RootCtrl(messageBoardService, $rootScope, $scope, $templateRequest, $compile, rootUtils, mlMapManager) {
+  function RootCtrl(messageBoardService, userService, $scope,
+    $rootScope, $templateRequest, $compile, rootUtils, mlMapManager) {
+
     var ctrl = this;
-    ctrl.messageBoardService = messageBoardService;
     ctrl.currentYear = new Date().getUTCFullYear();
+    ctrl.messageBoardService = messageBoardService;
+
+    $scope.$watch(userService.currentUser, function(newValue) {
+      ctrl.currentUser = newValue;
+    });
 
     var miw = window.jQuery('#app-mobile-info-window').get(0); // FIXME: use angular.element?
     var miwscope = $rootScope.$new(), mobileWin;
