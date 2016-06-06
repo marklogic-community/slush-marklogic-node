@@ -12,7 +12,7 @@
     "angular-ui-tinymce": "~0.0.9",
     "angular-x2js": "https://github.com/janmichaelyu/angular-x2js.git",
     "bootstrap": "~3.3.5",
-    "font-awesome": "~4.4.0",
+    "font-awesome": "~4.6.0",
     "highlightjs":"~8.7.0",
     "lodash": "~3.10.1",
     "ml-search-ng": "~0.2.0",
