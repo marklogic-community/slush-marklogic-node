@@ -37,35 +37,24 @@
     return service;
   }
 
-  RootCtrl.$inject = ['messageBoardService', '$rootScope', '$scope','$templateRequest', '$compile', 'rootUtils', 'mlMapManager', '$timeout'];
+  RootCtrl.$inject = ['messageBoardService', '$rootScope', '$scope','$templateRequest', '$compile', 'rootUtils', 'MLUiGmapManager'];
 
-  function RootCtrl(messageBoardService, $rootScope, $scope, $templateRequest, $compile, rootUtils, mlMapManager, $timeout) {
+  function RootCtrl(messageBoardService, $rootScope, $scope, $templateRequest, $compile, rootUtils, mlMapManager) {
     var ctrl = this;
     ctrl.messageBoardService = messageBoardService;
     ctrl.currentYear = new Date().getUTCFullYear();
 
-    var miw = window.jQuery('#app-mobile-info-window').get(0);
+    var miw = window.jQuery('#app-mobile-info-window').get(0); // FIXME: use angular.element?
     var miwscope = $rootScope.$new(), mobileWin;
-    var pixelOffset,shownMarker,boundsChanging,resetMap = true;
+    var pixelOffset,shownMarker;
 
-    var initCenterLat = 52.0325133;
-    var initCenterLng = 5.2289087;
-    var initZoom = 2;
-    var initBounds = {
-      southwest: {
-        latitude: null,
-        longitude: null
-      },
-      northeast: {
-        latitude: null,
-        longitude: null
-      }
-    };
+    ctrl.mapManager = mlMapManager;
 
     ctrl.isMobile = rootUtils.isMobile();
 
     if (ctrl.isMobile) {
       // compile the info window template
+      // FIXME: can we use ng-include somehow? or the compile directive?
       $templateRequest('app/map/infoWindow.html').then(function(html) {
         var fn = $compile(html);
         var ele = fn(miwscope);
@@ -73,72 +62,14 @@
       });
     }
 
-    ctrl.map = {
-      center: {
-        latitude: initCenterLat,
-        longitude: initCenterLng
-      },
-      zoom: initZoom,
-      bounds: initBounds,
-      events: {
-        bounds_changed: function() {
-          // Compensate rapid firing of multiple bounds_changed events in sequence
-          if (!boundsChanging) {
-            boundsChanging = true;
-            $timeout(function () {
-              boundsChanging = false;
-              if (!resetMap && ctrl.map.bounds.southwest.latitude) {
-                mlMapManager.setBounds(ctrl.map.bounds);
-              }
-            }, 1000); // Note: this timeout must be smaller than initial one at end of ctrl
-          }
-        },
-        rightclick: function() {
-          $scope.$apply(function () {
-            ctrl.map.center.latitude = initCenterLat;
-            ctrl.map.center.longitude = initCenterLng;
-            ctrl.map.zoom = initZoom;
-            ctrl.map.bounds = initBounds;
-            mlMapManager.setBounds(null);
-            
-            // Resetting of map causes bounds_changed events which we want to ignore
-            resetMap = true;
-            $timeout(function() {
-              resetMap = false;
-            }, 2000);
-          });
-        }
-      }
-    };
-
-    ctrl.options = {
-      scrollwheel: true,
-      streetViewControl: false,
-      disableDefaultUI: true,
-      zoomControl: true
-    };
-
-    ctrl.markers = [];
-
-    // watch for changes to the search results
-    $scope.$watch(function() { return mlMapManager.markers; }, function(newVal) {
-      ctrl.markers = newVal;
-    });
-    
-    // watch for changes to the center of the map
-    $scope.$watch(function() { return mlMapManager.center; }, function(center) {
-      if(center) {
-        ctrl.map.center.latitude = center.latitude;
-        ctrl.map.center.longitude = center.longitude;
-      }
-    });
-
+    // FIXME: can we make more use of ui-gmap-window nested inside ui-gmap-markers directive?
+    //        Alternatively, push away part of this code into a service. RootUtils perhaps?
     ctrl.markerClick = function(inst,evt,marker) {
       if (!pixelOffset) {
         pixelOffset = new google.maps.Size(0, -30);
         ctrl.infoWindow.options = { pixelOffset: pixelOffset };
       }
-      
+
       var lat = inst.getPosition().lat() + 20;
       var lng = inst.getPosition().lng();
       var position = new google.maps.LatLng(lat, lng, true);
@@ -175,12 +106,11 @@
           ctrl.infoWindow.shown = false;
         } else {
           ctrl.infoWindow.coords = {
-            latitude: marker.latitude,
-            longitude: marker.longitude
+            latitude: marker.location.latitude,
+            longitude: marker.location.longitude
           };
           ctrl.infoWindow.shown = true;
           ctrl.infoWindow.data = marker.content;
-          
           inst.map.setCenter(position);
         }
       }
@@ -195,14 +125,5 @@
       templateUrl: 'app/map/infoWindow.html'
     };
 
-    $timeout(function() {
-      resetMap = false;
-    }, 2000);
-    
-    //close info window if the user navigates to a different page
-    $rootScope.$on('$stateChangeStart', 
-      function(event, toState, toParams, fromState, fromParams){ 
-    	ctrl.infoWindow.shown = false;
-	});
   }
 }());

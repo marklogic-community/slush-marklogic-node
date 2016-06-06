@@ -2,6 +2,12 @@
 <div class="row" ng-if="ctrl.currentUser">
   <div class="col-md-12">
     <ml-input qtext="ctrl.qtext" search="ctrl.search(qtext)" suggest="ctrl.suggest(val)" template="fa" class="search"></ml-input>
+    <label class="radio-inline">
+      <input type="radio" ng-model="ctrl.showFacetsOnMap" ng-value="true" ng-change="ctrl.toggleShowFacets()"> Show facets or
+    </label>
+    <label class="radio-inline">
+      <input type="radio" ng-model="ctrl.showFacetsOnMap" ng-value="false" ng-change="ctrl.toggleShowFacets()"> results on map
+    </label>
   </div>
 </div>
 

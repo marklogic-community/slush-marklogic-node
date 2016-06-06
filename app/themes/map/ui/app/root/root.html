@@ -19,8 +19,8 @@
 </nav>
 
 <div>
-  <ui-gmap-google-map center="ctrl.map.center" zoom="ctrl.map.zoom" draggable="true" options="ctrl.options" bounds="ctrl.map.bounds" events="ctrl.map.events">
-    <ui-gmap-markers models="ctrl.markers" coords="'self'" icon="'icon'" fit="false" click="ctrl.markerClick">
+  <ui-gmap-google-map center="ctrl.mapManager.center" zoom="ctrl.mapManager.zoom" draggable="true" options="ctrl.mapManager.mapOptions" bounds="ctrl.mapManager.bounds" events="ctrl.mapManager.events">
+    <ui-gmap-markers models="ctrl.mapManager.getMarkers()" coords="'location'" options="'options'" icon="'icon'" fit="false" click="ctrl.markerClick">
     </ui-gmap-markers>
     <ui-gmap-window
             coords='ctrl.infoWindow.coords'
@@ -44,4 +44,3 @@
     Copyright <sup>&copy;</sup> {{ ctrl.currentYear }} MarkLogic Corporation. MARKLOGIC <sup>&reg;</sup> is a registered trademark of MarkLogic Corporation.
   </div>
 </footer>
-
