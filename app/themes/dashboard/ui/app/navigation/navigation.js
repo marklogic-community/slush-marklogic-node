@@ -4,8 +4,7 @@
   var app = angular.module('app');
 
   app
-    .factory('navService', NavigationService)
-    .controller('topnavCtrl', TopNavCtrl);
+    .factory('navService', NavigationService);
 
    NavigationService.$injector = ['$rootScope', '$state'];
     function NavigationService($rootScope, $state) {
@@ -19,6 +18,7 @@
         var s, lbl;
 
         links = [];
+        linkAreas = {};
         for (var i = 0; i < states.length; i++) {
           s = states[i];
           lbl = s.navLabel;
@@ -77,21 +77,5 @@
 
       return service;
     }
-
-  TopNavCtrl.$injector = ['$scope', 'userService', '$document', 'loginService'];
-
-  function TopNavCtrl($scope, userService, $document, loginService) {
-    var ctrl = this;
-
-    ctrl.currentUser = userService.getUser();
-
-    $scope.$watch(userService.currentUser, function(newValue) {
-      ctrl.currentUser = newValue;
-    });
-
-    ctrl.logout = function() {
-      loginService.logout();
-    };
-  }
 
 })();
