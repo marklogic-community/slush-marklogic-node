@@ -33,6 +33,7 @@
     ctrl.toggleShowFacets = function() {
       mlMapManager.markerMode = ctrl.showFacetsOnMap ? 'facets' : 'results';
     };
+    ctrl.toggleShowFacets();
 
     $scope.$watch(userService.currentUser, function(newValue) {
       ctrl.currentUser = newValue;
