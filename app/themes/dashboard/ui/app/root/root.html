@@ -1,19 +1,76 @@
-<aside class="main-sidebar">
-   <section class="sidebar" style="height: auto;">
-    <!-- search form -->
-    <form class="sidebar-form">
-      <div class="input-group">
-        <ml-input qtext="ctrl.qtext" search="ctrl.search(qtext)" suggest="ctrl.suggest(val)" template="fa" class="search"></ml-input>
+<div><toast></toast></div>
+<div class="wrapper skin-black sidebar-mini" ng-class="{'sidebar-open': !!ctrl.navService.showSidebar, 'sidebar-collapse': !ctrl.navService.showSidebar}">
+  <toast></toast>
+  <header class="main-header">
+    <!-- Logo -->
+    <a ui-sref="root.landing" class="logo">
+      <!-- mini logo for sidebar mini 50x50 pixels -->
+      <span class="logo-mini"><b>ML</b></span>
+      <!-- logo for regular state and mobile devices -->
+      <span class="logo-lg"><h1 id="logo">Sample App</h1></span>
+    </a>
+    <nav class="navbar navbar-static-top" role="navigation" ng-cloak>
+      <a class="sidebar-toggle" role="button" data-toggle="offcanvas" href="#" ng-click="ctrl.navService.toggleSidebar()">
+        <span class="sr-only">Toggle navigation</span>
+      </a>
+      <!-- Navbar Right Menu -->
+      <div class="navbar-custom-menu">
+        <ul class="nav navbar-nav" ng-if="!ctrl.currentUser">
+          <li class="user">
+            <a ui-sref="root.login"><span class="glyphicon glyphicon-user"></span> Sign In</a></li>
+        </ul>
+        <ul class="nav navbar-nav" ng-if="ctrl.currentUser">
+          <li>
+            <a ui-sref="root.landing">
+              <i class="fa fa-dashboard"></i> Dashboard
+            </a>
+          </li>
+          <li class="dropdown user user-menu">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <i class="fa fa-user"></i>
+              <span class="hidden-xs">{{ ctrl.currentUser.name }}</span>
+            </a>
+            <ul class="dropdown-menu">
+              <!-- User image -->
+              <li class="user-header">
+                <p>
+                  {{ ctrl.currentUser.name }}
+                </p>
+              </li>
+              <!-- Menu Footer-->
+              <li class="user-footer">
+                <div class="pull-left">
+                  <a ui-sref="root.profile" class="btn btn-default btn-flat">Profile</a>
+                </div>
+                <div class="pull-right">
+                  <a ng-click="ctrl.loginService.logout()" class="btn btn-default btn-flat">Sign out</a>
+                </div>
+              </li>
+            </ul>
+          </li>
+        </ul>
       </div>
-    </form>
-    <!-- /.search form -->
-    <!-- sidebar menu: : style can be found in sidebar.less -->
-    <ul class="sidebar-menu">
-      <li ng-repeat="link in ctrl.navService.getLinks('dashboard')" ng-class="{ active: ctrl.navService.isActive(link.state) }"><a ng-click="ctrl.navService.gotoLink(link)"><i class="fa" ng-class="link.label.navClass"></i> <span>{{ link.label.text }}</span></a></li>
-    </ul>
-  </section>
-</aside>
-
-<div class="content-wrapper" style="min-height:800px">
-  <ui-view></ui-view>
+    </nav>
+  </header>
+  <aside class="main-sidebar">
+    <section class="sidebar" style="height: auto;">
+      <!-- sidebar menu: : style can be found in sidebar.less -->
+      <ul class="sidebar-menu">
+        <li ng-repeat="link in ctrl.navService.getLinks('dashboard')" ng-class="{ active: ctrl.navService.isActive(link.state) }"><a ng-click="ctrl.navService.gotoLink(link)"><i class="fa" ng-class="link.label.navClass"></i> <span>{{ link.label.text }}</span></a></li>
+      </ul>
+    </section>
+  </aside>
+  <div class="content-wrapper" style="min-height:800px">
+    <ui-view></ui-view>
+  </div>
 </div>
+<footer id="footer" class="powered" ng-controller="FooterCtrl as footer">
+  <div class="container">
+    <div class="row">
+      <div class="row copyright">
+        <div class="col-sm-12 text-muted">
+          Copyright <sup>&copy;</sup> {{ footer.currentYear }} MarkLogic Corporation. MARKLOGIC <sup>&reg;</sup> is a registered trademark of MarkLogic Corporation.
+        </div>
+      </div>
+    </div>
+</footer>

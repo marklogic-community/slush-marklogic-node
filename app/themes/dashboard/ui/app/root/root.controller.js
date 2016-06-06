@@ -9,15 +9,22 @@
     this.currentYear = new Date().getUTCFullYear();
   }
 
-  RootCtrl.$inject = ['messageBoardService', 'navService', '$state'];
+  RootCtrl.$inject = ['messageBoardService', 'navService', '$state', 'userService', 'loginService', '$scope'];
 
-  function RootCtrl(messageBoardService, navService, $state) {
+  function RootCtrl(messageBoardService, navService, $state, userService, loginService, $scope) {
     var ctrl = this;
     // call this to register the available states
     navService.registerStates($state.get());
 
     ctrl.navService = navService;
+    ctrl.loginService = loginService;
     ctrl.messageBoardService = messageBoardService;
+
+    ctrl.currentUser = userService.getUser();
+
+    $scope.$watch(userService.currentUser, function(newValue) {
+      ctrl.currentUser = newValue;
+    });
 
     // example chart data
     ctrl.piechart = {

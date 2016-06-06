@@ -7,8 +7,8 @@
       $httpProvider.interceptors.push('errorInterceptor');
     }]);
 
-  ErrorInterceptor.$inject = ['$q', '$injector'];
-  function ErrorInterceptor($q, $injector) {
+  ErrorInterceptor.$inject = ['$q', '$injector', 'ngToast'];
+  function ErrorInterceptor($q, $injector, toast) {
     var errorInterceptor = {
       responseError: function(rejection) {
         if (rejection.status === 500 || rejection.status === 400) {
@@ -25,6 +25,8 @@
             };
           }
           messageBoardService.message(msg);
+          var toastMsg = '<strong>' + msg.title + '</strong><p>' + msg.body + '</p>';
+          toast.danger(toastMsg);
         }
         return $q.reject(rejection);
       }

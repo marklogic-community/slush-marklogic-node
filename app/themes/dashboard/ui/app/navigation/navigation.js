@@ -1,10 +1,10 @@
 (function () {
+  'use strict';
 
   var app = angular.module('app');
 
   app
-    .factory('navService', NavigationService)
-    .controller('topnavCtrl', TopNavCtrl);
+    .factory('navService', NavigationService);
 
    NavigationService.$injector = ['$rootScope', '$state'];
     function NavigationService($rootScope, $state) {
@@ -18,6 +18,7 @@
         var s, lbl;
 
         links = [];
+        linkAreas = {};
         for (var i = 0; i < states.length; i++) {
           s = states[i];
           lbl = s.navLabel;
@@ -50,9 +51,11 @@
       };
 
       service.toXSDateTime = function(jsDate) {
-        if (!jsDate) return;
+        if (!jsDate) {
+          return;
+        }
         var xsd = jsDate.toISOString();
-        return xsd.slice(0,-1);
+        return xsd.slice(0, -1);
         //xsd += '+' + (jsDate.getTimezoneOffset() / 60) + ':00';
         //return xsd;
       };
@@ -66,18 +69,13 @@
         $state.go(link.state);
       };
 
+      service.showSidebar = true;
+
+      service.toggleSidebar = function () {
+        service.showSidebar = !service.showSidebar;
+      };
+
       return service;
-    }
-
-    TopNavCtrl.$injector = ['$scope', 'userService'];
-    function TopNavCtrl($scope, userService) {
-      var ctrl = this;
-
-      ctrl.currentUser = userService.getUser();
-
-      $scope.$watch(userService.currentUser, function(newValue) {
-        ctrl.currentUser = newValue;
-      });
     }
 
 })();

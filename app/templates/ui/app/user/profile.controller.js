@@ -4,9 +4,9 @@
   angular.module('app.user')
     .controller('ProfileCtrl', ProfileCtrl);
 
-  ProfileCtrl.$inject = ['$scope', '$state', 'MLRest', 'userService'];
+  ProfileCtrl.$inject = ['$scope', '$state', 'MLRest', 'userService', 'ngToast'];
 
-  function ProfileCtrl($scope, $state, mlRest, userService) {
+  function ProfileCtrl($scope, $state, mlRest, userService, toast) {
     var ctrl = this;
     angular.extend(ctrl, {
       user: null,
@@ -60,6 +60,7 @@
           // 'perm:sample-role': 'read',
           // 'perm:sample-role': 'update'
         }).then(function(data) {
+          toast.success('Submitted');
           $state.go('root');
         });
       }
