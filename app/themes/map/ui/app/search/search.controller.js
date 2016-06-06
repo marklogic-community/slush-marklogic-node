@@ -5,7 +5,8 @@
   angular.module('app.search')
     .controller('SearchCtrl', SearchCtrl);
 
-  SearchCtrl.$inject = ['$scope', '$location', 'userService', 'MLSearchFactory', 'MLQueryBuilder', 'MLUiGmapManager'];
+  SearchCtrl.$inject = ['$scope', '$location', 'userService', 'MLSearchFactory',
+    'MLQueryBuilder', 'MLUiGmapManager'];
 
   // inherit from MLSearchController
   var superCtrl = MLSearchController.prototype;
@@ -14,7 +15,9 @@
   function SearchCtrl($scope, $location, userService, searchFactory, qb, mlMapManager) {
     var ctrl = this;
 
-    superCtrl.constructor.call(ctrl, $scope, $location, searchFactory.newContext({ pageLength: 50 }));
+    superCtrl.constructor.call(ctrl, $scope, $location, searchFactory.newContext({
+      pageLength: 50
+    }));
 
     ctrl.updateSearchResults = function(resp) {
       superCtrl.updateSearchResults.call(this,resp);

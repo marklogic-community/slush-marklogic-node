@@ -24,8 +24,10 @@
         address: null,
         about: null,
         registered: null,
-        latitude: 0,
-        longitude: 0,
+        location: {
+          latitude: 0,
+          longitude: 0
+        },
         tags: [],
         friends: [],
         greeting: null,

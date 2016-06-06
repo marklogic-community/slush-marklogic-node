@@ -5,6 +5,8 @@
     .service('MLUiGmapManager', ['$rootScope', '$timeout', 'uiGmapGoogleMapApi', MapManager]);
 
   function MapManager($rootScope, $timeout, $googleMapsApi) {
+    var service = {};
+
     // Google Maps API is loaded asynchroniously..
     var $googleMaps = null;
 
@@ -56,7 +58,7 @@
     };
 
     // service interface
-    var service = {
+    angular.extend(service, {
       // method
       init: init,
       restoreDefaults: restoreDefaults,
@@ -68,7 +70,7 @@
       setBounds: setBounds,
       watchBounds: watchBounds,
       resetMap: resetMap
-    };
+    });
 
     // service init method
     function init(newCenter, newZoom) {
@@ -119,7 +121,7 @@
             location: r.location,
             title: r.name,
             content: r,
-            icon: 'images/'+color+'-dot-marker.png'
+            icon: 'images/' + color + '-dot-marker.png'
           };
           newMarkers.push(m);
         }
@@ -141,12 +143,12 @@
               longitude: (box.w + box.e) / 2,
             },
             options: {
-              labelContent: ''+box.count,
-              labelAnchor: '' + (10 + (((''+box.count).length - 1) * 3)) +' 0',
+              labelContent: '' + box.count,
+              labelAnchor: '' + (10 + ((('' + box.count).length - 1) * 3)) + ' 0',
               labelClass: 'cluster-marker-label'
             },
             box: box,
-            icon: 'images/'+color+'-cluster-marker.png'
+            icon: 'images/' + color + '-cluster-marker.png'
           };
           newMarkers.push(m);
         });
@@ -226,7 +228,9 @@
       }
     });
 
-    $rootScope.$watch(function() { return service.drawingControl.getDrawingManager; }, function(manager) {
+    $rootScope.$watch(function() {
+      return service.drawingControl.getDrawingManager;
+    }, function(manager) {
       if ($googleMaps && manager) {
         $googleMaps.event.addListener(manager(), 'overlaycomplete', function(overlayEvent) {
           service.drawings.push(overlayEvent.overlay);

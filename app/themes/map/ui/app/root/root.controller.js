@@ -37,8 +37,8 @@
     return service;
   }
 
-  RootCtrl.$inject = ['messageBoardService', 'userService', '$scope',
-    '$rootScope', '$templateRequest', '$compile', 'rootUtils', 'MLUiGmapManager', 'uiGmapGoogleMapApi'];
+  RootCtrl.$inject = ['messageBoardService', 'userService', '$scope', '$rootScope',
+    '$templateRequest', '$compile', 'rootUtils', 'MLUiGmapManager', 'uiGmapGoogleMapApi'];
 
   function RootCtrl(messageBoardService, userService, $scope,
     $rootScope, $templateRequest, $compile, rootUtils, mlMapManager, $googleMapsApi) {
@@ -90,7 +90,7 @@
       var lng = inst.getPosition().lng();
       var position = new $googleMaps.LatLng(lat, lng, true);
 
-      if (! marker.content) {
+      if (!marker.content) {
         inst.map.setCenter(position);
       } else if (rootUtils.isMobile()) {
         if (!mobileWin) {
