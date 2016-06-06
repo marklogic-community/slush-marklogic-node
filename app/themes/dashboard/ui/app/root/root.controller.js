@@ -4,9 +4,12 @@
   angular.module('app.root')
     .controller('RootCtrl', RootCtrl);
 
-  RootCtrl.$inject = ['messageBoardService', 'userService', '$scope', 'loginService', 'navService', '$state'];
+  RootCtrl.$inject = ['messageBoardService', 'userService', '$scope',
+    'loginService', 'navService', '$state'];
 
-  function RootCtrl(messageBoardService, userService, $scope, loginService, navService, $state) {
+  function RootCtrl(messageBoardService, userService, $scope,
+    loginService, navService, $state) {
+
     var ctrl = this;
     ctrl.currentYear = new Date().getUTCFullYear();
     ctrl.messageBoardService = messageBoardService;
@@ -86,7 +89,9 @@
         text: 'Source: WorldClimate.com'
       },
       xAxis: {
-        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        categories: [
+          'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+        ]
       },
       yAxis: {
         title: {
