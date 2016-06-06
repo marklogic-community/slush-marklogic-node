@@ -73,6 +73,11 @@
         templateUrl: 'app/create/create.html',
         controller: 'CreateCtrl',
         controllerAs: 'ctrl',
+        navLabel: {
+          text: 'Create',
+          area: 'dashboard',
+          navClass: 'fa-wpforms'
+        },
         resolve: {
           stuff: function() {
             return null;
