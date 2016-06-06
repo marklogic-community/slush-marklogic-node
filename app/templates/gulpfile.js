@@ -228,6 +228,91 @@ gulp.task('init-prod', function(done) {
 });
 
 /**
+ * Creates a sample process.json
+ */
+gulp.task('init-process', function() {
+  //copy from slushfile - with modifications to use config instead
+  log('Creating process.json sample document with values drawn from gulp.config.js');
+  try {
+    var configJSON = pm2JSON();
+
+    var configString = JSON.stringify(configJSON, null, 2) + '\n';
+    fs.writeFileSync('process.json', configString, {
+      encoding: 'utf8'
+    });
+  } catch (e) {
+    console.log('failed to write process.json: ' + e.message);
+  }
+});
+
+/**
+ * Creates a sample ecosystem.json
+ */
+gulp.task('init-ecosystem', function() {
+  log('Creating ecosystem.json sample document with values drawn from gulp.config.js');
+  try {
+    var configJSON = pm2JSON();
+
+    configJSON.deploy = {
+      'sample-target': {
+        'key': '/path/to/key',
+        'user': 'USERNAME',
+        'host': ['HOSTNAME'],
+        'ref': 'origin/master',
+        'repo': 'https://GIT_USERNAME:GIT_PASSWORD@marklogic.unfuddle.com/git/REPO_NAME/',
+        'path': '/space/projects/PROJECT_FOLDER/',
+        'pre-deploy-local': 'echo "an echo was executed on your local machine"',
+        'post-deploy': './ml local bootstrap --ml.password=SERVER_PASSWORD; ./ml local deploy modules --ml.password=SERVER_PASSWORD; ./ml local deploy content -password SERVER_PASSWORD; npm install; bower install; gulp build',
+        'env': {
+          'NODE_ENV': 'production'
+        }
+      }
+    };
+
+    var configString = JSON.stringify(configJSON, null, 2) + '\n';
+    fs.writeFileSync('ecosystem.json', configString, {
+      encoding: 'utf8'
+    });
+  } catch (e) {
+    console.log('failed to write ecosystem.json: ' + e.message);
+  }
+});
+
+function pm2JSON() {
+  var configJSON = {};
+
+  var properties = fs.readFileSync('deploy/build.properties', {
+    encoding: 'utf8'
+  });
+
+  var name = properties.match(/app-name=(.*)/)[1];
+
+  var apps = {};
+  apps.name = name;
+  apps.script = './node-server/node-app.js';
+  apps.env = {
+    'NODE_ENV': 'default',
+    'PORT': config.defaultPort,
+    'ML_HOST': config.marklogic.host,
+    'ML_PORT': config.marklogic.httpPort,
+    'ML_APP_USER': config.marklogic.user,
+    'ML_APP_PASS': config.marklogic.password
+  };
+  apps.build = {
+    'NODE_ENV': 'build',
+    'PORT': config.defaultPort,
+    'ML_HOST': config.marklogic.host,
+    'ML_PORT': config.marklogic.httpPort,
+    'ML_APP_USER': config.marklogic.user,
+    'ML_APP_PASS': config.marklogic.password
+  };
+
+  configJSON.apps = [apps];
+
+  return configJSON;
+}
+
+/**
  * Run the spec runner
  * @param  {Function} done - callback when complete
  */

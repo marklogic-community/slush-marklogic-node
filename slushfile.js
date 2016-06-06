@@ -292,7 +292,7 @@ function configRoxy() {
 
 }
 
-gulp.task('npmInstall', ['init', 'generateSecret', 'configGulp'], function(done) {
+gulp.task('npmInstall', ['init', 'generateSecret', 'configGulp', 'config-process', 'config-ecosystem'], function(done) {
   return gulp.src(['./package.json'])
    .pipe(install({
       args: ['--msvs_version=2013' ] // npm install --msvs_version=2013 // node-gyph depends on Visual C++ on Win
@@ -351,6 +351,92 @@ gulp.task('configGulp', ['init'], function(done) {
 
   done();
 });
+
+/**
+ * Creates a sample process.json
+ */
+gulp.task('config-process', ['init'], function(done) {
+  try {
+    var configJSON = pm2JSON();
+
+    var configString = JSON.stringify(configJSON, null, 2) + '\n';
+    fs.writeFileSync('process.json', configString, {
+      encoding: 'utf8'
+    });
+  } catch (e) {
+    console.log('failed to write process.json: ' + e.message);
+  }
+
+  done();
+});
+
+/**
+ * Creates a sample ecosystem.json
+ */
+gulp.task('config-ecosystem', ['init'], function(done) {
+  try {
+    var configJSON = pm2JSON();
+
+    configJSON.deploy = {
+      'sample-target': {
+        'key': '/path/to/key',
+        'user': 'USERNAME',
+        'host': ['HOSTNAME'],
+        'ref': 'origin/master',
+        'repo': 'https://GIT_USERNAME:GIT_PASSWORD@marklogic.unfuddle.com/git/REPO_NAME/',
+        'path': '/space/projects/PROJECT_FOLDER/',
+        'pre-deploy-local': 'echo "an echo was executed on your local machine"',
+        'post-deploy': './ml local bootstrap --ml.password=SERVER_PASSWORD; ./ml local deploy modules --ml.password=SERVER_PASSWORD; ./ml local deploy content -password SERVER_PASSWORD; npm install; bower install; gulp build',
+        'env': {
+          'NODE_ENV': 'production'
+        }
+      }
+    };
+
+    var configString = JSON.stringify(configJSON, null, 2) + '\n';
+    fs.writeFileSync('ecosystem.json', configString, {
+      encoding: 'utf8'
+    });
+  } catch (e) {
+    console.log('failed to write ecosystem.json: ' + e.message);
+  }
+
+  done();
+});
+
+function pm2JSON() {
+  var configJSON = {};
+
+  var properties = fs.readFileSync('deploy/build.properties', {
+    encoding: 'utf8'
+  });
+
+  var name = properties.match(/app-name=(.*)/)[1];
+
+  var apps = {};
+  apps.name = name;
+  apps.script = './node-server/node-app.js';
+  apps.env = {
+    'NODE_ENV': 'default',
+    'PORT': settings.nodePort.toString(),
+    'ML_HOST': settings.marklogicHost,
+    'ML_PORT': settings.appPort.toString(),
+    'ML_APP_USER': settings.marklogicAdminUser,
+    'ML_APP_PASS': settings.marklogicAdminPass
+  };
+  apps.build = {
+    'NODE_ENV': 'build',
+    'PORT': settings.nodePort.toString(),
+    'ML_HOST': settings.marklogicHost,
+    'ML_PORT': settings.appPort.toString(),
+    'ML_APP_USER': settings.marklogicAdminUser,
+    'ML_APP_PASS': settings.marklogicAdminPass
+  };
+
+  configJSON.apps = [apps];
+
+  return configJSON;
+}
 
 gulp.task('checkForUpdates', function(done) {
   checkLatestVersion().then(function() {
