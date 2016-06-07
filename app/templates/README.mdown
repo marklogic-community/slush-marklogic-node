@@ -69,3 +69,67 @@ Or on Windows:
 The application comes with a sample set of JSON data. The detail controller,
 the part that handles showing your data, can not only handle JSON, but also
 XML, Binary, and Text data out of the box.
+
+## Running with PM2
+
+To run you must install pm2 with:
+
+`npm install pm2 -g`
+
+Make sure you have the file `process.json` if it's missing then run:
+
+`gulp init-process`
+
+This file will also include any config your node layer needs eg. mlHost, mlPort, nodePort, mlPassword etc.
+
+You can then launch the app using pm2 with:
+
+`pm2 startOrRestart process.json`
+
+You can also launch the app using different environment configuration (env name prefixed with "env_") using:
+
+`pm2 startOrRestart process.json --env build`
+
+To view all running pm2 applications use:
+
+`pm2 list`
+
+And for more information use: 
+
+`pm2 help`
+
+## Deploying with PM2
+
+To deploy, make sure both your local machine and your remote server/deployment target have pm2 installed with:
+
+`npm install pm2 -g`
+
+Make sure you have the file `ecosystem.json` if it's missing then run:
+
+`gulp init-ecosystem`
+
+`ecosystem.json` will include any config as well as any deployment config along with your credentials. It is git ignored by default and we recommend you avoid commiting it and instead put any repository appropriate configuration in `process.json`
+
+Using the sample target in ecosystem.json as a guide, set up a target to deploy to. Your configuration must have an ssh key, remote server user, git repository potentially with credentials and a valid path that isn't being used.
+
+First initialize the target host:
+
+`pm2 deploy ecosystem.json TARGETNAME setup`
+
+Then deploy new code with:
+
+`pm2 deploy ecosystem.json TARGETNAME`
+
+**Hint**, If you do not specify `ecosystem.json` pm2 automatically looks for it in your current directory
+
+If you want to deploy without commiting your current code use `--force`:
+
+`pm2 deploy TARGETNAME --force`
+
+You can also run commands on the server with `exec` such as starting the app:
+
+`pm2 deploy ecosystem.json TARGETNAME exec "pm2 startOrRestart process.json"`
+
+For more information use:
+
+`pm2 deploy help`

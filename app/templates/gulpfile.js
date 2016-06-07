@@ -298,7 +298,7 @@ function pm2JSON() {
     'ML_APP_USER': config.marklogic.user,
     'ML_APP_PASS': config.marklogic.password
   };
-  apps.build = {
+  apps.env_build = {
     'NODE_ENV': 'build',
     'PORT': config.defaultPort,
     'ML_HOST': config.marklogic.host,

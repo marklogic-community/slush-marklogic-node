@@ -424,7 +424,7 @@ function pm2JSON() {
     'ML_APP_USER': settings.marklogicAdminUser,
     'ML_APP_PASS': settings.marklogicAdminPass
   };
-  apps.build = {
+  apps.env_build = {
     'NODE_ENV': 'build',
     'PORT': settings.nodePort.toString(),
     'ML_HOST': settings.marklogicHost,
