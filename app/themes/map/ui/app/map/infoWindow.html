@@ -1,12 +1,9 @@
-  <div class="map-info-window" ng-class="{ isShown: parameter.showMe }">
-    <section class="heading">
-      <h4 class="window-title">{{ parameter.name || parameter.label }}</h4>
-    </section>
-    <section class="window-content">
-      <div class="photo" ng-if="parameter.photo"><img ng-src="images/photos/{{parameter.photo}}" ng-attr-alt="{{parameter.name}}"></div>
-      <div class="details">
-        <dl class="dl-horizontal">
-          <span ng-repeat="(key,val) in parameter"><dt>{{key}}</dt><dd>{{ val }}</dd>
-        </dl>
-      </div>
-    </section>
+<div class="map-info-window" ng-class="{ isShown: parameter.showMe }">
+  <section class="heading">
+    <h4 class="window-title">{{ parameter.name || parameter.label }}</h4>
+  </section>
+  <section class="window-content">
+    <div class="image" ng-if="parameter.picture || parameter.image || parameter.photo"><img ng-src="{{parameter.picture || parameter.image || parameter.photo}}" ng-attr-alt="{{parameter.name || parameter.label}}"></div>
+    <div class="details" ng-include="'app/map/infoWindow-details.html'"></div>
+  </section>
+</div>

@@ -3,7 +3,17 @@
 
   angular.module('app.root')
     .factory('rootUtils', RootUtilsFactory)
-    .controller('RootCtrl', RootCtrl);
+    .controller('RootCtrl', RootCtrl)
+    .filter('isObject', function() {
+      return function(val) {
+        return angular.isObject(val);
+      };
+    })
+    .filter('isArray', function() {
+      return function(val) {
+        return angular.isArray(val);
+      };
+    });
 
   function RootUtilsFactory() {
     var service = {}, width = window.innerWidth;
