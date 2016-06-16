@@ -3,7 +3,11 @@
 
   <nav class="navbar navbar-default navbar-fixed-top nav" role="navigation">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#sidebar" ng-click="ctrl.toggleControls()">
+      <button type="button" class="controls-toggle btn btn-default pull-left" ng-click="ctrl.hideControls = !ctrl.hideControls">
+        <span class="sr-only">Toggle sidebar</span>
+        <span class="fa fa-bars"></span>
+      </button>
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
         <span class="sr-only">Toggle navigation</span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -52,7 +56,9 @@
       </ui-gmap-drawing-manager>
     </ui-gmap-google-map>
 
-    <div id="sidebar">
+    <div id="map-mobile-info-window"></div>
+
+    <div id="sidebar" ng-show="!ctrl.hideControls">
       <div id="map-controls" class="container">
         <ui-view></ui-view>
       </div>
