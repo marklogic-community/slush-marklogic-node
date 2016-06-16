@@ -30,20 +30,6 @@
       return width < 992; // match bootrap sm
     };
 
-    service.controlsAreShown = !service.isMobile();
-
-    service.toggleControls = function() {
-      service.controlsAreShown = !service.controlsAreShown;
-    };
-
-    service.hideControls = function() {
-      service.controlsAreShown = false;
-    };
-
-    service.showControls = function() {
-      service.controlsAreShown = true;
-    };
-
     return service;
   }
 
@@ -61,9 +47,9 @@
       ctrl.currentUser = newValue;
     });
 
-    var miw = window.jQuery('#app-mobile-info-window').get(0); // FIXME: use angular.element?
+    var miw = window.jQuery('#map-mobile-info-window').get(0); // FIXME: use angular.element?
     var miwscope = $rootScope.$new(), mobileWin;
-    var pixelOffset,shownMarker;
+    var pixelOffset,shownMarker,shown;
     var $googleMaps = null;
 
     $googleMapsApi.then(function($gMaps) {
@@ -72,9 +58,8 @@
 
     ctrl.mapManager = mlMapManager;
 
-    ctrl.isMobile = rootUtils.isMobile();
-
-    if (ctrl.isMobile) {
+    if (rootUtils.isMobile()) {
+      ctrl.hideControls = true;
       // compile the info window template
       // FIXME: can we use ng-include somehow? or the compile directive?
       $templateRequest('app/map/infoWindow.html').then(function(html) {
@@ -102,6 +87,8 @@
 
       if (!marker.content) {
         inst.map.setCenter(position);
+        ctrl.infoWindow.shown = false;
+        delete ctrl.infoWindow.data;
       } else if (rootUtils.isMobile()) {
         if (!mobileWin) {
           mobileWin = new $googleMaps.InfoWindow({ content: '<span>' + marker.title + '</span>' });
@@ -113,23 +100,30 @@
         } else {
           mobileWin.setContent('<span>' + marker.title + '</span>');
         }
-        var shown = (shownMarker !== marker.title);
+        shown = (shownMarker === marker.title);
         if (shown) {
-          mobileWin.open(inst.getMap(), inst);
-        } else {
           mobileWin.close();
+        } else {
+          mobileWin.open(inst.getMap(), inst);
         }
         // for mobile we show our own window
         miwscope.parameter = marker.content;
         miwscope.parameter.showMe = shown;
+        miwscope.parameter.close = function() {
+          mobileWin.close();
+          miwscope.parameter.showMe = false;
+          shownMarker = null;
+        };
         shownMarker = marker.title;
         inst.map.setCenter(position);
 
       } else {
 
         // otherwise manipulate the google map infowindow
-        if (ctrl.infoWindow.shown) {
+        shown = (shownMarker === marker.title);
+        if (shown) {
           ctrl.infoWindow.shown = false;
+          shownMarker = null;
         } else {
           ctrl.infoWindow.coords = {
             latitude: marker.location.latitude,
@@ -138,6 +132,7 @@
           ctrl.infoWindow.shown = true;
           ctrl.infoWindow.data = marker.content;
           inst.map.setCenter(position);
+          shownMarker = marker.title;
         }
       }
     };

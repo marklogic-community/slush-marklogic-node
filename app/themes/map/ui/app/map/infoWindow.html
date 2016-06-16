@@ -1,5 +1,6 @@
 <div class="map-info-window" ng-class="{ isShown: parameter.showMe }">
   <section class="heading">
+    <div class="info-close"><a ng-click="parameter.close()"><i class="fa fa-close"></i></a></div>
     <h4 class="window-title">{{ parameter.name || parameter.label }}</h4>
   </section>
   <section class="window-content">
