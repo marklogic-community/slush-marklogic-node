@@ -1,0 +1,18 @@
+<dl class="dl-horizontal">
+  <span ng-repeat="(key,val) in parameter track by $index" ng-hide="key.startsWith('_')">
+    <dt>{{key}}</dt>
+    <!-- simple value -->
+    <dd ng-if="!(val | isObject)">{{ val !== '' ? val : '&#160;' }}</dd>
+    <!-- array or object -->
+    <span ng-if="(val | isObject)">
+      <!-- array with simple values -->
+      <dd ng-if="(val | isArray) && !(val[0] | isObject)">{{ val.join(', ') }}</dd>
+      <!-- add nbsp for better alignment of values -->
+      <dd ng-if="!(val | isArray) || (val[0] | isObject)">&#160;</dd>
+      <!-- object, recurse -->
+      <dd ng-if="!(val | isArray)" ng-init="parameter = val" ng-include="'app/map/infoWindow-details.html'"></dd>
+      <!-- array of object, repeat recurse -->
+      <dd ng-if="(val | isArray) && (val[0] | isObject)" ng-repeat="parameter in val track by $index" ng-include="'app/map/infoWindow-details.html'"></dd>
+    </span>
+  </span>
+</dl>
