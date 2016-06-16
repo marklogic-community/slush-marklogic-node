@@ -22,7 +22,8 @@
     "ng-json-explorer": "8c2a0f9104",
     "vkbeautify-wrapper": "*",
     "highcharts": "^4.2",
-    "angular-google-maps": "2.3.2"
+    "angular-google-maps": "2.3.2",
+    "tinymce-dist": "4.3.12"
   },
   "overrides": {
     "angular-highlightjs": {
