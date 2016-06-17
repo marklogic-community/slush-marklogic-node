@@ -1,5 +1,47 @@
 # Change Log
 
+## [1.1.0](https://github.com/marklogic/slush-marklogic-node/tree/1.1.0) (2016-06-17)
+[Full Changelog](https://github.com/marklogic/slush-marklogic-node/compare/1.0.3...1.1.0)
+
+**Implemented enhancements:**
+
+- Review ui-themes branch [\#336](https://github.com/marklogic/slush-marklogic-node/issues/336)
+- Add map theme [\#311](https://github.com/marklogic/slush-marklogic-node/issues/311)
+- Add 3-column theme [\#310](https://github.com/marklogic/slush-marklogic-node/issues/310)
+- Add dashboard theme [\#309](https://github.com/marklogic/slush-marklogic-node/issues/309)
+- Add logic to generator to select themes [\#308](https://github.com/marklogic/slush-marklogic-node/issues/308)
+
+**Fixed bugs:**
+
+- Should we explicitly load jQuery before Angular? [\#331](https://github.com/marklogic/slush-marklogic-node/issues/331)
+
+**Merged pull requests:**
+
+- Merging Ui themes [\#364](https://github.com/marklogic/slush-marklogic-node/pull/364) ([grtjn](https://github.com/grtjn))
+- Last minute fix getting rid of map theme button in default template [\#363](https://github.com/marklogic/slush-marklogic-node/pull/363) ([grtjn](https://github.com/grtjn))
+- adding changes to the map for mobile version [\#362](https://github.com/marklogic/slush-marklogic-node/pull/362) ([jenbreese](https://github.com/jenbreese))
+- Map theme fixes for mobile mode [\#359](https://github.com/marklogic/slush-marklogic-node/pull/359) ([grtjn](https://github.com/grtjn))
+- Fixing infoWindow, and improving display of random json in it [\#358](https://github.com/marklogic/slush-marklogic-node/pull/358) ([grtjn](https://github.com/grtjn))
+- unit tests cleanup for gulp build [\#356](https://github.com/marklogic/slush-marklogic-node/pull/356) ([janmichaelyu](https://github.com/janmichaelyu))
+- Css minor changes [\#355](https://github.com/marklogic/slush-marklogic-node/pull/355) ([jenbreese](https://github.com/jenbreese))
+- Minimizing diffs between ui-themes [\#354](https://github.com/marklogic/slush-marklogic-node/pull/354) ([grtjn](https://github.com/grtjn))
+- Map fixes [\#353](https://github.com/marklogic/slush-marklogic-node/pull/353) ([grtjn](https://github.com/grtjn))
+- Refined map theme \(and a few other small changes\) [\#349](https://github.com/marklogic/slush-marklogic-node/pull/349) ([grtjn](https://github.com/grtjn))
+- Ui themes dashboard fixes [\#348](https://github.com/marklogic/slush-marklogic-node/pull/348) ([janmichaelyu](https://github.com/janmichaelyu))
+- Added header and footer in the Map UI theme [\#347](https://github.com/marklogic/slush-marklogic-node/pull/347) ([maeisabelle](https://github.com/maeisabelle))
+- Added support to respond to bounds\_changed events from map [\#346](https://github.com/marklogic/slush-marklogic-node/pull/346) ([grtjn](https://github.com/grtjn))
+- Fix map markers [\#345](https://github.com/marklogic/slush-marklogic-node/pull/345) ([maeisabelle](https://github.com/maeisabelle))
+- fix wiring of map markers for map theme [\#344](https://github.com/marklogic/slush-marklogic-node/pull/344) ([withjam](https://github.com/withjam))
+- small ui fixes for 3 column theme [\#343](https://github.com/marklogic/slush-marklogic-node/pull/343) ([janmichaelyu](https://github.com/janmichaelyu))
+- adding logout and fixing the user profile page [\#342](https://github.com/marklogic/slush-marklogic-node/pull/342) ([jenbreese](https://github.com/jenbreese))
+- updates to the map design  [\#340](https://github.com/marklogic/slush-marklogic-node/pull/340) ([jenbreese](https://github.com/jenbreese))
+- Updated per review on Friday. [\#339](https://github.com/marklogic/slush-marklogic-node/pull/339) ([jenbreese](https://github.com/jenbreese))
+- fixes to the default template [\#338](https://github.com/marklogic/slush-marklogic-node/pull/338) ([jenbreese](https://github.com/jenbreese))
+- Removed all backref notations, some browsers choke on it [\#337](https://github.com/marklogic/slush-marklogic-node/pull/337) ([grtjn](https://github.com/grtjn))
+- Themes branch [\#335](https://github.com/marklogic/slush-marklogic-node/pull/335) ([withjam](https://github.com/withjam))
+- Update license.txt [\#328](https://github.com/marklogic/slush-marklogic-node/pull/328) ([popzip](https://github.com/popzip))
+- Add options for new themes, include default files to track changes [\#320](https://github.com/marklogic/slush-marklogic-node/pull/320) ([withjam](https://github.com/withjam))
+
 ## [1.0.3](https://github.com/marklogic/slush-marklogic-node/tree/1.0.3) (2016-03-10)
 [Full Changelog](https://github.com/marklogic/slush-marklogic-node/compare/1.0.2...1.0.3)
 
@@ -30,21 +72,21 @@
 
 **Implemented enhancements:**
 
+- Dynamic copyright year [\#296](https://github.com/marklogic/slush-marklogic-node/issues/296)
 - gulpfile should be made more explicit [\#271](https://github.com/marklogic/slush-marklogic-node/issues/271)
 - lint/test errors shouldn't always abort the build [\#267](https://github.com/marklogic/slush-marklogic-node/issues/267)
-- Dynamic copyright year [\#296](https://github.com/marklogic/slush-marklogic-node/issues/296)
 - List slush version somewhere [\#257](https://github.com/marklogic/slush-marklogic-node/issues/257)
 - Add geospatial component [\#9](https://github.com/marklogic/slush-marklogic-node/issues/9)
 - Css update [\#282](https://github.com/marklogic/slush-marklogic-node/pull/282) ([jenbreese](https://github.com/jenbreese))
 
 **Fixed bugs:**
 
-- app-port empty by default in local.properties [\#275](https://github.com/marklogic/slush-marklogic-node/issues/275)
 - JSHint fails: 'deregisterLoginSuccess' was used before it was defined [\#307](https://github.com/marklogic/slush-marklogic-node/issues/307)
 - detail router stripping '/' from uri on page refresh [\#303](https://github.com/marklogic/slush-marklogic-node/issues/303)
 - 'marklogic-node' not found! [\#290](https://github.com/marklogic/slush-marklogic-node/issues/290)
 - Search page error: $q.resolve is not a function   [\#286](https://github.com/marklogic/slush-marklogic-node/issues/286)
 - Need to run gulp build twice [\#283](https://github.com/marklogic/slush-marklogic-node/issues/283)
+- app-port empty by default in local.properties [\#275](https://github.com/marklogic/slush-marklogic-node/issues/275)
 - Windows - slush marklogic-node \<app-name\> "generator issue" [\#274](https://github.com/marklogic/slush-marklogic-node/issues/274)
 - included init scripts and forever.js not working [\#269](https://github.com/marklogic/slush-marklogic-node/issues/269)
 - Less compile error should not break gulp [\#264](https://github.com/marklogic/slush-marklogic-node/issues/264)
@@ -52,6 +94,7 @@
 - Running slush from within an existing Roxy project 'hangs' [\#262](https://github.com/marklogic/slush-marklogic-node/issues/262)
 - creating Admin user account breaks login [\#258](https://github.com/marklogic/slush-marklogic-node/issues/258)
 - Remove static links to arcgis in index.html [\#254](https://github.com/marklogic/slush-marklogic-node/issues/254)
+- Spacing on highlights  [\#252](https://github.com/marklogic/slush-marklogic-node/issues/252)
 - Unsuitable resolution declared for angular: 1.4.6 [\#251](https://github.com/marklogic/slush-marklogic-node/issues/251)
 - Unable To Build Out of Box/Detail Controller Test Fails [\#248](https://github.com/marklogic/slush-marklogic-node/issues/248)
 - Bump Task Broken [\#247](https://github.com/marklogic/slush-marklogic-node/issues/247)
@@ -64,8 +107,6 @@
 
 **Merged pull requests:**
 
-- Removed ESRI imports [\#281](https://github.com/marklogic/slush-marklogic-node/pull/281) ([daveegrant](https://github.com/daveegrant))
-- changing the icon to a minus per \#255. Also made added a link cursor … [\#256](https://github.com/marklogic/slush-marklogic-node/pull/256) ([jenbreese](https://github.com/jenbreese))
 - Version 1.0.2 [\#322](https://github.com/marklogic/slush-marklogic-node/pull/322) ([grtjn](https://github.com/grtjn))
 - Issue \#274 - added additional documentation to allow Microsoft Windows… [\#317](https://github.com/marklogic/slush-marklogic-node/pull/317) ([bluetorch](https://github.com/bluetorch))
 - Fixed \#264: added error handler to less [\#315](https://github.com/marklogic/slush-marklogic-node/pull/315) ([grtjn](https://github.com/grtjn))
@@ -77,19 +118,14 @@
 - Fixed \#257: addes slush-version.txt with placeholder replacement [\#297](https://github.com/marklogic/slush-marklogic-node/pull/297) ([grtjn](https://github.com/grtjn))
 - Fixed \#269: fixed init script, and added docs/scripts for server deployment [\#294](https://github.com/marklogic/slush-marklogic-node/pull/294) ([grtjn](https://github.com/grtjn))
 - Fixed \#286: more flexible angular resolution [\#293](https://github.com/marklogic/slush-marklogic-node/pull/293) ([grtjn](https://github.com/grtjn))
+- Removed ESRI imports [\#281](https://github.com/marklogic/slush-marklogic-node/pull/281) ([daveegrant](https://github.com/daveegrant))
+- changing the icon to a minus per \#255. Also made added a link cursor … [\#256](https://github.com/marklogic/slush-marklogic-node/pull/256) ([jenbreese](https://github.com/jenbreese))
+- Fixing the spacing as described in \#252 [\#253](https://github.com/marklogic/slush-marklogic-node/pull/253) ([jenbreese](https://github.com/jenbreese))
 - Added missing bump dependency [\#250](https://github.com/marklogic/slush-marklogic-node/pull/250) ([hunterwilliams](https://github.com/hunterwilliams))
 - Fixes \#248 detail controller test breaking build [\#249](https://github.com/marklogic/slush-marklogic-node/pull/249) ([hunterwilliams](https://github.com/hunterwilliams))
 
 ## [1.0.1](https://github.com/marklogic/slush-marklogic-node/tree/1.0.1) (2015-10-13)
 [Full Changelog](https://github.com/marklogic/slush-marklogic-node/compare/1.0.0...1.0.1)
-
-**Fixed bugs:**
-
-- Spacing on highlights  [\#252](https://github.com/marklogic/slush-marklogic-node/issues/252)
-
-**Merged pull requests:**
-
-- Fixing the spacing as described in \#252 [\#253](https://github.com/marklogic/slush-marklogic-node/pull/253) ([jenbreese](https://github.com/jenbreese))
 
 ## [1.0.0](https://github.com/marklogic/slush-marklogic-node/tree/1.0.0) (2015-09-25)
 [Full Changelog](https://github.com/marklogic/slush-marklogic-node/compare/v0.1.2...1.0.0)

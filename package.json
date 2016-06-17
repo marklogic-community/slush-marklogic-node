@@ -1,6 +1,6 @@
 {
   "name": "slush-marklogic-node",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "description": "A slush generator for AngularJS/node.js/MarkLogic",
   "main": "slushfile.js",
   "author": "David Cassel <dmcassel@gmail.com>",
