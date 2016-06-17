@@ -1,0 +1,73 @@
+<div>
+  <toast></toast>
+
+  <nav class="navbar navbar-default navbar-fixed-top nav" role="navigation">
+    <div class="navbar-header">
+      <button type="button" class="controls-toggle btn btn-default pull-left" ng-click="ctrl.hideControls = !ctrl.hideControls">
+        <span class="sr-only">Toggle sidebar</span>
+        <span class="fa fa-bars"></span>
+      </button>
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/"><h1 id="logo">Sample App</h1></a>
+    </div>
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li><a href="/">Home</a></li>
+        <li><a href="/search">Search</a></li>
+        <li><a href="/create">Create</a></li>
+      </ul>
+      <ml-user mode="inline"></ml-user>
+    </div><!-- /.navbar-collapse -->
+  </nav>
+
+  <div>
+    <ui-gmap-google-map
+        center="ctrl.mapManager.center"
+        zoom="ctrl.mapManager.zoom"
+        draggable="true"
+        options="ctrl.mapManager.mapOptions"
+        bounds="ctrl.mapManager.bounds"
+        events="ctrl.mapManager.events">
+      <ui-gmap-markers
+          models="ctrl.mapManager.getMarkers()"
+          coords="'location'"
+          options="'options'"
+          icon="'icon'"
+          fit="false"
+          click="ctrl.markerClick">
+      </ui-gmap-markers>
+      <ui-gmap-window
+          coords="ctrl.infoWindow.coords"
+          show="ctrl.infoWindow.shown"
+          templateUrl="ctrl.infoWindow.templateUrl"
+          templateParameter="ctrl.infoWindow.data"
+          options="ctrl.infoWindow.options"
+          closeClick="ctrl.closeClick">
+      </ui-gmap-window>
+      <ui-gmap-drawing-manager
+          ng-if="ctrl.mapManager.drawingOptions"
+          options="ctrl.mapManager.drawingOptions"
+          control="ctrl.mapManager.drawingControl">
+      </ui-gmap-drawing-manager>
+    </ui-gmap-google-map>
+
+    <div id="map-mobile-info-window"></div>
+
+    <div id="sidebar" ng-show="!ctrl.hideControls">
+      <div id="map-controls" class="container">
+        <ui-view></ui-view>
+      </div>
+    </div>
+  </div>
+
+  <footer id="footer" class="powered">
+    <div class="copyright text-muted">
+      Copyright <sup>&copy;</sup> {{ ctrl.currentYear }} MarkLogic Corporation. MARKLOGIC <sup>&reg;</sup> is a registered trademark of MarkLogic Corporation.
+    </div>
+  </footer>
+</div>

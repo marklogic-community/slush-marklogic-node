@@ -13,14 +13,13 @@
 
   function SearchCtrl($scope, $location, userService, searchFactory) {
     var ctrl = this;
-    var mlSearch = searchFactory.newContext();
 
-    superCtrl.constructor.call(ctrl, $scope, $location, mlSearch);
+    superCtrl.constructor.call(ctrl, $scope, $location, searchFactory.newContext());
 
     ctrl.init();
 
     ctrl.setSnippet = function(type) {
-      mlSearch.setSnippet(type);
+      ctrl.mlSearch.setSnippet(type);
       ctrl.search();
     };
 

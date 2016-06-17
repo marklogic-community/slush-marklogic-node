@@ -1,12 +1,22 @@
+/* Remove the powered by image on small devices (tablets, 768px and down) */
+@media (max-width: @screen-sm-min) { .powered { background: none; } }
+
 a {
   cursor: hand;
   cursor: pointer;
 }
 
+.jumbotron.login-box {
+    margin-top: 50px;
+}
+
 /*Content well*/
 .content {
+  .container{
+    padding-top: 70px;
+  }
   background-color: #fff;
-  padding-top: 20px;
+  padding-top: 50px;
 }
 
 .breadcrumb {
@@ -23,8 +33,12 @@ a {
   height: 300px;
 }
 
+.user.pull-right {
+  margin-right: 14px;
+}
+
 .welcome {
-  margin-top: 14px;
+  margin: 14px;
 }
 
 .facet-list .facet a {
@@ -51,6 +65,10 @@ form[name=profileForm] {
   .valid-email {
     min-height: 20px;
   }
+}
+
+form {
+  padding-bottom: 50px;
 }
 
 .create .tag {

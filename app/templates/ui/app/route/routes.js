@@ -50,19 +50,34 @@
       })
       .state('root.landing', {
         url: '/',
-        templateUrl: 'app/landing/landing.html'
+        templateUrl: 'app/landing/landing.html',
+        navLabel: {
+          text: 'Home',
+          area: 'dashboard',
+          navClass: 'fa-home'
+        }
       })
       .state('root.search', {
         url: '/search',
         templateUrl: 'app/search/search.html',
         controller: 'SearchCtrl',
-        controllerAs: 'ctrl'
+        controllerAs: 'ctrl',
+        navLabel: {
+          text: 'Search',
+          area: 'dashboard',
+          navClass: 'fa-search'
+        }
       })
       .state('root.create', {
         url: '/create',
         templateUrl: 'app/create/create.html',
         controller: 'CreateCtrl',
         controllerAs: 'ctrl',
+        navLabel: {
+          text: 'Create',
+          area: 'dashboard',
+          navClass: 'fa-wpforms'
+        },
         resolve: {
           stuff: function() {
             return null;

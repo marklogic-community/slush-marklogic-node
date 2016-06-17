@@ -76,7 +76,7 @@ gulp.task('styles', ['clean-styles'], function() {
   });
 
   return gulp
-    .src(config.less)
+    .src(config.mainLess)
     .pipe($.plumber()) // exit gracefully if something fails after this
     .pipe(less)
     .pipe($.autoprefixer({browsers: ['last 2 version', '> 5%']}))

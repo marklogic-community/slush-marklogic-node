@@ -28,8 +28,10 @@
     angular.extend(ctrl, {
       username: null,
       password: null,
-      loginService: loginService,
-      userService: userService
+      loginService: loginService
+    });
+    $scope.$watch(userService.currentUser, function(newValue) {
+      $scope.currentUser = newValue;
     });
   }
 
