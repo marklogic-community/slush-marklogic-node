@@ -25,7 +25,7 @@
     }
 
     function failLogin(response) {
-      if (response.status === 401) {
+      if (response.status > 200) {
         _loginError = true;
       }
     }
@@ -35,7 +35,7 @@
     }
 
     function getAuthenticatedStatus() {
-      if (_isAuthenticated) {
+      if (_isAuthenticated !== undefined) {
         return _isAuthenticated;
       }
 

@@ -187,6 +187,12 @@ function configRoxy() {
     var matches = passwordMatch.exec(properties);
     settings.appuserPassword = matches[1];
 
+    // fix bug in Roxy causing { in pwd to get escaped mistakenly
+    if (settings.appuserPassword.match(/\{/g)) {
+      settings.appuserPassword = settings.appuserPassword.replace(/\{/g, '');
+      properties = properties.replace(passwordMatch, 'appuser-password=' + settings.appuserPassword);
+    }
+
     fs.writeFileSync('deploy/build.properties', properties);
   } catch (e) {
     console.log('failed to update properties: ' + e.message);
@@ -311,6 +317,7 @@ gulp.task('configGulp', ['init'], function(done) {
 
   try {
     var configJSON = {};
+    configJSON['app-name'] = settings.appName;
     configJSON['ml-version'] = settings.mlVersion;
     configJSON['ml-host'] = settings.marklogicHost;
     configJSON['ml-admin-user'] = settings.marklogicAdminUser;

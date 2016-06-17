@@ -22,7 +22,7 @@ var options = require('./utils/options')();
 // For any other GET request, proxy it on to MarkLogic.
 router.get('*', function(req, res) {
   noCache(res);
-  if (req.session.user === undefined) {
+  if (!options.guestAccess && req.session.user === undefined) {
     res.status(401).send('Unauthorized');
   } else {
     proxy(req, res);
@@ -35,9 +35,9 @@ router.put('*', function(req, res) {
   // For PUT requests, require authentication
   if (req.session.user === undefined) {
     res.status(401).send('Unauthorized');
-  } else if (req.path === '/v1/documents' &&
+  } else if (options.readOnlyAccess || (req.path === '/v1/documents' &&
     req.query.uri.match('/api/users/') &&
-    req.query.uri.match(new RegExp('/api/users/[^(' + req.session.user.name + ')]+.json'))) {
+    req.query.uri.match(new RegExp('/api/users/[^(' + req.session.user.name + ')]+.json')))) {
     // The user is trying to PUT to a profile document other than his/her own. Not allowed.
     res.status(403).send('Forbidden');
   } else {
@@ -50,10 +50,20 @@ router.put('*', function(req, res) {
 });
 
 // Require authentication for POST requests
+router.post(/^\/(alert\/match|search|suggest|values\/.*)$/, function(req, res) {
+  noCache(res);
+  if (!options.guestAccess && req.session.user === undefined) {
+    res.status(401).send('Unauthorized');
+  } else {
+    proxy(req, res);
+  }
+});
 router.post('*', function(req, res) {
   noCache(res);
   if (req.session.user === undefined) {
     res.status(401).send('Unauthorized');
+  } else if (options.readOnlyAccess) {
+    res.status(403).send('Forbidden');
   } else {
     proxy(req, res);
   }
@@ -64,6 +74,8 @@ router.delete('*', function(req, res) {
   noCache(res);
   if (req.session.user === undefined) {
     res.status(401).send('Unauthorized');
+  } else if (options.readOnlyAccess) {
+    res.status(403).send('Forbidden');
   } else {
     proxy(req, res);
   }
