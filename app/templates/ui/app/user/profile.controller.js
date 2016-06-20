@@ -48,17 +48,18 @@
           _.pull(ctrl.user.emails, '');
         }
 
-        mlRest.updateDocument({
-          user: {
-            'fullname': ctrl.user.fullname,
-            'emails': ctrl.user.emails
+        ctrl.message = undefined;
+        mlRest.callExtension('profile', {
+          method: 'PUT',
+          data: {
+            user: {
+              fullname: ctrl.user.fullname,
+              emails: ctrl.user.emails
+            }
+          },
+          headers: {
+            'Content-Type': 'application/json'
           }
-        }, {
-          format: 'json',
-          uri: '/api/users/' + ctrl.user.name + '.json'
-          // TODO: add read/update permissions here like this:
-          // 'perm:sample-role': 'read',
-          // 'perm:sample-role': 'update'
         }).then(function(data) {
           toast.success('Submitted');
           $state.go('root');

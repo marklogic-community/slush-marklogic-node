@@ -240,6 +240,107 @@ function configRoxy() {
       '          <range-value-positions>false</range-value-positions>\n' +
       '        </range-element-index>\n');
 
+    foo = foo.replace(/^\s*<privilege-name>xdmp:with-namespaces<\/privilege-name>/m,
+      '          <privilege-name>xdmp:with-namespaces</privilege-name>\n' +
+      '        </privilege>\n' +
+      '        <privilege>\n' +
+      '          <privilege-name>rest-reader</privilege-name>\n' +
+      '        </privilege>\n' +
+      '        <privilege>\n' +
+      '          <privilege-name>rest-writer</privilege-name>' +
+      '        </privilege>\n' +
+      '      </privileges>\n' +
+      '    </role>\n' +
+      '\n' +
+      '    <role>\n' +
+      '      <role-name>@ml.app-name-amp-role</role-name>\n' +
+      '      <description>A role for amping function of the @ml.app-name application</description>\n' +
+      '      <privileges>\n' +
+      '        <privilege>\n' +
+      '          <privilege-name>any-collection</privilege-name>\n' +
+      '        </privilege>\n' +
+      '        <privilege>\n' +
+      '          <privilege-name>xdmp:email</privilege-name>\n' +
+      '        </privilege>\n' +
+      '        <privilege>\n' +
+      '          <privilege-name>users-uri</privilege-name>'
+      );
+
+    foo = foo.replace(/^\s*<role-names>(\r|\n)^\s*<\/role-names>/m,
+      '      <role-names>\n' +
+      '        <role-name>rest-extension-user</role-name>\n' +
+      '      </role-names>'
+      );
+
+    foo = foo.replace(/^\s*<\/amp>(\r|\n)^\s*-->/m,
+      '    </amp>\n' +
+      '-->\n' +
+      '    <amp>\n' +
+      '      <namespace>http://marklogic.com/slush/user-model</namespace>\n' +
+      '      <local-name>save</local-name>\n' +
+      '      <doc-uri>/lib/user-model.xqy</doc-uri>\n' +
+      '      <db-name>@ml.app-modules-db</db-name>\n' +
+      '      <role-name>@ml.app-name-amp-role</role-name>\n' +
+      '    </amp>\n' +
+      '    <amp>\n' +
+      '      <namespace>http://marklogic.com/rest-api/resource/profile</namespace>\n' +
+      '      <local-name>put</local-name>\n' +
+      '      <doc-uri>/marklogic.rest.resource/profile/assets/resource.xqy</doc-uri>\n' +
+      '      <db-name>@ml.app-modules-db</db-name>\n' +
+      '      <role-name>@ml.app-name-update-role</role-name>\n' +
+      '    </amp>'
+      );
+
+    foo = foo.replace(/^\s*<kind>uri<\/kind>(\r|\n)^\s*<\/privilege>(\r|\n)^\s*-->/m,
+      '      <kind>uri</kind>\n' +
+      '    </privilege>\n' +
+      '-->\n' +
+      '    <privilege>\n' +
+      '      <privilege-name>users-uri</privilege-name>\n' +
+      '      <action>/users/</action>\n' +
+      '      <kind>uri</kind>\n' +
+      '    </privilege>\n'
+      );
+
+    foo = foo.replace(/^\s*<roles xmlns="http:\/\/marklogic.com\/xdmp\/security">/m,
+      '  <roles xmlns="http://marklogic.com/xdmp/security">\n' +
+      '    <!-- low level roles -->\n' +
+      '    <role>\n' +
+      '      <role-name>@ml.app-name-read-role</role-name>\n' +
+      '      <description>A low level read role for documents and modules of the @ml.app-name application</description>\n' +
+      '    </role>\n' +
+      '    <role>\n' +
+      '      <role-name>@ml.app-name-insert-role</role-name>\n' +
+      '      <description>A low level insert role for documents of the @ml.app-name application</description>\n' +
+      '    </role>\n' +
+      '    <role>\n' +
+      '      <role-name>@ml.app-name-update-role</role-name>\n' +
+      '      <description>A low level update role for documents of the @ml.app-name application</description>\n' +
+      '    </role>\n' +
+      '    <role>\n' +
+      '      <role-name>@ml.app-name-execute-role</role-name>\n' +
+      '      <description>A low level execute role for modules of the @ml.app-name application</description>\n' +
+      '    </role>\n' +
+      '    <role>\n' +
+      '      <role-name>@ml.app-name-defaults-role</role-name>\n' +
+      '      <description>A low level role providing default permissions for documents of the @ml.app-name application</description>\n' +
+      '      <permissions>\n' +
+      '        <permission>\n' +
+      '          <capability>read</capability>\n' +
+      '          <role-name>@ml.app-name-read-role</role-name>\n' +
+      '        </permission>\n' +
+      '        <permission>\n' +
+      '          <capability>insert</capability>\n' +
+      '          <role-name>@ml.app-name-insert-role</role-name>\n' +
+      '        </permission>\n' +
+      '        <permission>\n' +
+      '          <capability>update</capability>\n' +
+      '          <role-name>@ml.app-name-update-role</role-name>\n' +
+      '        </permission>\n' +
+      '      </permissions>\n' +
+      '    </role>'
+      );
+
     // add a geospatial index for the default content
     foo = foo.replace(/^\s*<geospatial-element-pair-indexes>/m,
       '      <geospatial-element-pair-indexes>\n' +
@@ -255,6 +356,8 @@ function configRoxy() {
       '        </geospatial-element-pair-index>\n');
 
     fs.writeFileSync('deploy/ml-config.xml', foo);
+
+
   } catch (e) {
     console.log('failed to update configuration: ' + e.message);
   }
