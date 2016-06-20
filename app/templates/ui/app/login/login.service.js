@@ -15,6 +15,7 @@
     var _toStateName;
     var _toStateParams;
     var _isAuthenticated;
+    var _userPrefix = '';
     var _protectedRoutes = [];
     var deregisterLoginSuccess;
 
@@ -41,6 +42,9 @@
       }
 
       return $http.get('/api/user/status', {}).then(function(response) {
+        if (response.data.appUsersOnly) {
+          _userPrefix = response.data.appName + '-';
+        }
         if (response.data.authenticated === false) {
           _isAuthenticated = false;
         }
@@ -60,7 +64,7 @@
 
     function login(username, password) {
       return $http.post('/api/user/login', {
-        'username': username,
+        'username': _userPrefix + username,
         'password': password
       }).then(function(response) {
         loginSuccess(response);

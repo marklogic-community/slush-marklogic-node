@@ -17,7 +17,7 @@ module.exports = function(){
     defaultUser: process.env.ML_APP_USER || envJson['ml-app-user'] || config.marklogic.user,
     defaultPass: process.env.ML_APP_PASS || envJson['ml-app-pass'] || config.marklogic.password,
     guestAccess: bool(process.env.GUEST_ACCESS || envJson['guest-access'] || config.marklogic.guestAccess || false),
-    readOnlyAccess: bool(process.env.READ_ONLY_ACCESS || envJson['readonly-access'] || config.marklogic.readOnlyAccess || false),
+    disallowUpdates: bool(process.env.DISALLOW_UPDATES || envJson['disallow-updates'] || config.marklogic.disallowUpdates || false),
     appUsersOnly: bool(process.env.APP_USERS_ONLY || envJson['appusers-only'] || config.marklogic.appUsersOnly || false)
   };
 

@@ -17,25 +17,19 @@ router.get('/user/status', function(req, res) {
   noCache(res);
   if (req.session.user === undefined) {
     if (options.guestAccess) {
-      res.send({
-        authenticated: true,
-        username: options.defaultUser,
-        profile: { fullname: 'Guest' },
-        guestAccess: options.guestAccess,
-        readOnlyAccess: options.readOnlyAccess,
-        appUsersOnly: options.appUsersOnly
-      });
+      res.send(authStatus(
+        true,
+        options.defaultUser,
+        { fullname: 'Guest' }
+      ));
     } else {
-      res.send({
-        authenticated: false,
-        guestAccess: options.guestAccess,
-        readOnlyAccess: options.readOnlyAccess,
-        appUsersOnly: options.appUsersOnly
-      });
+      res.send(authStatus(
+        false
+      ));
     }
   } else {
     delete headers['content-length'];
-    var status = http.get({
+    var profile = http.get({
       hostname: options.mlHost,
       port: options.mlHttpPort,
       path: '/v1/documents?uri=/api/users/' + req.session.user.username + '.json',
@@ -48,32 +42,26 @@ router.get('/user/status', function(req, res) {
           if (json.user === undefined) {
             console.log('did not find chunk.user');
           }
-          res.status(200).send({
-            authenticated: true,
-            username: req.session.user.username,
-            profile: json.user || {},
-            guestAccess: options.guestAccess,
-            readOnlyAccess: options.readOnlyAccess,
-            appUsersOnly: options.appUsersOnly
-          });
+          res.status(200).send(authStatus(
+            true,
+            req.session.user.username,
+            json.user
+          ));
           req.session.user.profile = json.user || {};
         });
       } else if (response.statusCode === 404) {
         //no profile yet for user
-        res.status(200).send({
-          authenticated: true,
-          username: req.session.user.username,
-          profile: req.session.user.profile || {},
-          guestAccess: options.guestAccess,
-          readOnlyAccess: options.readOnlyAccess,
-          appUsersOnly: options.appUsersOnly
-        });
+        res.status(200).send(authStatus(
+          true,
+          req.session.user.username,
+          req.session.user.profile
+        ));
       } else {
         res.send({authenticated: false});
       }
     });
 
-    status.on('error', function(e) {
+    profile.on('error', function(e) {
       console.log(JSON.stringify(e));
       console.log('status check failed: ' + e.statusCode);
     });
@@ -115,14 +103,10 @@ router.post('/user/login', function(req, res) {
           username: username,
           password: password
         };
-        res.status(200).send({
-          authenticated: true,
-          username: username,
-          profile: {},
-          guestAccess: options.guestAccess,
-          readOnlyAccess: options.readOnlyAccess,
-          appUsersOnly: options.appUsersOnly
-        });
+        res.status(200).send(authStatus(
+          true,
+          username
+        ));
       } else {
         console.log('code: ' + response.statusCode);
         if (response.statusCode === 200) {
@@ -136,14 +120,11 @@ router.post('/user/login', function(req, res) {
             if (json.user === undefined) {
               console.log('did not find chunk.user');
             }
-            res.status(200).send({
-              authenticated: true,
-              username: username,
-              profile: json.user || {},
-              guestAccess: options.guestAccess,
-              readOnlyAccess: options.readOnlyAccess,
-              appUsersOnly: options.appUsersOnly
-            });
+            res.status(200).send(authStatus(
+              true,
+              username,
+              json.user || {}
+            ));
             req.session.user.profile = json.user || {};
           });
         } else {
@@ -172,6 +153,18 @@ function noCache(response){
   response.append('Cache-Control', 'no-cache, must-revalidate');//HTTP 1.1 - must-revalidate
   response.append('Pragma', 'no-cache');//HTTP 1.0
   response.append('Expires', 'Sat, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+}
+
+function authStatus(authenticated, username, profile) {
+  return {
+    authenticated: authenticated,
+    username: username,
+    profile: profile || {},
+    guestAccess: options.guestAccess,
+    disallowUpdates: options.disallowUpdates,
+    appUsersOnly: options.appUsersOnly,
+    appName: options.appName
+  };
 }
 
 module.exports = router;

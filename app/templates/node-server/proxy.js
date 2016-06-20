@@ -35,7 +35,7 @@ router.put('*', function(req, res) {
   // For PUT requests, require authentication
   if (req.session.user === undefined) {
     res.status(401).send('Unauthorized');
-  } else if (options.readOnlyAccess || (req.path === '/v1/documents' &&
+  } else if (options.disallowUpdates || (req.path === '/v1/documents' &&
     req.query.uri.match('/api/users/') &&
     req.query.uri.match(new RegExp('/api/users/[^(' + req.session.user.username + ')]+.json')))) {
     // The user is trying to PUT to a profile document other than his/her own. Not allowed.
@@ -62,7 +62,7 @@ router.post('*', function(req, res) {
   noCache(res);
   if (req.session.user === undefined) {
     res.status(401).send('Unauthorized');
-  } else if (options.readOnlyAccess) {
+  } else if (options.disallowUpdates) {
     res.status(403).send('Forbidden');
   } else {
     proxy(req, res);
@@ -74,7 +74,7 @@ router.delete('*', function(req, res) {
   noCache(res);
   if (req.session.user === undefined) {
     res.status(401).send('Unauthorized');
-  } else if (options.readOnlyAccess) {
+  } else if (options.disallowUpdates) {
     res.status(403).send('Forbidden');
   } else {
     proxy(req, res);

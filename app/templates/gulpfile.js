@@ -16,7 +16,9 @@ var _ = require('lodash');
 var $ = require('gulp-load-plugins')({lazy: true});
 /* jshint ignore:end */
 
-var _s = require('underscore.string');
+var _s = require('underscore.string'),
+    q = require('q'),
+    spawn = require('child_process').spawn;
 
 /**
  * yargs variables can be passed in to alter the behavior, when present.
@@ -520,118 +522,144 @@ function clean(files) {
  */
 function init(env, done) {
   if (fs.existsSync(env + '.json')) {
-    log(env + '.json already exists!');
+    log('NOTE: ' + env + '.json already exists, change manually if needed.');
+    if (fs.existsSync('deploy/' + env + '.properties')) {
+      log('NOTE: deploy/' + env + '.properties already exists, change manually too.');
+    } else {
+      log('WARN: deploy/' + env + '.properties is missing!');
+    }
     done();
   } else {
     //copy from slushfile - config gulp - with modifications to use config instead
     var inquirer = require('inquirer');
 
-    var properties = fs.readFileSync('deploy/build.properties', { encoding: 'utf8' });
+    run('./ml', [env, 'info', '--format=json']).then(function(output) {
+      var localJson = fs.existsSync('local.json') ? JSON.parse(fs.readFileSync('local.json', 'utf8')) : {};
 
-    // capture app-name entered earlier
-    var appNameMatch = /^app\-name=(.*)$/m;
-    var matches = appNameMatch.exec(properties);
-    var appName = matches[1];
+      var localAppName = localJson['app-name'];
+      var localMlVersion = localJson['ml-version'];
+      var localMlHost = localJson['ml-host'];
+      var localMlAdminUser = localJson['ml-admin-user'];
+      var localMlAppUser = localJson['ml-app-user'];
+      var localMlAppPass = localJson['ml-app-pass'];
+      var localMlHttpPort = localJson['ml-http-port'];
+      var localMlXccPort = localJson['ml-xcc-port'];
+      var localNodePort = localJson['node-port'] || 9070;
+      var localGuestAccess = ['false', 'true'].indexOf(localJson['guest-access']);
+      var localDisallowUpdates = ['false', 'true'].indexOf(localJson['disallow-updates']);
+      var localAppUsersOnly = ['false', 'true'].indexOf(localJson['appusers-only']);
 
-    var prompts = [
-      {type: 'list', name: 'mlVersion', message: 'MarkLogic version?', choices: ['8','7', '6', '5'], default: 0},
-      {type: 'input', name: 'marklogicHost', message: 'MarkLogic Host?', default: 'localhost'},
-      {type: 'input', name: 'marklogicAdminUser', message: 'MarkLogic Admin User?', default: 'admin'},
-      {type: 'input', name: 'marklogicAdminPass', message: 'Note: consider keeping the following blank, ' +
-        'you will be asked to enter it at appropriate commands.\n? MarkLogic Admin Password?', default: ''},
-      {type: 'input', name: 'appPort', message: 'MarkLogic App/Rest port?', default: 8040},
-      {type: 'input', name: 'xccPort', message: 'XCC port?', default:8041, when: function(answers) {
-        return answers.mlVersion < 8;
-      }},
-      {type: 'input', name: 'nodePort', message: 'Node app port?', default: 9070},
-      {type: 'list', name: 'guestAccess', message: 'Allow anonymous users to search data?', choices: ['false', 'true'], default: 0},
-      {type: 'list', name: 'readOnlyAccess', message: 'Disallow proxying update requests?', choices: ['false', 'true'], default: 0},
-      {type: 'list', name: 'appUsersOnly', message: 'Only allow access to users created for this app? Note: disallows admin users.', choices: ['false', 'true'], default: 0}
-    ];
+      var properties = JSON.parse(output).properties || {};
 
-    if (typeof appName === 'undefined') {
-      prompts.unshift(
-        {type: 'input', name: 'name', message: 'Name for the app?'});
-    }
+      var mlVersion = ['8','7', '6', '5'].indexOf(localMlVersion || properties['ml.server-version'] || '8');
+      var marklogicHost = properties['ml.' + env + '-server'] || localMlHost || 'localhost';
+      var marklogicAdminUser = properties['ml.user'] || localMlAdminUser || 'admin';
+      var appName = properties['ml.app-name'] || localAppName;
+      var appUserName = properties['ml.default-user'] || localMlAppUser;
+      var appUserPass = properties['ml.appuser-password'] || localMlAppPass;
+      var appPort = localMlHttpPort || properties['ml.app-port'] || 8040;
+      var xccPort = localMlXccPort || properties['ml.xcc-port'] || 8041;
 
-    inquirer.prompt(prompts, function (settings) {
+      var prompts = [
+        {type: 'list', name: 'mlVersion', message: 'MarkLogic version?', choices: ['8','7', '6', '5'], default: mlVersion > 0 ? mlVersion : 0 },
+        {type: 'input', name: 'marklogicHost', message: 'MarkLogic Host?', default: marklogicHost},
+        {type: 'input', name: 'marklogicAdminUser', message: 'MarkLogic Admin User?', default: marklogicAdminUser},
+        {type: 'input', name: 'marklogicAdminPass', message: 'Note: consider keeping the following blank, ' +
+          'you will be asked to enter it at appropriate commands.\n? MarkLogic Admin Password?', default: ''},
+        {type: 'input', name: 'appPort', message: 'MarkLogic App/Rest port?', default: appPort},
+        {type: 'input', name: 'xccPort', message: 'XCC port?', default: xccPort, when: function(answers) {
+          return answers.mlVersion < 8;
+        }},
+        {type: 'input', name: 'nodePort', message: 'Node app port?', default: localNodePort},
+        {type: 'list', name: 'guestAccess', message: 'Allow anonymous users to search data?', choices: ['false', 'true'], default: localGuestAccess > 0 ? localGuestAccess : 0},
+        {type: 'list', name: 'disallowUpdates', message: 'Disallow proxying update requests?', choices: ['false', 'true'], default: localDisallowUpdates > 0 ? localDisallowUpdates : 0},
+        {type: 'list', name: 'appUsersOnly', message: 'Only allow access to users created for this app? Note: disallows admin users.', choices: ['false', 'true'], default: localAppUsersOnly > 0 ? localAppUsersOnly : 0}
+      ];
+
       if (typeof appName === 'undefined') {
-        settings.nameDashed = _s.slugify(settings.name);
-      } else {
-        settings.nameDashed = _s.slugify(appName);
+        prompts.unshift(
+          {type: 'input', name: 'name', message: 'Name for the app?'});
       }
 
-      try {
-        var configJSON = {};
-        configJSON['app-name'] = settings.nameDashed;
-        configJSON['ml-version'] = settings.mlVersion;
-        configJSON['ml-host'] = settings.marklogicHost;
-        configJSON['ml-admin-user'] = settings.marklogicAdminUser;
-        configJSON['ml-admin-pass'] = settings.marklogicAdminPass;
-        configJSON['ml-app-user'] = settings.nameDashed + '-user';
-        configJSON['ml-app-pass'] = settings.appuserPassword;
-        configJSON['ml-http-port'] = settings.appPort;
-
-        if (settings.mlVersion < 8) {
-          configJSON['ml-xcc-port'] = settings.xccPort;
-        }
-
-        configJSON['node-port'] = settings.nodePort;
-        configJSON['guest-access'] = settings.guestAccess;
-        configJSON['readonly-access'] = settings.readOnlyAccess;
-        configJSON['appusers-only'] = settings.appUsersOnly;
-
-        var configString = JSON.stringify(configJSON, null, 2) + '\n';
-        fs.writeFileSync(env + '.json', configString, { encoding: 'utf8' });
-        log('Created ' + env + '.json.');
-
-        if (fs.existsSync('deploy/' + env + '.properties')) {
-          log('deploy/' + env + '.properties already exists!');
+      inquirer.prompt(prompts, function (settings) {
+        if (typeof appName === 'undefined') {
+          settings.nameDashed = _s.slugify(settings.name);
         } else {
-          var envProperties = '#################################################################\n' +
-            '# This file contains overrides to values in build.properties\n' +
-            '# These only affect your local environment and should not be checked in\n' +
-            '#################################################################\n' +
-            '\n' +
-            'server-version=' + settings.mlVersion + '\n' +
-            '\n' +
-            '#\n' +
-            '# The ports used by your application\n' +
-            '#\n' +
-            'app-port=' + settings.appPort + '\n';
-          if (settings.mlVersion < 8) {
-            envProperties += 'xcc-port=' + settings.xccPort + '\n';
-          }
-          else
-          {
-            envProperties += '# Taking advantage of not needing a XCC Port for ML8\n' +
-            'xcc-port=${app-port}\n' +
-            'install-xcc=false\n';
-          }
-
-          envProperties += '\n' +
-            '#\n' +
-            '# the uris or IP addresses of your servers\n' +
-            '# WARNING: if you are running these scripts on WINDOWS you may need to change localhost to 127.0.0.1\n' +
-            '# There have been reported issues with dns resolution when localhost wasn\'t in the hosts file.\n' +
-            '#\n' +
-            env + '-server=' + settings.marklogicHost + '\n' +
-            'content-forests-per-host=3\n' +
-            '\n' +
-            '#\n' +
-            '# Admin username/password that will exist on the local/dev/prod servers\n' +
-            '#\n' +
-            'user=' + settings.marklogicAdminUser + '\n' +
-            'password=' + settings.marklogicAdminPass + '\n';
-
-          fs.writeFileSync('deploy/' + env + '.properties', envProperties, {encoding: 'utf8'});
-          log('Created deploy/' + env + '.properties.');
+          settings.nameDashed = _s.slugify(appName);
         }
-        done();
-      } catch (e) {
-        log('Failed to write ' + env + ' config files: ' + e.message);
-        done();
-      }
+
+        try {
+          var configJSON = {};
+          configJSON['app-name'] = settings.nameDashed;
+          configJSON['ml-version'] = settings.mlVersion;
+          configJSON['ml-host'] = settings.marklogicHost;
+          configJSON['ml-admin-user'] = settings.marklogicAdminUser;
+          configJSON['ml-admin-pass'] = settings.marklogicAdminPass;
+          configJSON['ml-app-user'] = appUserName || (settings.nameDashed + '-user');
+          configJSON['ml-app-pass'] = appUserPass || '';
+          configJSON['ml-http-port'] = settings.appPort;
+
+          if (settings.mlVersion < 8) {
+            configJSON['ml-xcc-port'] = settings.xccPort;
+          }
+
+          configJSON['node-port'] = settings.nodePort;
+          configJSON['guest-access'] = settings.guestAccess;
+          configJSON['disallow-updates'] = settings.disallowUpdates;
+          configJSON['appusers-only'] = settings.appUsersOnly;
+
+          var configString = JSON.stringify(configJSON, null, 2) + '\n';
+          fs.writeFileSync(env + '.json', configString, { encoding: 'utf8' });
+          log('Created ' + env + '.json.');
+
+          if (fs.existsSync('deploy/' + env + '.properties')) {
+            log('NOTE: deploy/' + env + '.properties already exists, change manually please!');
+          } else {
+            var envProperties = '#################################################################\n' +
+              '# This file contains overrides to values in build.properties\n' +
+              '# These only affect your local environment and should not be checked in\n' +
+              '#################################################################\n' +
+              '\n' +
+              'server-version=' + settings.mlVersion + '\n' +
+              '\n' +
+              '#\n' +
+              '# The ports used by your application\n' +
+              '#\n' +
+              'app-port=' + settings.appPort + '\n';
+            if (settings.mlVersion < 8) {
+              envProperties += 'xcc-port=' + settings.xccPort + '\n';
+            }
+            else
+            {
+              envProperties += '# Taking advantage of not needing a XCC Port for ML8\n' +
+              'xcc-port=${app-port}\n' +
+              'install-xcc=false\n';
+            }
+
+            envProperties += '\n' +
+              '#\n' +
+              '# the uris or IP addresses of your servers\n' +
+              '# WARNING: if you are running these scripts on WINDOWS you may need to change localhost to 127.0.0.1\n' +
+              '# There have been reported issues with dns resolution when localhost wasn\'t in the hosts file.\n' +
+              '#\n' +
+              env + '-server=' + settings.marklogicHost + '\n' +
+              'content-forests-per-host=3\n' +
+              '\n' +
+              '#\n' +
+              '# Admin username/password that will exist on the local/dev/prod servers\n' +
+              '#\n' +
+              'user=' + settings.marklogicAdminUser + '\n' +
+              'password=' + settings.marklogicAdminPass + '\n';
+
+            fs.writeFileSync('deploy/' + env + '.properties', envProperties, {encoding: 'utf8'});
+            log('Created deploy/' + env + '.properties.');
+          }
+          done();
+        } catch (e) {
+          log('Failed to write ' + env + ' config files: ' + e.message);
+          done();
+        }
+      });
     });
   }
 }
@@ -924,6 +952,38 @@ function notify(options) {
   };
   _.assign(notifyOptions, options);
   notifier.notify(notifyOptions);
+}
+
+function run(cmd, args, verbose) {
+  var d = q.defer();
+  var output = '';
+
+  console.log('Spawning ' + cmd + ' ' + args.join(' '));
+  var child = spawn(cmd, args, {
+    stdio: [
+      0, // Use parents stdin for child
+      'pipe', // Pipe child's stdout to parent (default)
+      'pipe' // Pipe child's stderr to parent (default)
+    ]
+  });
+
+  child.on('close', function() {
+    console.log('done running ' + cmd);
+    d.resolve(output);
+  });
+
+  child.stdout.on('data', function (chunk) {
+    if (verbose) {
+      console.log(chunk.toString());
+    }
+    output += chunk.toString();
+  });
+
+  child.stderr.on('data', function (data) {
+    console.log(data.toString());
+  });
+
+  return d.promise;
 }
 
 module.exports = gulp;
