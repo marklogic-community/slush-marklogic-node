@@ -1,0 +1,50 @@
+<div ng-if="ctrl.user" class="profile">
+  <div class="row">
+    <h2 class="col-md-12">Edit your profile</h2>
+  </div>
+  <form name="profileForm">
+    <div class="form-group">
+      <div class="row">
+        <div class="col-md-12">
+          <label class="control-label">Full name</label>
+          <input type="text" class="form-control" placeholder="full name of user" ng-model="ctrl.user.fullname">
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <!-- show empty field if no emails yet -->
+      <div class="row">
+        <div class="col-md-12">
+          <label class="control-label">E-mail(s)</label>
+        </div>
+        <div class="col-md-12">
+          <input type="email" name="newEmail" class="form-control col-md-9" placeholder="e-mail of user" ng-model="ctrl.newEmail">
+          <button class="btn btn-primary col-md-2" ng-click="ctrl.addEmail()">
+            <span class="glyphicon glyphicon-plus"></span>
+          </button>
+        </div>
+      </div>
+      <div class="row valid-email">
+        <div class="col-md-offset-2 col-md-6 error bg-danger" ng-if="profileForm.newEmail.$error.email">Not valid email!</div>
+      </div>
+      <!-- always show add button -->
+      <!-- repeat if there are emails -->
+      <div class="row" ng-repeat="email in ctrl.user.emails track by $index">
+        <div class="col-md-12">
+          <div class="input-group additional-email">
+            <input type="text" class="form-control" placeholder="e-mail of user" ng-model="ctrl.user.emails[$index]">
+            <span class="input-group-addon btn-danger" ng-click="ctrl.removeEmail($index)">
+              <span class="glyphicon glyphicon-remove"></span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <a class="btn btn-default" href="/">Cancel</a>
+        <button class="btn btn-primary" ng-click="ctrl.submit(profileForm)">Submit</button>
+      </div>
+    </div>
+  </form>
+</div>

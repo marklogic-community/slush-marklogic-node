@@ -16,7 +16,8 @@
     'app.user',
     'ui.bootstrap',
     'ui.router',
-    'ui.tinymce'
+    'ui.tinymce',
+    'ngToast'
   ]);
 
 }());

@@ -92,6 +92,18 @@
     </range>
   </constraint>
 
+  <!-- Example geospatial facet based on the sample-data, used by map theme -->
+  <constraint name="Location">
+    <geo-elem-pair> 
+      <parent ns="" name="location"/> 
+      <lat ns="" name="latitude"/> 
+      <lon ns="" name="longitude"/>
+      <geo-option>boundaries-included</geo-option>
+      <geo-option>score-function=reciprocal</geo-option>
+      <heatmap s="-90" w="-180" n="90" e="180" latdivs="4" londivs="4"/>
+    </geo-elem-pair>
+  </constraint>
+
   <!-- example facet constraint below -->
   <!--
   <constraint name="myconstraint">
@@ -112,5 +124,9 @@
     <suggestion-option>limit=10</suggestion-option>
   </suggestion-source>
   -->
+
+  <!-- This will extract the latitude and longitude from the search. -->
+  <extract-document-data selected="all">
+  </extract-document-data>
 
 </options>

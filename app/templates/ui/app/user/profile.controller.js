@@ -4,9 +4,9 @@
   angular.module('app.user')
     .controller('ProfileCtrl', ProfileCtrl);
 
-  ProfileCtrl.$inject = ['$scope', '$state', 'MLRest', 'userService'];
+  ProfileCtrl.$inject = ['$scope', '$state', 'MLRest', 'userService', 'ngToast'];
 
-  function ProfileCtrl($scope, $state, mlRest, userService) {
+  function ProfileCtrl($scope, $state, mlRest, userService, toast) {
     var ctrl = this;
     angular.extend(ctrl, {
       user: null,
@@ -60,8 +60,9 @@
           headers: {
             'Content-Type': 'application/json'
           }
-        }).then(function(){
-          ctrl.message = 'Profile stored successfully';
+        }).then(function(data) {
+          toast.success('Submitted');
+          $state.go('root');
         });
       }
     }

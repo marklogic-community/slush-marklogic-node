@@ -81,7 +81,7 @@ function getAuth(options, session) {
 // Generic proxy function used by multiple HTTP verbs
 function proxy(req, res) {
   var queryString = req.originalUrl.split('?')[1];
-  var path = '/v1' + req.path + (queryString ? '?' + queryString : '');
+  var path = req.baseUrl + req.path + (queryString ? '?' + queryString : '');
   console.log(
     req.method + ' ' + req.path + ' proxied to ' +
     options.mlHost + ':' + options.mlHttpPort + path);

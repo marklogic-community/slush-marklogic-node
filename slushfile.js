@@ -341,6 +341,20 @@ function configRoxy() {
       '    </role>'
       );
 
+    // add a geospatial index for the default content
+    foo = foo.replace(/^\s*<geospatial-element-pair-indexes>/m,
+      '      <geospatial-element-pair-indexes>\n' +
+      '        <geospatial-element-pair-index>\n' +
+      '          <parent-namespace-uri/>\n' +
+      '          <parent-localname>location</parent-localname>\n' +
+      '          <latitude-namespace-uri/>\n' +
+      '          <latitude-localname>latitude</latitude-localname>\n' +
+      '          <longitude-namespace-uri/>\n' +
+      '          <longitude-localname>longitude</longitude-localname>\n' +
+      '          <coordinate-system>wgs84</coordinate-system>\n' +
+      '          <range-value-positions>false</range-value-positions>\n' +
+      '        </geospatial-element-pair-index>\n');
+
     fs.writeFileSync('deploy/ml-config.xml', foo);
 
 

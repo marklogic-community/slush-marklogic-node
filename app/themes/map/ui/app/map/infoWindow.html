@@ -1,0 +1,10 @@
+<div class="map-info-window" ng-class="{ isShown: parameter.showMe }">
+  <section class="heading">
+    <div class="info-close"><a ng-click="parameter.close()"><i class="fa fa-close"></i></a></div>
+    <h4 class="window-title">{{ parameter.name || parameter.label }}</h4>
+  </section>
+  <section class="window-content">
+    <div class="image" ng-if="parameter.picture || parameter.image || parameter.photo"><img ng-src="{{parameter.picture || parameter.image || parameter.photo}}" ng-attr-alt="{{parameter.name || parameter.label}}"></div>
+    <div class="details" ng-include="'app/map/infoWindow-details.html'"></div>
+  </section>
+</div>

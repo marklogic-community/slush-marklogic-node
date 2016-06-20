@@ -1,0 +1,255 @@
+
+body {
+  background-color: #eee;
+}
+
+/*header*/
+.navbar-brand {
+  padding: 5px 10px 0 25px;
+}
+
+.navbar {
+  margin-bottom: 0;
+}
+
+nav.nav {
+  border-bottom: 1px solid #ccc;
+  border-radius: 0;
+}
+
+#logo {
+  text-indent: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  background: url('/images/marklogic.png') no-repeat;
+  background-size: contain;
+  min-height: 30px;
+  height: 30px;
+  margin: 0.3em 0;
+  width: 160px;
+}
+
+.error {
+  font-weight: bold;
+}
+
+/* user login/logout */
+.user {
+  button {
+    margin-left: 3px;
+  }
+  input {
+    margin: 0 2px;
+  }
+}
+
+/* side bar */
+.right-col h3 {
+  color: @brand-primary;
+  border-bottom: 2px solid @brand-primary;
+  padding-top: 15px;
+}
+
+/* to get cursor for facet links */
+.facet > div {
+  cursor: hand;
+  cursor: pointer;
+}
+
+.chiclet {
+  margin: 3px;
+}
+
+.facet-icon-pos.facet-add-pos {
+  content: "\f041";
+}
+
+/* negated and added chiclets */
+.chiclet  {
+    position: relative;
+}
+/* set up the added one first */
+.chiclet:before {
+    content: "\f055";
+    font-family: FontAwesome;
+    font-style: normal;
+    font-weight: normal;
+    text-decoration: inherit;
+    color: #fff;
+    font-size: 10px;
+    padding-right: 0.5em;
+    position: absolute;
+    top: 0px;
+    left: 2px;
+}
+/* replace for negated */
+.chiclet.negated:before {
+    content: "\f056";
+}
+
+/* landing page */
+.panel-body {
+  min-height: 125px;
+}
+
+.panel > .panel-heading {
+  text-align: center;
+}
+
+/* profile page */
+.input-group.additional-email {
+  margin: 3px 0;
+}
+
+/*footer*/
+footer {
+  bottom: 0;
+  width: 100%;
+  padding: 1.3em 0;
+  border-top: 1px solid #ccc;
+  color: #555555;
+  text-align: center;
+  background-color: #eee;
+
+  .social-links {
+
+    margin: auto;
+
+    a {
+      width: 25px;
+      height: 25px;
+      display: inline-block;
+      margin-left: 1.5em;
+
+      img { width: 100%; max-height: 100%; }
+      &:first-child{ margin-left: 0 }
+    }
+  }
+
+  .nav {
+    padding: 1em 0;
+
+    li {
+
+      display: inline-block;
+
+      a {
+        color: #555;
+        display: block;
+        padding: 0 0 0 1em;
+
+        &:after {
+          content: '|';
+          display: inline-block;
+          margin-left: 1em;
+        }
+      }
+
+      &:last-child {
+        a {
+          padding-right: 1em;
+        }
+        a:after{ display: none; margin-left: 0; }
+
+      }
+    }
+  }
+
+  .copyright { font-size: 0.9em }
+
+  .nav > li > a:hover, .nav > li > a:focus {
+    text-decoration: none;
+    background-color: #dedede;
+  }
+}
+
+.powered {
+  background: transparent url(/images/MarkLogic-Powered-By.png) no-repeat scroll 10px 10px;
+}
+
+.detail {
+  .desc textarea {
+    width: 100%;
+  }
+}
+
+.map-detail {
+  height: 300px;
+}
+
+.welcome {
+  margin-top: 14px;
+}
+
+.facet-list .facet a {
+  cursor: pointer;
+}
+
+.results {
+  ul.pagination {
+    margin: 0;
+
+    + div.btn-group {
+      margin-top: -3px;
+    }
+  }
+
+  .search-metrics {
+    line-height: 28px;
+    margin-left: 10px;
+    vertical-align: top;
+  }
+
+  .highlight {
+    background-color: #FFFFCC;
+  }
+}
+
+form[name=profileForm] {
+  .valid-email {
+    min-height: 20px;
+  }
+}
+
+.create .tag {
+  margin-top: 10px;
+  margin-right: 5px;
+}
+
+/* Search */
+.search form {
+  margin-bottom: 15px;
+}
+
+/* Search results */
+.pagination-ctrls .btn-group button#single-button {
+    margin-top: -20px;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+.pagination-ctrls {
+    margin-top: 15px;
+}
+
+.results .match .highlight {
+  background-color: @brand-info;
+  color: @gray-lighter;
+  font-weight: bold;
+  padding: 0 2px 2px 2px;
+  margin: 0;
+}
+
+.nav-pills {
+  margin-bottom: 15px;
+}
+
+.pre-xml {
+  border-width : 0;
+  font-family: monospace;
+  font-size: 1.1em;
+  white-space: pre-wrap;       /* Since CSS 2.1 */
+  white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+  white-space: -pre-wrap;      /* Opera 4-6 */
+  white-space: -o-pre-wrap;    /* Opera 7 */
+  word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}

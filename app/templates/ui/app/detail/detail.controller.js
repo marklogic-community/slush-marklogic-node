@@ -1,3 +1,4 @@
+/* global X2JS,vkbeautify */
 (function () {
   'use strict';
   angular.module('app.detail')

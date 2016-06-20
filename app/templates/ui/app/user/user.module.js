@@ -1,5 +1,5 @@
 (function () {
   'use strict';
 
-  angular.module('app.user', ['ml.common', 'app.login']);
+  angular.module('app.user', ['ml.common', 'app.login', 'ngToast']);
 }());

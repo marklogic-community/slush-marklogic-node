@@ -4,9 +4,9 @@
   angular.module('app.create')
     .controller('CreateCtrl', CreateCtrl);
 
-  CreateCtrl.$inject = ['$scope', 'MLRest', '$state', 'userService'];
+  CreateCtrl.$inject = ['$scope', 'MLRest', '$state', 'userService', 'ngToast'];
 
-  function CreateCtrl($scope, mlRest, $state, userService) {
+  function CreateCtrl($scope, mlRest, $state, userService, toast) {
     var ctrl = this;
 
     angular.extend(ctrl, {
@@ -24,8 +24,10 @@
         address: null,
         about: null,
         registered: null,
-        latitude: 0,
-        longitude: 0,
+        location: {
+          latitude: 0,
+          longitude: 0
+        },
         tags: [],
         friends: [],
         greeting: null,
@@ -51,6 +53,7 @@
         // 'perm:sample-role': 'read',
         // 'perm:sample-role': 'update'
       }).then(function(response) {
+        toast.success('Record created.');
         $state.go('root.view', { uri: response.replace(/(.*\?uri=)/, '') });
       });
     }
