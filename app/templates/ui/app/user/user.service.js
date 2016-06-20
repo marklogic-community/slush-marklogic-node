@@ -27,22 +27,11 @@
         return null;
       }
 
-      _currentUser = {
-        name: data.username,
-      };
+      // Copy all initially
+      _currentUser = angular.copy(data);
 
-      if ( data.profile ) {
-        _currentUser.hasProfile = true;
-        _currentUser.fullname = data.profile.fullname;
-
-        if ( _.isArray(data.profile.emails) ) {
-          _currentUser.emails = data.profile.emails;
-        }
-        else if (data.profile.emails) {
-          // wrap single value in array, needed for repeater
-          _currentUser.emails = [data.profile.emails];
-        }
-      }
+      // Password property should not exist, delete anyhow just to be sure
+      delete _currentUser.password;
 
       return _currentUser;
     }

@@ -275,8 +275,8 @@ gulp.task('build', ['optimize', 'images', 'fonts', 'statics', 'tinymce'], functi
 
   var msg = {
     title: 'gulp build',
-    subtitle: 'Deployed to the build folder',
-    message: 'Running `gulp serve-dist`'
+    subtitle: 'Deployed to the dist folder',
+    message: 'Ready to run `gulp serve-dev` or `gulp serve-prod`'
   };
   log(msg);
   notify(msg);
@@ -544,9 +544,9 @@ function init(env, done) {
         return answers.mlVersion < 8;
       }},
       {type: 'input', name: 'nodePort', message: 'Node app port?', default: 9070},
-      {type: 'input', name: 'guestAccess', message: 'Allow anonymous users to search data?', default: 'false'},
-      {type: 'input', name: 'readOnlyAccess', message: 'Disallow proxying update requests?', default: 'false'},
-      {type: 'input', name: 'appUsersOnly', message: 'Only allow access to users created for this app? Disallows admin users.', default: 'false'}
+      {type: 'list', name: 'guestAccess', message: 'Allow anonymous users to search data?', choices: ['false', 'true'], default: 0},
+      {type: 'list', name: 'readOnlyAccess', message: 'Disallow proxying update requests?', choices: ['false', 'true'], default: 0},
+      {type: 'list', name: 'appUsersOnly', message: 'Only allow access to users created for this app? Note: disallows admin users.', choices: ['false', 'true'], default: 0}
     ];
 
     if (typeof appName === 'undefined') {

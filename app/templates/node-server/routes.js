@@ -20,19 +20,27 @@ router.get('/user/status', function(req, res) {
       res.send({
         authenticated: true,
         username: options.defaultUser,
-        profile: { fullname: 'Guest' }
+        profile: { fullname: 'Guest' },
+        guestAccess: options.guestAccess,
+        readOnlyAccess: options.readOnlyAccess,
+        appUsersOnly: options.appUsersOnly
       });
     } else {
-      res.send({authenticated: false});
+      res.send({
+        authenticated: false,
+        guestAccess: options.guestAccess,
+        readOnlyAccess: options.readOnlyAccess,
+        appUsersOnly: options.appUsersOnly
+      });
     }
   } else {
     delete headers['content-length'];
     var status = http.get({
       hostname: options.mlHost,
       port: options.mlHttpPort,
-      path: '/v1/documents?uri=/api/users/' + req.session.user.name + '.json',
+      path: '/v1/documents?uri=/api/users/' + req.session.user.username + '.json',
       headers: headers,
-      auth: req.session.user.name + ':' + req.session.user.password
+      auth: req.session.user.username + ':' + req.session.user.password
     }, function(response) {
       if (response.statusCode === 200) {
         response.on('data', function(chunk) {
@@ -42,8 +50,11 @@ router.get('/user/status', function(req, res) {
           }
           res.status(200).send({
             authenticated: true,
-            username: req.session.user.name,
-            profile: json.user || {}
+            username: req.session.user.username,
+            profile: json.user || {},
+            guestAccess: options.guestAccess,
+            readOnlyAccess: options.readOnlyAccess,
+            appUsersOnly: options.appUsersOnly
           });
           req.session.user.profile = json.user || {};
         });
@@ -51,8 +62,11 @@ router.get('/user/status', function(req, res) {
         //no profile yet for user
         res.status(200).send({
           authenticated: true,
-          username: req.session.user.name,
-          profile: req.session.user.profile || {}
+          username: req.session.user.username,
+          profile: req.session.user.profile || {},
+          guestAccess: options.guestAccess,
+          readOnlyAccess: options.readOnlyAccess,
+          appUsersOnly: options.appUsersOnly
         });
       } else {
         res.send({authenticated: false});
@@ -98,20 +112,23 @@ router.post('/user/login', function(req, res) {
       } else if (response.statusCode === 404) {
         // authentication successful, but no profile defined
         req.session.user = {
-          name: username,
+          username: username,
           password: password
         };
         res.status(200).send({
           authenticated: true,
           username: username,
-          profile: {}
+          profile: {},
+          guestAccess: options.guestAccess,
+          readOnlyAccess: options.readOnlyAccess,
+          appUsersOnly: options.appUsersOnly
         });
       } else {
         console.log('code: ' + response.statusCode);
         if (response.statusCode === 200) {
           // authentication successful, remember the username
           req.session.user = {
-            name: username,
+            username: username,
             password: password
           };
           response.on('data', function(chunk) {
@@ -122,7 +139,10 @@ router.post('/user/login', function(req, res) {
             res.status(200).send({
               authenticated: true,
               username: username,
-              profile: json.user || {}
+              profile: json.user || {},
+              guestAccess: options.guestAccess,
+              readOnlyAccess: options.readOnlyAccess,
+              appUsersOnly: options.appUsersOnly
             });
             req.session.user.profile = json.user || {};
           });

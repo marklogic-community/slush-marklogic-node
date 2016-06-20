@@ -34,7 +34,7 @@
       });
 
       bard.mockService(loginService, {
-        getAuthenticatedStatus: $q.when(),
+        getAuthenticatedStatus: $q.when()
       });
 
     });

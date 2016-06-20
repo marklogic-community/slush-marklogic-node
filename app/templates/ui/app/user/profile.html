@@ -1,7 +1,7 @@
 <div ng-if="ctrl.user" class="profile">
   <div class="row">
     <div class="col-md-2"></div>
-    <h2 class="col-md-10">Edit your profile</h2>
+    <h2 class="col-md-10">Edit profile of {{ctrl.user.username}}</h2>
   </div>
   <form class="form-horizontal" name="profileForm">
     <div class="form-group">
@@ -10,7 +10,7 @@
           <label class="control-label">Full name</label>
         </div>
         <div class="col-md-2">
-          <input type="text" class="form-control" placeholder="full name of user" ng-model="ctrl.user.fullname">
+          <input type="text" class="form-control" placeholder="full name of user" ng-model="ctrl.user.profile.fullname" ng-disabled="ctrl.user.readOnlyAccess">
         </div>
       </div>
     </div>
@@ -21,10 +21,10 @@
           <label class="control-label">E-mail(s)</label>
         </div>
         <div class="col-md-6">
-          <input type="email" name="newEmail" class="form-control" placeholder="e-mail of user" ng-model="ctrl.newEmail">
+          <input type="email" name="newEmail" class="form-control" placeholder="e-mail of user" ng-model="ctrl.newEmail" ng-disabled="ctrl.user.readOnlyAccess">
         </div>
         <div class="col-md-1">
-          <button class="btn btn-primary" ng-click="ctrl.addEmail()">
+          <button class="btn btn-primary" ng-click="ctrl.addEmail()" ng-show="!ctrl.user.readOnlyAccess">
             <span class="glyphicon glyphicon-plus"></span>
           </button>
         </div>
@@ -34,20 +34,20 @@
       </div>
       <!-- always show add button -->
       <!-- repeat if there are emails -->
-      <div class="row" ng-repeat="email in ctrl.user.emails track by $index">
+      <div class="row" ng-repeat="email in ctrl.user.profile.emails track by $index">
         <div class="col-md-offset-2 col-md-6">
           <div class="input-group additional-email">
-            <input type="text" class="form-control" placeholder="e-mail of user" ng-model="ctrl.user.emails[$index]">
-            <span class="input-group-addon btn-danger" ng-click="ctrl.removeEmail($index)">
+            <input type="text" class="form-control" placeholder="e-mail of user" ng-model="ctrl.user.profile.emails[$index]" ng-disabled="ctrl.user.readOnlyAccess">
+            <span class="input-group-addon btn-danger" ng-click="ctrl.removeEmail($index)" ng-show="!ctrl.user.readOnlyAccess">
               <span class="glyphicon glyphicon-remove"></span>
             </span>
           </div>
         </div>
       </div>
     </div>
-    <div class="row">
+    <div class="row" ng-show="!ctrl.user.readOnlyAccess">
       <div class="col-md-offset-7 col-md-5">
-        <a class="btn btn-default" href="/">Cancel</a>
+        <a class="btn btn-default" ui-sref="root.landing">Cancel</a>
         <button class="btn btn-primary" ng-click="ctrl.submit(profileForm)">Submit</button>
       </div>
     </div>

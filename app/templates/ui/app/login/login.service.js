@@ -9,6 +9,7 @@
   function LoginService($http, $uibModal, $q, $rootScope, $state,
     $stateParams, messageBoardService) {
 
+    var service = {};
     var _loginMode = 'full'; // 'modal', 'top-right', or 'full'
     var _loginError;
     var _toStateName;
@@ -47,7 +48,7 @@
         {
           loginSuccess(response);
         }
-        return isAuthenticated();
+        return service.isAuthenticated();
       });
     }
 
@@ -135,7 +136,7 @@
 
     function blockRoute(event, next, nextParams) {
       event.preventDefault();
-      loginPrompt();
+      service.loginPrompt();
       if (_loginMode !== 'full') {
         if (deregisterLoginSuccess) {
           deregisterLoginSuccess();
@@ -156,11 +157,11 @@
       }
 
       if (routeIsProtected(next.name)) {
-        var auth = getAuthenticatedStatus();
+        var auth = service.getAuthenticatedStatus();
 
         if (angular.isFunction(auth.then)) {
           auth.then(function() {
-            if (!isAuthenticated()) {
+            if (!service.isAuthenticated()) {
               //this does NOT block requests in a timely fashion...
               blockRoute(event, next, nextParams);
             }
@@ -175,7 +176,12 @@
       }
     });
 
-    return {
+    $rootScope.$on('loginService:profile-changed', function() {
+      _isAuthenticated = undefined;
+      service.getAuthenticatedStatus();
+    });
+
+    angular.extend(service, {
       login: login,
       logout: logout,
       loginPrompt: loginPrompt,
@@ -184,6 +190,8 @@
       isAuthenticated: isAuthenticated,
       getAuthenticatedStatus: getAuthenticatedStatus,
       protectedRoutes: protectedRoutes
-    };
+    });
+
+    return service;
   }
 }());

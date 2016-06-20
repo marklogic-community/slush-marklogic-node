@@ -193,9 +193,9 @@ function configRoxy() {
     var matches = passwordMatch.exec(properties);
     settings.appuserPassword = matches[1];
 
-    // fix bug in Roxy causing { in pwd to get escaped mistakenly
-    if (settings.appuserPassword.match(/[\{\}]/g)) {
-      settings.appuserPassword = settings.appuserPassword.replace(/[\{\}]/g, '');
+    // fix bug in Roxy causing {, } and \ in pwd to get mangled
+    if (settings.appuserPassword.match(/[\{\}\\]/g)) {
+      settings.appuserPassword = settings.appuserPassword.replace(/[\{\}\\]/g, '');
       properties = properties.replace(passwordMatch, 'appuser-password=' + settings.appuserPassword);
     }
 
@@ -389,9 +389,9 @@ gulp.task('init', ['checkForUpdates'], function (done) {
       { name: 'Documents', value: '3column' },
       { name: 'Other', value: 'default' }
     ]},
-    {type: 'input', name: 'guestAccess', message: 'Allow anonymous users to search data?', default: 'false'},
-    {type: 'input', name: 'readOnlyAccess', message: 'Disallow proxying update requests?', default: 'false'},
-    {type: 'input', name: 'appUsersOnly', message: 'Only allow access to users created for this app? Disallows admin users.', default: 'false'}
+    {type: 'list', name: 'guestAccess', message: 'Allow anonymous users to search data?', choices: ['false', 'true'], default: 0},
+    {type: 'list', name: 'readOnlyAccess', message: 'Disallow proxying update requests?', choices: ['false', 'true'], default: 0},
+    {type: 'list', name: 'appUsersOnly', message: 'Only allow access to users created for this app? Note: disallows admin users.', choices: ['false', 'true'], default: 0}
   ];
 
   if (typeof appName === 'undefined') {

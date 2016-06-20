@@ -37,7 +37,7 @@ router.put('*', function(req, res) {
     res.status(401).send('Unauthorized');
   } else if (options.readOnlyAccess || (req.path === '/v1/documents' &&
     req.query.uri.match('/api/users/') &&
-    req.query.uri.match(new RegExp('/api/users/[^(' + req.session.user.name + ')]+.json')))) {
+    req.query.uri.match(new RegExp('/api/users/[^(' + req.session.user.username + ')]+.json')))) {
     // The user is trying to PUT to a profile document other than his/her own. Not allowed.
     res.status(403).send('Forbidden');
   } else {
@@ -83,8 +83,8 @@ router.delete('*', function(req, res) {
 
 function getAuth(options, session) {
   var auth = null;
-  if (session.user !== undefined && session.user.name !== undefined) {
-    auth =  session.user.name + ':' + session.user.password;
+  if (session.user !== undefined && session.user.username !== undefined) {
+    auth =  session.user.username + ':' + session.user.password;
   }
   else {
     auth = options.defaultUser + ':' + options.defaultPass;
