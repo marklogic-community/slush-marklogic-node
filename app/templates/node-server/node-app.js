@@ -5,10 +5,11 @@ var express = require('express');
 var expressSession = require('express-session');
 var app = express();
 var logger = require('morgan');
-var port = process.env.PORT || 8001;
 var four0four = require('./utils/404')();
 
-var environment = process.env.NODE_ENV;
+var options = require('./utils/options')();
+var port = options.appPort;
+var environment = options.env;
 
 app.use(expressSession({
   name: '@sample-app-name',

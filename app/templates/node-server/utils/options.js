@@ -10,8 +10,9 @@ module.exports = function(){
   var envJson = getEnvOptions(environment === 'build' ? 'prod' : 'local');
 
   var options = {
+    env: environment,
     appName: process.env.APP_NAME || envJson['app-name'] || 'slush-app',
-    appPort: process.env.APP_PORT || envJson['node-port'] || config.defaultPort,
+    appPort: process.env.APP_PORT || process.env.PORT || envJson['node-port'] || config.defaultPort,
     mlHost: process.env.ML_HOST || envJson['ml-host'] || config.marklogic.host,
     mlHttpPort: process.env.ML_PORT || envJson['ml-http-port'] || config.marklogic.httpPort,
     defaultUser: process.env.ML_APP_USER || envJson['ml-app-user'] || config.marklogic.user,
