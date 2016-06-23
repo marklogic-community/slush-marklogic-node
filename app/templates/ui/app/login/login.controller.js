@@ -1,4 +1,4 @@
-(function () {
+(function() {
   'use strict';
 
   angular.module('app.login')
@@ -6,6 +6,7 @@
     .controller('LoginFullCtrl', LoginFullCtrl);
 
   LoginCtrl.$inject = ['$scope', 'loginService'];
+
   function LoginCtrl($scope, loginService) {
     var ctrl = this;
     angular.extend(ctrl, {
@@ -35,12 +36,15 @@
 
     function callback(user) {
       if ($scope.callback && !loginService.loginError()) {
-        $scope.callback({user: user});
+        $scope.callback({
+          user: user
+        });
       }
     }
   }
 
   LoginFullCtrl.$inject = ['$state', '$stateParams'];
+
   function LoginFullCtrl($state, $stateParams) {
     var ctrl = this;
     angular.extend(ctrl, {

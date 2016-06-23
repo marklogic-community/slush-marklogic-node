@@ -3,19 +3,19 @@
   "version": "0.0.0",
   "dependencies": {
     "jquery": "~2.1.4",
-    "angular": "~1.4.4",
+    "angular": "~1.5.x",
     "angular-bootstrap": "^1.1",
-    "angular-cookies": "~1.4.4",
-    "angular-highlightjs": "~0.4.3",
-    "angular-mocks": "~1.4.4",
-    "angular-ui-router": "~0.2.15",
+    "angular-cookies": "~1.5.x",
+    "angular-highlightjs": "^0.6.1",
+    "angular-mocks": "~1.5.x",
+    "angular-ui-router": "^1.0.0",
     "angular-ui-tinymce": "~0.0.9",
-    "angular-animate": "~1.4.4",
+    "angular-animate": "~1.5.x",
     "ngtoast": "^2.0.0",
     "angular-x2js": "https://github.com/janmichaelyu/angular-x2js.git",
     "bootstrap": "~3.3.5",
     "font-awesome": "~4.6.0",
-    "highlightjs":"~8.7.0",
+    "highlightjs": "~8.7.0",
     "lodash": "~3.10.1",
     "ml-search-ng": "~0.2.0",
     "ml-utils": "withjam/ml-utils",
@@ -27,16 +27,19 @@
   },
   "overrides": {
     "angular-highlightjs": {
-      "dependencies": {"angular" : ">1.0.8", "highlightjs":"~8.7.0"}
+      "dependencies": {
+        "angular": ">1.0.8",
+        "highlightjs": "~8.7.0"
+      }
     }
   },
   "devDependencies": {
-    "angular-mocks": "~1.4.4",
+    "angular-mocks": "~1.5.x",
     "sinon": "http://sinonjs.org/releases/sinon-1.16.1.js",
     "bardjs": "~0.1.8"
   },
   "private": true,
   "resolutions": {
-    "angular": "~1.4.4"
+    "angular": "~1.5.x"
   }
 }
