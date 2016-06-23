@@ -1,0 +1,19 @@
+{
+  "apps": [{
+    "name": "@sample-app-name",
+    "script": "./node-server/node-app.js",
+    "watch": true,
+    "env": {
+      "NODE_ENV": "local"
+    },
+    "env_local": {
+      "NODE_ENV": "local"
+    },
+    "env_dev": {
+      "NODE_ENV": "dev"
+    },
+    "env_prod": {
+      "NODE_ENV": "prod"
+    }
+  }]
+}

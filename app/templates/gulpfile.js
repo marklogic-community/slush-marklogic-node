@@ -10,10 +10,13 @@ var fs = require('fs');
 var glob = require('glob');
 var gulp = require('gulp');
 var path = require('path');
+var username = require('username');
 
 /* jshint ignore:start */
 var _ = require('lodash');
-var $ = require('gulp-load-plugins')({lazy: true});
+var $ = require('gulp-load-plugins')({
+  lazy: true
+});
 /* jshint ignore:end */
 
 var _s = require('underscore.string'),
@@ -49,7 +52,9 @@ gulp.task('vet', function() {
     .src(config.alljs)
     .pipe($.if(args.verbose, $.print()))
     .pipe($.jshint())
-    .pipe($.jshint.reporter('jshint-stylish', {verbose: true}))
+    .pipe($.jshint.reporter('jshint-stylish', {
+      verbose: true
+    }))
     .pipe($.if(!args.ignoreErrors, $.jshint.reporter('fail')))
     .pipe($.jscs())
     .pipe($.jscs.reporter())
@@ -74,7 +79,7 @@ gulp.task('plato', function(done) {
 gulp.task('styles', ['clean-styles'], function() {
   log('Compiling Less --> CSS');
 
-  var less = $.less().on('error',function(e){
+  var less = $.less().on('error', function(e) {
     $.util.log($.util.colors.red(e));
     this.emit('end', e);
   });
@@ -83,7 +88,9 @@ gulp.task('styles', ['clean-styles'], function() {
     .src(config.mainLess)
     .pipe($.plumber()) // exit gracefully if something fails after this
     .pipe(less)
-    .pipe($.autoprefixer({browsers: ['last 2 version', '> 5%']}))
+    .pipe($.autoprefixer({
+      browsers: ['last 2 version', '> 5%']
+    }))
     .pipe(gulp.dest(config.temp))
     .pipe($.if(args.verbose, $.print()));
 });
@@ -124,7 +131,9 @@ gulp.task('tinymce', function() {
   log('Copying tinymce files');
 
   return gulp
-    .src(config.tinymce, { base: './bower_components/tinymce-dist' })
+    .src(config.tinymce, {
+      base: './bower_components/tinymce-dist'
+    })
     .pipe(gulp.dest(config.build + 'js/'))
     .pipe($.if(args.verbose, $.print()));
 });
@@ -138,7 +147,9 @@ gulp.task('images', ['clean-images'], function() {
 
   return gulp
     .src(config.images)
-    .pipe($.imagemin({optimizationLevel: 4}))
+    .pipe($.imagemin({
+      optimizationLevel: 4
+    }))
     .pipe(gulp.dest(config.build + 'images'))
     .pipe($.if(args.verbose, $.print()));
 });
@@ -228,89 +239,101 @@ gulp.task('init-prod', function(done) {
 });
 
 /**
- * Creates a sample process.json
+ * Updates ecosystem.json
  */
-gulp.task('init-process', function() {
-  //copy from slushfile - with modifications to use config instead
-  log('Creating process.json sample document with values drawn from gulp.config.js');
-  try {
-    var configJSON = pm2JSON();
+gulp.task('add-deploy-target', function(done) {
+  log('Update ecosystem.json targets or create new ones!');
 
-    var configString = JSON.stringify(configJSON, null, 2) + '\n';
-    fs.writeFileSync('process.json', configString, {
-      encoding: 'utf8'
-    });
-  } catch (e) {
-    console.log('failed to write process.json: ' + e.message);
+  var ecosystem = 'ecosystem.json';
+
+  if (!fs.existsSync(ecosystem)) {
+    try {
+      var configJSON = {};
+      configJSON.deploy = {};
+
+      var configString = JSON.stringify(configJSON, null, 2) + '\n';
+
+      fs.writeFileSync('ecosystem.json', configString, {
+        encoding: 'utf8'
+      });
+    } catch (e) {
+      console.log('failed to write ecosystem.json: ' + e.message);
+    }
   }
-});
-
-/**
- * Creates a sample ecosystem.json
- */
-gulp.task('init-ecosystem', function() {
-  log('Creating ecosystem.json sample document with values drawn from gulp.config.js');
-  try {
-    var configJSON = pm2JSON();
-
-    configJSON.deploy = {
-      'sample-target': {
-        'key': '/path/to/key',
-        'user': 'USERNAME',
-        'host': ['HOSTNAME'],
-        'ref': 'origin/master',
-        'repo': 'https://GIT_USERNAME:GIT_PASSWORD@marklogic.unfuddle.com/git/REPO_NAME/',
-        'path': '/space/projects/PROJECT_FOLDER/',
-        'pre-deploy-local': 'echo "an echo was executed on your local machine"',
-        'post-deploy': './ml local bootstrap --ml.password=SERVER_PASSWORD; ./ml local deploy modules --ml.password=SERVER_PASSWORD; ./ml local deploy content -password SERVER_PASSWORD; npm install; bower install; gulp build',
-        'env': {
-          'NODE_ENV': 'production'
-        }
-      }
-    };
-
-    var configString = JSON.stringify(configJSON, null, 2) + '\n';
-    fs.writeFileSync('ecosystem.json', configString, {
-      encoding: 'utf8'
-    });
-  } catch (e) {
-    console.log('failed to write ecosystem.json: ' + e.message);
-  }
-});
-
-function pm2JSON() {
-  var configJSON = {};
 
   var properties = fs.readFileSync('deploy/build.properties', {
     encoding: 'utf8'
   });
 
   var name = properties.match(/app-name=(.*)/)[1];
+  var gitUrl = 'https://github.com/';
+  var folderPath = '/space/projects/' + name;
 
-  var apps = {};
-  apps.name = name;
-  apps.script = './node-server/node-app.js';
-  apps.env = {
-    'NODE_ENV': 'default',
-    'PORT': config.defaultPort,
-    'ML_HOST': config.marklogic.host,
-    'ML_PORT': config.marklogic.httpPort,
-    'ML_APP_USER': config.marklogic.user,
-    'ML_APP_PASS': config.marklogic.password
-  };
-  apps.env_build = {
-    'NODE_ENV': 'build',
-    'PORT': config.defaultPort,
-    'ML_HOST': config.marklogic.host,
-    'ML_PORT': config.marklogic.httpPort,
-    'ML_APP_USER': config.marklogic.user,
-    'ML_APP_PASS': config.marklogic.password
-  };
+  $.git.exec({
+    args: 'config --get remote.origin.url',
+    quiet: true
+  }, function(err, stdout) {
+    if (!err) {
+      gitUrl = stdout.split('\n')[0];
+    }
 
-  configJSON.apps = [apps];
+    var questions = [{
+      type: 'input',
+      name: 'targetName',
+      message: 'What\'s the name of this deployment target? (If this target exists we\'ll replace it!!!!)',
+      default: 'prod'
+    }, {
+      type: 'input',
+      name: 'key',
+      message: 'Where do you keep your ssh key that\'s used for both the target server and the git repository?',
+      default: '~/.ssh/id_rsa'
+    }, {
+      type: 'input',
+      name: 'username',
+      message: 'Where\'s your username on the target server?',
+      default: username.sync()
+    }, {
+      type: 'input',
+      name: 'hostname',
+      message: 'What\'s the hostname of the target server?',
+      default: 'localhost'
+    }, {
+      type: 'input',
+      name: 'branch',
+      message: 'Which git branch are we deploying?',
+      default: 'master'
+    }, {
+      type: 'input',
+      name: 'gitUrl',
+      message: 'What\'s the url of your git repository?',
+      default: gitUrl
+    }, {
+      type: 'input',
+      name: 'folder',
+      message: 'Where do you want to store the project on your target server?',
+      default: folderPath
+    }];
 
-  return configJSON;
-}
+    gulp.src(ecosystem)
+      .pipe($.prompt.prompt(questions, function(answers) {
+
+        gulp.src(ecosystem)
+          .pipe($.jsonEditor(function(json) {
+            json.deploy[answers.targetName] = {
+              'key': answers.key,
+              'user': answers.username,
+              'host': [answers.hostname],
+              'ref': 'origin/' + answers.branch,
+              'repo': answers.gitUrl,
+              'path': answers.folder,
+              'post-deploy': 'npm install; bower install; gulp build'
+            };
+            return json; // must return JSON object.
+          }))
+          .pipe(gulp.dest('./'));
+      }));
+  });
+});
 
 /**
  * Run the spec runner
@@ -318,7 +341,7 @@ function pm2JSON() {
  */
 gulp.task('serve-specs', ['build-specs'], function(done) {
   log('run the spec runner');
-  serve('local' /* env */, true /* specRunner */);
+  serve('local' /* env */ , true /* specRunner */ );
   done();
 });
 
@@ -379,9 +402,15 @@ gulp.task('optimize', ['inject', 'test'], function() {
   log('Optimizing the js, css, and html');
 
   // Filters are named for the gulp-useref path
-  var cssFilter = $.filter('**/*.css', {restore: true});
-  var jsAppFilter = $.filter('**/' + config.optimized.app, {restore: true});
-  var jslibFilter = $.filter('**/' + config.optimized.lib, {restore: true});
+  var cssFilter = $.filter('**/*.css', {
+    restore: true
+  });
+  var jsAppFilter = $.filter('**/' + config.optimized.app, {
+    restore: true
+  });
+  var jslibFilter = $.filter('**/' + config.optimized.lib, {
+    restore: true
+  });
 
   var templateCache = config.temp + config.templateCache.file;
 
@@ -389,31 +418,33 @@ gulp.task('optimize', ['inject', 'test'], function() {
     .src(config.index)
     .pipe($.plumber())
     .pipe(inject(templateCache, 'templates'))
-
     // Apply the concat and file replacement with useref
-    .pipe($.useref({searchPath: './'}))
-
+    .pipe($.useref({
+      searchPath: './'
+    }))
     // Get the css
     .pipe(cssFilter)
     // Take inventory of the css file names for future rev numbers
     .pipe($.rev())
     .pipe($.sourcemaps.init())
-    .pipe($.cssnano({safe: true}))
+    .pipe($.cssnano({
+      safe: true
+    }))
     // write sourcemap for css
     .pipe($.sourcemaps.write('.'))
     .pipe(cssFilter.restore)
-
     // Get the custom javascript
     .pipe(jsAppFilter)
     // Take inventory of the js app file name for future rev numbers
     .pipe($.rev())
     .pipe($.sourcemaps.init())
-    .pipe($.ngAnnotate({add: true}))
+    .pipe($.ngAnnotate({
+      add: true
+    }))
     .pipe($.uglify())
     // write sourcemap for js app
     .pipe($.sourcemaps.write('.'))
     .pipe(jsAppFilter.restore)
-
     // Get the vendor javascript
     .pipe(jslibFilter)
     // Take inventory of the js lib file name for future rev numbers
@@ -423,10 +454,8 @@ gulp.task('optimize', ['inject', 'test'], function() {
     // write sourcemap for js lib
     .pipe($.sourcemaps.write('.'))
     .pipe(jslibFilter.restore)
-
     // Rename the recorded file names in the steam, and in the html to append rev numbers
     .pipe($.revReplace())
-
     // copy result to dist/, and print some logging..
     .pipe(gulp.dest(config.build))
     .pipe($.if(args.verbose, $.print()));
@@ -499,7 +528,7 @@ gulp.task('clean-code', function() {
  * @param  {Function} done - callback when complete
  */
 gulp.task('test', ['vet', 'templatecache'], function(done) {
-  startTests(true /*singleRun*/, done);
+  startTests(true /*singleRun*/ , done);
 });
 
 /**
@@ -510,7 +539,7 @@ gulp.task('test', ['vet', 'templatecache'], function(done) {
  * @param  {Function} done - callback when complete
  */
 gulp.task('autotest', function(done) {
-  startTests(false /*singleRun*/, done);
+  startTests(false /*singleRun*/ , done);
 });
 
 /**
@@ -520,7 +549,7 @@ gulp.task('autotest', function(done) {
  * @return {Stream}
  */
 gulp.task('serve-local', ['inject', 'fonts'], function() {
-  return serve('local' /*env*/);
+  return serve('local' /*env*/ );
 });
 
 /**
@@ -530,7 +559,7 @@ gulp.task('serve-local', ['inject', 'fonts'], function() {
  * @return {Stream}
  */
 gulp.task('serve-dev', ['build'], function() {
-  return serve('dev' /*env*/);
+  return serve('dev' /*env*/ );
 });
 
 /**
@@ -540,7 +569,7 @@ gulp.task('serve-dev', ['build'], function() {
  * @return {Stream}
  */
 gulp.task('serve-prod', ['build'], function() {
-  return serve('prod' /*env*/);
+  return serve('prod' /*env*/ );
 });
 
 /**
@@ -761,7 +790,9 @@ function unescape(s) {
  * @return  {Stream}
  */
 function inject(src, label, order) {
-  var options = {read: false};
+  var options = {
+    read: false
+  };
   if (label) {
     options.name = 'inject:' + label;
   }
@@ -775,7 +806,7 @@ function inject(src, label, order) {
  * @param   {Array} order Glob array pattern
  * @return  {Stream} The ordered stream
  */
-function orderSrc (src, order) {
+function orderSrc(src, order) {
   return gulp
     .src(src)
     .pipe($.if(order, $.order(order)));
@@ -805,17 +836,19 @@ function serve(env, specRunner) {
       log('files changed:\n' + ev);
       setTimeout(function() {
         browserSync.notify('reloading now ...');
-        browserSync.reload({stream: false});
+        browserSync.reload({
+          stream: false
+        });
       }, config.browserReloadDelay);
     })
-    .on('start', function () {
+    .on('start', function() {
       log('*** nodemon started');
       startBrowserSync(env, specRunner);
     })
-    .on('crash', function () {
+    .on('crash', function() {
       log('*** nodemon crashed: script crashed for some reason');
     })
-    .on('exit', function () {
+    .on('exit', function() {
       log('*** nodemon exited cleanly');
     });
 }
@@ -834,8 +867,7 @@ function getNodeOptions(env) {
   var envFile = './' + env + '.json';
   try {
     envJson = require(envFile);
-  }
-  catch (e) {
+  } catch (e) {
     envJson = {};
     log('Couldn\'t find ' + envFile + '; you can create this file to override properties - ' +
       '`gulp init-local` creates local.json which can be modified for other environments as well');
@@ -877,8 +909,7 @@ function startBrowserSync(env, specRunner) {
   if (isDevMode(env)) {
     gulp.watch([config.less], ['styles'])
       .on('change', changeEvent);
-  }
-  else {
+  } else {
     gulp.watch([config.less, config.js, config.html], ['optimize', browserSync.reload])
       .on('change', changeEvent);
   }
@@ -904,7 +935,7 @@ function startBrowserSync(env, specRunner) {
     notify: true,
     reloadDelay: 0, //1000
     ui: false
-  } ;
+  };
   if (specRunner) {
     options.startPath = config.specRunnerFile;
   }
@@ -936,7 +967,9 @@ function startPlatoVisualizer(done) {
     if (args.verbose) {
       log(overview.summary);
     }
-    if (done) { done(); }
+    if (done) {
+      done();
+    }
   }
 }
 

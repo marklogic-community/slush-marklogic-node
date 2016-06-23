@@ -72,29 +72,51 @@ XML, Binary, and Text data out of the box.
 
 ## Running with PM2
 
-To run you must install pm2 with:
+To run you must first install pm2 if you do not have it with:
 
 `npm install pm2 -g`
 
-Make sure you have the file `process.json` if it's missing then run:
+It's very **Important** that when deploying to a secure server that you do all pm2 commands as the pm2 user by using:
 
-`gulp init-process`
-
-This file will also include any config your node layer needs eg. mlHost, mlPort, nodePort, mlPassword etc.
+`sudo su pm2`
 
 You can then launch the app using pm2 with:
 
-`pm2 startOrRestart process.json`
+`pm2 startOrRestart boot.json`
 
-You can also launch the app using different environment configuration (env name prefixed with "env_") using:
+You can also launch the app using different environment configurations in boot.json (env name prefixed with "env_"), for example:
 
-`pm2 startOrRestart process.json --env build`
+`pm2 startOrRestart boot.json --env prod`
+
+You can also save your current pm2 deployments with:
+
+`pm2 save`
+
+You should run `pm2 save` whenever you deploy a new app.
 
 To view all running pm2 applications use:
 
 `pm2 list`
 
-And for more information use: 
+To view any logs use:
+
+`pm2 logs`
+
+To monitor ram or cpu usage use:
+
+`pm2 monit`
+
+**If** you've deployed applications previously but don't see them when you run pm2 list then it might be because you're not logged in as the pm2 user or you deployed them under a different user.
+
+If you accidently launch pm2 under your own account then you can kill the process with:
+
+`pm2 kill`
+
+And if you accidently run that command when logged in as the pm2 user then you can start pm2 and resurrect all processes from the last `pm2 save` with:
+
+`pm2 resurrect`
+
+For more information use:
 
 `pm2 help`
 
@@ -104,31 +126,27 @@ To deploy, make sure both your local machine and your remote server/deployment t
 
 `npm install pm2 -g`
 
-Make sure you have the file `ecosystem.json` if it's missing then run:
+Make sure you have the file `ecosystem.json` with any saved deployment targets inside, to create this file or add a new deployment target run:
 
-`gulp init-ecosystem`
+`gulp add-deploy-target`
 
-`ecosystem.json` will include any config as well as any deployment config along with your credentials. It is git ignored by default and we recommend you avoid commiting it and instead put any repository appropriate configuration in `process.json`
-
-Using the sample target in ecosystem.json as a guide, set up a target to deploy to. Your configuration must have an ssh key, remote server user, git repository potentially with credentials and a valid path that isn't being used.
+`ecosystem.json` will include any config as well as any deployment config along with your credentials. It is git ignored by default and we recommend you avoid commiting it and instead put any repository appropriate configuration in `boot.json`
 
 First initialize the target host:
 
-`pm2 deploy ecosystem.json TARGETNAME setup`
+`pm2 deploy TARGETNAME setup`
 
-Then deploy new code with:
+Then deploy your latest code from your git repository and run any post-deploy commands with:
 
-`pm2 deploy ecosystem.json TARGETNAME`
+`pm2 deploy TARGETNAME`
 
-**Hint**, If you do not specify `ecosystem.json` pm2 automatically looks for it in your current directory
+**Hint**, pm2 automatically looks `ecosystem.json` in your current directory, but you can use other config files with `pm2 deploy otherEcosystemFile.json TARGETNAME`
 
-If you want to deploy without commiting your current code use `--force`:
+If you have files you haven't commited, pm2 will ask you to commit them before deploying, to ignore this use `--force`:
 
 `pm2 deploy TARGETNAME --force`
 
-You can also run commands on the server with `exec` such as starting the app:
-
-`pm2 deploy ecosystem.json TARGETNAME exec "pm2 startOrRestart process.json"`
+With your application deployed follow the above "Running with PM2" instructions to start the application, once you've started the app it will listen for changes and automatically restart when you make deploy changes with `pm2 deploy TARGETNAME`.
 
 For more information use:
 
