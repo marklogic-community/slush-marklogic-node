@@ -7,7 +7,9 @@ var config = require('../../gulp.config')();
 module.exports = function(){
 
   var environment = process.env.NODE_ENV;
-  var envJson = getEnvOptions(environment === 'build' ? 'prod' : 'local');
+  environment = environment === 'build' ? 'prod' : environment;
+
+  var envJson = getEnvOptions(environment);
 
   var options = {
     env: environment,

@@ -556,7 +556,7 @@ function init(env, done) {
       var marklogicAdminUser = properties['ml.user'] || localMlAdminUser || 'admin';
       var appName = properties['ml.app-name'] || localAppName;
       var appUserName = properties['ml.default-user'] || localMlAppUser;
-      var appUserPass = properties['ml.appuser-password'] || localMlAppPass;
+      var appUserPass = unescape(properties['ml.appuser-password']) || localMlAppPass;
       var appPort = localMlHttpPort || properties['ml.app-port'] || 8040;
       var xccPort = localMlXccPort || properties['ml.xcc-port'] || 8041;
 
@@ -662,6 +662,10 @@ function init(env, done) {
       });
     });
   }
+}
+// bypass Roxy bug that causes special XML chars to get escaped as entities
+function unescape(s) {
+  return s.replace('&apos;', '\'').replace('&quot;', '"').replace('&lt;', '<').replace('&gt;', '>').replace('&amp;', '&').replace('{{', '{').replace('}}', '}');
 }
 
 /**
