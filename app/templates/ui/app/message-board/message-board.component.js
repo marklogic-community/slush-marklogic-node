@@ -1,23 +1,15 @@
-(function () {
+(function() {
 
   'use strict';
 
   angular.module('app.messageBoard')
-    .directive('messageBoard', MessageBoardDirective)
-    .controller('MessageBoardController', MessageBoardController);
-
-  function MessageBoardDirective() {
-    return {
-      restrict: 'E',
-      controller: 'MessageBoardController',
-      controllerAs: 'ctrl',
-      replace: true,
-      scope: {
+    .component('messageBoard', {
+      bindings: {
         msg: '='
       },
-      templateUrl: 'app/message-board/message-board-dir.html'
-    };
-  }
+      controller: MessageBoardController,
+      templateUrl: 'app/message-board/message-board-component.html',
+    });
 
   MessageBoardController.$inject = ['$scope'];
 

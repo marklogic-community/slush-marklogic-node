@@ -35,8 +35,8 @@
     }
 
     function callback(user) {
-      if ($scope.callback && !loginService.loginError()) {
-        $scope.callback({
+      if (ctrl.callback && !loginService.loginError()) {
+        ctrl.callback({
           user: user
         });
       }
