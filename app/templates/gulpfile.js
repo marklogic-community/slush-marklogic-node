@@ -244,23 +244,6 @@ gulp.task('init-prod', function(done) {
 gulp.task('add-deploy-target', function(done) {
   log('Update ecosystem.json targets or create new ones!');
 
-  var ecosystem = 'ecosystem.json';
-
-  if (!fs.existsSync(ecosystem)) {
-    try {
-      var configJSON = {};
-      configJSON.deploy = {};
-
-      var configString = JSON.stringify(configJSON, null, 2) + '\n';
-
-      fs.writeFileSync('ecosystem.json', configString, {
-        encoding: 'utf8'
-      });
-    } catch (e) {
-      console.log('failed to write ecosystem.json: ' + e.message);
-    }
-  }
-
   var properties = fs.readFileSync('deploy/build.properties', {
     encoding: 'utf8'
   });
@@ -268,6 +251,10 @@ gulp.task('add-deploy-target', function(done) {
   var name = properties.match(/app-name=(.*)/)[1];
   var gitUrl = 'https://github.com/';
   var folderPath = '/space/projects/' + name;
+
+  var ecosystem = 'ecosystem.json';
+
+  ecosystemMustExist(ecosystem, name);
 
   $.git.exec({
     args: 'config --get remote.origin.url',
@@ -312,10 +299,21 @@ gulp.task('add-deploy-target', function(done) {
       name: 'folder',
       message: 'Where do you want to store the project on your target server?',
       default: folderPath
+    }, {
+      type: 'list',
+      name: 'local',
+      message: 'Is there any sensitive information or credentials here that shouldn\'t go in source control?',
+      choices: ['no', 'yes'],
+      default: 0
     }];
 
     gulp.src(ecosystem)
       .pipe($.prompt.prompt(questions, function(answers) {
+
+        if (answers.local === 'yes') {
+          ecosystem = 'local.ecosystem.json';
+          ecosystemMustExist(ecosystem, name);
+        }
 
         gulp.src(ecosystem)
           .pipe($.jsonEditor(function(json) {
@@ -326,7 +324,7 @@ gulp.task('add-deploy-target', function(done) {
               'ref': 'origin/' + answers.branch,
               'repo': answers.gitUrl,
               'path': answers.folder,
-              'post-deploy': 'npm install; bower install; gulp build'
+              'post-deploy': 'npm install && bower install && gulp build'
             };
             return json; // must return JSON object.
           }))
@@ -334,6 +332,42 @@ gulp.task('add-deploy-target', function(done) {
       }));
   });
 });
+
+function ecosystemMustExist(ecosystem, name) {
+  if (!fs.existsSync(ecosystem)) {
+    try {
+      var configJSON = {
+        'apps': [{
+          'name': name,
+          'script': './node-server/node-app.js',
+          'watch': true,
+          'restart_delay': 4000,
+          'env': {
+            'NODE_ENV': 'local'
+          },
+          'env_local': {
+            'NODE_ENV': 'local'
+          },
+          'env_dev': {
+            'NODE_ENV': 'dev'
+          },
+          'env_prod': {
+            'NODE_ENV': 'prod'
+          }
+        }],
+        'deploy': {}
+      };
+
+      var configString = JSON.stringify(configJSON, null, 2) + '\n';
+
+      fs.writeFileSync(ecosystem, configString, {
+        encoding: 'utf8'
+      });
+    } catch (e) {
+      console.log('failed to write ecosystem.json: ' + e.message);
+    }
+  }
+}
 
 /**
  * Run the spec runner

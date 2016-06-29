@@ -3,6 +3,7 @@
     "name": "@sample-app-name",
     "script": "./node-server/node-app.js",
     "watch": true,
+    "restart_delay": 4000,
     "env": {
       "NODE_ENV": "local"
     },
@@ -15,5 +16,6 @@
     "env_prod": {
       "NODE_ENV": "prod"
     }
-  }]
+  }],
+  "deploy": {}
 }
