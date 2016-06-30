@@ -1,8 +1,8 @@
 /* jshint -W117, -W030 */
-(function () {
+(function() {
   'use strict';
 
-  describe('Controller: DetailCtrl', function () {
+  describe('Controller: DetailCtrl', function() {
 
     var controller;
     var doc;
@@ -12,20 +12,24 @@
       bard.inject('$controller', '$rootScope');
     });
 
-    beforeEach(function () {
+    beforeEach(function() {
       // stub the document
-      var headers = function() { return 'application/json'; };
+      var headers = function() {
+        return 'application/json';
+      };
       doc = {
         headers: headers,
         data: {
           name: 'hi'
         }
       };
-      controller = $controller('DetailCtrl', { doc: doc });
+      controller = $controller('DetailCtrl', {}, {
+        doc: doc
+      });
       $rootScope.$apply();
     });
 
-    it('should be created successfully', function () {
+    it('should be created successfully', function() {
       expect(controller).to.be.defined;
     });
 
