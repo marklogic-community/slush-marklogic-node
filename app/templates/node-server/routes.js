@@ -57,7 +57,9 @@ router.get('/user/status', function(req, res) {
           req.session.user.profile
         ));
       } else {
-        res.send({authenticated: false});
+        res.send(authStatus(
+          false
+        ));
       }
     });
 

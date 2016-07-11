@@ -30,7 +30,7 @@ console.log('NODE_ENV=' + environment);
 switch (environment){
   case 'prod':
   case 'dev':
-    console.log('** BUILD **');
+    console.log('** DIST **');
     app.use(express.static('./dist/'));
     // Any invalid calls for templateUrls are under app/* and should return 404
     app.use('/app/*', function(req, res, next) {
@@ -40,7 +40,7 @@ switch (environment){
     app.use('/*', express.static('./dist/index.html'));
     break;
   default:
-    console.log('** DEV **');
+    console.log('** UI **');
     app.use(express.static('./ui/'));
     app.use(express.static('./')); // for bower_components
     app.use(express.static('./tmp'));
