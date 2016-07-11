@@ -280,6 +280,17 @@ function configRoxy() {
       '          <range-value-positions>false</range-value-positions>\n' +
       '        </geospatial-element-pair-index>\n');
 
+    // add range path index for the default content
+    foo = foo.replace(/^\s*<range-path-indexes>/m,
+        '      <range-path-indexes>\n' +
+        '        <range-path-index>\n' +
+        '          <scalar-type>string</scalar-type>\n' +
+        '          <collation>http://marklogic.com/collation/codepoint</collation>\n' +
+        '          <path-expression>//docFormat</path-expression>\n' +
+        '          <range-value-positions>false</range-value-positions>\n' +
+        '          <invalid-values>reject</invalid-values>\n' +
+        '        </range-path-index>\n');
+
     // fix default app-role privileges to match rest-style applications
     foo = foo.replace(/<privileges>[^]*?<\/privileges>/,
       '<privileges>\n' +
