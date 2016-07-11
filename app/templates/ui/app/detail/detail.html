@@ -1,42 +1,19 @@
 <div class="row detail">
   <div class="col-sm-8">
-    <uib-tabset type="pills">
-      <!--
-      <uib-tab active="true">
-        <uib-tab-heading>{{ctrl.type | uppercase}}</uib-tab-heading>
-        <div class="col-sm-9 bottom-buffer">
-          <json-explorer ng-if="ctrl.type==='json'" data="ctrl.json"></json-explorer>
-          <pre ng-if="ctrl.type!=='json'" class="pre-xml">{{ctrl.xml}}</pre>
-
-          <a ng-if="ctrl.type==='binary'" target="_blank" ng-href="/v1/documents?uri={{ctrl.uri}}&transform=download" class="btn btn-default">Download</a>
-        </div>
-      </uib-tab>
-      <uib-tab ng-if="ctrl.type!=='json'">
-        <uib-tab-heading>JSON</uib-tab-heading>
-        <div class="col-sm-9 bottom-buffer">
-          <json-explorer data="ctrl.json"></json-explorer>
-        </div>
-      </uib-tab>
-      <uib-tab ng-if="ctrl.type==='json'">
-        <uib-tab-heading >XML</uib-tab-heading>
-        <div class="col-sm-9">
-          <pre class="pre-xml">{{ctrl.xml}}</pre>
-        </div>
-      </uib-tab>
-      -->
-      <uib-tab active="ctrl.type==='json'" ng-click="ctrl.type='json'" ng-if="ctrl.type!='binary'">
+    <uib-tabset type="pills" active="ctrl.type">
+      <uib-tab index="'json'" ng-click="ctrl.type='json'" ng-if="ctrl.type!='binary'">
         <uib-tab-heading>JSON</uib-tab-heading>
         <div class="col-sm-9">
           <json-explorer data="ctrl.json"></json-explorer>
         </div>
       </uib-tab>
-      <uib-tab active="ctrl.type==='xml'" ng-click="ctrl.type='xml'" ng-if="ctrl.type!='binary'">
+      <uib-tab index="'xml'" ng-click="ctrl.type='xml'" ng-if="ctrl.type!='binary'">
         <uib-tab-heading >XML</uib-tab-heading>
         <div class="col-sm-9">
           <pre class="pre-xml">{{ctrl.xml}}</pre>
         </div>
       </uib-tab>
-      <uib-tab active="ctrl.type==='binary'" ng-click="ctrl.type='binary'" ng-if="ctrl.type=='binary'">
+      <uib-tab index="'binary'" ng-click="ctrl.type='binary'" ng-if="ctrl.type=='binary'">
         <uib-tab-heading >Binary</uib-tab-heading>
         <div class="col-sm-9">
           <a target="_blank" ng-href="/v1/documents?uri={{ctrl.uri}}&transform=download"
