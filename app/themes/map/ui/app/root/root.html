@@ -19,7 +19,7 @@
       <ul class="nav navbar-nav">
         <li><a href="/">Home</a></li>
         <li><a href="/search">Search</a></li>
-        <li><a href="/create">Create</a></li>
+        <li ng-show="ctrl.currentUser && !ctrl.currentUser.disallowUpdates"><a href="/create">Create</a></li>
       </ul>
       <ml-user mode="inline"></ml-user>
     </div><!-- /.navbar-collapse -->

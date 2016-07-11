@@ -53,8 +53,10 @@
         // 'perm:sample-role': 'read',
         // 'perm:sample-role': 'update'
       }).then(function(response) {
-        toast.success('Record created.');
+        toast.success('Created');
         $state.go('root.view', { uri: response.replace(/(.*\?uri=)/, '') });
+      }, function(response) {
+        toast.danger(response.data);
       });
     }
 

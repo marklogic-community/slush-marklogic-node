@@ -76,7 +76,8 @@
         navLabel: {
           text: 'Create',
           area: 'dashboard',
-          navClass: 'fa-wpforms'
+          navClass: 'fa-wpforms',
+          edit: true
         },
         resolve: {
           stuff: function() {

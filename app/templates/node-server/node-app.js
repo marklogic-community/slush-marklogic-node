@@ -5,10 +5,11 @@ var express = require('express');
 var expressSession = require('express-session');
 var app = express();
 var logger = require('morgan');
-var port = process.env.PORT || 8001;
 var four0four = require('./utils/404')();
 
-var environment = process.env.NODE_ENV;
+var options = require('./utils/options')();
+var port = options.appPort;
+var environment = options.env;
 
 app.use(expressSession({
   name: '@sample-app-name',
@@ -22,16 +23,14 @@ app.use(logger('dev'));
 app.use('/v1', require('./proxy'));
 app.use('/api', require('./routes'));
 
-app.use('/create', express.static('./build/index.html'));
-app.use('/profile', express.static('./build/index.html'));
-
 console.log('About to crank up node');
 console.log('PORT=' + port);
 console.log('NODE_ENV=' + environment);
 
 switch (environment){
-  case 'build':
-    console.log('** BUILD **');
+  case 'prod':
+  case 'dev':
+    console.log('** DIST **');
     app.use(express.static('./dist/'));
     // Any invalid calls for templateUrls are under app/* and should return 404
     app.use('/app/*', function(req, res, next) {
@@ -41,7 +40,7 @@ switch (environment){
     app.use('/*', express.static('./dist/index.html'));
     break;
   default:
-    console.log('** DEV **');
+    console.log('** UI **');
     app.use(express.static('./ui/'));
     app.use(express.static('./')); // for bower_components
     app.use(express.static('./tmp'));

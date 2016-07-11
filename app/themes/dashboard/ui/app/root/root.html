@@ -23,13 +23,13 @@
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <i class="fa fa-user"></i>
-              <span class="hidden-xs">{{ ctrl.currentUser.fullname || ctrl.currentUser.name }}</span>
+              <span class="hidden-xs">{{ ctrl.currentUser.profile.fullname || ctrl.currentUser.username }}</span>
             </a>
             <ul class="dropdown-menu">
               <!-- User image -->
               <li class="user-header">
                 <p>
-                  {{ ctrl.currentUser.fullname || ctrl.currentUser.name }}
+                  {{ ctrl.currentUser.profile.fullname || ctrl.currentUser.username }}
                 </p>
               </li>
               <!-- Menu Footer-->
@@ -52,7 +52,9 @@
     <section class="sidebar" style="height: auto;">
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu">
-        <li ng-repeat="link in ctrl.navService.getLinks('dashboard')" ng-class="{ active: ctrl.navService.isActive(link.state) }"><a ng-click="ctrl.navService.gotoLink(link)"><i class="fa" ng-class="link.label.navClass"></i> <span>{{ link.label.text }}</span></a></li>
+        <li ng-repeat="link in ctrl.navService.getLinks('dashboard')" ng-class="{ active: ctrl.navService.isActive(link.state) }" ng-show="!link.label.edit || (ctrl.currentUser && !ctrl.currentUser.disallowUpdates)">
+          <a ng-click="ctrl.navService.gotoLink(link)"><i class="fa" ng-class="link.label.navClass"></i> <span>{{ link.label.text }}</span></a>
+        </li>
       </ul>
     </section>
   </aside>

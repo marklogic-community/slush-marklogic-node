@@ -9,11 +9,13 @@
   function LoginService($http, $uibModal, $q, $rootScope, $state,
     $stateParams, messageBoardService) {
 
+    var service = {};
     var _loginMode = 'full'; // 'modal', 'top-right', or 'full'
     var _loginError;
     var _toStateName;
     var _toStateParams;
     var _isAuthenticated;
+    var _userPrefix = '';
     var _protectedRoutes = [];
     var deregisterLoginSuccess;
 
@@ -25,7 +27,7 @@
     }
 
     function failLogin(response) {
-      if (response.status === 401) {
+      if (response.status > 200) {
         _loginError = true;
       }
     }
@@ -35,11 +37,14 @@
     }
 
     function getAuthenticatedStatus() {
-      if (_isAuthenticated) {
+      if (_isAuthenticated !== undefined) {
         return _isAuthenticated;
       }
 
       return $http.get('/api/user/status', {}).then(function(response) {
+        if (response.data.appUsersOnly) {
+          _userPrefix = response.data.appName + '-';
+        }
         if (response.data.authenticated === false) {
           _isAuthenticated = false;
         }
@@ -47,7 +52,7 @@
         {
           loginSuccess(response);
         }
-        return isAuthenticated();
+        return service.isAuthenticated();
       });
     }
 
@@ -59,7 +64,7 @@
 
     function login(username, password) {
       return $http.post('/api/user/login', {
-        'username': username,
+        'username': _userPrefix + username,
         'password': password
       }).then(function(response) {
         loginSuccess(response);
@@ -135,7 +140,7 @@
 
     function blockRoute(event, next, nextParams) {
       event.preventDefault();
-      loginPrompt();
+      service.loginPrompt();
       if (_loginMode !== 'full') {
         if (deregisterLoginSuccess) {
           deregisterLoginSuccess();
@@ -156,11 +161,11 @@
       }
 
       if (routeIsProtected(next.name)) {
-        var auth = getAuthenticatedStatus();
+        var auth = service.getAuthenticatedStatus();
 
         if (angular.isFunction(auth.then)) {
           auth.then(function() {
-            if (!isAuthenticated()) {
+            if (!service.isAuthenticated()) {
               //this does NOT block requests in a timely fashion...
               blockRoute(event, next, nextParams);
             }
@@ -175,7 +180,12 @@
       }
     });
 
-    return {
+    $rootScope.$on('loginService:profile-changed', function() {
+      _isAuthenticated = undefined;
+      service.getAuthenticatedStatus();
+    });
+
+    angular.extend(service, {
       login: login,
       logout: logout,
       loginPrompt: loginPrompt,
@@ -184,6 +194,8 @@
       isAuthenticated: isAuthenticated,
       getAuthenticatedStatus: getAuthenticatedStatus,
       protectedRoutes: protectedRoutes
-    };
+    });
+
+    return service;
   }
 }());

@@ -3,20 +3,24 @@
 'use strict';
 
 var gulp = require('gulp'),
-  colors = require('colors'),
-  FetchStream = require('fetch').FetchStream,
-  fs = require('fs'),
-  inquirer = require('inquirer'),
-  install = require('gulp-install'),
-  q = require('q'),
-  rename = require('gulp-rename'),
-  replace = require('gulp-replace'),
-  pkgSettings = require('./package.json'),
-  spawn = require('child_process').spawn,
-  uuid = require('node-uuid'),
-  win32 = process.platform === 'win32',
-  _ = require('underscore.string')
-  ;
+    FetchStream = require('fetch').FetchStream,
+    fs = require('fs'),
+    inquirer = require('inquirer'),
+    install = require('gulp-install'),
+    q = require('q'),
+    rename = require('gulp-rename'),
+    replace = require('gulp-replace'),
+    pkgSettings = require('./package.json'),
+    spawn = require('child_process').spawn,
+    uuid = require('node-uuid'),
+    win32 = process.platform === 'win32'
+    ;
+
+/* jshint ignore:start */
+var colors = require('colors'),
+    _ = require('underscore.string')
+    ;
+/* jshint ignore:end */
 
 var npmVersion = null;
 
@@ -39,7 +43,9 @@ function checkLatestVersion() {
 
   try {
     console.log('checking for latest version');
+    /* jshint camelcase:false */
     var proxy = process.env.PROXY || process.env.http_proxy || null;
+    /* jshint camelcase:true */
     var request = require('request');
     request({ url: 'http://registry.npmjs.org/slush-marklogic-node/latest', proxy: proxy }, function(err, res, body) {
       try {
@@ -176,11 +182,21 @@ function configRoxy() {
   console.log('Configuring Roxy');
 
   try {
-
     var properties = fs.readFileSync('deploy/build.properties', { encoding: 'utf8' });
 
-    // set the authentication-method property to digestbasic
+    // Set the authentication-method property to digestbasic
     properties = properties.replace(/^authentication\-method=digest/m, 'authentication-method=digestbasic');
+
+    // Capture appuser-password from Roxy properties for later use
+    var passwordMatch = /^appuser\-password=(.*)$/m;
+    var matches = passwordMatch.exec(properties);
+    settings.appuserPassword = matches[1];
+
+    // Bypass bug in Roxy causing {, } and \ in pwd to get mangled
+    if (settings.appuserPassword.match(/[\{\}\\]/g)) {
+      settings.appuserPassword = settings.appuserPassword.replace(/[\{\}\\]/g, '');
+      properties = properties.replace(passwordMatch, 'appuser-password=' + settings.appuserPassword);
+    }
 
     fs.writeFileSync('deploy/build.properties', properties);
   } catch (e) {
@@ -192,6 +208,8 @@ function configRoxy() {
       '# This file contains overrides to values in build.properties\n' +
       '# These only affect your local environment and should not be checked in\n' +
       '#################################################################\n' +
+      '\n' +
+      'server-version=' + settings.mlVersion + '\n' +
       '\n' +
       '#\n' +
       '# The ports used by your application\n' +
@@ -214,6 +232,7 @@ function configRoxy() {
       '# There have been reported issues with dns resolution when localhost wasn\'t in the hosts file.\n' +
       '#\n' +
       'local-server=' + settings.marklogicHost + '\n' +
+      'content-forests-per-host=3\n' +
       '\n' +
       '#\n' +
       '# Admin username/password that will exist on the local/dev/prod servers\n' +
@@ -253,6 +272,18 @@ function configRoxy() {
       '          <coordinate-system>wgs84</coordinate-system>\n' +
       '          <range-value-positions>false</range-value-positions>\n' +
       '        </geospatial-element-pair-index>\n');
+
+    // fix default app-role privileges to match rest-style applications
+    foo = foo.replace(/<privileges>[^]*?<\/privileges>/,
+      '<privileges>\n' +
+      '        <privilege>\n' +
+      '          <privilege-name>rest-reader</privilege-name>\n' +
+      '        </privilege>\n' +
+      '        <!-- remove the rest-writer privilege if read-only access is required -->\n' +
+      '        <privilege>\n' +
+      '          <privilege-name>rest-writer</privilege-name>\n' +
+      '        </privilege>\n' +
+      '      </privileges>\n');
 
     fs.writeFileSync('deploy/ml-config.xml', foo);
   } catch (e) {
@@ -294,18 +325,23 @@ gulp.task('configGulp', ['init'], function(done) {
 
   try {
     var configJSON = {};
+    configJSON['app-name'] = settings.appName;
     configJSON['ml-version'] = settings.mlVersion;
     configJSON['ml-host'] = settings.marklogicHost;
     configJSON['ml-admin-user'] = settings.marklogicAdminUser;
     configJSON['ml-admin-pass'] = settings.marklogicAdminPass;
-    configJSON['ml-app-user'] = settings.marklogicAdminUser; //THIS NEEDS TO CHANGE
-    configJSON['ml-app-pass'] = settings.marklogicAdminPass; //THIS NEEDS TO CHANGE
+    configJSON['ml-app-user'] = settings.appName + '-user';
+    configJSON['ml-app-pass'] = settings.appuserPassword;
     configJSON['ml-http-port'] = settings.appPort;
-    configJSON['node-port'] = settings.nodePort;
 
     if (settings.mlVersion < 8) {
       configJSON['ml-xcc-port'] = settings.xccPort;
     }
+
+    configJSON['node-port'] = settings.nodePort;
+    configJSON['guest-access'] = settings.guestAccess;
+    configJSON['disallow-updates'] = settings.disallowUpdates;
+    configJSON['appusers-only'] = settings.appUsersOnly;
 
     var configString = JSON.stringify(configJSON, null, 2) + '\n';
     fs.writeFileSync('local.json', configString, { encoding: 'utf8' });
@@ -335,9 +371,9 @@ gulp.task('init', ['checkForUpdates'], function (done) {
     {type: 'input', name: 'marklogicAdminUser', message: 'MarkLogic Admin User?', default: 'admin'},
     {type: 'input', name: 'marklogicAdminPass', message: 'Note: consider keeping the following blank, ' +
       'you will be asked to enter it at appropriate commands.\n? MarkLogic Admin Password?', default: ''},
-    {type: 'input', name: 'nodePort', message: 'Node app port?', default: 9070},
     {type: 'input', name: 'appPort', message: 'MarkLogic App/Rest port?', default: 8040},
     {type: 'input', name: 'xccPort', message: 'XCC port?', default:8041, when: function(answers){return answers.mlVersion < 8;} },
+    {type: 'input', name: 'nodePort', message: 'Node app port?', default: 9070},
     {type:'list', name: 'template', message: 'Select Template', choices: [
       { name: 'default', value: 'default' },
       { name: '3-columns', value: '3column' },
@@ -351,7 +387,10 @@ gulp.task('init', ['checkForUpdates'], function (done) {
       { name: 'Map/Graph', value: 'map' },
       { name: 'Documents', value: '3column' },
       { name: 'Other', value: 'default' }
-    ]}
+    ]},
+    {type: 'list', name: 'guestAccess', message: 'Allow anonymous users to search data?', choices: ['false', 'true'], default: 0},
+    {type: 'list', name: 'disallowUpdates', message: 'Disallow proxying update requests?', choices: ['false', 'true'], default: 0},
+    {type: 'list', name: 'appUsersOnly', message: 'Only allow access to users created for this app? Note: disallows admin users.', choices: ['false', 'true'], default: 0}
   ];
 
   if (typeof appName === 'undefined') {
@@ -371,7 +410,11 @@ gulp.task('init', ['checkForUpdates'], function (done) {
     settings.marklogicAdminPass = answers.marklogicAdminPass;
     settings.nodePort = answers.nodePort;
     settings.appPort = answers.appPort;
-    settings.xccPort = answers.xccPort || null;
+    settings.xccPort = answers.xccPort || answers.appPort;
+    settings.appName = answers.nameDashed;
+    settings.guestAccess = answers.guestAccess;
+    settings.disallowUpdates = answers.disallowUpdates;
+    settings.appUsersOnly = answers.appUsersOnly;
 
     getRoxyScript(answers.nameDashed, answers.mlVersion, appType, branch)
       .then(runRoxy)
@@ -399,6 +442,8 @@ gulp.task('init', ['checkForUpdates'], function (done) {
           .pipe(replace('@sample-app-role', answers.nameDashed + '-role', {skipBinary:true}))
           .pipe(replace('@node-port', answers.nodePort, {skipBinary:true}))
           .pipe(replace('@ml-http-port', answers.appPort, {skipBinary:true}))
+          .pipe(replace('@ml-xcc-port', answers.xccPort || answers.appPort, {skipBinary:true}))
+          .pipe(replace('@ml-host', answers.marklogicHost, {skipBinary:true}))
           .pipe(gulp.dest('./')) // Relative to cwd
           .on('end', function () {
             done(); // Finished!
