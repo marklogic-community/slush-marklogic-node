@@ -1,13 +1,47 @@
 <div class="create" ng-show="ctrl.currentUser && !ctrl.currentUser.disallowUpdates">
   <div class="row">
-    <div class="col-sm-2"></div>
-    <h2 class="col-sm-10">Create a Document</h2>
+    <div class="col-sm-2">
+    </div>
+    <h2 class="col-sm-10" ng-if="ctrl.mode == 'create'">Create a Document</h2>
+    <h2 class="col-sm-10" ng-if="ctrl.mode == 'edit'">Edit Document</h2>
   </div>
-  <form class="form-horizontal">
+  <form class="form-horizontal" name="createForm" novalidate>
     <div class="form-group">
-      <label class="col-sm-2 control-label">Name</label>
+      <div class="col-sm-8 col-sm-offset-2">
+        <strong class="required alert-danger"><span>*</span><em>required</em></strong>
+      </div>
+    </div>
+    <div class="form-group" ng-if="createForm.$submitted && !createForm.$valid">
+      <div class="col-sm-10 col-sm-offset-2">
+        <p class="text-danger">
+          <alert type="danger"><strong>Invalid input, details below.</strong></alert>
+        </p>
+        <!-- uncomment to view errors in the form
+        <ul>
+          <li ng-repeat="(key, errors) in createForm.$error track by $index"> <strong>{{ key }}</strong> errors
+            <ul>
+              <li ng-repeat="e in errors">{{ e.$name }} has an error: <strong>{{ key }}</strong>.</li>
+            </ul>
+          </li>
+        </ul>
+        -->
+     </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Name *</label>
       <div class="col-sm-10">
-        <input type="text" class="form-control" placeholder="person's name" ng-model="ctrl.person.name">
+        <input type="text" class="form-control" placeholder="person's name" ng-model="ctrl.person.name"
+               required name="name" minlength="3" maxlength="100">
+
+      </div>
+    </div>
+    <div class="row form-error" ng-if="(createForm.$submitted || createForm.name.$touched) && createForm.name.$error">
+      <div class="col-md-10 col-md-offset-2 has-error has-feedback" >
+        <div ng-messages="createForm.name.$error">
+          <p class="alert alert-danger" ng-message="required">Person's name is required.</p>
+          <p class="alert alert-danger" ng-message="minlength">Too short</p>
+          <p class="alert alert-danger" ng-message="maxlength">Too long</p>
+        </div>
       </div>
     </div>
     <div class="form-group">
@@ -64,7 +98,15 @@
     <div class="form-group">
       <label class="col-sm-2 control-label">Email</label>
       <div class="col-sm-10">
-        <input type="email" class="form-control" ng-model="ctrl.person.email" placeholder="">
+        <input type="email" class="form-control" ng-model="ctrl.person.email" placeholder="" name="email" required>
+      </div>
+    </div>
+    <div class="row form-error" ng-if="(createForm.$submitted || createForm.email.$touched) && createForm.email.$error">
+      <div class="col-md-10 col-md-offset-2 has-error has-feedback" >
+        <div ng-messages="createForm.email.$error">
+          <p class="alert alert-danger" ng-message="required">Email is required.</p>
+          <p class="alert alert-danger" ng-message="email">Invalid email format.</p>
+        </div>
       </div>
     </div>
     <div class="form-group">
@@ -91,7 +133,7 @@
     <div class="form-group">
       <label class="col-sm-2 control-label">Tags</label>
       <div class="col-sm-10">
-        <input type="text" ng-model="ctrl.newTag">
+        <input type="text" ng-model="ctrl.newTag"/>
         <button class="add-feature btn btn-default btn-sm" ng-click="ctrl.addTag()">Add</button>
       </div>
       <div class="col-sm-10 col-sm-offset-2">
@@ -109,10 +151,29 @@
         </label>
       </div>
     </div>
-
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Document Format *</label>
+      <div class="col-sm-1">
+        <label class="radio-inline"><input type="radio" name="docFormat" value="json" ng-model="ctrl.person.docFormat" placeholder=""
+                                           ng-disabled="ctrl.mode == 'edit'"
+                                           ng-required="!ctrl.person.docFormat">JSON</label>
+      </div>
+      <div class="col-sm-1">
+        <label class="radio-inline"><input type="radio" name="docFormat" value="xml" ng-model="ctrl.person.docFormat" placeholder=""
+                                           ng-disabled="ctrl.mode == 'edit'"
+                                           ng-required="!ctrl.person.docFormat">XML</label>
+      </div>
+    </div>
+    <div class="row form-error" ng-if="(createForm.$submitted || createForm.docFormat.$touched) && createForm.docFormat.$error">
+      <div class="col-md-10 col-md-offset-2 has-error has-feedback" >
+        <div ng-messages="createForm.docFormat.$error">
+          <p class="alert alert-danger" ng-message="required">Document Format is required.</p>
+        </div>
+      </div>
+    </div>
     <div class="row">
       <a class="col-sm-offset-10 btn btn-default" ui-sref="root.landing">Cancel</a>
-      <button class="btn btn-primary" ng-click="ctrl.submit()">Create</button>
+      <button class="btn btn-primary" ng-click="createForm.$valid && ctrl.submit()">Submit</button>
     </div>
   </form>
 </div>

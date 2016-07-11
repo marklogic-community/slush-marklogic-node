@@ -1,6 +1,7 @@
 <div class="row detail">
   <div class="col-sm-8">
     <uib-tabset type="pills">
+      <!--
       <uib-tab active="true">
         <uib-tab-heading>{{ctrl.type | uppercase}}</uib-tab-heading>
         <div class="col-sm-9 bottom-buffer">
@@ -22,6 +23,26 @@
           <pre class="pre-xml">{{ctrl.xml}}</pre>
         </div>
       </uib-tab>
+      -->
+      <uib-tab active="ctrl.type==='json'" ng-click="ctrl.type='json'" ng-if="ctrl.type!='binary'">
+        <uib-tab-heading>JSON</uib-tab-heading>
+        <div class="col-sm-9">
+          <json-explorer data="ctrl.json"></json-explorer>
+        </div>
+      </uib-tab>
+      <uib-tab active="ctrl.type==='xml'" ng-click="ctrl.type='xml'" ng-if="ctrl.type!='binary'">
+        <uib-tab-heading >XML</uib-tab-heading>
+        <div class="col-sm-9">
+          <pre class="pre-xml">{{ctrl.xml}}</pre>
+        </div>
+      </uib-tab>
+      <uib-tab active="ctrl.type==='binary'" ng-click="ctrl.type='binary'" ng-if="ctrl.type=='binary'">
+        <uib-tab-heading >Binary</uib-tab-heading>
+        <div class="col-sm-9">
+          <a target="_blank" ng-href="/v1/documents?uri={{ctrl.uri}}&transform=download"
+             class="btn btn-default">Download</a>
+        </div>
+      </uib-tab>
     </uib-tabset>
   </div>
   <div class="col-sm-4">
@@ -32,5 +53,12 @@
         <ml-similar uri="{{ctrl.uri}}" limit="5"></ml-similar>
       </div>
     </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-12">
+    <button class="btn btn-primary" ui-sref="root.search">Cancel</button>
+    <button class="btn btn-primary" ui-sref="root.edit({uri: ctrl.uri})">Edit</button>
+    <button class="btn btn-primary" ng-click="ctrl.delete()">Delete</button>
   </div>
 </div>

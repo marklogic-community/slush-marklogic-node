@@ -23,6 +23,7 @@
     "vkbeautify-wrapper": "*",
     "highcharts": "^4.2",
     "angular-google-maps": "2.3.2",
+    "angular-messages": "^1.5.7",
     "tinymce-dist": "4.3.12"
   },
   "overrides": {
@@ -37,6 +38,6 @@
   },
   "private": true,
   "resolutions": {
-    "angular": "~1.4.4"
+    "angular": "~1.5.7"
   }
 }

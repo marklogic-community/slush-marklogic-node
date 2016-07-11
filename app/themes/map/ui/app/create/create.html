@@ -1,13 +1,37 @@
 <div class="create" ng-show="ctrl.currentUser && !ctrl.currentUser.disallowUpdates">
   <div class="row">
     <div class="col-sm-1"></div>
-    <h2 class="col-sm-11">Create a Document</h2>
+    <h2 class="col-sm-11" ng-if="ctrl.mode == 'create'">Create a Document</h2>
+    <h2 class="col-sm-11" ng-if="ctrl.mode == 'edit'">Edit Document</h2>
   </div>
-  <form>
+  <form name="createForm" novalidate>
     <div class="form-group">
-      <label class="control-label">Name</label>
       <div>
-        <input type="text" class="form-control" placeholder="person's name" ng-model="ctrl.person.name">
+        <strong class="required alert-danger"><span>*</span><em>required</em></strong>
+        <p class="text-danger" ng-if="createForm.$submitted && !createForm.$valid">
+          <alert type="danger"><strong>Invalid input, details below.</strong></alert>
+        </p>
+        <!-- uncomment to view errors in the form
+        <ul>
+          <li ng-repeat="(key, errors) in createForm.$error track by $index"> <strong>{{ key }}</strong> errors
+            <ul>
+              <li ng-repeat="e in errors">{{ e.$name }} has an error: <strong>{{ key }}</strong>.</li>
+            </ul>
+          </li>
+        </ul>
+        -->
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label">Name *</label>
+      <div>
+        <input type="text" class="form-control" placeholder="person's name" ng-model="ctrl.person.name"
+               required name="name" minlength="3" maxlength="100">
+        <div ng-messages="createForm.name.$error">
+          <p class="alert alert-danger" ng-message="required">Person's name is required.</p>
+          <p class="alert alert-danger" ng-message="minlength">Too short</p>
+          <p class="alert alert-danger" ng-message="maxlength">Too long</p>
+        </div>
       </div>
     </div>
     <div class="form-group">
@@ -62,9 +86,14 @@
       </div>
     </div>
     <div class="form-group">
-      <label class="control-label">Email</label>
+      <label class="control-label">Email *</label>
       <div>
-        <input type="email" class="form-control" ng-model="ctrl.person.email" placeholder="">
+        <input type="email" class="form-control" ng-model="ctrl.person.email" placeholder=""
+               placeholder="" name="email" required>
+        <div ng-messages="createForm.email.$error">
+          <p class="alert alert-danger" ng-message="required">Email is required.</p>
+          <p class="alert alert-danger" ng-message="email">Invalid email format.</p>
+        </div>
       </div>
     </div>
     <div class="form-group">
@@ -110,9 +139,23 @@
       </div>
     </div>
     <div class="form-group">
+      <label class="control-label">Document Format *</label>
+      <div>
+        <label class="radio-inline"><input type="radio" value="json" ng-model="ctrl.person.docFormat" placeholder="" ng-disabled="ctrl.mode == 'edit'"
+                                           ng-required="!ctrl.person.docFormat" name="docFormat">JSON</label>
+      </div>
+      <div>
+        <label class="radio-inline"><input type="radio" value="xml" ng-model="ctrl.person.docFormt" placeholder="" ng-disabled="ctrl.mode == 'edit'"
+                                           ng-required="!ctrl.person.docFormat" name="docFormat">XML</label>
+      </div>
+      <div ng-messages="createForm.docFormat.$error">
+        <p class="alert alert-danger" ng-message="required">Document Format is required.</p>
+      </div>
+    </div>
+    <div class="form-group">
       <div class="row">
         <a class="col-sm-offset-1 btn btn-default" ui-sref="root.landing">Cancel</a>
-        <button class="btn btn-primary" ng-click="ctrl.submit()">Create</button>
+        <button class="btn btn-primary" ng-click="createForm.$valid && ctrl.submit()">Submit</button>
       </div>
     </div>
   </form>

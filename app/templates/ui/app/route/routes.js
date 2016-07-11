@@ -80,8 +80,28 @@
           edit: true
         },
         resolve: {
-          stuff: function() {
+          doc: function() {
             return null;
+          }
+        }
+      })
+      .state('root.edit', {
+        url: '/edit{uri:path}',
+        templateUrl: 'app/create/create.html',
+        controller: 'CreateCtrl',
+        controllerAs: 'ctrl',
+        resolve: {
+          doc: function(MLRest, $stateParams) {
+            var uri = $stateParams.uri;
+
+            var format = 'json';
+            if (uri.endsWith('.xml')) {
+              format = 'xml';
+            }
+
+            return MLRest.getDocument(uri, { format: format }).then(function(response) {
+              return response;
+            });
           }
         }
       })

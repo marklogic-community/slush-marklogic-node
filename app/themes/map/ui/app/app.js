@@ -17,8 +17,10 @@
     'ui.bootstrap',
     'ui.router',
     'ui.tinymce',
+    'cb.x2js',
     'ngToast',
-    'uiGmapgoogle-maps'
+    'uiGmapgoogle-maps',
+    'ngMessages'
   ])
   .config(['uiGmapGoogleMapApiProvider', function(uiGmapGoogleMapApiProvider) {
     var libs = uiGmapGoogleMapApiProvider.options.libraries;
