@@ -3,11 +3,13 @@
 'use strict';
 
 var http = require('http');
-var options = require('./options');
+var options = require('./options')();
 var q = require('q');
 var wwwAuthenticate = require('www-authenticate');
 /* jshint -W079 */
 var _ = require('underscore');
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
 
 var defaultOptions = {
   authHost: options.mlHost,
@@ -17,6 +19,100 @@ var defaultOptions = {
   challengeMethod: 'HEAD',
   challengePath: '/v1/ping'
 };
+
+function init() {
+  passport.serializeUser(function(user, done) {
+    done(null, user);
+  });
+  passport.deserializeUser(function(obj, done) {
+    done(null, obj);
+  });
+
+  passport.use(new LocalStrategy(
+    { passReqToCallback: true },
+    function(req, username, password, done) {
+      var reqOptions = {
+        hostname: options.mlHost,
+        port: options.mlHttpPort,
+        path: '/v1/documents?uri=/api/users/' + username + '.json',
+        headers: {}
+      };
+
+      getAuthorization(req.session, reqOptions.method, reqOptions.path,
+        {
+          authHost: options.mlHost,
+          authPort: options.mlHttpPort,
+          authUser: username,
+          authPassword: password
+        }
+      ).then(function(authorization) {
+        if (authorization) {
+          reqOptions.headers.Authorization = authorization;
+        }
+        var login = http.get(reqOptions, function(response) {
+
+          var user = {
+                authenticated:true,
+                username:username
+              };
+
+          if (response.statusCode === 200) {
+            response.on('data', function(chunk) {
+              var json = JSON.parse(chunk);
+              if (json.user !== undefined) {
+                user.profile = json.user;
+              } else {
+                console.log('did not find chunk.user');
+              }
+
+              done(null, user);
+            });
+          } else if (response.statusCode === 404) {
+            //no user profile yet..
+            done(null, user);
+          } else if (response.statusCode === 401) {
+            done(null, false, {message: 'Invalid credentials'});
+          } else {
+            done(null, false, {message: 'API error'});
+          }
+        });
+        login.on('error', function(e) {
+          console.log(JSON.stringify(e));
+          console.log('login failed: ' + e.statusCode);
+          done(e);
+        });
+      });
+    }
+  ));
+}
+
+function handleLocalAuth(req, res, next) {
+  passport.authenticate('local', function(err, user, info) {
+    if (err) { return next(err); }
+    if (!user) {
+      return res.json(401, {
+        message: info.message
+      });
+    }
+
+    // Manually establish the session...
+    req.login(user, function(err) {
+      if (err) { return next(err); }
+      return res.json(user);
+    });
+
+  })(req, res, next);
+}
+
+function isAuthenticated(req, res, next) {
+
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  else {
+    res.status(401).send('Unauthorized');
+  }
+}
 
 var authenticators = {};
 
@@ -74,7 +170,7 @@ var expirationTime = 1000 * 60 * 60 * 12;
 
 function isExpired(authenticator) {
   return
-    authenticator.lastAccessed &&
+  authenticator.lastAccessed &&
     ((new Date()) - authenticator.lastAccessed) > expirationTime;
 }
 
@@ -86,7 +182,6 @@ function getAuthenticator(session, user, host, port) {
   if (!authenticatorId) {
     return null;
   }
-  console.log('Get auth: ' + user + ':' + host + ':' + port);
   var authenticator = authenticators[authenticatorId];
   timestampAuthenticator(authenticator);
   return authenticator;
@@ -97,7 +192,12 @@ function getAuthorization(session, reqMethod, reqPath, authOptions) {
   var authorization = null;
   var d = q.defer();
   var mergedOptions = _.extend({}, defaultOptions, authOptions || {});
-  var authenticator = getAuthenticator(session, mergedOptions.authUser, mergedOptions.authHost, mergedOptions.authPort);
+  var authenticator = getAuthenticator(
+    session,
+    mergedOptions.authUser,
+    mergedOptions.authHost,
+    mergedOptions.authPort
+  );
   if (authenticator) {
     authorization = authenticator.authorize(reqMethod, reqPath);
     d.resolve(authorization);
@@ -113,7 +213,12 @@ function getAuthorization(session, reqMethod, reqPath, authOptions) {
       var hasChallenge = (challenge != null);
       if (statusCode === 401 && hasChallenge) {
         authenticator = createAuthenticator(
-          session, mergedOptions.authHost, mergedOptions.authPort, mergedOptions.authUser, mergedOptions.authPassword, challenge
+          session,
+          mergedOptions.authHost,
+          mergedOptions.authPort,
+          mergedOptions.authUser,
+          mergedOptions.authPassword,
+          challenge
         );
         authorization = authenticator.authorize(reqMethod, reqPath);
         d.resolve(authorization);
@@ -128,6 +233,9 @@ function getAuthorization(session, reqMethod, reqPath, authOptions) {
 }
 
 var authHelper = {
+  init: init,
+  isAuthenticated: isAuthenticated,
+  handleLocalAuth: handleLocalAuth,
   getAuthorization: getAuthorization,
   clearAuthenticator: clearAuthenticator
 };
