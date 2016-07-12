@@ -20,8 +20,12 @@ var $ = require('gulp-load-plugins')({
 /* jshint ignore:end */
 
 var _s = require('underscore.string'),
-    q = require('q'),
-    spawn = require('child_process').spawn;
+  q = require('q'),
+  spawn = require('child_process').spawn;
+
+var encoding = {
+  encoding: 'utf8'
+};
 
 /**
  * yargs variables can be passed in to alter the behavior, when present.
@@ -244,9 +248,7 @@ gulp.task('init-prod', function(done) {
 gulp.task('add-deploy-target', function(done) {
   log('Update ecosystem.json targets or create new ones!');
 
-  var properties = fs.readFileSync('deploy/build.properties', {
-    encoding: 'utf8'
-  });
+  var properties = fs.readFileSync('deploy/build.properties', encoding);
 
   var name = properties.match(/app-name=(.*)/)[1];
   var gitUrl = 'https://github.com/';
@@ -360,9 +362,7 @@ function ecosystemMustExist(ecosystem, name) {
 
       var configString = JSON.stringify(configJSON, null, 2) + '\n';
 
-      fs.writeFileSync(ecosystem, configString, {
-        encoding: 'utf8'
-      });
+      fs.writeFileSync(ecosystem, configString, encoding);
     } catch (e) {
       console.log('failed to write ecosystem.json: ' + e.message);
     }
@@ -436,15 +436,12 @@ gulp.task('optimize', ['inject', 'test'], function() {
   log('Optimizing the js, css, and html');
 
   // Filters are named for the gulp-useref path
-  var cssFilter = $.filter('**/*.css', {
+  var restore = {
     restore: true
-  });
-  var jsAppFilter = $.filter('**/' + config.optimized.app, {
-    restore: true
-  });
-  var jslibFilter = $.filter('**/' + config.optimized.lib, {
-    restore: true
-  });
+  };
+  var cssFilter = $.filter('**/*.css', restore);
+  var jsAppFilter = $.filter('**/' + config.optimized.app, restore);
+  var jslibFilter = $.filter('**/' + config.optimized.lib, restore);
 
   var templateCache = config.temp + config.templateCache.file;
 
@@ -699,7 +696,7 @@ function init(env, done) {
 
       var properties = JSON.parse(output).properties || {};
 
-      var mlVersion = ['8','7', '6', '5'].indexOf(localMlVersion || properties['ml.server-version'] || '8');
+      var mlVersion = ['8', '7', '6', '5'].indexOf(localMlVersion || properties['ml.server-version'] || '8');
       var marklogicHost = properties['ml.' + env + '-server'] || localMlHost || 'localhost';
       var marklogicAdminUser = properties['ml.user'] || localMlAdminUser || 'admin';
       var appName = properties['ml.app-name'] || localAppName;
@@ -708,28 +705,75 @@ function init(env, done) {
       var appPort = localMlHttpPort || properties['ml.app-port'] || 8040;
       var xccPort = localMlXccPort || properties['ml.xcc-port'] || 8041;
 
-      var prompts = [
-        {type: 'list', name: 'mlVersion', message: 'MarkLogic version?', choices: ['8','7', '6', '5'], default: mlVersion > 0 ? mlVersion : 0 },
-        {type: 'input', name: 'marklogicHost', message: 'MarkLogic Host?', default: marklogicHost},
-        {type: 'input', name: 'marklogicAdminUser', message: 'MarkLogic Admin User?', default: marklogicAdminUser},
-        {type: 'input', name: 'marklogicAdminPass', message: 'Note: consider keeping the following blank, ' +
-          'you will be asked to enter it at appropriate commands.\n? MarkLogic Admin Password?', default: ''},
-        {type: 'input', name: 'appPort', message: 'MarkLogic App/Rest port?', default: appPort},
-        {type: 'input', name: 'xccPort', message: 'XCC port?', default: xccPort, when: function(answers) {
+      var prompts = [{
+        type: 'list',
+        name: 'mlVersion',
+        message: 'MarkLogic version?',
+        choices: ['8', '7', '6', '5'],
+        default: mlVersion > 0 ? mlVersion : 0
+      }, {
+        type: 'input',
+        name: 'marklogicHost',
+        message: 'MarkLogic Host?',
+        default: marklogicHost
+      }, {
+        type: 'input',
+        name: 'marklogicAdminUser',
+        message: 'MarkLogic Admin User?',
+        default: marklogicAdminUser
+      }, {
+        type: 'input',
+        name: 'marklogicAdminPass',
+        message: 'Note: consider keeping the following blank, ' +
+          'you will be asked to enter it at appropriate commands.\n? MarkLogic Admin Password?',
+        default: ''
+      }, {
+        type: 'input',
+        name: 'appPort',
+        message: 'MarkLogic App/Rest port?',
+        default: appPort
+      }, {
+        type: 'input',
+        name: 'xccPort',
+        message: 'XCC port?',
+        default: xccPort,
+        when: function(answers) {
           return answers.mlVersion < 8;
-        }},
-        {type: 'input', name: 'nodePort', message: 'Node app port?', default: localNodePort},
-        {type: 'list', name: 'guestAccess', message: 'Allow anonymous users to search data?', choices: ['false', 'true'], default: localGuestAccess > 0 ? localGuestAccess : 0},
-        {type: 'list', name: 'disallowUpdates', message: 'Disallow proxying update requests?', choices: ['false', 'true'], default: localDisallowUpdates > 0 ? localDisallowUpdates : 0},
-        {type: 'list', name: 'appUsersOnly', message: 'Only allow access to users created for this app? Note: disallows admin users.', choices: ['false', 'true'], default: localAppUsersOnly > 0 ? localAppUsersOnly : 0}
-      ];
+        }
+      }, {
+        type: 'input',
+        name: 'nodePort',
+        message: 'Node app port?',
+        default: localNodePort
+      }, {
+        type: 'list',
+        name: 'guestAccess',
+        message: 'Allow anonymous users to search data?',
+        choices: ['false', 'true'],
+        default: localGuestAccess > 0 ? localGuestAccess : 0
+      }, {
+        type: 'list',
+        name: 'disallowUpdates',
+        message: 'Disallow proxying update requests?',
+        choices: ['false', 'true'],
+        default: localDisallowUpdates > 0 ? localDisallowUpdates : 0
+      }, {
+        type: 'list',
+        name: 'appUsersOnly',
+        message: 'Only allow access to users created for this app? Note: disallows admin users.',
+        choices: ['false', 'true'],
+        default: localAppUsersOnly > 0 ? localAppUsersOnly : 0
+      }];
 
       if (typeof appName === 'undefined') {
-        prompts.unshift(
-          {type: 'input', name: 'name', message: 'Name for the app?'});
+        prompts.unshift({
+          type: 'input',
+          name: 'name',
+          message: 'Name for the app?'
+        });
       }
 
-      inquirer.prompt(prompts, function (settings) {
+      inquirer.prompt(prompts, function(settings) {
         if (typeof appName === 'undefined') {
           settings.nameDashed = _s.slugify(settings.name);
         } else {
@@ -757,7 +801,7 @@ function init(env, done) {
           configJSON['appusers-only'] = settings.appUsersOnly;
 
           var configString = JSON.stringify(configJSON, null, 2) + '\n';
-          fs.writeFileSync(env + '.json', configString, { encoding: 'utf8' });
+          fs.writeFileSync(env + '.json', configString, encoding);
           log('Created ' + env + '.json.');
 
           if (fs.existsSync('deploy/' + env + '.properties')) {
@@ -776,12 +820,10 @@ function init(env, done) {
               'app-port=' + settings.appPort + '\n';
             if (settings.mlVersion < 8) {
               envProperties += 'xcc-port=' + settings.xccPort + '\n';
-            }
-            else
-            {
+            } else {
               envProperties += '# Taking advantage of not needing a XCC Port for ML8\n' +
-              'xcc-port=${app-port}\n' +
-              'install-xcc=false\n';
+                'xcc-port=${app-port}\n' +
+                'install-xcc=false\n';
             }
 
             envProperties += '\n' +
@@ -799,7 +841,7 @@ function init(env, done) {
               'user=' + settings.marklogicAdminUser + '\n' +
               'password=' + settings.marklogicAdminPass + '\n';
 
-            fs.writeFileSync('deploy/' + env + '.properties', envProperties, {encoding: 'utf8'});
+            fs.writeFileSync('deploy/' + env + '.properties', envProperties, encoding);
             log('Created deploy/' + env + '.properties.');
           }
           done();
@@ -1128,14 +1170,14 @@ function run(cmd, args, verbose) {
     d.resolve(output);
   });
 
-  child.stdout.on('data', function (chunk) {
+  child.stdout.on('data', function(chunk) {
     if (verbose) {
       console.log(chunk.toString());
     }
     output += chunk.toString();
   });
 
-  child.stderr.on('data', function (data) {
+  child.stderr.on('data', function(data) {
     console.log(data.toString());
   });
 
