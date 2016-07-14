@@ -28,6 +28,10 @@ var encoding = {
   encoding: 'utf8'
 };
 
+var skipBinary = {
+  skipBinary: true
+};
+
 function printVersionWarning() {
   if (npmVersion && npmVersion !== pkgSettings.version.trim()) {
     process.stdout.write('\n------------------------------------\n'.red);
@@ -519,27 +523,13 @@ gulp.task('init', ['checkForUpdates'], function(done) {
               }
 
             }))
-            .pipe(replace('@slush-version', pkgSettings.version.trim(), {
-              skipBinary: true
-            }))
-            .pipe(replace('@sample-app-name', answers.nameDashed, {
-              skipBinary: true
-            }))
-            .pipe(replace('@sample-app-role', answers.nameDashed + '-role', {
-              skipBinary: true
-            }))
-            .pipe(replace('@node-port', answers.nodePort, {
-              skipBinary: true
-            }))
-            .pipe(replace('@ml-http-port', answers.appPort, {
-              skipBinary: true
-            }))
-            .pipe(replace('@ml-xcc-port', answers.xccPort || answers.appPort, {
-              skipBinary: true
-            }))
-            .pipe(replace('@ml-host', answers.marklogicHost, {
-              skipBinary: true
-            }))
+            .pipe(replace('@slush-version', pkgSettings.version.trim(), skipBinary))
+            .pipe(replace('@sample-app-name', answers.nameDashed, skipBinary))
+            .pipe(replace('@sample-app-role', answers.nameDashed + '-role', skipBinary))
+            .pipe(replace('@node-port', answers.nodePort, skipBinary))
+            .pipe(replace('@ml-http-port', answers.appPort, skipBinary))
+            .pipe(replace('@ml-xcc-port', answers.xccPort || answers.appPort, skipBinary))
+            .pipe(replace('@ml-host', answers.marklogicHost, skipBinary))
             .pipe(gulp.dest('./')) // Relative to cwd
             .on('end', function() {
               done(); // Finished!
