@@ -1,0 +1,160 @@
+# Deploying to a server
+
+To deploy, make sure both your local machine and your remote server/deployment target have pm2 installed with:
+
+`npm install pm2 -g`
+
+Make sure you have the file `ecosystem.json` with any saved deployment targets inside, to create this file or add a new deployment target run:
+
+`gulp add-deploy-target`
+
+**Note:** This command may not work on older projects! If it's not available you will need to modify the `ecosystem.json` file manually.
+
+`ecosystem.json` will include any config as well as any deployment config along with your credentials. If you need to put in any credentials or sensitive information that can't be in the repository then answer the final question from `gulp add-deploy-target` with a yes and it will put the deployment config into `local.ecosystem.json`.
+
+Once you've got your TARGETNAME (answer to the first question in `gulp add-deploy-target`) you can initialize the target host with:
+
+`pm2 deploy TARGETNAME setup`
+
+Then deploy your latest code from your git repository and run any post-deploy commands with:
+
+`pm2 deploy TARGETNAME`
+
+**Hint**, pm2 automatically looks for `ecosystem.json` in your current directory, but you can use your `local.ecosystem.json` configuration with `pm2 deploy local.ecosystem.json TARGETNAME`
+
+If you have files you haven't commited, pm2 will ask you to commit them before deploying, to ignore this use `--force`:
+
+`pm2 deploy TARGETNAME --force`
+
+You will now need to ssh into the server, once you've ssh'd in it's very **Important** that when deploying to a secure server that you do all pm2 commands as the pm2 user by using:
+
+`sudo su pm2`
+
+You can then navigate to the app's folder that you chose during `gulp add-deploy-target`.
+
+Once you're in the folder you should have 3 folders: 'current',  'shared', and 'source'; go into the current folder:
+
+`cd current`
+
+You can now launch the app using pm2 with:
+
+`pm2 startOrRestart ecosystem.json`
+
+You can also launch the app using different environment configurations in ecosystem.json (env name prefixed with "env_"), for example:
+
+`pm2 startOrRestart ecosystem.json --env prod`
+
+You should then save your current pm2 deployments with:
+
+`pm2 save`
+
+Running `pm2 save` whenever you deploy a new app is very important as in the event of a server restart the previously saved apps will be resurrected.
+
+Now that the app is started you will not have to stop or restart it when making updates. pm2 will automatically restart the app if any of it's files are changed so you can do `pm2 deploy TARGETNAME --force` from your local machine and the pm2 will automatically restart the app with any changes!
+
+## Initializing httpd
+
+Next to this, you likely want to enable the httpd daemon. Often only very limited ports are exposed on servers, and we usually deliberately configure the application outside that scope. Add a forwarding rule for the appropriate dns:
+
+- sudo chkconfig --levels 2345 httpd on
+- sudo service httpd stop
+- sudo vi /etc/httpd/conf/httpd.conf, uncomment the line with:
+
+NameVirtualHost *:80
+
+- and append:
+
+<VirtualHost *:80>
+  ServerName @sample-app-name.demoserver.com
+  RewriteEngine On
+  RewriteRule ^(.*)$ http://localhost:@node-port$1 [P]
+</VirtualHost>
+
+- sudo service httpd start
+
+## Administration
+
+To view all running pm2 applications use:
+
+`pm2 list`
+
+To view any logs use:
+
+`pm2 logs`
+
+To monitor ram or cpu usage use:
+
+`pm2 monit`
+
+**If** you've deployed applications previously but don't see them when you run pm2 list then it might be because you're not logged in as the pm2 user or you deployed them under a different user.
+
+If you accidently launch pm2 under your own account then you can kill the process with:
+
+`pm2 kill`
+
+And if you accidently run that command when logged in as the pm2 user then you can start pm2 and resurrect all processes from the last `pm2 save` with:
+
+`pm2 resurrect`
+
+For more information use the help commands or consult the documentation [here](http://pm2.keymetrics.io/docs/usage/quick-start/):
+
+`pm2 help`
+
+`pm2 deploy help`
+
+## Converting an existing project
+
+If you've previously deployed an application using linux server scripts then you will need to remove the scripts and the old deployment.
+
+To minimize application downtime, you should configure and deploy the project using pm2 before removing the old deployment.
+
+When converting a project to pm2 you should create an `ecosystem.json` file with your desired deployment config and commit it into the project, follow the above instructions and deploy it to your target server. pm2 will deploy the project to `/space/projects/{appname}/source`. **Don't** run `pm2 startOrRestart ecosystem.json` yet though!
+
+Now once you've almost finished deploying with pm2 you will need to stop it with the service scripts:
+
+`service stop {appname}`
+
+If you have a {appname}-watch script then stop that as well:
+
+`service stop {appname}-watch`
+
+You should now be able to run `pm2 startOrRestart ecosystem.json`
+
+Now that the project is deployed and assuming it's running okay you will need to clean up the old deployment.
+
+Firstly, remove the chkconfig
+
+`chkconfig -del {appname}`
+
+And also for the watch script if appropriate
+
+`chkconfig -del {appname}-watch`
+
+Then delete the scripts
+
+`rm /etc/init.d/{appname}`
+
+`rm /etc/{appname}`
+
+And for the watch script:
+
+`rm /etc/init.d/{appname}-watch`
+
+Older projects were typically deployed using a .git .live folder structure, since we no longer need these you can delete them:
+
+`rm -r /space/projects/{appname}.git`
+
+`rm -r /space/projects/{appname}.live]`
+
+Finally delete the git remote that pointed to the .git folder from your laptop:
+
+cd to your project directory and run:
+
+`git remote rm {DeploymentName}`
+
+You can then finish off by deleting the old etc folder from the project folder as the scripts and documentation inside should no longer be needed:
+
+`rm -r ./etc`
+
+You should also copy THIS Install guide to your projects repository for the benefit of other users.
+

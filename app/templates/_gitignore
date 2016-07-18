@@ -4,6 +4,7 @@ coverage
 ui/fonts
 deploy/local.properties
 local.json
+local.ecosystem.json
 /dist
 .DS_Store
 *.pid

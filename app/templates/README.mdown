@@ -48,7 +48,7 @@ Edit `./local.json` to set your desired ports
 
 # Installation and deployment on server
 
-See etc/INSTALL.md
+See INSTALL.md
 
 # Data
 
