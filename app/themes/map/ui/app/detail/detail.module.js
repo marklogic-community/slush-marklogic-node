@@ -5,6 +5,7 @@
     'app.similar',
     'ui.router',
     'app.root',
-    'uiGmapgoogle-maps'
+    'uiGmapgoogle-maps',
+    'hljs'
   ]);
 }());
