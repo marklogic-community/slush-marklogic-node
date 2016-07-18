@@ -1,8 +1,8 @@
 /* jshint -W117, -W030 */
-(function () {
+(function() {
   'use strict';
 
-  describe('Controller: DetailCtrl', function () {
+  describe('Controller: DetailCtrl', function() {
 
     var controller;
     var doc;
@@ -10,28 +10,31 @@
     beforeEach(function() {
       bard.appModule('app.detail');
       bard.inject('$controller', '$rootScope');
-    });
 
-    beforeEach(function () {
       // stub the document
+      var headers = function() {
+        return 'application/json'; };
       doc = {
-        name: 'hi',
-        headers: function(text) {
-          return 'application/json';
+        headers: headers,
+        data: {
+          name: 'hi',
+          location: {
+            latitude: 1,
+            longitude: 2
+          }
         }
       };
       controller = $controller('DetailCtrl', { doc: doc });
       $rootScope.$apply();
     });
 
-    it('should be created successfully', function () {
+    it('should be created successfully', function() {
       expect(controller).to.be.defined;
     });
 
-    // TODO: update test
-    // it('should have the doc we gave it', function() {
-    //   expect(controller.doc).to.eq(doc);
-    // });
+    it('should have the doc data we gave it', function() {
+      expect(controller.doc).to.eq(doc.data);
+    });
 
   });
 }());
