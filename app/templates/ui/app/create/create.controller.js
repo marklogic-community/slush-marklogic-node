@@ -17,7 +17,7 @@
     if (doc) {
       ctrl.mode = 'edit';
       //check extension
-      if (doc.config.params.format == 'json') {
+      if (doc.config.params.format === 'json') {
         ctrl.person = doc.data;
       } else {
         /* jscs: disable */
@@ -86,7 +86,7 @@
     function submit() {
       var extension = '.json';
       var data = ctrl.person;
-      if (ctrl.person.docFormat == 'xml') {
+      if (ctrl.person.docFormat === 'xml') {
         extension = '.xml';
         var wrap = {
           xml : ctrl.person
@@ -96,7 +96,7 @@
       }
       /* jscs: enable */
 
-      if (ctrl.mode == 'create') {
+      if (ctrl.mode === 'create') {
         mlRest.createDocument(data, {
           format: ctrl.person.docFormat,
           directory: '/content/',
