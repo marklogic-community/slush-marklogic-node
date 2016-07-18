@@ -1,4 +1,4 @@
-#Deploying to a server
+# Deploying to a server
 
 To deploy, make sure both your local machine and your remote server/deployment target have pm2 installed with:
 
@@ -7,6 +7,8 @@ To deploy, make sure both your local machine and your remote server/deployment t
 Make sure you have the file `ecosystem.json` with any saved deployment targets inside, to create this file or add a new deployment target run:
 
 `gulp add-deploy-target`
+
+**Note:** This command may not work on older projects! If it's not available you will need to modify the `ecosystem.json` file manually.
 
 `ecosystem.json` will include any config as well as any deployment config along with your credentials. If you need to put in any credentials or sensitive information that can't be in the repository then answer the final question from `gulp add-deploy-target` with a yes and it will put the deployment config into `local.ecosystem.json`.
 
@@ -50,7 +52,27 @@ Running `pm2 save` whenever you deploy a new app is very important as in the eve
 
 Now that the app is started you will not have to stop or restart it when making updates. pm2 will automatically restart the app if any of it's files are changed so you can do `pm2 deploy TARGETNAME --force` from your local machine and the pm2 will automatically restart the app with any changes!
 
-#Administration
+## Initializing httpd
+
+Next to this, you likely want to enable the httpd daemon. Often only very limited ports are exposed on servers, and we usually deliberately configure the application outside that scope. Add a forwarding rule for the appropriate dns:
+
+- sudo chkconfig --levels 2345 httpd on
+- sudo service httpd stop
+- sudo vi /etc/httpd/conf/httpd.conf, uncomment the line with:
+
+NameVirtualHost *:80
+
+- and append:
+
+<VirtualHost *:80>
+  ServerName @sample-app-name.demoserver.com
+  RewriteEngine On
+  RewriteRule ^(.*)$ http://localhost:@node-port$1 [P]
+</VirtualHost>
+
+- sudo service httpd start
+
+## Administration
 
 To view all running pm2 applications use:
 
@@ -79,4 +101,60 @@ For more information use the help commands or consult the documentation [here](h
 `pm2 help`
 
 `pm2 deploy help`
+
+## Converting an existing project
+
+If you've previously deployed an application using linux server scripts then you will need to remove the scripts and the old deployment.
+
+To minimize application downtime, you should configure and deploy the project using pm2 before removing the old deployment.
+
+When converting a project to pm2 you should create an `ecosystem.json` file with your desired deployment config and commit it into the project, follow the above instructions and deploy it to your target server. pm2 will deploy the project to `/space/projects/{appname}/source`. **Don't** run `pm2 startOrRestart ecosystem.json` yet though!
+
+Now once you've almost finished deploying with pm2 you will need to stop it with the service scripts:
+
+`service stop {appname}`
+
+If you have a {appname}-watch script then stop that as well:
+
+`service stop {appname}-watch`
+
+You should now be able to run `pm2 startOrRestart ecosystem.json`
+
+Now that the project is deployed and assuming it's running okay you will need to clean up the old deployment.
+
+Firstly, remove the chkconfig
+
+`chkconfig -del {appname}`
+
+And also for the watch script if appropriate
+
+`chkconfig -del {appname}-watch`
+
+Then delete the scripts
+
+`rm /etc/init.d/{appname}`
+
+`rm /etc/{appname}`
+
+And for the watch script:
+
+`rm /etc/init.d/{appname}-watch`
+
+Older projects were typically deployed using a .git .live folder structure, since we no longer need these you can delete them:
+
+`rm -r /space/projects/{appname}.git`
+
+`rm -r /space/projects/{appname}.live]`
+
+Finally delete the git remote that pointed to the .git folder from your laptop:
+
+cd to your project directory and run:
+
+`git remote rm {DeploymentName}`
+
+You can then finish off by deleting the old etc folder from the project folder as the scripts and documentation inside should no longer be needed:
+
+`rm -r ./etc`
+
+You should also copy THIS Install guide to your projects repository for the benefit of other users.
 
