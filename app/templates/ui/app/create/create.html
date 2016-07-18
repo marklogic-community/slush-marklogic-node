@@ -2,13 +2,13 @@
   <div class="row">
     <div class="col-sm-2">
     </div>
-    <h2 class="col-sm-10" ng-if="ctrl.mode == 'create'">Create a Document</h2>
-    <h2 class="col-sm-10" ng-if="ctrl.mode == 'edit'">Edit Document</h2>
+    <h2 class="col-sm-10" ng-if="ctrl.mode === 'create'">Create a Document</h2>
+    <h2 class="col-sm-10" ng-if="ctrl.mode === 'edit'">Edit "{{ ctrl.uri }}"</h2>
   </div>
   <form class="form-horizontal" name="createForm" novalidate>
     <div class="form-group">
       <div class="col-sm-8 col-sm-offset-2">
-        <strong class="required alert-danger"><span>*</span><em>required</em></strong>
+        <strong class="required alert-danger"><em>required</em></strong>
       </div>
     </div>
     <div class="form-group" ng-if="createForm.$submitted && !createForm.$valid">
@@ -28,7 +28,7 @@
      </div>
     </div>
     <div class="form-group">
-      <label class="col-sm-2 control-label">Name *</label>
+      <label class="col-sm-2 control-label required">Name</label>
       <div class="col-sm-10">
         <input type="text" class="form-control" placeholder="person's name" ng-model="ctrl.person.name"
                required name="name" minlength="3" maxlength="100">
@@ -96,7 +96,7 @@
       </div>
     </div>
     <div class="form-group">
-      <label class="col-sm-2 control-label">Email</label>
+      <label class="col-sm-2 control-label required">Email</label>
       <div class="col-sm-10">
         <input type="email" class="form-control" ng-model="ctrl.person.email" placeholder="" name="email" required>
       </div>
@@ -152,7 +152,7 @@
       </div>
     </div>
     <div class="form-group">
-      <label class="col-sm-2 control-label">Document Format *</label>
+      <label class="col-sm-2 control-label required">Document Format</label>
       <div class="col-sm-1">
         <label class="radio-inline"><input type="radio" name="docFormat" value="json" ng-model="ctrl.person.docFormat" placeholder=""
                                            ng-disabled="ctrl.mode == 'edit'"

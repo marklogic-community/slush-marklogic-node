@@ -286,7 +286,7 @@ function configRoxy() {
         '        <range-path-index>\n' +
         '          <scalar-type>string</scalar-type>\n' +
         '          <collation>http://marklogic.com/collation/codepoint</collation>\n' +
-        '          <path-expression>//docFormat</path-expression>\n' +
+        '          <path-expression>docFormat</path-expression>\n' +
         '          <range-value-positions>false</range-value-positions>\n' +
         '          <invalid-values>reject</invalid-values>\n' +
         '        </range-path-index>\n');

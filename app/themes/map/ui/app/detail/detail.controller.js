@@ -4,8 +4,8 @@
   angular.module('app.detail')
   .controller('DetailCtrl', DetailCtrl);
 
-  DetailCtrl.$inject = ['doc', '$stateParams', 'MLUiGmapManager','MLRest', 'ngToast','$location'];
-  function DetailCtrl(doc, $stateParams, mlMapManager, MLRest, ngToast, $location) {
+  DetailCtrl.$inject = ['doc', '$stateParams', 'MLUiGmapManager','MLRest', 'ngToast','$state'];
+  function DetailCtrl(doc, $stateParams, mlMapManager, MLRest, toast, $state) {
     var ctrl = this;
 
     var uri = $stateParams.uri;
@@ -73,15 +73,14 @@
     function deleteFunc() {
       MLRest.deleteDocument (uri).then(function(response) {
         // create a toast with settings:
-        ngToast.create({
+        toast.create({
           className: 'warning',
           content: 'Deleted ' + uri,
           dismissOnTimeout: true,
           timeout: 2000,
-          dismissButton: true,
           onDismiss: function () {
             //redirect to search page
-            $location.path('/search');
+            $state.go('root.search');
           }
         });
       });

@@ -17,9 +17,7 @@
     'ui.bootstrap',
     'ui.router',
     'ui.tinymce',
-    'cb.x2js',
-    'ngToast',
-    'ngMessages'
+    'ngToast'
   ]);
 
 }());

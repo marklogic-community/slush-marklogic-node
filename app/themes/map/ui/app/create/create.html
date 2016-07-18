@@ -1,8 +1,8 @@
 <div class="create" ng-show="ctrl.currentUser && !ctrl.currentUser.disallowUpdates">
   <div class="row">
     <div class="col-sm-1"></div>
-    <h2 class="col-sm-11" ng-if="ctrl.mode == 'create'">Create a Document</h2>
-    <h2 class="col-sm-11" ng-if="ctrl.mode == 'edit'">Edit Document</h2>
+    <h2 class="col-sm-11" ng-if="ctrl.mode === 'create'">Create a Document</h2>
+    <h2 class="col-sm-11" ng-if="ctrl.mode === 'edit'">Edit {{ ctrl.uri }}</h2>
   </div>
   <form name="createForm" novalidate>
     <div class="form-group">
@@ -23,7 +23,7 @@
       </div>
     </div>
     <div class="form-group">
-      <label class="control-label">Name *</label>
+      <label class="control-label required">Name</label>
       <div>
         <input type="text" class="form-control" placeholder="person's name" ng-model="ctrl.person.name"
                required name="name" minlength="3" maxlength="100">
@@ -86,7 +86,7 @@
       </div>
     </div>
     <div class="form-group">
-      <label class="control-label">Email *</label>
+      <label class="control-label required">Email</label>
       <div>
         <input type="email" class="form-control" ng-model="ctrl.person.email" placeholder=""
                placeholder="" name="email" required>
@@ -139,7 +139,7 @@
       </div>
     </div>
     <div class="form-group">
-      <label class="control-label">Document Format *</label>
+      <label class="control-label required">Document Format</label>
       <div>
         <label class="radio-inline"><input type="radio" value="json" ng-model="ctrl.person.docFormat" placeholder="" ng-disabled="ctrl.mode == 'edit'"
                                            ng-required="!ctrl.person.docFormat" name="docFormat">JSON</label>

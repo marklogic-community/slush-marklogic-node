@@ -4,9 +4,9 @@
   angular.module('app.create')
     .controller('CreateCtrl', CreateCtrl);
 
-  CreateCtrl.$inject = ['$scope', 'MLRest', '$state', 'userService', 'ngToast','x2js','doc'];
+  CreateCtrl.$inject = ['$scope', 'MLRest', '$state', 'userService', 'ngToast','x2js','doc','$stateParams'];
 
-  function CreateCtrl($scope, mlRest, $state, userService, toast, x2js, doc) {
+  function CreateCtrl($scope, mlRest, $state, userService, toast, x2js, doc, $stateParams) {
     var ctrl = this;
 
     ctrl.x2js = x2js;
@@ -39,7 +39,7 @@
         };
       }
 
-      ctrl.uri = doc.config.params.uri;
+      ctrl.uri = $stateParams.uri;
 
     } else {
       ctrl.mode = 'create';
