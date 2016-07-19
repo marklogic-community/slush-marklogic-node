@@ -2,6 +2,7 @@
   "name": "@sample-app-name",
   "version": "0.0.0",
   "dependencies": {
+    "jquery": "~2.1.4",
     "angular": "~1.4.4",
     "angular-animate": "~1.4.4",
     "angular-bootstrap": "^1.1",
@@ -18,7 +19,6 @@
     "font-awesome": "~4.6.0",
     "highcharts": "^4.2",
     "highlightjs":"~8.7.0",
-    "jquery": "~2.1.4",
     "ng-json-explorer": "8c2a0f9104",
     "ngtoast": "^2.0.0",
     "lodash": "~3.10.1",
