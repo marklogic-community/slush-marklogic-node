@@ -1,41 +1,15 @@
 <!doctype html>
-<html>
+<html lang="en">
   <head>
     <base href="/">
     <meta charset="utf-8">
     <title>@sample-app-name</title>
     <meta name="description" content="">
-    <meta name="viewport" content="width=device-width">
-    <link rel="shortcut icon" href="/images/favicon.ico">
-
-    <!-- build:css styles/lib.css -->
-    <!-- bower:css -->
-    <!-- endbower -->
-    <!-- endbuild -->
-
-    <!-- build:css styles/app.css -->
-    <!-- inject:css -->
-    <!-- endinject -->
-    <!-- endbuild -->
-
+    <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
-  <body ng-app="app">
-
-    <ui-view></ui-view>
-
-    <!-- build:js js/lib.js -->
-    <!-- bower:js -->
-    <!-- endbower -->
-    <script src="/bower_components/tinymce-dist/themes/modern/theme.js"></script>
-    <!-- endbuild -->
-
-    <!-- build:js js/app.js -->
-    <!-- inject:js -->
-    <!-- endinject -->
-
-    <!-- inject:templates:js -->
-    <!-- endinject -->
-    <!-- endbuild -->
-
+  <body ng-app="app" ng-strict-di ng-cloak>
+    <app>
+      Loading...
+    </app>
   </body>
 </html>

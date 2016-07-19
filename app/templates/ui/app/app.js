@@ -1,23 +1,18 @@
-(function () {
-  'use strict';
+import angular from 'angular';
 
-  angular.module('app', [
-    'ml.common',
-    'ml.search',
-    'ml.search.tpls',
-    'ml.utils',
-    'ngJsonExplorer',
-    'app.create',
-    'app.detail',
-    'app.error',
-    'app.login',
-    'app.root',
-    'app.search',
-    'app.user',
-    'ui.bootstrap',
-    'ui.router',
-    'ui.tinymce',
-    'ngToast'
-  ]);
+import Common from './common/common';
+import Components from './components/components';
+import AppComponent from './app.component';
 
-}());
+import routes from './route/routes';
+
+import 'normalize.css';
+import '../styles/main.less';
+
+angular.module('app', [
+    routes,
+    Common,
+    Components,
+    'ml.search.tpls'
+  ])
+  .component('app', AppComponent);
