@@ -133,7 +133,7 @@
     <div class="form-group">
       <label class="col-sm-2 control-label">Tags</label>
       <div class="col-sm-10">
-        <input type="text" ng-model="ctrl.newTag"/>
+        <input type="text" ng-model="ctrl.newTag">
         <button class="add-feature btn btn-default btn-sm" ng-click="ctrl.addTag()">Add</button>
       </div>
       <div class="col-sm-10 col-sm-offset-2">
@@ -172,7 +172,7 @@
       </div>
     </div>
     <div class="row">
-      <a class="col-sm-offset-10 btn btn-default" ui-sref="root.landing">Cancel</a>
+      <a class="btn btn-default" ui-sref="root.landing">Cancel</a>
       <button class="btn btn-primary" ng-click="createForm.$valid && ctrl.submit()">Submit</button>
     </div>
   </form>
