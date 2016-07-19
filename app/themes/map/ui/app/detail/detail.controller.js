@@ -4,7 +4,9 @@
   angular.module('app.detail')
   .controller('DetailCtrl', DetailCtrl);
 
-  DetailCtrl.$inject = ['doc', '$stateParams', 'MLUiGmapManager','MLRest', 'ngToast','$state','$uibModal'];
+  DetailCtrl.$inject = ['doc', '$stateParams', 'MLUiGmapManager','MLRest',
+    'ngToast','$state','$uibModal'];
+
   function DetailCtrl(doc, $stateParams, mlMapManager, MLRest, toast, $state, $uibModal) {
     var ctrl = this;
 
@@ -66,13 +68,12 @@
 
     if (ctrl.type === 'json' || ctrl.type === 'xml') {
       //note that this should be matched with the exact data
+
       ctrl.showMarker(ctrl.json.location.latitude, ctrl.json.location.longitude,
         ctrl.json, ctrl.json.name);
     }
 
-
     function deleteFunc() {
-
       $uibModal.open({
         controller: ['$uibModalInstance', function($uibModalInstance) {
           var ctrl = this;
