@@ -9,10 +9,12 @@
 
     beforeEach(function() {
       bard.appModule('app.create');
-      bard.inject('$controller', '$q', '$rootScope', 'MLRest', '$state', 'userService');
+      bard.inject('$controller', '$q', '$rootScope', 'MLRest', '$state', 'userService',
+        'x2js');
 
       bard.mockService(MLRest, {
-        createDocument: $q.when('/?uri=blah')
+        createDocument: $q.when('/?uri=blah'),
+        updateDocument: $q.when('/?uri=blah')
       });
 
       bard.mockService($state, {
@@ -27,7 +29,16 @@
 
     beforeEach(function () {
       // stub the current user
-      controller = $controller('CreateCtrl', { $scope: $rootScope.$new() });
+      var doc = {
+        uri: 'blah',
+        config: {
+          params: ''
+        },
+        data: '<xml><x>test</x></xml>'
+      };
+
+      controller = $controller('CreateCtrl', { $scope: $rootScope.$new(), 'doc': doc,
+        $stateParams: { uri: 'blah'} });
       $rootScope.$apply();
     });
 

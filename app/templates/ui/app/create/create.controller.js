@@ -69,7 +69,7 @@
         friends: [],
         greeting: null,
         favoriteFruit: null
-      }
+      };
     }
 
     angular.extend(ctrl, {
