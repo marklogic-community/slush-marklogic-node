@@ -27,7 +27,8 @@
       <div>
         <input type="text" class="form-control" placeholder="person's name" ng-model="ctrl.person.name"
                required name="name" minlength="3" maxlength="100">
-        <div ng-messages="createForm.name.$error">
+        <div ng-messages="createForm.name.$error"
+             ng-if="(createForm.$submitted || createForm.name.$touched) && createForm.name.$error">
           <p class="alert alert-danger" ng-message="required">Person's name is required.</p>
           <p class="alert alert-danger" ng-message="minlength">Too short</p>
           <p class="alert alert-danger" ng-message="maxlength">Too long</p>
@@ -90,7 +91,8 @@
       <div>
         <input type="email" class="form-control" ng-model="ctrl.person.email" placeholder=""
                placeholder="" name="email" required>
-        <div ng-messages="createForm.email.$error">
+        <div ng-messages="createForm.email.$error"
+             ng-if="(createForm.$submitted || createForm.email.$touched) && createForm.email.$error">
           <p class="alert alert-danger" ng-message="required">Email is required.</p>
           <p class="alert alert-danger" ng-message="email">Invalid email format.</p>
         </div>
@@ -148,7 +150,8 @@
         <label class="radio-inline"><input type="radio" value="xml" ng-model="ctrl.person.docFormat" placeholder="" ng-disabled="ctrl.mode == 'edit'"
                                            ng-required="!ctrl.person.docFormat" name="docFormat">XML</label>
       </div>
-      <div ng-messages="createForm.docFormat.$error">
+      <div ng-messages="createForm.docFormat.$error"
+           ng-if="(createForm.$submitted || createForm.docFormat.$touched) && createForm.docFormat.$error">
         <p class="alert alert-danger" ng-message="required">Document Format is required.</p>
       </div>
     </div>
