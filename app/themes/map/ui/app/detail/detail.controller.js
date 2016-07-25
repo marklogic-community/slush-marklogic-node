@@ -63,6 +63,7 @@
 
     if (ctrl.type === 'json' || ctrl.type === 'xml') {
       //note that this should be matched with the exact data
+      //TODO: fails with xml data, adapt to xml data with dynamic root
       ctrl.showMarker(ctrl.json.location.latitude, ctrl.json.location.longitude,
         ctrl.json, ctrl.json.name);
     }
