@@ -134,13 +134,13 @@ Then delete the scripts
 
 `sudo rm /etc/init.d/{appname}`
 
-`sudo rm -r /etc/{appname}`
+`sudo rm /etc/{appname}`
 
 And for the watch script:
 
 `sudo rm /etc/init.d/{appname}-watch`
 
-`sudo rm -r /etc/{appname}-watch`
+`sudo rm /etc/{appname}-watch`
 
 Older projects were typically deployed using a .git .live folder structure, since we no longer need these you can delete them:
 
