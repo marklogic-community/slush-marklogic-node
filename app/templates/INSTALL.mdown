@@ -112,11 +112,11 @@ When converting a project to pm2 you should create an `ecosystem.json` file with
 
 Now once you've almost finished deploying with pm2 you will need to stop it with the service scripts:
 
-`service stop {appname}`
+`sudo service stop {appname}`
 
 If you have a {appname}-watch script then stop that as well:
 
-`service stop {appname}-watch`
+`sudo service stop {appname}-watch`
 
 You should now be able to run `pm2 startOrRestart ecosystem.json`
 
@@ -124,27 +124,29 @@ Now that the project is deployed and assuming it's running okay you will need to
 
 Firstly, remove the chkconfig
 
-`chkconfig -del {appname}`
+`sudo chkconfig --del {appname}`
 
 And also for the watch script if appropriate
 
-`chkconfig -del {appname}-watch`
+`sudo chkconfig --del {appname}-watch`
 
 Then delete the scripts
 
-`rm /etc/init.d/{appname}`
+`sudo rm /etc/init.d/{appname}`
 
-`rm /etc/{appname}`
+`sudo rm /etc/{appname}`
 
 And for the watch script:
 
-`rm /etc/init.d/{appname}-watch`
+`sudo rm /etc/init.d/{appname}-watch`
+
+`sudo rm /etc/{appname}-watch`
 
 Older projects were typically deployed using a .git .live folder structure, since we no longer need these you can delete them:
 
 `rm -r /space/projects/{appname}.git`
 
-`rm -r /space/projects/{appname}.live]`
+`rm -r /space/projects/{appname}.live`
 
 Finally delete the git remote that pointed to the .git folder from your laptop:
 
