@@ -1,11 +1,13 @@
-(function () {
+(function() {
   'use strict';
 
   angular.module('app.login')
     .factory('loginService', LoginService);
 
   LoginService.$inject = ['$http', '$uibModal', '$q', '$rootScope', '$state',
-    '$stateParams', 'messageBoardService'];
+    '$stateParams', 'messageBoardService'
+  ];
+
   function LoginService($http, $uibModal, $q, $rootScope, $state,
     $stateParams, messageBoardService) {
 
@@ -47,9 +49,7 @@
         }
         if (response.data.authenticated === false) {
           _isAuthenticated = false;
-        }
-        else
-        {
+        } else {
           loginSuccess(response);
         }
         return service.isAuthenticated();
@@ -95,20 +95,21 @@
           keyboard: false
         });
       } else if (_loginMode === 'top-right') {
-        messageBoardService.message({title: 'Please sign-in to see content.'});
+        messageBoardService.message({
+          title: 'Please sign-in to see content.'
+        });
         var deregisterMsgBoard = $rootScope.$on('loginService:login-success', function(e, user) {
           messageBoardService.message(null);
           d.resolve(user);
           deregisterMsgBoard();
         });
       } else {
-        $state.go('root.login',
-          {
-            'state': _toStateName || $state.current.name,
-            'params': JSON.stringify((_toStateParams || $stateParams))
-          }).then(function() {
-            d.reject();
-          });
+        $state.go('root.login', {
+          'state': _toStateName || $state.current.name,
+          'params': JSON.stringify((_toStateParams || $stateParams))
+        }).then(function() {
+          d.reject();
+        });
       }
       return d.promise;
     }
@@ -170,8 +171,7 @@
               blockRoute(event, next, nextParams);
             }
           });
-        }
-        else {
+        } else {
           if (!auth) {
             blockRoute(event, next, nextParams);
           }
