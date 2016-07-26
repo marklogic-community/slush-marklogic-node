@@ -1,14 +1,16 @@
 /* global X2JS,vkbeautify */
-(function () {
+(function() {
   'use strict';
   angular.module('app.detail')
-  .controller('DetailCtrl', DetailCtrl);
+    .controller('DetailCtrl', DetailCtrl);
 
-  DetailCtrl.$inject = ['doc', '$stateParams'];
-  function DetailCtrl(doc, $stateParams) {
+  DetailCtrl.$inject = ['$stateParams'];
+
+  function DetailCtrl($stateParams) {
     var ctrl = this;
 
     var uri = $stateParams.uri;
+    var doc = this.doc;
 
     var contentType = doc.headers('content-type');
 
@@ -27,20 +29,26 @@
       /* jscs: enable */
     } else if (contentType.lastIndexOf('text/plain', 0) === 0) {
       ctrl.xml = doc.data;
-      ctrl.json = {'Document' : doc.data};
+      ctrl.json = {
+        'Document': doc.data
+      };
       ctrl.type = 'text';
-    } else if (contentType.lastIndexOf('application', 0) === 0 ) {
+    } else if (contentType.lastIndexOf('application', 0) === 0) {
       ctrl.xml = 'Binary object';
-      ctrl.json = {'Document type' : 'Binary object'};
+      ctrl.json = {
+        'Document type': 'Binary object'
+      };
       ctrl.type = 'binary';
     } else {
       ctrl.xml = 'Error occured determining document type.';
-      ctrl.json = {'Error' : 'Error occured determining document type.'};
+      ctrl.json = {
+        'Error': 'Error occured determining document type.'
+      };
     }
 
     angular.extend(ctrl, {
-      doc : doc.data,
-      uri : uri
+      doc: doc.data,
+      uri: uri
     });
   }
 }());

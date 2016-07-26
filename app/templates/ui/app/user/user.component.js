@@ -1,25 +1,17 @@
-(function () {
+(function() {
 
   'use strict';
 
   angular.module('app.user')
-    .directive('mlUser', UserDirective)
-    .controller('UserController', UserController);
-
-  function UserDirective() {
-    return {
-      restrict: 'EA',
-      controller: 'UserController',
-      controllerAs: 'ctrl',
-      replace: true,
-      scope: {
+    .component('mlUser', {
+      bindings: {
         showCancel: '=',
         mode: '@',
         callback: '&'
       },
-      templateUrl: 'app/user/user-dir.html'
-    };
-  }
+      controller: UserController,
+      templateUrl: 'app/user/user-component.html'
+    });
 
   UserController.$inject = ['$scope', 'userService', 'loginService'];
 
@@ -31,7 +23,7 @@
       loginService: loginService
     });
     $scope.$watch(userService.currentUser, function(newValue) {
-      $scope.currentUser = newValue;
+      ctrl.currentUser = newValue;
     });
   }
 
