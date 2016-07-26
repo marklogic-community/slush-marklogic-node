@@ -41,12 +41,7 @@
       .state('root', {
         url: '',
         // abstract: true,
-        component: 'root',
-        resolve: {
-          user: function(userService) {
-            return userService.getUser();
-          }
-        }
+        component: 'root'
       })
       .state('root.landing', {
         url: '/',

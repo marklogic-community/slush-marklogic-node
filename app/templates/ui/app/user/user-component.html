@@ -7,7 +7,7 @@
   <!-- display the logged in user -->
   <div class="welcome" ng-if="$ctrl.currentUser">
     <div class="navbar-collapse collapse">
-      <span class="glyphicon glyphicon-user"></span> {{ $ctrl.currentUser.fullname || $ctrl.currentUser.name }} | <span class="profile-link"><a href="/profile">Account</a></span>
+      <span class="glyphicon glyphicon-user"></span> {{ $ctrl.currentUser.profile.fullname || $ctrl.currentUser.username }} | <span class="profile-link"><a href="/profile">Account</a></span>
 
       <button class="btn btn-danger btn-xs" type="button" ng-click="$ctrl.loginService.logout()">Logout</button>
 
