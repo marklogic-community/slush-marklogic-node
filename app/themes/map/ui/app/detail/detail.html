@@ -38,8 +38,17 @@
 </div>
 <div class="row">
   <div class="col-sm-12">
-    <button class="btn btn-default" ui-sref="root.search">Cancel</button>
+    <button class="btn btn-default" ui-sref="root.search">Search</button>
     <button class="btn btn-primary" ui-sref="root.edit({uri: ctrl.uri})">Edit</button>
-    <button class="btn btn-primary" ng-click="ctrl.delete()">Delete</button>
+    <button class="btn btn-primary"
+            mwl-confirm
+            title="Confirm"
+            confirm-text="Yes"
+            cancel-text="No"
+            placement="top"
+            on-confirm="ctrl.delete()"
+            on-cancel="cancelClicked = true"
+            confirm-button-type="danger"
+            cancel-button-type="default">Delete</button>
   </div>
 </div>

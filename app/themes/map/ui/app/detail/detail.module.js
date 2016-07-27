@@ -6,8 +6,8 @@
     'ui.router',
     'app.root',
     'uiGmapgoogle-maps',
-    'ml.common', // unit test fails without this
-    'ngToast', // unit test fails without this
-    'ui.bootstrap' // unit test fails without this
+    'ml.common', // Using MLRest for delete
+    'ngToast', // Showing a toast on delete
+    'mwl.confirm' // for delete confirmation popups
   ]);
 }());

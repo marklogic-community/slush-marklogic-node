@@ -4,8 +4,8 @@
   angular.module('app.detail')
   .controller('DetailCtrl', DetailCtrl);
 
-  DetailCtrl.$inject = ['doc', '$stateParams','MLRest', 'ngToast','$state','$uibModal'];
-  function DetailCtrl(doc, $stateParams, MLRest, toast, $state, $uibModal) {
+  DetailCtrl.$inject = ['doc', '$stateParams','MLRest', 'ngToast','$state'];
+  function DetailCtrl(doc, $stateParams, MLRest, toast, $state) {
     var ctrl = this;
 
     var uri = $stateParams.uri;
@@ -47,34 +47,18 @@
     });
 
     function deleteFunc() {
-
-      $uibModal.open({
-        controller: ['$uibModalInstance', function($uibModalInstance) {
-          var ctrl = this;
-
-          ctrl.confirm = function(answer) {
-            if (answer === true) {
-              MLRest.deleteDocument (uri).then(function(response) {
-                // create a toast with settings:
-                toast.create({
-                  className: 'warning',
-                  content: 'Deleted ' + uri,
-                  dismissOnTimeout: true,
-                  timeout: 2000,
-                  onDismiss: function () {
-                    //redirect to search page
-                    $state.go('root.search');
-                  }
-                });
-              });
-            }
-            return $uibModalInstance.close();
-          };
-        }],
-        controllerAs: 'ctrl',
-        templateUrl: '/app/detail/confirm-modal.html',
-        backdrop: 'static',
-        keyboard: false
+      MLRest.deleteDocument (uri).then(function(response) {
+        // create a toast with settings:
+        toast.create({
+          className: 'warning',
+          content: 'Deleted ' + uri,
+          dismissOnTimeout: true,
+          timeout: 2000,
+          onDismiss: function () {
+            //redirect to search page
+            $state.go('root.search');
+          }
+        });
       });
     }
 

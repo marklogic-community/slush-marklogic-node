@@ -39,8 +39,8 @@
       <div class="col-md-10 col-md-offset-2 has-error has-feedback" >
         <div ng-messages="createForm.name.$error">
           <p class="alert alert-danger" ng-message="required">Person's name is required.</p>
-          <p class="alert alert-danger" ng-message="minlength">Too short</p>
-          <p class="alert alert-danger" ng-message="maxlength">Too long</p>
+          <p class="alert alert-danger" ng-message="minlength">Minimum 3 characters.</p>
+          <p class="alert alert-danger" ng-message="maxlength">Maximum of 100 characters.</p>
         </div>
       </div>
     </div>
@@ -71,22 +71,45 @@
     <div class="form-group">
       <label class="col-sm-2 control-label">Age</label>
       <div class="col-sm-10">
-        <input type="text" class="form-control" ng-model="ctrl.person.age" placeholder="">
+        <input type="number" class="form-control" ng-model="ctrl.person.age" placeholder="" name="age" string-to-number>
+      </div>
+    </div>
+    <div class="row form-error" ng-if="(createForm.$submitted || createForm.age.$touched) && createForm.age.$error">
+      <div class="col-md-10 col-md-offset-2 has-error has-feedback" >
+        <div ng-messages="createForm.age.$error">
+          <p class="alert alert-danger" ng-message="number">Invalid age format.</p>
+        </div>
       </div>
     </div>
     <div class="form-group">
-      <label class="col-sm-2 control-label">Eye Color</label>
+      <label class="col-sm-2 control-label required">Eye Color</label>
       <div class="col-sm-10">
-        <input type="text" class="form-control" ng-model="ctrl.person.eyeColor" placeholder="">
+        <input type="text" class="form-control" ng-model="ctrl.person.eyeColor" placeholder="" name="eyeColor" required>
+      </div>
+    </div>
+    <div class="row form-error" ng-if="(createForm.$submitted || createForm.eyeColor.$touched) && createForm.eyeColor.$error">
+      <div class="col-md-10 col-md-offset-2 has-error has-feedback" >
+        <div ng-messages="createForm.eyeColor.$error">
+          <p class="alert alert-danger" ng-message="required">Eye Color is required.</p>
+        </div>
       </div>
     </div>
     <div class="form-group">
-      <label class="col-sm-2 control-label">Gender</label>
+      <label class="col-sm-2 control-label required">Gender</label>
       <div class="col-sm-1">
-        <label class="radio-inline"><input type="radio" value="Female" ng-model="ctrl.person.gender" placeholder="">Female</label>
+        <label class="radio-inline"><input type="radio" value="female" ng-model="ctrl.person.gender"
+                                           placeholder="" name="gender" ng-required="!ctrl.person.gender">Female</label>
       </div>
       <div class="col-sm-1">
-        <label class="radio-inline"><input type="radio" value="Male" ng-model="ctrl.person.gender" placeholder="">Male</label>
+        <label class="radio-inline"><input type="radio" value="male" ng-model="ctrl.person.gender"
+                                           placeholder="" name="gender" ng-required="!ctrl.person.gender">Male</label>
+      </div>
+    </div>
+    <div class="row form-error" ng-if="(createForm.$submitted || createForm.gender.$touched) && createForm.gender.$error">
+      <div class="col-md-10 col-md-offset-2 has-error has-feedback" >
+        <div ng-messages="createForm.gender.$error">
+          <p class="alert alert-danger" ng-message="required">Gender is required.</p>
+        </div>
       </div>
     </div>
     <div class="form-group">
@@ -96,15 +119,14 @@
       </div>
     </div>
     <div class="form-group">
-      <label class="col-sm-2 control-label required">Email</label>
+      <label class="col-sm-2 control-label">Email</label>
       <div class="col-sm-10">
-        <input type="email" class="form-control" ng-model="ctrl.person.email" placeholder="" name="email" required>
+        <input type="email" class="form-control" ng-model="ctrl.person.email" placeholder="" name="email">
       </div>
     </div>
     <div class="row form-error" ng-if="(createForm.$submitted || createForm.email.$touched) && createForm.email.$error">
       <div class="col-md-10 col-md-offset-2 has-error has-feedback" >
         <div ng-messages="createForm.email.$error">
-          <p class="alert alert-danger" ng-message="required">Email is required.</p>
           <p class="alert alert-danger" ng-message="email">Invalid email format.</p>
         </div>
       </div>
@@ -124,10 +146,30 @@
     <div class="form-group">
       <label class="col-sm-2 control-label">Location</label>
       <div class="col-sm-5">
-        <input type="text" class="form-control" ng-model="ctrl.person.location.latitude" placeholder="">
+        <input type="number" class="form-control" ng-model="ctrl.person.location.latitude" placeholder=""
+          min="-90" max="90" name="latitude" ng-required="ctrl.person.location.longitude" string-to-number>
       </div>
       <div class="col-sm-5">
-        <input type="text" class="form-control" ng-model="ctrl.person.location.longitude" placeholder="">
+        <input type="number" class="form-control" ng-model="ctrl.person.location.longitude" placeholder=""
+          min="-180" max="180" name="longitude" ng-required="ctrl.person.location.latitude" string-to-number>
+      </div>
+    </div>
+    <div class="row form-error" ng-if="(createForm.$submitted || createForm.latitude.$touched) && createForm.latitude.$error">
+      <div class="col-md-10 col-md-offset-2 has-error has-feedback" >
+        <div ng-messages="createForm.latitude.$error">
+          <p class="alert alert-danger" ng-message="required">Latitude is required if longitude is filled.</p>
+          <p class="alert alert-danger" ng-message="min">Minimum value for latitude is -90.</p>
+          <p class="alert alert-danger" ng-message="max">Maximum value for latitude is 90.</p>
+        </div>
+      </div>
+    </div>
+    <div class="row form-error" ng-if="(createForm.$submitted || createForm.longitude.$touched) && createForm.longitude.$error">
+      <div class="col-md-10 col-md-offset-2 has-error has-feedback" >
+        <div ng-messages="createForm.longitude.$error">
+          <p class="alert alert-danger" ng-message="required">Longitude is required if latitude is filled.</p>
+          <p class="alert alert-danger" ng-message="min">Minimum value for longitude is -180.</p>
+          <p class="alert alert-danger" ng-message="max">Maximum value for longitude is 180.</p>
+        </div>
       </div>
     </div>
     <div class="form-group">
@@ -147,7 +189,7 @@
       <label class="col-sm-2 control-label">Active</label>
       <div class="col-sm-1">
         <label class="checkbox">
-          <input type="checkbox" ng-model="ctrl.person.isActive">
+          <input type="checkbox" ng-model="ctrl.person.isActive" ng-true-value="'true'" ng-false-value="'false'">
         </label>
       </div>
     </div>
@@ -172,8 +214,9 @@
       </div>
     </div>
     <div class="row">
-      <a class="btn btn-default" ui-sref="root.landing">Cancel</a>
+      <a class="btn btn-default" ui-sref="root.search">Search</a>
       <button class="btn btn-primary" ng-click="createForm.$valid && ctrl.submit()">Submit</button>
     </div>
   </form>
 </div>
+
