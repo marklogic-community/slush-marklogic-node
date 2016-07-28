@@ -1,5 +1,19 @@
 <div class="row detail">
   <div class="col-sm-12">
+    <button class="btn btn-default" ui-sref="root.search">Search</button>
+    <button class="btn btn-primary" ui-sref="root.edit({uri: ctrl.uri})">Edit</button>
+    <button class="btn btn-primary"
+            mwl-confirm
+            title="This will permanently delete {{ctrl.uri}}, are you sure?"
+            confirm-text="Yes"
+            cancel-text="No"
+            placement="right"
+            on-confirm="ctrl.delete()"
+            on-cancel="cancelClicked = true"
+            confirm-button-type="danger"
+            cancel-button-type="default">Delete</button>
+  </div>
+  <div class="col-sm-12">
     <uib-tabset type="tabs" type="pills" active="ctrl.type">
       <uib-tab index="'json'" ng-click="ctrl.type='json'"
                ng-if="ctrl.type==='json'">
@@ -34,21 +48,5 @@
         <ml-similar uri="{{ctrl.uri}}" limit="5"></ml-similar>
       </div>
     </div>
-  </div>
-</div>
-<div class="row">
-  <div class="col-sm-12">
-    <button class="btn btn-default" ui-sref="root.search">Search</button>
-    <button class="btn btn-primary" ui-sref="root.edit({uri: ctrl.uri})">Edit</button>
-    <button class="btn btn-primary"
-            mwl-confirm
-            title="This will permanently delete {{ctrl.uri}}, are you sure?"
-            confirm-text="Yes"
-            cancel-text="No"
-            placement="top"
-            on-confirm="ctrl.delete()"
-            on-cancel="cancelClicked = true"
-            confirm-button-type="danger"
-            cancel-button-type="default">Delete</button>
   </div>
 </div>
