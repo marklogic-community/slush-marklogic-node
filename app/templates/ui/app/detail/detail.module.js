@@ -3,6 +3,9 @@
 
   angular.module('app.detail', [
     'app.similar',
-    'ui.router'
+    'ui.router',
+    'ml.common', // Using MLRest for delete
+    'ngToast', // Showing toast on delete
+    'mwl.confirm' // for delete confirmation popups
   ]);
 }());

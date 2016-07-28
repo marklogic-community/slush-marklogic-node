@@ -4,36 +4,42 @@
   "dependencies": {
     "jquery": "~2.1.4",
     "angular": "~1.4.4",
+    "angular-animate": "~1.4.4",
     "angular-bootstrap": "^1.1",
+    "angular-bootstrap-confirm": "^2.3.0",
     "angular-cookies": "~1.4.4",
+    "angular-google-maps": "2.3.2",
     "angular-highlightjs": "~0.4.3",
+    "angular-messages": "~1.4.4",
     "angular-mocks": "~1.4.4",
+    "angular-sanitize": "~1.4.4",
     "angular-ui-router": "~0.2.15",
     "angular-ui-tinymce": "~0.0.9",
-    "angular-animate": "~1.4.4",
-    "ngtoast": "^2.0.0",
     "angular-x2js": "https://github.com/janmichaelyu/angular-x2js.git",
     "bootstrap": "~3.3.5",
     "font-awesome": "~4.6.0",
+    "highcharts": "^4.2",
     "highlightjs":"~8.7.0",
+    "ng-json-explorer": "8c2a0f9104",
+    "ngtoast": "^2.0.0",
     "lodash": "~3.10.1",
     "ml-search-ng": "~0.2.0",
     "ml-utils": "withjam/ml-utils",
-    "ng-json-explorer": "8c2a0f9104",
-    "vkbeautify-wrapper": "*",
-    "highcharts": "^4.2",
-    "angular-google-maps": "2.3.2",
-    "tinymce-dist": "4.3.12"
+    "tinymce-dist": "4.3.12",
+    "vkbeautify-wrapper": "*"
   },
   "overrides": {
     "angular-highlightjs": {
-      "dependencies": {"angular" : ">1.0.8", "highlightjs":"~8.7.0"}
+      "dependencies": {
+        "angular" : ">1.0.8",
+        "highlightjs":"~8.7.0"
+      }
     }
   },
   "devDependencies": {
     "angular-mocks": "~1.4.4",
-    "sinon": "http://sinonjs.org/releases/sinon-1.16.1.js",
-    "bardjs": "~0.1.8"
+    "bardjs": "~0.1.8",
+    "sinon": "http://sinonjs.org/releases/sinon-1.16.1.js"
   },
   "private": true,
   "resolutions": {
