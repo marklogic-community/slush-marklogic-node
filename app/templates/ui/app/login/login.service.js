@@ -5,11 +5,11 @@
     .factory('loginService', LoginService);
 
   LoginService.$inject = ['$http', '$uibModal', '$q', '$rootScope', '$state',
-    '$stateParams', 'messageBoardService'
+    '$stateParams', 'messageBoardService', '$transitions', 'userService'
   ];
 
   function LoginService($http, $uibModal, $q, $rootScope, $state,
-    $stateParams, messageBoardService) {
+    $stateParams, messageBoardService, $transitions, userService) {
 
     var service = {};
     var _loginMode = 'full'; // 'modal', 'top-right', or 'full'
@@ -19,7 +19,6 @@
     var _isAuthenticated;
     var _userPrefix = '';
     var _protectedRoutes = [];
-    var deregisterLoginSuccess;
 
     function loginMode(mode) {
       if (mode === undefined) {
@@ -59,7 +58,7 @@
     function loginSuccess(response) {
       _loginError = null;
       _isAuthenticated = true;
-      $rootScope.$broadcast('loginService:login-success', response.data);
+      userService.updateUser(response);
     }
 
     function login(username, password) {
@@ -116,7 +115,7 @@
 
     function logout() {
       return $http.get('/api/user/logout').then(function(response) {
-        $rootScope.$broadcast('loginService:logout-success', response);
+        userService.logOut();
         _loginError = null;
         _isAuthenticated = false;
         $state.reload();
@@ -139,44 +138,36 @@
       return _protectedRoutes.indexOf(route) > -1;
     }
 
-    function blockRoute(event, next, nextParams) {
-      event.preventDefault();
-      service.loginPrompt();
-      if (_loginMode !== 'full') {
-        if (deregisterLoginSuccess) {
-          deregisterLoginSuccess();
-          deregisterLoginSuccess = null;
-        }
-        deregisterLoginSuccess = $rootScope.$on('loginService:login-success', function() {
-          deregisterLoginSuccess();
-          deregisterLoginSuccess = null;
-          $state.go(next.name, nextParams);
-        });
+    $transitions.onStart({
+      to: function(state) {
+        return routeIsProtected(state.name);
       }
-    }
+    }, function($transition$) {
 
-    $rootScope.$on('$stateChangeStart', function(event, next, nextParams) {
-      if (next.name !== 'root.login') {
-        _toStateName = next.name;
-        _toStateParams = nextParams;
+      if ($transition$.$to().name !== 'root.login') {
+        _toStateName = $transition$.$to().name;
+        _toStateParams = $transition$.$to().params;
       }
 
-      if (routeIsProtected(next.name)) {
+      if (routeIsProtected($transition$.$to().name)) {
         var auth = service.getAuthenticatedStatus();
-
         if (angular.isFunction(auth.then)) {
-          auth.then(function() {
+          return auth.then(function() {
             if (!service.isAuthenticated()) {
-              //this does NOT block requests in a timely fashion...
-              blockRoute(event, next, nextParams);
+              return $state.target('root.login', {
+                'state': _toStateName || $state.current.name,
+                'params': JSON.stringify((_toStateParams || $stateParams))
+              });
             }
           });
         } else {
           if (!auth) {
-            blockRoute(event, next, nextParams);
+            return $state.target('root.login', {
+              'state': _toStateName || $state.current.name,
+              'params': JSON.stringify((_toStateParams || $stateParams))
+            });
           }
         }
-
       }
     });
 
@@ -189,6 +180,7 @@
       login: login,
       logout: logout,
       loginPrompt: loginPrompt,
+      loginSuccess: loginSuccess,
       loginError: loginError,
       loginMode: loginMode,
       isAuthenticated: isAuthenticated,

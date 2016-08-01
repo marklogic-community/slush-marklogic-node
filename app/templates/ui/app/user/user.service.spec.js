@@ -14,7 +14,7 @@
 
     beforeEach(function() {
       bard.appModule('app.user');
-      bard.inject('$q', '$http', '$rootScope', '$state', 'loginService');
+      bard.inject('$q', '$http', '$rootScope', '$state');
 
       bard.mockService($http, {
         _default: $q.when([]),
@@ -23,18 +23,20 @@
       });
 
       bard.mockService($state, {
-        current: { name: 'root.search', params: {} },
+        current: {
+          name: 'root.search',
+          params: {}
+        },
         go: function(stateName, stateParams) {
-          this.current = { name: stateName, params: stateParams };
+          this.current = {
+            name: stateName,
+            params: stateParams
+          };
           return $q.when();
         },
         reload: function() {
           return $q.when();
         }
-      });
-
-      bard.mockService(loginService, {
-        getAuthenticatedStatus: $q.when()
       });
 
     });
@@ -51,37 +53,25 @@
       expect(service.currentUser()).to.not.be.defined;
     });
 
-    it('should get the current logged in user - if loginService not init', function() {
-      service.getUser().then(function(user) {
-        expect(user).to.deep.eq(null);
-      });
-
-      expect(loginService.getAuthenticatedStatus).to.have.been.calledOnce;
-
-      $rootScope.$apply();
+    it('should update the current user when logged in', function() {
+      service.updateUser(_user);
+      expect(service.currentUser().username).to.eq('bob');
     });
 
-    it('should update the current user when logged in using loginService', function(done) {
-      $rootScope.$broadcast('loginService:login-success', {data:_user});
-      $rootScope.$apply(service);
-
-      done();
-      expect(service.currentUser().name).to.eq('bob');
-    });
-
-    it('should not set user with invalid credentials', function () {
+    it('should not set user with invalid credentials', function() {
       _user.data.authenticated = false;
-      $rootScope.$broadcast('loginService:login-success', {data:_user});
-      $rootScope.$apply(service);
+      service.updateUser(_user);
 
-      expect(service.currentUser().name).to.eq(undefined);
+      expect(service.currentUser()).to.eq(null);
     });
 
-    it('should clear user after logout', function () {
-      $rootScope.$broadcast('loginService:logout-success');
-      $rootScope.$apply(service);
+    it('should clear user after logout', function() {
+      _user.data.authenticated = true;
+      service.updateUser(_user);
 
-      expect(service.currentUser()).to.not.be.defined;
+      service.logOut();
+
+      expect(service.currentUser()).to.eq(null);
     });
   });
 }());

@@ -1,8 +1,8 @@
 /* jshint -W117, -W030 */
-(function () {
+(function() {
   'use strict';
 
-  describe('Service: loginService', function () {
+  describe('Service: loginService', function() {
 
     var service;
     var modalOpened = false;
@@ -23,9 +23,15 @@
       });
 
       bard.mockService($state, {
-        current: { name: 'root.search', params: {} },
+        current: {
+          name: 'root.search',
+          params: {}
+        },
         go: function(stateName, stateParams) {
-          this.current = { name: stateName, params: stateParams };
+          this.current = {
+            name: stateName,
+            params: stateParams
+          };
           return $q.when();
         }
       });
@@ -33,19 +39,21 @@
       bard.mockService($uibModal, {
         open: function() {
           modalOpened = true;
-          return { result: angular.noop };
+          return {
+            result: angular.noop
+          };
         }
       });
 
     });
 
-    beforeEach(inject(function (_loginService_) {
+    beforeEach(inject(function(_loginService_) {
       service = _loginService_;
 
       modalOpened = false;
     }));
 
-    it('should be defined', function () {
+    it('should be defined', function() {
       expect(service).to.be.defined;
     });
 
@@ -68,7 +76,7 @@
     });
   });
 
-  describe('Service: loginService - should be authenticated if logged in already', function () {
+  describe('Service: loginService - should be authenticated if logged in already', function() {
 
     var service;
     var modalOpened = false;
@@ -81,7 +89,8 @@
 
     beforeEach(function() {
       bard.appModule('app.login');
-      bard.inject('$q', '$http', '$uibModal', '$rootScope', '$state', '$stateParams');
+      bard.inject('$q', '$http', '$uibModal', '$rootScope', '$state', '$stateParams',
+        '$transitions', 'userService');
 
       bard.mockService($http, {
         _default: $q.when([]),
@@ -89,9 +98,15 @@
       });
 
       bard.mockService($state, {
-        current: { name: 'root.search', params: {} },
+        current: {
+          name: 'root.search',
+          params: {}
+        },
         go: function(stateName, stateParams) {
-          this.current = { name: stateName, params: stateParams };
+          this.current = {
+            name: stateName,
+            params: stateParams
+          };
           return $q.when();
         }
       });
@@ -99,13 +114,15 @@
       bard.mockService($uibModal, {
         open: function() {
           modalOpened = true;
-          return { result: angular.noop };
+          return {
+            result: angular.noop
+          };
         }
       });
 
     });
 
-    beforeEach(inject(function (_loginService_) {
+    beforeEach(inject(function(_loginService_) {
       service = _loginService_;
 
       modalOpened = false;
@@ -116,7 +133,7 @@
       $rootScope.$apply();
     }));
 
-    it('should be defined', function () {
+    it('should be defined', function() {
       expect(service).to.be.defined;
     });
 
