@@ -3,6 +3,7 @@
 
   angular.module('app.detail', [
     'app.similar',
+    'app.user',
     'ui.router',
     'app.root',
     'uiGmapgoogle-maps',

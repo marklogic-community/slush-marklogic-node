@@ -26,8 +26,11 @@
   <div class="col-sm-4">
     <div id="buttons-detail">
       <button class="btn btn-default" ui-sref="root.search">Search</button>
-      <button class="btn btn-primary" ui-sref="root.edit({uri: ctrl.uri})">Edit</button>
       <button class="btn btn-primary"
+              ng-show="ctrl.currentUser && !ctrl.currentUser.disallowUpdates" 
+              ui-sref="root.edit({uri: ctrl.uri})">Edit</button>
+      <button class="btn btn-primary"
+              ng-show="ctrl.currentUser && !ctrl.currentUser.disallowUpdates" 
               mwl-confirm
               title="This will permanently delete {{ctrl.uri}}, are you sure?"
               confirm-text="Yes"

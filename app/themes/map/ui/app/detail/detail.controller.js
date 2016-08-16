@@ -5,9 +5,9 @@
   .controller('DetailCtrl', DetailCtrl);
 
   DetailCtrl.$inject = ['doc', '$stateParams', 'MLUiGmapManager','MLRest',
-    'ngToast','$state'];
+    'ngToast','$state','$scope','userService'];
 
-  function DetailCtrl(doc, $stateParams, mlMapManager, MLRest, toast, $state) {
+  function DetailCtrl(doc, $stateParams, mlMapManager, MLRest, toast, $state, $scope, userService) {
     var ctrl = this;
 
     var uri = $stateParams.uri;
@@ -60,12 +60,6 @@
       mlMapManager.center = { latitude: latitude, longitude: longitude };
     };
 
-    angular.extend(ctrl, {
-      doc : doc.data,
-      uri : uri,
-      delete: deleteFunc
-    });
-
     if (ctrl.type === 'json' || ctrl.type === 'xml') {
       //note that this should be matched with the exact data
 
@@ -89,5 +83,15 @@
       });
     }
 
+    angular.extend(ctrl, {
+      doc : doc.data,
+      uri : uri,
+      currentUser: null,
+      delete: deleteFunc
+    });
+
+    $scope.$watch(userService.currentUser, function(newValue) {
+      ctrl.currentUser = newValue;
+    });
   }
 }());
