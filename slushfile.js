@@ -129,7 +129,9 @@ function processInput() {
       var splits = arg.split('=');
       var flag = splits[0].replace(/^-+/,'');
       var value = splits[1];
-      if (allowedFlags.indexOf(flag) >= 0) {
+      if (flag === 'gulpfile') {
+        // ignore
+      } else if (allowedFlags.indexOf(flag) >= 0) {
         inputs[flag] = value;
       } else {
         process.stdout.write(('\nERROR: unsupported argument \'' + arg + '\'.\n').red);
