@@ -19,6 +19,7 @@
     "gulp-bump": "^1.0.0",
     "gulp-bytediff": "^1.0.0",
     "gulp-concat": "^2.2.0",
+    "postcss-svgo": "2.1.4",
     "gulp-cssnano": "^2.0.0",
     "gulp-filter": "^3.0.1",
     "gulp-flatten": "0.2.0",
