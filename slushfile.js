@@ -103,6 +103,7 @@ function isFlag(arg) {
 
 function processInput() {
   var allowedFlags = [
+    'app-name',
     'fork',
     'branch',
     'theme',
@@ -136,7 +137,7 @@ function processInput() {
         process.exit(1);
       }
     } else {
-      inputs.appName = arg;
+      inputs['app-name'] = arg;
     }
   });
   return inputs;
@@ -431,7 +432,7 @@ gulp.task('checkForUpdates', function(done) {
 
 gulp.task('init', ['checkForUpdates'], function(done) {
   var clArgs = processInput();
-  var appName = clArgs.appName;
+  var appName = clArgs['app-name'];
 
   var prompts = [];
   if (!clArgs['ml-version']) {
