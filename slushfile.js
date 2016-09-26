@@ -594,7 +594,7 @@ gulp.task('init', ['checkForUpdates'], function(done) {
     settings.marklogicAdminPass = answers.marklogicAdminPass || clArgs['ml-admin-pass'];
     settings.nodePort = answers.nodePort || clArgs['node-port'];
     settings.appPort = answers.appPort || clArgs['ml-http-port'];
-    settings.xccPort = answers.xccPort || clArgs['ml-xcc-port'] || settings.appPort;
+    settings.xccPort = answers.xccPort || clArgs['ml-xcc-port'] || null;
     settings.guestAccess = answers.guestAccess || clArgs['guest-access'];
     settings.disallowUpdates = answers.disallowUpdates || clArgs['disallowed-updates'];
     settings.appUsersOnly = answers.appUsersOnly || clArgs['appusers-only'];
