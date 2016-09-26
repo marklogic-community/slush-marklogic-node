@@ -32,6 +32,34 @@ var skipBinary = {
   skipBinary: true
 };
 
+function printUsage() {
+  process.stdout.write('\n');
+  process.stdout.write('Usage:\n');
+  process.stdout.write('  slush marklogic-node <app-name> [args]\n');
+  process.stdout.write('\n');
+  process.stdout.write('Arguments:\n');
+  process.stdout.write('  fork=<..>             Github fork to use for Roxy. Defaults to: marklogic\n');
+  process.stdout.write('  branch=<..>           Github branch to use for Roxy. Defaults to: master\n');
+  process.stdout.write('  theme=<..>            Slush theme to use. Defaults to: default\n');
+  process.stdout.write('  ml-version=<..>       MarkLogic version. Defaults to: 8\n');
+  process.stdout.write('  ml-host=<..>          Host on which MarkLogic runs. Defaults to: localhost\n');
+  process.stdout.write('  ml-admin-user=<..>    User for MarkLogic deployments. Defaults to: admin\n');
+  process.stdout.write('  ml-admin-pass=<..>    Pass for MarkLogic deployments. Defaults to: <blank>\n');
+  process.stdout.write('  ml-app-user=<..>      MarkLogic user for guest access. Defaults to: <app-name>-user\n');
+  process.stdout.write('  ml-app-pass=<..>      MarkLogic pass for guest access. Defaults to: <roxy-appuser-password>\n');
+  process.stdout.write('  ml-http-port=<..>     Port at which MarkLogic app-server runs. Defaults to: 8040\n');
+  process.stdout.write('  ml-xcc-port=<..>      Port at which MarkLogic xcc-server runs. Defaults to: <ml-app-port>\n');
+  process.stdout.write('  node-port=<..>        Port at which Node.js middle-tier runs. Defaults to: 9070\n');
+  process.stdout.write('  guest-access=<..>     Whether guests are automatically logged in. Defaults to: false\n');
+  process.stdout.write('  disallow-updates=<..> Whether updates to MarkLogic should be disallowed. Defaults to: false\n');
+  process.stdout.write('  appusers-only=<..>    Whether front-end users get prefixed with <app-name>-. Defaults to: false\n');
+  process.stdout.write('\n');
+  process.stdout.write('Note:\n');
+  process.stdout.write('  Using command-line arguments will suppress the relevant questions.\n');
+  process.stdout.write('  To suppress all, provide arguments for all.\n');
+  process.stdout.write('\n');
+}
+
 function printVersionWarning() {
   if (npmVersion && npmVersion !== pkgSettings.version.trim()) {
     process.stdout.write('\n------------------------------------\n'.red);
@@ -74,8 +102,25 @@ function isFlag(arg) {
 }
 
 function processInput() {
+  var allowedFlags = [
+    'fork',
+    'branch',
+    'theme',
+    'ml-version',
+    'ml-host',
+    'ml-admin-user',
+    'ml-admin-pass',
+    'ml-app-user',
+    'ml-app-pass',
+    'ml-http-port',
+    'ml-xcc-port',
+    'node-port',
+    'guest-access',
+    'disallow-updates',
+    'appusers-only'
+  ];
   var inputs = {
-    appType: 'rest',
+    fork: 'marklogic',
     branch: 'master'
   };
   gulp.args.forEach(function(arg) {
@@ -83,13 +128,12 @@ function processInput() {
       var splits = arg.split('=');
       var flag = splits[0];
       var value = splits[1];
-      if (flag === 'appType') {
-        inputs.appType = value;
-      } else if (flag === 'branch') {
-        inputs.branch = value;
+      if (allowedFlags.indexOf(flag) >= 0) {
+        inputs[flag] = value;
       } else {
-        var message = arg + '\n is not a supported flag and has been ignored. You can specify appType=<appType> to specify Roxy appType or branch=<branch> to specify a Roxy branch\n';
-        process.stdout.write(message.red);
+        process.stdout.write(('\nERROR: unsupported argument \'' + arg + '\'.\n').red);
+        printUsage();
+        process.exit(1);
       }
     } else {
       inputs.appName = arg;
@@ -108,7 +152,9 @@ function getNameProposal() {
 }
 
 // Download the Roxy ml script from GitHub
-function getRoxyScript(appName, mlVersion, appType, branch) {
+function getRoxyScript(appName, mlVersion, fork, branch) {
+  fork = fork || 'marklogic';
+  branch = branch || 'master';
 
   var d = q.defer(),
     out;
@@ -117,7 +163,7 @@ function getRoxyScript(appName, mlVersion, appType, branch) {
 
   console.log('Retrieving Roxy script');
   out = fs.createWriteStream(scriptName);
-  var stream = new FetchStream('https://github.com/marklogic/roxy/raw/' + branch + '/' + scriptName);
+  var stream = new FetchStream('https://github.com/' + fork + '/roxy/raw/' + branch + '/' + scriptName);
   stream.pipe(out);
   stream.on('end', function() {
     console.log('Got Roxy script');
@@ -128,12 +174,12 @@ function getRoxyScript(appName, mlVersion, appType, branch) {
         console.log(err);
         d.reject(err);
       } else {
-        console.log('chmod done; appName=' + appName + '; mlVersion=' + mlVersion + '; appType=' + appType + '; branch=' + branch);
+        console.log('chmod done; appName=' + appName + '; mlVersion=' + mlVersion + '; fork=' + fork + '; branch=' + branch);
         d.resolve({
           'script': scriptName,
           'app': appName,
           'mlVersion': mlVersion,
-          'appType': appType,
+          'fork': fork,
           'branch': branch
         });
       }
@@ -148,7 +194,7 @@ function runRoxy(config) {
   var scriptName = config.script,
     appName = config.app,
     mlVersion = config.mlVersion,
-    appType = config.appType,
+    fork = config.fork,
     branch = config.branch;
 
   var d = q.defer();
@@ -157,7 +203,8 @@ function runRoxy(config) {
     'new',
     appName,
     '--server-version=' + mlVersion,
-    '--app-type=' + appType,
+    '--app-type=rest',
+    '--fork=' + fork,
     '--branch=' + branch
   ];
 
@@ -210,6 +257,7 @@ function configRoxy() {
     fs.writeFileSync('deploy/build.properties', properties);
   } catch (e) {
     console.log('failed to update properties: ' + e.message);
+    process.exit(1);
   }
 
   try {
@@ -224,7 +272,7 @@ function configRoxy() {
       '# The ports used by your application\n' +
       '#\n' +
       'app-port=' + settings.appPort + '\n';
-    if (settings.mlVersion < 8) {
+    if (settings.xccPort || (settings.mlVersion < 8)) {
       localProperties += 'xcc-port=' + settings.xccPort + '\n';
     } else {
       localProperties += '# Taking advantage of not needing a XCC Port for ML8\n' +
@@ -250,6 +298,7 @@ function configRoxy() {
     fs.writeFileSync('deploy/local.properties', localProperties, encoding);
   } catch (e) {
     console.log('failed to write roxy local.properties');
+    process.exit(1);
   }
 
   try {
@@ -306,6 +355,7 @@ function configRoxy() {
     fs.writeFileSync('deploy/ml-config.xml', foo);
   } catch (e) {
     console.log('failed to update configuration: ' + e.message);
+    process.exit(1);
   }
 
 }
@@ -334,6 +384,7 @@ gulp.task('generateSecret', ['init'], function(done) {
     fs.writeFileSync('node-server/node-app.js', nodeApp);
   } catch (e) {
     console.log('failed to update SECRET in node-server/node-app.js: ' + e.message);
+    process.exit(1);
   }
 
   done();
@@ -352,7 +403,7 @@ gulp.task('configGulp', ['init'], function(done) {
     configJSON['ml-app-pass'] = settings.appuserPassword;
     configJSON['ml-http-port'] = settings.appPort;
 
-    if (settings.mlVersion < 8) {
+    if (settings.xccPort || (settings.mlVersion < 8)) {
       configJSON['ml-xcc-port'] = settings.xccPort;
     }
 
@@ -365,6 +416,7 @@ gulp.task('configGulp', ['init'], function(done) {
     fs.writeFileSync('local.json', configString, encoding);
   } catch (e) {
     console.log('failed to write local.json: ' + e.message);
+    process.exit(1);
   }
 
   done();
@@ -380,111 +432,143 @@ gulp.task('checkForUpdates', function(done) {
 gulp.task('init', ['checkForUpdates'], function(done) {
   var clArgs = processInput();
   var appName = clArgs.appName;
-  var appType = clArgs.appType;
-  var branch = clArgs.branch;
 
-  var prompts = [{
-    type: 'list',
-    name: 'mlVersion',
-    message: 'MarkLogic version?',
-    choices: ['8', '7', '6', '5'],
-    default: 0
-  }, {
-    type: 'input',
-    name: 'marklogicHost',
-    message: 'MarkLogic Host?',
-    default: 'localhost'
-  }, {
-    type: 'input',
-    name: 'marklogicAdminUser',
-    message: 'MarkLogic Admin User?',
-    default: 'admin'
-  }, {
-    type: 'input',
-    name: 'marklogicAdminPass',
-    message: 'Note: consider keeping the following blank, ' +
-      'you will be asked to enter it at appropriate commands.\n? MarkLogic Admin Password?',
-    default: ''
-  }, {
-    type: 'input',
-    name: 'appPort',
-    message: 'MarkLogic App/Rest port?',
-    default: 8040
-  }, {
-    type: 'input',
-    name: 'xccPort',
-    message: 'XCC port?',
-    default: 8041,
-    when: function(answers) {
-      return answers.mlVersion < 8;
-    }
-  }, {
-    type: 'input',
-    name: 'nodePort',
-    message: 'Node app port?',
-    default: 9070
-  }, {
-    type: 'list',
-    name: 'template',
-    message: 'Select Template',
-    choices: [{
-      name: 'default',
-      value: 'default'
-    }, {
-      name: '3-columns',
-      value: '3column'
-    }, {
-      name: 'Dashboard',
-      value: 'dashboard'
-    }, {
-      name: 'Full-screen map',
-      value: 'map'
-    }, {
-      name: 'I don\'t know',
-      value: 'unsure'
-    }]
-  }, {
-    type: 'list',
-    name: 'theme',
-    message: 'What is the main focus?',
-    when: function(ans) {
-      return ans.template === 'unsure';
-    },
-    choices: [{
-      name: 'Semantics',
-      value: '3column'
-    }, {
-      name: 'Charts',
-      value: 'dashboard'
-    }, {
-      name: 'Map/Graph',
-      value: 'map'
-    }, {
-      name: 'Documents',
-      value: '3column'
-    }, {
-      name: 'Other',
-      value: 'default'
-    }]
-  }, {
-    type: 'list',
-    name: 'guestAccess',
-    message: 'Allow anonymous users to search data?',
-    choices: ['false', 'true'],
-    default: 0
-  }, {
-    type: 'list',
-    name: 'disallowUpdates',
-    message: 'Disallow proxying update requests?',
-    choices: ['false', 'true'],
-    default: 0
-  }, {
-    type: 'list',
-    name: 'appUsersOnly',
-    message: 'Only allow access to users created for this app? Note: disallows admin users.',
-    choices: ['false', 'true'],
-    default: 0
-  }];
+  var prompts = [];
+  if (!clArgs['ml-version']) {
+    prompts.push({
+      type: 'list',
+      name: 'mlVersion',
+      message: 'MarkLogic version?',
+      choices: ['8', '7', '6', '5'],
+      default: 0
+    });
+  }
+  if (!clArgs['ml-host']) {
+    prompts.push({
+      type: 'input',
+      name: 'marklogicHost',
+      message: 'MarkLogic Host?',
+      default: 'localhost'
+    });
+  }
+  if (!clArgs['ml-admin-user']) {
+    prompts.push({
+      type: 'input',
+      name: 'marklogicAdminUser',
+      message: 'MarkLogic Admin User?',
+      default: 'admin'
+    });
+  }
+  if (!clArgs['ml-admin-pass']) {
+    prompts.push({
+      type: 'input',
+      name: 'marklogicAdminPass',
+      message: 'Note: consider keeping the following blank, ' +
+        'you will be asked to enter it at appropriate commands.\n? MarkLogic Admin Password?',
+      default: ''
+    });
+  }
+  if (!clArgs['ml-http-port']) {
+    prompts.push({
+      type: 'input',
+      name: 'appPort',
+      message: 'MarkLogic App/Rest port?',
+      default: 8040
+    });
+  }
+  if (!clArgs['ml-xcc-port']) {
+    prompts.push({
+      type: 'input',
+      name: 'xccPort',
+      message: 'XCC port?',
+      default: 8041,
+      when: function(answers) {
+        return (answers.mlVersion || clArgs['ml-version']) < 8;
+      }
+    });
+  }
+  if (!clArgs['node-port']) {
+    prompts.push({
+      type: 'input',
+      name: 'nodePort',
+      message: 'Node app port?',
+      default: 9070
+    });
+  }
+  if (!clArgs.theme) {
+    prompts.push({
+      type: 'list',
+      name: 'template',
+      message: 'Select Template',
+      choices: [{
+        name: 'default',
+        value: 'default'
+      }, {
+        name: '3-columns',
+        value: '3column'
+      }, {
+        name: 'Dashboard',
+        value: 'dashboard'
+      }, {
+        name: 'Full-screen map',
+        value: 'map'
+      }, {
+        name: 'I don\'t know',
+        value: 'unsure'
+      }]
+    });
+    prompts.push({
+      type: 'list',
+      name: 'theme',
+      message: 'What is the main focus?',
+      when: function(ans) {
+        return ans.template === 'unsure';
+      },
+      choices: [{
+        name: 'Semantics',
+        value: '3column'
+      }, {
+        name: 'Charts',
+        value: 'dashboard'
+      }, {
+        name: 'Map/Graph',
+        value: 'map'
+      }, {
+        name: 'Documents',
+        value: '3column'
+      }, {
+        name: 'Other',
+        value: 'default'
+      }]
+    });
+  }
+  if (!clArgs['guest-access']) {
+    prompts.push({
+      type: 'list',
+      name: 'guestAccess',
+      message: 'Allow anonymous users to search data?',
+      choices: ['false', 'true'],
+      default: 0
+    });
+  }
+  if (!clArgs['disallow-updates']) {
+    prompts.push({
+      type: 'list',
+      name: 'disallowUpdates',
+      message: 'Disallow proxying update requests?',
+      choices: ['false', 'true'],
+      default: 0
+    });
+  }
+  if (!clArgs['appusers-only']) {
+    prompts.push({
+      type: 'list',
+      name: 'appUsersOnly',
+      message: 'Only allow access to users created for this app? Note: disallows admin users.',
+      choices: ['false', 'true'],
+      default: 0
+    });
+  }
 
   if (typeof appName === 'undefined') {
     prompts.unshift({
@@ -497,23 +581,22 @@ gulp.task('init', ['checkForUpdates'], function(done) {
 
   inquirer.prompt(prompts, function(answers) {
     if (typeof appName === 'undefined') {
-      answers.nameDashed = _.slugify(answers.name);
+      settings.appName = _.slugify(answers.name);
     } else {
-      answers.nameDashed = _.slugify(appName);
+      settings.appName = _.slugify(appName);
     }
-    settings.mlVersion = answers.mlVersion;
-    settings.marklogicHost = answers.marklogicHost;
-    settings.marklogicAdminUser = answers.marklogicAdminUser;
-    settings.marklogicAdminPass = answers.marklogicAdminPass;
-    settings.nodePort = answers.nodePort;
-    settings.appPort = answers.appPort;
-    settings.xccPort = answers.xccPort || answers.appPort;
-    settings.appName = answers.nameDashed;
-    settings.guestAccess = answers.guestAccess;
-    settings.disallowUpdates = answers.disallowUpdates;
-    settings.appUsersOnly = answers.appUsersOnly;
+    settings.mlVersion = answers.mlVersion || clArgs['ml-version'];
+    settings.marklogicHost = answers.marklogicHost || clArgs['ml-host'];
+    settings.marklogicAdminUser = answers.marklogicAdminUser || clArgs['ml-admin-user'];
+    settings.marklogicAdminPass = answers.marklogicAdminPass || clArgs['ml-admin-pass'];
+    settings.nodePort = answers.nodePort || clArgs['node-port'];
+    settings.appPort = answers.appPort || clArgs['ml-http-port'];
+    settings.xccPort = answers.xccPort || clArgs['ml-xcc-port'] || settings.appPort;
+    settings.guestAccess = answers.guestAccess || clArgs['guest-access'];
+    settings.disallowUpdates = answers.disallowUpdates || clArgs['disallowed-updates'];
+    settings.appUsersOnly = answers.appUsersOnly || clArgs['appusers-only'];
 
-    getRoxyScript(answers.nameDashed, answers.mlVersion, appType, branch)
+    getRoxyScript(settings.appName, settings.mlVersion, clArgs.fork, clArgs.branch)
       .then(runRoxy)
       .then(function() {
           // Copy over the Angular files
@@ -522,7 +605,7 @@ gulp.task('init', ['checkForUpdates'], function(done) {
             files.push(__dirname + '/app/themes/' + (answers.theme || answers.template) + '/**');
           }
 
-          process.chdir('./' + answers.nameDashed);
+          process.chdir('./' + settings.appName);
 
           configRoxy();
 
@@ -535,8 +618,8 @@ gulp.task('init', ['checkForUpdates'], function(done) {
 
             }))
             .pipe(replace('@slush-version', pkgSettings.version.trim(), skipBinary))
-            .pipe(replace('@sample-app-name', answers.nameDashed, skipBinary))
-            .pipe(replace('@sample-app-role', answers.nameDashed + '-role', skipBinary))
+            .pipe(replace('@sample-app-name', settings.appName, skipBinary))
+            .pipe(replace('@sample-app-role', settings.appName + '-role', skipBinary))
             .pipe(replace('@node-port', answers.nodePort, skipBinary))
             .pipe(replace('@ml-http-port', answers.appPort, skipBinary))
             .pipe(replace('@ml-xcc-port', answers.xccPort || answers.appPort, skipBinary))
