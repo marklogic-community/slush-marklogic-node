@@ -9,7 +9,8 @@
 
     beforeEach(function() {
       bard.appModule('app.detail');
-      bard.inject('$controller', '$rootScope', 'MLUiGmapManager', 'uiGmapGoogleMapApi');
+      bard.inject('$controller', '$rootScope', 'userService',
+                  'MLUiGmapManager', 'uiGmapGoogleMapApi');
 
       // stub the document
       var headers = function() {
@@ -24,7 +25,8 @@
           }
         }
       };
-      controller = $controller('DetailCtrl', { doc: doc });
+      controller = $controller('DetailCtrl',
+                               { doc: doc, $scope: $rootScope.$new() });
       $rootScope.$apply();
     });
 

@@ -9,7 +9,7 @@
 
     beforeEach(function() {
       bard.appModule('app.detail');
-      bard.inject('$controller', '$rootScope', 'MLRest', '$q');
+      bard.inject('$controller', '$rootScope', 'MLRest', '$q', 'userService');
 
       bard.mockService(MLRest, {
         deleteDocument: $q.when('/?uri=blah')
@@ -25,7 +25,7 @@
           name: 'hi'
         }
       };
-      controller = $controller('DetailCtrl', { doc: doc });
+      controller = $controller('DetailCtrl', { doc: doc, $scope: $rootScope.$new() });
       $rootScope.$apply();
     });
 
