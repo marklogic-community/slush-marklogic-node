@@ -123,10 +123,10 @@ function processInput() {
     fork: 'marklogic',
     branch: 'master'
   };
-  gulp.args.forEach(function(arg) {
+  (gulp.args || process.argv).forEach(function(arg) {
     if (isFlag(arg)) {
       var splits = arg.split('=');
-      var flag = splits[0];
+      var flag = splits[0].replace(/^-+/,'');
       var value = splits[1];
       if (allowedFlags.indexOf(flag) >= 0) {
         inputs[flag] = value;
