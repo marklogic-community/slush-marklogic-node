@@ -50,6 +50,7 @@
     ];
     var changingBounds = true;
     var mlBounds = null;
+    var mlDrawings = [];
 
     // keep track of multiple sets of markers
     var markers = {
@@ -67,8 +68,8 @@
       setMarkers: setMarkers,
       setResultMarkers: setResultMarkers,
       setFacetMarkers: setFacetMarkers,
-      setBounds: setBounds,
       watchBounds: watchBounds,
+      watchDrawings: watchDrawings,
       resetMap: resetMap
     });
 
@@ -159,21 +160,46 @@
       setMarkers('facets', newMarkers);
     }
 
-    // to consume Google Maps bounds directly
-    function setBounds(googleBounds) {
-      if (googleBounds && googleBounds.getSouthWest) {
-        $timeout(function () {
-          service.bounds = {
-            southwest: {
-              latitude: googleBounds.getSouthWest().lat(),
-              longitude: googleBounds.getSouthWest().lng()
-            },
-            northeast: {
-              latitude: googleBounds.getNorthEast().lat(),
-              longitude: googleBounds.getNorthEast().lng()
-            }
+    // to consume Google Maps drawing directly
+    function addDrawing(googleOverlay) {
+      if (googleOverlay) {
+        var bounds;
+
+        // circle
+        if (googleOverlay.getRadius) {
+          bounds = {
+            point: getPoint(googleOverlay.getCenter()),
+            radius: googleOverlay.getRadius() * 0.00062137 // convert meters to miles
           };
-        });
+        // polygon
+        } else if (googleOverlay.getPaths) {
+          bounds = {
+            point: getPoints(googleOverlay.getPaths())
+          };
+        // polyline
+        } else if (googleOverlay.getPath) {
+          bounds = {
+            point: getPoints(googleOverlay.getPath())
+          };
+        // marker
+        } else if (googleOverlay.getPosition) {
+          bounds = getPoint(googleOverlay.getPosition());
+        // rectangle
+        } else if (googleOverlay.getBounds) {
+          var googleBounds = googleOverlay.getBounds();
+          bounds = {
+            south: googleBounds.getSouthWest().lat(),
+            west: googleBounds.getSouthWest().lng(),
+            north: googleBounds.getNorthEast().lat(),
+            east: googleBounds.getNorthEast().lng()
+          };
+        }
+
+        if (bounds) {
+          $timeout(function () {
+            mlDrawings.push(bounds);
+          });
+        }
       }
     }
 
@@ -183,10 +209,10 @@
         if (service.bounds && service.bounds.southwest && service.bounds.southwest.latitude) {
           changingBounds = true;
           mlBounds = {
-            'south': service.bounds.southwest.latitude,
-            'west': service.bounds.southwest.longitude,
-            'north': service.bounds.northeast.latitude,
-            'east': service.bounds.northeast.longitude
+            south: service.bounds.southwest.latitude,
+            west: service.bounds.southwest.longitude,
+            north: service.bounds.northeast.latitude,
+            east: service.bounds.northeast.longitude
           };
           $timeout(function() {
             changingBounds = false;
@@ -201,11 +227,16 @@
       return mlBounds;
     }
 
+    function watchDrawings() {
+      return mlDrawings;
+    }
+
     function resetMap() {
       changingBounds = true;
       service.center = angular.copy(defaultCenter);
       service.zoom = angular.copy(defaultZoom);
       mlBounds = null;
+      mlDrawings = [];
       $timeout(function() {
         changingBounds = false;
       }, 2000);
@@ -220,6 +251,10 @@
           drawingControlOptions: {
             position: $googleMaps.ControlPosition.TOP_CENTER,
             drawingModes: [
+              $googleMaps.drawing.OverlayType.CIRCLE,
+              $googleMaps.drawing.OverlayType.MARKER,
+              $googleMaps.drawing.OverlayType.POLYGON,
+              $googleMaps.drawing.OverlayType.POLYLINE,
               $googleMaps.drawing.OverlayType.RECTANGLE
             ]
           }
@@ -234,7 +269,7 @@
       if ($googleMaps && manager) {
         $googleMaps.event.addListener(manager(), 'overlaycomplete', function(overlayEvent) {
           service.drawings.push(overlayEvent.overlay);
-          setBounds(overlayEvent.overlay.getBounds());
+          addDrawing(overlayEvent.overlay);
         });
       }
     });
@@ -245,4 +280,24 @@
 
     return service;
   }
+
+  function getPoints(arr) {
+    var points = [];
+    angular.forEach(arr, function(a, index) {
+      if (a.length) {
+        points = points.concat(getPoints(a));
+      } else {
+        points.push(getPoint(a));
+      }
+    });
+    return points;
+  }
+
+  function getPoint(googleLatLng) {
+    return {
+      latitude: googleLatLng.lat(),
+      longitude: googleLatLng.lng()
+    };
+  }
+
 })();
