@@ -176,14 +176,15 @@
           bounds = {
             point: getPoints(googleOverlay.getPaths())
           };
-        // polyline
-        } else if (googleOverlay.getPath) {
-          bounds = {
-            point: getPoints(googleOverlay.getPath())
-          };
-        // marker
-        } else if (googleOverlay.getPosition) {
-          bounds = getPoint(googleOverlay.getPosition());
+        // we don't support proximity search yet
+        // // polyline
+        // } else if (googleOverlay.getPath) {
+        //   bounds = {
+        //     point: getPoints(googleOverlay.getPath())
+        //   };
+        // // marker
+        // } else if (googleOverlay.getPosition) {
+        //   bounds = getPoint(googleOverlay.getPosition());
         // rectangle
         } else if (googleOverlay.getBounds) {
           var googleBounds = googleOverlay.getBounds();
@@ -252,9 +253,9 @@
             position: $googleMaps.ControlPosition.TOP_CENTER,
             drawingModes: [
               $googleMaps.drawing.OverlayType.CIRCLE,
-              $googleMaps.drawing.OverlayType.MARKER,
+              //$googleMaps.drawing.OverlayType.MARKER, // we don't support proximity search yet
               $googleMaps.drawing.OverlayType.POLYGON,
-              $googleMaps.drawing.OverlayType.POLYLINE,
+              //$googleMaps.drawing.OverlayType.POLYLINE, // we don't support proximity search yet
               $googleMaps.drawing.OverlayType.RECTANGLE
             ]
           }
