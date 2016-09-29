@@ -583,6 +583,7 @@ gulp.task('init', ['checkForUpdates'], function(done) {
   }
 
   inquirer.prompt(prompts, function(answers) {
+    // consolidate answers, clArgs, and defaults
     if (typeof appName === 'undefined') {
       settings.appName = _.slugify(answers.name);
     } else {
@@ -598,14 +599,15 @@ gulp.task('init', ['checkForUpdates'], function(done) {
     settings.guestAccess = answers.guestAccess || clArgs['guest-access'];
     settings.disallowUpdates = answers.disallowUpdates || clArgs['disallowed-updates'];
     settings.appUsersOnly = answers.appUsersOnly || clArgs['appusers-only'];
+    settings.theme = answers.theme || answers.template || clArgs.theme || 'default';
 
     getRoxyScript(settings.appName, settings.mlVersion, clArgs.fork, clArgs.branch)
       .then(runRoxy)
       .then(function() {
           // Copy over the Angular files
           var files = [__dirname + '/app/templates/**'];
-          if (answers.theme !== 'default') { // overlay the theme if not the default theme chosen
-            files.push(__dirname + '/app/themes/' + (answers.theme || answers.template) + '/**');
+          if (settings.theme !== 'default') { // overlay the theme if not the default theme chosen
+            files.push(__dirname + '/app/themes/' + settings.theme + '/**');
           }
 
           process.chdir('./' + settings.appName);
@@ -623,10 +625,10 @@ gulp.task('init', ['checkForUpdates'], function(done) {
             .pipe(replace('@slush-version', pkgSettings.version.trim(), skipBinary))
             .pipe(replace('@sample-app-name', settings.appName, skipBinary))
             .pipe(replace('@sample-app-role', settings.appName + '-role', skipBinary))
-            .pipe(replace('@node-port', answers.nodePort, skipBinary))
-            .pipe(replace('@ml-http-port', answers.appPort, skipBinary))
-            .pipe(replace('@ml-xcc-port', answers.xccPort || answers.appPort, skipBinary))
-            .pipe(replace('@ml-host', answers.marklogicHost, skipBinary))
+            .pipe(replace('@node-port', settings.nodePort, skipBinary))
+            .pipe(replace('@ml-http-port', settings.appPort, skipBinary))
+            .pipe(replace('@ml-xcc-port', settings.xccPort || settings.appPort, skipBinary))
+            .pipe(replace('@ml-host', settings.marklogicHost, skipBinary))
             .pipe(gulp.dest('./')) // Relative to cwd
             .on('end', function() {
               done(); // Finished!
