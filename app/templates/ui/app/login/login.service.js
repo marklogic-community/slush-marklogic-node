@@ -71,6 +71,7 @@
       }, failLogin);
     }
 
+    //loginPrompt not used for transition events atm due to weird state.go behaviour
     function loginPrompt() {
       var d = $q.defer();
       if (_loginMode === 'modal') {
@@ -139,9 +140,7 @@
     }
 
     $transitions.onStart({
-      to: function(state) {
-        return routeIsProtected(state.name);
-      }
+      to: '*.*'
     }, function($transition$) {
 
       if ($transition$.$to().name !== 'root.login') {
