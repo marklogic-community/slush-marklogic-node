@@ -101,6 +101,15 @@
     </range>
   </constraint>
 
+  <constraint name="gender">
+    <range type="xs:string" facet="true" collation="http://marklogic.com/collation/codepoint">
+      <facet-option>limit=5</facet-option>
+      <facet-option>item-order</facet-option>
+      <facet-option>descending</facet-option>
+      <path-index>gender</path-index>
+    </range>
+  </constraint>
+
   <!-- Example geospatial facet based on the sample-data, used by map theme -->
   <constraint name="Location">
     <geo-elem-pair>

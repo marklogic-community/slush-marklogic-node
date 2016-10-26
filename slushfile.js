@@ -341,6 +341,26 @@ function configRoxy() {
         '          <path-expression>docFormat</path-expression>\n' +
         '          <range-value-positions>false</range-value-positions>\n' +
         '          <invalid-values>reject</invalid-values>\n' +
+        '        </range-path-index>\n' +
+        '        <range-path-index>\n' +
+        '          <scalar-type>string</scalar-type>\n' +
+        '          <collation>http://marklogic.com/collation/codepoint</collation>\n' +
+        '          <path-expression>eyeColor</path-expression>\n' +
+        '          <range-value-positions>false</range-value-positions>\n' +
+        '          <invalid-values>reject</invalid-values>\n' +
+        '        </range-path-index>\n' +
+        '        <range-path-index>\n' +
+        '          <scalar-type>string</scalar-type>\n' +
+        '          <collation>http://marklogic.com/collation/codepoint</collation>\n' +
+        '          <path-expression>gender</path-expression>\n' +
+        '          <range-value-positions>false</range-value-positions>\n' +
+        '          <invalid-values>reject</invalid-values>\n' +
+        '        </range-path-index>\n' +
+        '        <range-path-index>\n' +
+        '          <scalar-type>unsignedInt</scalar-type>\n' +
+        '          <path-expression>age</path-expression>\n' +
+        '          <range-value-positions>false</range-value-positions>\n' +
+        '          <invalid-values>reject</invalid-values>\n' +
         '        </range-path-index>\n');
 
     // fix default app-role privileges to match rest-style applications

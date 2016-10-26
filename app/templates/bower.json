@@ -26,7 +26,8 @@
     "ml-search-ng": "~0.2.0",
     "ml-utils": "withjam/ml-utils",
     "tinymce-dist": "4.3.12",
-    "vkbeautify-wrapper": "*"
+    "vkbeautify-wrapper": "*",
+    "ml-highcharts-ng": "ryanjdew/ml-highcharts-ng"
   },
   "overrides": {
     "angular-highlightjs": {
@@ -43,6 +44,8 @@
   },
   "private": true,
   "resolutions": {
-    "angular": "~1.4.4"
+    "angular": "~1.4.4",
+    "angular-bootstrap": "^1.1",
+    "highcharts": "^4.2"
   }
 }
