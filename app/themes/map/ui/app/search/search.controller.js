@@ -42,21 +42,48 @@
       ctrl.currentUser = newValue;
     });
 
-    $scope.$watch(mlMapManager.watchBounds, function(newValue) {
-      if (newValue) {
+    $scope.$watch(mlMapManager.watchBounds, function(bounds) {
+      if (bounds) {
+        var drawings = mlMapManager.watchDrawings();
         ctrl.mlSearch.clearAdditionalQueries();
         ctrl.mlSearch.addAdditionalQuery(
-          qb.or(
-            qb.ext.geospatialConstraint('Location', newValue)
-            // append more geospatial constraints here if there are multiple
+          qb.and(
+            bounds ? geoQuery(bounds) : qb.and(),
+            drawings.length ? geoQuery(drawings) : qb.and()
           )
         );
         ctrl.search();
       } else {
+        // resetMap
         ctrl.mlSearch.clearAdditionalQueries();
         ctrl.search();
       }
     }, true);
+
+    $scope.$watch(mlMapManager.watchDrawings, function(drawings) {
+      if (drawings) {
+        var bounds = mlMapManager.watchBounds();
+        ctrl.mlSearch.clearAdditionalQueries();
+        ctrl.mlSearch.addAdditionalQuery(
+          qb.and(
+            bounds ? geoQuery(bounds) : qb.and(),
+            drawings.length ? geoQuery(drawings) : qb.and()
+          )
+        );
+        ctrl.search();
+      } else {
+        // resetMap
+        ctrl.mlSearch.clearAdditionalQueries();
+        ctrl.search();
+      }
+    }, true);
+
+    function geoQuery(bounds) {
+      return qb.or(
+        qb.ext.geospatialConstraint('Location', bounds)
+        // append more geospatial constraints here if there are multiple
+      );
+    }
 
   }
 }());

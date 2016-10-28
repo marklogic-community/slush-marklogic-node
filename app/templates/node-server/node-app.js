@@ -9,6 +9,7 @@ var logger = require('morgan');
 var four0four = require('./utils/404')();
 
 var options = require('./utils/options')();
+var passport = require('passport');
 var port = options.appPort;
 var environment = options.env;
 
@@ -33,6 +34,9 @@ app.use(expressSession({
   saveUninitialized: true,
   resave: true
 }));
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use(logger('dev'));
 

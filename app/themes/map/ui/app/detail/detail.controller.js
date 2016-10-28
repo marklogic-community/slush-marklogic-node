@@ -4,8 +4,10 @@
   angular.module('app.detail')
   .controller('DetailCtrl', DetailCtrl);
 
-  DetailCtrl.$inject = ['doc', '$stateParams', 'MLUiGmapManager'];
-  function DetailCtrl(doc, $stateParams, mlMapManager) {
+  DetailCtrl.$inject = ['doc', '$stateParams', 'MLUiGmapManager','MLRest',
+    'ngToast','$state','$scope','userService'];
+
+  function DetailCtrl(doc, $stateParams, mlMapManager, MLRest, toast, $state, $scope, userService) {
     var ctrl = this;
 
     var uri = $stateParams.uri;
@@ -16,13 +18,15 @@
     /* jscs: disable */
     if (contentType.lastIndexOf('application/json', 0) === 0) {
       /*jshint camelcase: false */
-      ctrl.xml = vkbeautify.xml(x2js.json2xml_str(doc.data));
+      ctrl.xml = vkbeautify.xml(x2js.json2xml_str(
+          { xml: doc.data }
+      ));
       ctrl.json = doc.data;
       ctrl.type = 'json';
     } else if (contentType.lastIndexOf('application/xml', 0) === 0) {
       ctrl.xml = vkbeautify.xml(doc.data);
       /*jshint camelcase: false */
-      ctrl.json = x2js.xml_str2json(doc.data);
+      ctrl.json = x2js.xml_str2json(doc.data).xml;
       ctrl.type = 'xml';
       /* jscs: enable */
     } else if (contentType.lastIndexOf('text/plain', 0) === 0) {
@@ -56,15 +60,38 @@
       mlMapManager.center = { latitude: latitude, longitude: longitude };
     };
 
-    angular.extend(ctrl, {
-      doc : doc.data,
-      uri : uri
-    });
-
     if (ctrl.type === 'json' || ctrl.type === 'xml') {
       //note that this should be matched with the exact data
+
       ctrl.showMarker(ctrl.json.location.latitude, ctrl.json.location.longitude,
         ctrl.json, ctrl.json.name);
     }
+
+    function deleteFunc() {
+      MLRest.deleteDocument (uri).then(function(response) {
+        // create a toast with settings:
+        toast.create({
+          className: 'warning',
+          content: 'Deleted ' + uri,
+          dismissOnTimeout: true,
+          timeout: 2000,
+          onDismiss: function () {
+            //redirect to search page
+            $state.go('root.search');
+          }
+        });
+      });
+    }
+
+    angular.extend(ctrl, {
+      doc : doc.data,
+      uri : uri,
+      currentUser: null,
+      delete: deleteFunc
+    });
+
+    $scope.$watch(userService.currentUser, function(newValue) {
+      ctrl.currentUser = newValue;
+    });
   }
 }());

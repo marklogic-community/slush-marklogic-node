@@ -92,11 +92,20 @@
     </range>
   </constraint>
 
+  <constraint name="docFormat">
+    <range type="xs:string" facet="true" collation="http://marklogic.com/collation/codepoint">
+      <facet-option>limit=5</facet-option>
+      <facet-option>item-order</facet-option>
+      <facet-option>descending</facet-option>
+      <path-index>docFormat</path-index>
+    </range>
+  </constraint>
+
   <!-- Example geospatial facet based on the sample-data, used by map theme -->
   <constraint name="Location">
-    <geo-elem-pair> 
-      <parent ns="" name="location"/> 
-      <lat ns="" name="latitude"/> 
+    <geo-elem-pair>
+      <parent ns="" name="location"/>
+      <lat ns="" name="latitude"/>
       <lon ns="" name="longitude"/>
       <geo-option>boundaries-included</geo-option>
       <geo-option>score-function=reciprocal</geo-option>

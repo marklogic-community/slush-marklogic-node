@@ -3,6 +3,7 @@
 'use strict';
 
 var router = require('express').Router();
+var authHelper = require('./utils/auth-helper');
 var http = require('http');
 var options = require('./utils/options')();
 
@@ -22,7 +23,7 @@ var options = require('./utils/options')();
 // For any other GET request, proxy it on to MarkLogic.
 router.get('*', function(req, res) {
   noCache(res);
-  if (!options.guestAccess && (req.session.user === undefined)) {
+  if (!(options.guestAccess || req.isAuthenticated())) {
     res.status(401).send('Unauthorized');
   } else {
     proxy(req, res);
@@ -33,7 +34,7 @@ router.get('*', function(req, res) {
 router.put('*', function(req, res) {
   noCache(res);
   // For PUT requests, require authentication
-  if (req.session.user === undefined) {
+  if (!req.isAuthenticated()) {
     res.status(401).send('Unauthorized');
   } else if (options.disallowUpdates || ((req.path === '/documents') &&
     req.query.uri.match('/api/users/') &&
@@ -49,15 +50,16 @@ router.put('*', function(req, res) {
 // Require authentication for POST requests
 router.post(/^\/(alert\/match|search|suggest|values\/.*)$/, function(req, res) {
   noCache(res);
-  if (!options.guestAccess && (req.session.user === undefined)) {
+  if (!(options.guestAccess || req.isAuthenticated())) {
     res.status(401).send('Unauthorized');
   } else {
     proxy(req, res);
   }
 });
+
 router.post('*', function(req, res) {
   noCache(res);
-  if (req.session.user === undefined) {
+  if (!req.isAuthenticated()) {
     res.status(401).send('Unauthorized');
   } else if (options.disallowUpdates) {
     res.status(403).send('Forbidden');
@@ -69,7 +71,7 @@ router.post('*', function(req, res) {
 // (#176) Require authentication for DELETE requests
 router.delete('*', function(req, res) {
   noCache(res);
-  if (req.session.user === undefined) {
+  if (!req.isAuthenticated()) {
     res.status(401).send('Unauthorized');
   } else if (options.disallowUpdates) {
     res.status(403).send('Forbidden');
@@ -78,19 +80,6 @@ router.delete('*', function(req, res) {
   }
 });
 
-function getAuth(options, session) {
-  var auth = null;
-
-  if ((session.user !== undefined) && (session.user.username !== undefined)) {
-    auth =  session.user.username + ':' + session.user.password;
-  }
-  else {
-    auth = options.defaultUser + ':' + options.defaultPass;
-  }
-
-  return auth;
-}
-
 // Generic proxy function used by multiple HTTP verbs
 function proxy(req, res) {
   var queryString = req.originalUrl.split('?')[1];
@@ -98,43 +87,56 @@ function proxy(req, res) {
   console.log(
     req.method + ' ' + req.path + ' proxied to ' +
     options.mlHost + ':' + options.mlHttpPort + path);
-  var mlReq = http.request({
-    hostname: options.mlHost,
-    port: options.mlHttpPort,
-    method: req.method,
-    path: path,
-    headers: req.headers,
-    auth: getAuth(options, req.session)
-  }, function(response) {
+  var reqOptions = {
+      hostname: options.mlHost,
+      port: options.mlHttpPort,
+      method: req.method,
+      path: path,
+      headers: req.headers
+    };
 
-    res.statusCode = response.statusCode;
-
-    // [GJo] (#67) forward all headers from MarkLogic
-    for (var header in response.headers) {
-      res.header(header, response.headers[header]);
+  var passportUser = req.session.passport.user;
+  authHelper.getAuthorization(req.session, reqOptions.method, reqOptions.path,
+    {
+      authUser: passportUser.username
     }
+  ).then(function(authorization) {
+    if (authorization) {
+      reqOptions.headers.Authorization = authorization;
+    }
+    var mlReq = http.request(reqOptions, function(response) {
 
-    response.on('data', function(chunk) {
-      res.write(chunk);
+      res.statusCode = response.statusCode;
+
+      // [GJo] (#67) forward all headers from MarkLogic
+      for (var header in response.headers) {
+        if (!/^WWW\-Authenticate$/i.test(header)) {
+          res.header(header, response.headers[header]);
+        }
+      }
+
+      response.on('data', function(chunk) {
+        res.write(chunk);
+      });
+      response.on('end', function() {
+        res.end();
+      });
     });
-    response.on('end', function() {
+
+    req.pipe(mlReq);
+    req.on('end', function() {
+      mlReq.end();
+    });
+
+    mlReq.on('error', function(e) {
+      console.log('Problem with request: ' + e.message);
+      res.statusCode = 500;
       res.end();
     });
   });
-
-  req.pipe(mlReq);
-  req.on('end', function() {
-    mlReq.end();
-  });
-
-  mlReq.on('error', function(e) {
-    console.log('Problem with request: ' + e.message);
-    res.statusCode = 500;
-    res.end();
-  });
 }
 
-function noCache(response){
+function noCache(response) {
   response.append('Cache-Control', 'no-cache, must-revalidate');     // HTTP 1.1 - must-revalidate
   response.append('Pragma',        'no-cache');                      // HTTP 1.0
   response.append('Expires',       'Sat, 26 Jul 1997 05:00:00 GMT'); // Date in the past

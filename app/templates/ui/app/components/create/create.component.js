@@ -2,7 +2,9 @@ import template from './create.html';
 import controller from './create.controller';
 
 const component = {
-  bindings: {},
+  bindings: {
+    doc: '<'
+  },
   controller: controller,
   template: template
 };
