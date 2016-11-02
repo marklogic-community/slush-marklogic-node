@@ -307,17 +307,6 @@ function configRoxy() {
   try {
     var foo = fs.readFileSync('deploy/ml-config.xml', encoding);
 
-    // add an index for the default content
-    foo = foo.replace(/^\s*<range-element-indexes>/m,
-      '      <range-element-indexes>\n' +
-      '        <range-element-index>\n' +
-      '          <scalar-type>string</scalar-type>\n' +
-      '          <namespace-uri/>\n' +
-      '          <localname>eyeColor</localname>\n' +
-      '          <collation>http://marklogic.com/collation/codepoint</collation>\n' +
-      '          <range-value-positions>false</range-value-positions>\n' +
-      '        </range-element-index>\n');
-
     // add a geospatial index for the default content
     foo = foo.replace(/^\s*<geospatial-element-pair-indexes>/m,
       '      <geospatial-element-pair-indexes>\n' +
