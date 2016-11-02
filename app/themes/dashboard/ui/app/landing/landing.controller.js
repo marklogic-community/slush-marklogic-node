@@ -110,7 +110,8 @@
             padding: 10,
             fontWeight: 'bold'
           },
-          shared: true,
+          shared: false,
+          split: true,
           crosshairs: true,
           headerFormat: '<b>{series.name}</b><br/>',
           pointFormatter: function() {
@@ -154,8 +155,7 @@
       seriesNameMLConstraint: yFacet,
       // dataPointNameMLConstraint: yFacet,
 
-      // limit of returned results
-      resultLimit: limit || 10,
+      resultLimit: 0,
       credits: {
         enabled: true
       }
