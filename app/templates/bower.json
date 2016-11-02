@@ -27,7 +27,7 @@
     "ml-utils": "withjam/ml-utils",
     "tinymce-dist": "4.3.12",
     "vkbeautify-wrapper": "*",
-    "ml-highcharts-ng": "ryanjdew/ml-highcharts-ng"
+    "ml-highcharts-ng": "https://github.com/ryanjdew/ml-highcharts-ng.git#2fcbb6db9d3cd00ac01561a53a43adf1400b8fcf"
   },
   "overrides": {
     "angular-highlightjs": {
