@@ -1,0 +1,17 @@
+<div ng-repeat="result in results" class="result panel panel-default col-md-3">
+  <div class="panel-body">
+    <h4>
+      <a ui-sref="root.view({uri: result.uri})">{{ result.label || result.uri }}</a>
+    </h4>
+    <div class="matches">
+      <div class="match" ng-repeat="match in result.matches">
+        <em ng-repeat="text in match['match-text'] track by $index">
+          <span ng-class="{ highlight: !!text.highlight }">{{ text.highlight || text  }}</span>
+        </em>
+      </div>
+    </div>
+  </div>
+  <div class="panel-footer phone">
+    <i class="fa fa-phone fa-lg"></i><phone phone-number="result.extracted.content[0].phone"></phone>
+  </div>
+</div>
