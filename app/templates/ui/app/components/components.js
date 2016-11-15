@@ -6,6 +6,7 @@ import Search from './search/search';
 import ErrorModule from './error/error';
 import Detail from './detail/detail';
 import Create from './create/create';
+import Profile from './profile/profile';
 
 let componentModule = angular.module('app.components', [
   Login,
@@ -14,7 +15,8 @@ let componentModule = angular.module('app.components', [
   Search,
   ErrorModule,
   Detail,
-  Create
+  Create,
+  Profile
 ])
 
 .name;

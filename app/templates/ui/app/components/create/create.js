@@ -4,6 +4,8 @@ import angularMessages from 'angular-messages';
 import bootstrapConfirm from 'angular-bootstrap-confirm';
 
 import CreateComponent from './create.component';
+import StringToNumber from './stringtonumber.directive';
+
 import User from '../user/user';
 
 //run globally since not in an es6 module
@@ -19,12 +21,8 @@ const module = angular.module('app.create', [
     bootstrapConfirm
   ])
   .component('create', CreateComponent)
+  .directive('stringToNumber', StringToNumber)
   .name;
 
 export
 default module;
-
-/*
-  angular.module('app.create', ['ml.common', 'app.user', 'ngToast','cb.x2js',
-    'ngMessages','mwl.confirm']);
-    */

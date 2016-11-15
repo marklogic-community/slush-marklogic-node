@@ -9,8 +9,11 @@ import AuthInterceptor from './loginInterceptor.service';
 import LoginFullComponent from './login-full.component';
 import LoginComponent from './login.component';
 
+//run globally since not in an es6 module
+import 'script!ml-common-ng/dist/ml-common-ng';
+
 const login = angular
-  .module('app.login', [uiBootstrap, uiRouter, messageBoard])
+  .module('app.login', [uiBootstrap, uiRouter, messageBoard, 'ml.common'])
   .component('loginFull', LoginFullComponent)
   .component('login', LoginComponent)
   .factory('loginService', loginService)
