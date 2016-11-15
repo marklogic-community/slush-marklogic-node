@@ -4,7 +4,7 @@
   angular.module('app.landing', [
     'ml.search',
     'app.user',
-    'app.snippet',
-    'ml.highcharts'
+    'app.snippet'
   ]);
+
 }());

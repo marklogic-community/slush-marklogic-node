@@ -38,7 +38,7 @@ router.put('*', function(req, res) {
     res.status(401).send('Unauthorized');
   } else if (options.disallowUpdates || ((req.path === '/documents') &&
     req.query.uri.match('/api/users/') &&
-    !req.query.uri.match('/api/users/' + req.session.user.username + '.json'))) {
+    !req.query.uri.match('/api/users/' + req.session.passport.user.username + '.json'))) {
     // The user is trying to PUT to a profile document other than his/her own. Not allowed.
     res.status(403).send('Forbidden');
   } else {
