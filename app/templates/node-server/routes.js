@@ -32,16 +32,26 @@ router.get('/user/status', function(req, res) {
       ));
     }
   } else {
+    var queryString = req.originalUrl.split('?')[1];
+    var path = req.baseUrl + req.path + (queryString ? '?' + queryString : '');
+    var passportUser = req.session.passport.user;
+    var reqOptions = {
+      hostname: options.mlHost,
+      port: options.mlHttpPort,
+      method: req.method,
+      path: path,
+      headers: req.headers
+    };
+
     delete headers['content-length'];
     authHelper.getAuthorization(req.session, reqOptions.method, reqOptions.path,
       {
         authHost: reqOptions.hostname || options.mlHost,
         authPort: reqOptions.port || options.mlHttpPort,
-        authUser: username,
-        authPassword: password
+        authUser: passportUser.username,
+        authPassword: passportUser.password
       }
     ).then(function(authorization) {
-      var passportUser = req.session.passport.user;
       delete headers['content-length'];
       if (authorization) {
         headers.Authorization = authorization;
