@@ -1,43 +1,30 @@
-/* global MLSearchController */
-(function () {
+(function() {
   'use strict';
 
   angular.module('app.landing')
     .controller('LandingCtrl', LandingCtrl);
 
-  LandingCtrl.$inject = ['$scope'
-    , '$location'
-    , 'userService'
-    , 'MLSearchFactory'
-    , 'HighchartsHelper'];
+  LandingCtrl.$inject = ['$scope', '$location', 'userService', 'MLSearchFactory'];
 
-  function LandingCtrl($scope
-    , $location
-    , userService
-    , searchFactory
-    , highchartsHelper) {
+  function LandingCtrl($scope, $location, userService, searchFactory) {
 
     var ctrl = this;
     ctrl.mlSearch = searchFactory.newContext();
 
     angular.extend(ctrl, {
-      "eyeColor" : top10Chart('Eye Color'
-        , 'pie'
-        , 'eyeColor'
-        , 'Eye Color'
-        , 50)
-      , "gender" : top10Chart('Gender'
-        , 'column'
-        , 'gender'
-        , 'Gender'
-        , 50)
-      , "combined" : top10Chartv2('Eye Color vs Gender'
-        , 'bar'
-        , 'eyeColor'
-        , 'Eye Color'
-        , 'gender'
-        , 'Gender')
+      eyeColor: top10Chart('Eye Color', 'pie', 'eyeColor', 'Eye Color', 50),
+      gender: top10Chart('Gender', 'bar', 'gender', 'Gender', 50),
+      combined: top10Chartv2('Eye Color vs Gender', 'column', 'eyeColor', 'Eye Color',
+                  'gender', 'Gender')
     });
+
+    $scope.$watch(userService.currentUser, function(newValue) {
+      ctrl.currentUser = newValue;
+      if (newValue) {
+        ctrl.mlSearch.search(); // trigger showing of charts
+      }
+    });
+
   }
 
   function top10Chart(title, type, xFacet, xLabel, limit) {
@@ -66,6 +53,7 @@
       title: {
         text: title
       },
+
       xAxis: {
         title: {
           text: xLabel
@@ -78,6 +66,11 @@
       //xAxisMLConstraint: xFacet,
       // optional constraint name for categorizing x axis values
       xAxisCategoriesMLConstraint: xFacet,
+
+      // grouping results
+      //seriesNameMLConstraint: yFacet,
+      //dataPointNameMLConstraint: yFacet,
+
       yAxis: {
         title: {
           text: 'Frequency'
@@ -85,12 +78,18 @@
       },
       // constraint name for y axis ($frequency is special value for value/tuple frequency)
       yAxisMLConstraint: '$frequency',
-      zAxis: {
-        title: {
-          text: null
-        }
-      },
+
+      // zAxis: {
+      //   title: {
+      //     text: null
+      //   }
+      // },
+      //zAxisMLConstraint: '$frequency',
       // limit of returned results
+
+      size: {
+        height: 250
+      },
       resultLimit: limit || 10,
       credits: {
         enabled: true
@@ -134,7 +133,14 @@
           rotation: -45
         } : {})
       },
+      // constraint name for x axis
+      // xAxisMLConstraint: xFacet,
+      // optional constraint name for categorizing x axis values
       xAxisCategoriesMLConstraint: xFacet,
+
+      // grouping results
+      seriesNameMLConstraint: yFacet,
+      //dataPointNameMLConstraint: yFacet,
 
       yAxis: {
         title: {
@@ -144,17 +150,16 @@
       // constraint name for y axis ($frequency is special value for value/tuple frequency)
       yAxisMLConstraint: '$frequency',
 
-      zAxis: {
-        title: {
-          text: yLabel
-        }
-      },
-      // constraint name for x axis
-      // xAxisMLConstraint: xFacet,
-      // optional constraint name for categorizing x axis values
-      seriesNameMLConstraint: yFacet,
-      // dataPointNameMLConstraint: yFacet,
+      // zAxis: {
+      //   title: {
+      //     text: null
+      //   }
+      // },
+      //zAxisMLConstraint: '$frequency',
 
+      size: {
+        height: 250
+      },
       resultLimit: 0,
       credits: {
         enabled: true

@@ -7,6 +7,12 @@
     var controller;
 
     var currentUser = null;
+    var _user = {
+      data: {
+        username: 'bob',
+        authenticated: true
+      }
+    };
 
     var results = [
       {
@@ -45,14 +51,20 @@
       expect(controller).to.be.defined;
     });
 
-    it('should update the current user if it changes', function() {
+    it('currentUser should not be defined', function() {
       expect(controller.currentUser).to.not.be.defined;
     });
 
-    it('should run a search', function() {
-      controller.search('stuff');
-      $rootScope.$apply();
-      expect(controller.response.results).to.eq(results);
+    it('should update the current user when logged in using loginService', function(done) {
+      $rootScope.$broadcast('loginService:login-success', {data:_user});
+      $rootScope.$apply(controller);
+
+      done();
+      expect(controller.currentUser().name).to.eq('bob');
+    });
+
+    it('should run a search at login', function() {
+      expect(controller.mlSearch.results.results).to.eq(results);
     });
   });
 }());

@@ -19,7 +19,7 @@
     "bootstrap": "~3.3.5",
     "font-awesome": "~4.6.0",
     "highcharts": "^4.2",
-    "highlightjs":"~8.7.0",
+    "highlightjs": "~8.7.0",
     "ng-json-explorer": "8c2a0f9104",
     "ngtoast": "^2.0.0",
     "lodash": "~3.10.1",
@@ -27,13 +27,13 @@
     "ml-utils": "withjam/ml-utils",
     "tinymce-dist": "4.3.12",
     "vkbeautify-wrapper": "*",
-    "ml-highcharts-ng": "https://github.com/ryanjdew/ml-highcharts-ng.git#2fcbb6db9d3cd00ac01561a53a43adf1400b8fcf"
+    "ml-highcharts-ng": "~0.0.11"
   },
   "overrides": {
     "angular-highlightjs": {
       "dependencies": {
-        "angular" : ">1.0.8",
-        "highlightjs":"~8.7.0"
+        "angular": ">1.0.8",
+        "highlightjs": "~8.7.0"
       }
     }
   },

@@ -51,6 +51,8 @@
       .state('root.landing', {
         url: '/',
         templateUrl: 'app/landing/landing.html',
+        controller: 'LandingCtrl',
+        controllerAs: 'ctrl',
         navLabel: {
           text: 'Home',
           area: 'dashboard',

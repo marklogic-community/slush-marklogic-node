@@ -20,7 +20,7 @@
         <ul>
           <li ng-repeat="(key, errors) in createForm.$error track by $index"> <strong>{{ key }}</strong> errors
             <ul>
-              <li ng-repeat="e in errors">{{ e.$name }} has an error: <strong>{{ key }}</strong>.</li>
+              <li ng-repeat="e in errors track by $index">{{ e.$name }} has an error: <strong>{{ key }}</strong>.</li>
             </ul>
           </li>
         </ul>
@@ -179,7 +179,7 @@
         <button class="add-feature btn btn-default btn-sm" ng-click="ctrl.addTag()">Add</button>
       </div>
       <div class="col-sm-10 col-sm-offset-2">
-        <div class="tag btn btn-info" ng-repeat="tag in ctrl.person.tags">
+        <div class="tag btn btn-info" ng-repeat="tag in ctrl.person.tags track by $index">
           <span>{{tag}}</span>
           <span class="glyphicon glyphicon-remove-circle" ng-click="ctrl.removeTag($index)"></span>
         </div>
