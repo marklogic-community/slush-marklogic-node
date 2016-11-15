@@ -307,17 +307,6 @@ function configRoxy() {
   try {
     var foo = fs.readFileSync('deploy/ml-config.xml', encoding);
 
-    // add an index for the default content
-    foo = foo.replace(/^\s*<range-element-indexes>/m,
-      '      <range-element-indexes>\n' +
-      '        <range-element-index>\n' +
-      '          <scalar-type>string</scalar-type>\n' +
-      '          <namespace-uri/>\n' +
-      '          <localname>eyeColor</localname>\n' +
-      '          <collation>http://marklogic.com/collation/codepoint</collation>\n' +
-      '          <range-value-positions>false</range-value-positions>\n' +
-      '        </range-element-index>\n');
-
     // add a geospatial index for the default content
     foo = foo.replace(/^\s*<geospatial-element-pair-indexes>/m,
       '      <geospatial-element-pair-indexes>\n' +
@@ -339,6 +328,26 @@ function configRoxy() {
         '          <scalar-type>string</scalar-type>\n' +
         '          <collation>http://marklogic.com/collation/codepoint</collation>\n' +
         '          <path-expression>docFormat</path-expression>\n' +
+        '          <range-value-positions>false</range-value-positions>\n' +
+        '          <invalid-values>reject</invalid-values>\n' +
+        '        </range-path-index>\n' +
+        '        <range-path-index>\n' +
+        '          <scalar-type>string</scalar-type>\n' +
+        '          <collation>http://marklogic.com/collation/codepoint</collation>\n' +
+        '          <path-expression>eyeColor</path-expression>\n' +
+        '          <range-value-positions>false</range-value-positions>\n' +
+        '          <invalid-values>reject</invalid-values>\n' +
+        '        </range-path-index>\n' +
+        '        <range-path-index>\n' +
+        '          <scalar-type>string</scalar-type>\n' +
+        '          <collation>http://marklogic.com/collation/codepoint</collation>\n' +
+        '          <path-expression>gender</path-expression>\n' +
+        '          <range-value-positions>false</range-value-positions>\n' +
+        '          <invalid-values>reject</invalid-values>\n' +
+        '        </range-path-index>\n' +
+        '        <range-path-index>\n' +
+        '          <scalar-type>unsignedInt</scalar-type>\n' +
+        '          <path-expression>age</path-expression>\n' +
         '          <range-value-positions>false</range-value-positions>\n' +
         '          <invalid-values>reject</invalid-values>\n' +
         '        </range-path-index>\n');

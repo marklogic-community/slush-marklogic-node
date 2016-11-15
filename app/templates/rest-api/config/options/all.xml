@@ -88,7 +88,7 @@
       <facet-option>limit=5</facet-option>
       <facet-option>frequency-order</facet-option>
       <facet-option>descending</facet-option>
-      <json-property>eyeColor</json-property>
+      <path-index>eyeColor</path-index>
     </range>
   </constraint>
 
@@ -98,6 +98,15 @@
       <facet-option>item-order</facet-option>
       <facet-option>descending</facet-option>
       <path-index>docFormat</path-index>
+    </range>
+  </constraint>
+
+  <constraint name="gender">
+    <range type="xs:string" facet="true" collation="http://marklogic.com/collation/codepoint">
+      <facet-option>limit=5</facet-option>
+      <facet-option>item-order</facet-option>
+      <facet-option>descending</facet-option>
+      <path-index>gender</path-index>
     </range>
   </constraint>
 
