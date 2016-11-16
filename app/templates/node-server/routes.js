@@ -13,7 +13,9 @@ var options = require('./utils/options')();
 authHelper.init();
 
 // [GJo] (#31) Moved bodyParsing inside routing, otherwise it might try to parse uploaded binaries as json..
-router.use(bodyParser.urlencoded({extended: true}));
+router.use(bodyParser.urlencoded({
+  extended: true
+}));
 router.use(bodyParser.json());
 
 router.get('/user/status', function(req, res) {
@@ -23,8 +25,9 @@ router.get('/user/status', function(req, res) {
     if (options.guestAccess) {
       res.send(authStatus(
         true,
-        options.defaultUser,
-        { fullname: 'Guest' }
+        options.defaultUser, {
+          fullname: 'Guest'
+        }
       ));
     } else {
       res.send(authStatus(
@@ -32,16 +35,24 @@ router.get('/user/status', function(req, res) {
       ));
     }
   } else {
+    var queryString = req.originalUrl.split('?')[1];
+    var path = req.baseUrl + req.path + (queryString ? '?' + queryString : '');
+    var passportUser = req.session.passport.user;
+    var reqOptions = {
+      hostname: options.mlHost,
+      port: options.mlHttpPort,
+      method: req.method,
+      path: path,
+      headers: req.headers
+    };
+
     delete headers['content-length'];
-    authHelper.getAuthorization(req.session, reqOptions.method, reqOptions.path,
-      {
-        authHost: reqOptions.hostname || options.mlHost,
-        authPort: reqOptions.port || options.mlHttpPort,
-        authUser: username,
-        authPassword: password
-      }
-    ).then(function(authorization) {
-      var passportUser = req.session.passport.user;
+    authHelper.getAuthorization(req.session, reqOptions.method, reqOptions.path, {
+      authHost: reqOptions.hostname || options.mlHost,
+      authPort: reqOptions.port || options.mlHttpPort,
+      authUser: passportUser.username,
+      authPassword: passportUser.password
+    }).then(function(authorization) {
       delete headers['content-length'];
       if (authorization) {
         headers.Authorization = authorization;
@@ -118,8 +129,8 @@ router.get('/user/logout', function(req, res) {
 router.get('/*', four0four.notFoundMiddleware);
 
 function noCache(response) {
-  response.append('Cache-Control', 'no-cache, must-revalidate');//HTTP 1.1 - must-revalidate
-  response.append('Pragma', 'no-cache');//HTTP 1.0
+  response.append('Cache-Control', 'no-cache, must-revalidate'); //HTTP 1.1 - must-revalidate
+  response.append('Pragma', 'no-cache'); //HTTP 1.0
   response.append('Expires', 'Sat, 26 Jul 1997 05:00:00 GMT'); // Date in the past
 }
 

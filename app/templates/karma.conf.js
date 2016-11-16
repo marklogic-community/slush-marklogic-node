@@ -1,66 +1,130 @@
 /*jshint node: true */
-
-'use strict';
-/*global module*/
-// Karma configuration
-// http://karma-runner.github.io/0.10/config/configuration-file.html
-
 module.exports = function(config) {
-  var gulpConfig = require('./gulp.config')();
-
   config.set({
-    // base path that will be used to resolve all patterns (eg. files, exclude)
-    basePath: './',
+    // base path used to resolve all patterns
+    basePath: '',
 
     // frameworks to use
-    // some available frameworks: https://npmjs.org/browse/keyword/karma-adapter
+    // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
     frameworks: ['mocha', 'chai', 'sinon', 'chai-sinon'],
 
-    // list of files / patterns to load in the browser
-    files: gulpConfig.karma.files,
+    // list of files/patterns to load in the browser
+    files: [{
+      pattern: 'spec.bundle.js',
+      watched: false
+    }],
 
-    // list of files to exclude
-    exclude: gulpConfig.karma.exclude,
+    // files to exclude
+    exclude: [],
 
-    proxies: {
-      '/': 'http://localhost:8888/'
-    },
+    plugins: [
+      require('karma-chai'),
+      require('karma-chrome-launcher'),
+      require('karma-mocha'),
+      require('karma-mocha-reporter'),
+      require('karma-coverage'),
+      require('karma-notify-reporter'),
+      require('karma-sourcemap-loader'),
+      require('karma-chai-sinon'),
+      require('karma-sinon'),
+      require('karma-webpack'),
+      require('karma-phantomjs-launcher')
+    ],
 
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
-    preprocessors: gulpConfig.karma.preprocessors,
-
-    // test results reporter to use
-    // possible values: 'dots', 'progress', 'coverage'
-    // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['progress', 'coverage', 'notify'],
-
-    coverageReporter: {
-      dir: gulpConfig.karma.coverage.dir,
-      reporters: gulpConfig.karma.coverage.reporters
+    preprocessors: {
+      'spec.bundle.js': ['webpack', 'sourcemap']
     },
 
+    webpack: {
+      devtool: 'inline-source-map',
+      module: {
+        /*\
+        preLoaders: [{
+          test: /\.js$/,
+          loader: 'isparta'
+        }],
+        */
+        loaders: [
+          // transpile all files except modules and source files which are need be tested
+          {
+            test: /\.js$/,
+            exclude: [/app((?!\.spec).)*$/, /node_modules/],
+            loader: 'ng-annotate!babel'
+          },
+          // transpile and instrument only testable files with isparta
+          // this allows us to generate a coverage report of all files
+          {
+            test: /\.js$/,
+            include: [/app((?!\.spec).)*$/],
+            loader: 'isparta'
+          }, {
+            test: /\.html$/,
+            loader: 'html'
+          }, {
+            test: /\.styl$/,
+            loader: 'style!css!stylus'
+          }, {
+            test: /\.less$/,
+            loader: 'css!less'
+          }, {
+            test: /\.css$/,
+            loader: 'style!css'
+          }, {
+            test: /\.(jpe?g|png|gif)$/i,
+            loader: 'file'
+          }, {
+            test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+            loader: 'url-loader?limit=10000&mimetype=application/font-woff'
+          }, {
+            test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+            loader: 'file'
+          }
+        ]
+      }
+    },
+
+    webpackServer: {
+      noInfo: true // prevent console spamming when running in Karma!
+    },
+
+    // available reporters: https://npmjs.org/browse/keyword/karma-reporter
+    reporters: ['mocha', 'coverage', 'notify'],
+
+    coverageReporter: {
+      // dir: report + 'coverage',
+      reporters: [
+        // reporters not supporting the `file` property
+        {
+          type: 'html',
+          subdir: 'report-html'
+        }, {
+          type: 'lcov',
+          subdir: 'report-lcov'
+        }, {
+          type: 'text-summary'
+        } //, subdir: '.', file: 'text-summary.txt'}
+      ]
+    },
     // web server port
     port: 9876,
 
-    // enable / disable colors in the output (reporters and logs)
+    // enable colors in the output
     colors: true,
 
     // level of logging
-    // possible values: config.LOG_DISABLE || config.LOG_ERROR ||
-    // config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
+    // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
     logLevel: config.LOG_INFO,
 
-    // enable / disable watching file and executing tests whenever any file changes
+    // toggle whether to watch files and rerun tests upon incurring changes
     autoWatch: true,
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    //    browsers: ['Chrome', 'ChromeCanary', 'FirefoxAurora', 'Safari', 'PhantomJS'],
     browsers: ['PhantomJS'],
 
-    // Continuous Integration mode
-    // if true, Karma captures browsers, runs the tests and exits
+    // if true, Karma runs tests once and exits
     singleRun: false
   });
 };

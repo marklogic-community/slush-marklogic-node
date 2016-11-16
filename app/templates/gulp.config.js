@@ -12,20 +12,24 @@ module.exports = function() {
   var temp = './.tmp/';
   var _ = require('lodash');
   var wiredep = require('wiredep');
+
   var bower = {
     json: require('./bower.json'),
     directory: './bower_components/',
     ignorePath: '..'
   };
+
   var getWiredepDefaultOptions = function() {
     return {
       bowerJson: bower.json,
       directory: bower.directory,
       ignorePath: bower.ignorePath,
-      exclude: [ 'requirejs', 'angularjs', 'font-awesome.css' ]
+      exclude: ['requirejs', 'angularjs', 'font-awesome.css']
     };
   };
-  var bowerFiles = wiredep(_.merge(getWiredepDefaultOptions(), { devDependencies: true })).js;
+  var bowerFiles = wiredep(_.merge(getWiredepDefaultOptions(), {
+    devDependencies: true
+  })).js;
   var nodeModules = 'node_modules';
 
   var config = {
@@ -94,7 +98,9 @@ module.exports = function() {
     /**
      * plato
      */
-    plato: {js: clientApp + '**/*.js'},
+    plato: {
+      js: clientApp + '**/*.js'
+    },
 
     /**
      * browser sync
@@ -183,9 +189,15 @@ module.exports = function() {
         // dir: report + 'coverage',
         reporters: [
           // reporters not supporting the `file` property
-          {type: 'html', subdir: 'report-html'},
-          {type: 'lcov', subdir: 'report-lcov'},
-          {type: 'text-summary'} //, subdir: '.', file: 'text-summary.txt'}
+          {
+            type: 'html',
+            subdir: 'report-html'
+          }, {
+            type: 'lcov',
+            subdir: 'report-lcov'
+          }, {
+            type: 'text-summary'
+          } //, subdir: '.', file: 'text-summary.txt'}
         ]
       },
       preprocessors: {}

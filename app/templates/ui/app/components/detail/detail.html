@@ -1,0 +1,53 @@
+<div class="row detail">
+  <div class="col-sm-8">
+    <!-- note -->
+    <uib-tabset type="pills" active="$ctrl.type">
+      <uib-tab index="'json'" ng-click="$ctrl.type='json'" ng-if="$ctrl.type==='json'">
+        <uib-tab-heading>JSON</uib-tab-heading>
+        <div class="col-sm-9">
+          <json-explorer data="$ctrl.json"></json-explorer>
+        </div>
+      </uib-tab>
+      <uib-tab index="'xml'" ng-click="$ctrl.type='xml'" ng-if="$ctrl.type==='xml' || $ctrl.type==='txt'">
+        <uib-tab-heading >XML</uib-tab-heading>
+        <div class="col-sm-9">
+          <pre class="pre-xml">{{$ctrl.xml}}</pre>
+        </div>
+      </uib-tab>
+      <uib-tab index="'binary'" ng-click="$ctrl.type='binary'" ng-if="$ctrl.type==='binary'">
+        <uib-tab-heading >Binary</uib-tab-heading>
+        <div class="col-sm-9">
+          <a target="_blank" ng-href="/v1/documents?uri={{$ctrl.uri}}&transform=download"
+             class="btn btn-default">Download</a>
+        </div>
+      </uib-tab>
+    </uib-tabset>
+  </div>
+  <div class="col-sm-4">
+    <div id="buttons-detail">
+      <button class="btn btn-default" ui-sref="root.search">Search</button>
+      <button class="btn btn-primary"
+              ng-show="$ctrl.currentUser && !$ctrl.currentUser.disallowUpdates"
+              ui-sref="root.edit({uri: $ctrl.uri})">Edit</button>
+      <button class="btn btn-primary"
+              ng-show="$ctrl.currentUser && !$ctrl.currentUser.disallowUpdates"
+              mwl-confirm
+              title="This will permanently delete {{$ctrl.uri}}, are you sure?"
+              confirm-text="Yes"
+              cancel-text="No"
+              placement="bottom"
+              on-confirm="$ctrl.delete()"
+              on-cancel="cancelClicked = true"
+              confirm-button-type="danger"
+              cancel-button-type="default">Delete</button>
+    </div>
+    <br>
+    <!-- show (links to) similar documents -->
+    <div class="panel panel-default">
+      <div class="panel-heading">Similar</div>
+      <div class="panel-body">
+        <ml-similar uri="{{$ctrl.uri}}" limit="5"></ml-similar>
+      </div>
+    </div>
+  </div>
+</div>

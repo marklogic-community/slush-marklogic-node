@@ -1,21 +1,18 @@
-(function () {
-  'use strict';
+import angular from 'angular';
+import uiRouter from 'angular-ui-router';
 
-  angular.module('app')
-    .run(['loginService', function(loginService) {
+import landingPageTemplate from '../components/landing/landing.html';
+
+let routesModule = angular.module('app.router', [
+    uiRouter
+  ])
+  .run(['loginService',
+    function(loginService) {
       loginService.protectedRoutes(['root.search', 'root.create', 'root.profile']);
-    }])
-    .config(Config);
-
-  Config.$inject = ['$stateProvider', '$urlMatcherFactoryProvider',
-    '$urlRouterProvider', '$locationProvider'
-  ];
-
-  function Config(
-    $stateProvider,
-    $urlMatcherFactoryProvider,
-    $urlRouterProvider,
-    $locationProvider) {
+    }
+  ])
+  .config(($stateProvider, $urlMatcherFactoryProvider, $urlRouterProvider, $locationProvider) => {
+    'ngInject';
 
     $urlRouterProvider.otherwise('/');
     $locationProvider.html5Mode(true);
@@ -39,9 +36,7 @@
       .state('root', {
         url: '',
         // abstract: true,
-        templateUrl: 'app/root/root.html',
-        controller: 'RootCtrl',
-        controllerAs: 'ctrl',
+        component: 'root',
         resolve: {
           user: function(userService) {
             return userService.getUser();
@@ -50,7 +45,7 @@
       })
       .state('root.landing', {
         url: '/',
-        templateUrl: 'app/landing/landing.html',
+        template: landingPageTemplate,
         navLabel: {
           text: 'Home',
           area: 'dashboard',
@@ -59,9 +54,7 @@
       })
       .state('root.search', {
         url: '/search',
-        templateUrl: 'app/search/search.html',
-        controller: 'SearchCtrl',
-        controllerAs: 'ctrl',
+        component: 'search',
         navLabel: {
           text: 'Search',
           area: 'dashboard',
@@ -70,14 +63,11 @@
       })
       .state('root.create', {
         url: '/create',
-        templateUrl: 'app/create/create.html',
-        controller: 'CreateCtrl',
-        controllerAs: 'ctrl',
+        component: 'create',
         navLabel: {
           text: 'Create',
           area: 'dashboard',
-          navClass: 'fa-wpforms',
-          edit: true
+          navClass: 'fa-wpforms'
         },
         resolve: {
           doc: function() {
@@ -86,10 +76,8 @@
         }
       })
       .state('root.edit', {
-        url: '/edit{uri:path}',
-        templateUrl: 'app/create/create.html',
-        controller: 'CreateCtrl',
-        controllerAs: 'ctrl',
+        url: '/edit?{uri:path}',
+        component: 'create',
         resolve: {
           doc: function(MLRest, $stateParams) {
             var uri = $stateParams.uri;
@@ -99,26 +87,28 @@
               format = 'xml';
             }
 
-            return MLRest.getDocument(uri, { format: format }).then(function(response) {
+            return MLRest.getDocument(uri, {
+              format: format
+            }).then(function(response) {
               return response;
             });
           }
         }
       })
       .state('root.view', {
-        url: '/detail{uri:path}',
+        url: '/detail?{uri:path}',
         params: {
           uri: {
             value: null
           }
         },
-        templateUrl: 'app/detail/detail.html',
-        controller: 'DetailCtrl',
-        controllerAs: 'ctrl',
+        component: 'detail',
         resolve: {
           doc: function(MLRest, $stateParams) {
             var uri = $stateParams.uri;
-            return MLRest.getDocument(uri, { format: 'json' }).then(function(response) {
+            return MLRest.getDocument(uri, {
+              format: 'json'
+            }).then(function(response) {
               return response;
             });
           }
@@ -126,15 +116,14 @@
       })
       .state('root.profile', {
         url: '/profile',
-        templateUrl: 'app/user/profile.html',
-        controller: 'ProfileCtrl',
-        controllerAs: 'ctrl'
+        component: 'profile'
       })
       .state('root.login', {
         url: '/login?state&params',
-        templateUrl: 'app/login/login-full.html',
-        controller: 'LoginFullCtrl',
-        controllerAs: 'ctrl'
+        component: 'loginFull'
       });
-  }
-}());
+  })
+  .name;
+
+export
+default routesModule;
