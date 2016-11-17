@@ -95,45 +95,46 @@ function proxy(req, res) {
       headers: req.headers
     };
 
-  var passportUser = req.session.passport.user;
+  var passportUser = req.session.passport && req.session.passport.user;
   authHelper.getAuthorization(req.session, reqOptions.method, reqOptions.path,
     {
-      authUser: passportUser.username
+      authUser: passportUser && passportUser.username
     }
-  ).then(function(authorization) {
-    if (authorization) {
-      reqOptions.headers.Authorization = authorization;
-    }
-    var mlReq = http.request(reqOptions, function(response) {
-
-      res.statusCode = response.statusCode;
-
-      // [GJo] (#67) forward all headers from MarkLogic
-      for (var header in response.headers) {
-        if (!/^WWW\-Authenticate$/i.test(header)) {
-          res.header(header, response.headers[header]);
-        }
+  ).then(
+    function(authorization) {
+      if (authorization) {
+        reqOptions.headers.Authorization = authorization;
       }
+      var mlReq = http.request(reqOptions, function(response) {
 
-      response.on('data', function(chunk) {
-        res.write(chunk);
+        res.statusCode = response.statusCode;
+
+        // [GJo] (#67) forward all headers from MarkLogic
+        for (var header in response.headers) {
+          if (!/^WWW\-Authenticate$/i.test(header)) {
+            res.header(header, response.headers[header]);
+          }
+        }
+
+        response.on('data', function(chunk) {
+          res.write(chunk);
+        });
+        response.on('end', function() {
+          res.end();
+        });
       });
-      response.on('end', function() {
+
+      req.pipe(mlReq);
+      req.on('end', function() {
+        mlReq.end();
+      });
+
+      mlReq.on('error', function(e) {
+        console.log('Problem with request: ' + e.message);
+        res.statusCode = 500;
         res.end();
       });
     });
-
-    req.pipe(mlReq);
-    req.on('end', function() {
-      mlReq.end();
-    });
-
-    mlReq.on('error', function(e) {
-      console.log('Problem with request: ' + e.message);
-      res.statusCode = 500;
-      res.end();
-    });
-  });
 }
 
 function noCache(response) {

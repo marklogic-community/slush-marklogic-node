@@ -10,8 +10,6 @@ var four0four = require('./utils/404')();
 var http = require('http');
 var options = require('./utils/options')();
 
-authHelper.init();
-
 // [GJo] (#31) Moved bodyParsing inside routing, otherwise it might try to parse uploaded binaries as json..
 router.use(bodyParser.urlencoded({extended: true}));
 router.use(bodyParser.json());
@@ -51,48 +49,49 @@ router.get('/user/status', function(req, res) {
         authUser: passportUser.username,
         authPassword: passportUser.password
       }
-    ).then(function(authorization) {
-      delete headers['content-length'];
-      if (authorization) {
-        headers.Authorization = authorization;
-      }
-      var profile = http.get({
-        hostname: options.mlHost,
-        port: options.mlHttpPort,
-        path: '/v1/documents?uri=/api/users/' + passportUser.username + '.json',
-        headers: headers
-      }, function(response) {
-        if (response.statusCode === 200) {
-          response.on('data', function(chunk) {
-            var json = JSON.parse(chunk);
-            if (json.user === undefined) {
-              console.log('did not find chunk.user');
-            }
+    ).then(
+      function(authorization) {
+        delete headers['content-length'];
+        if (authorization) {
+          headers.Authorization = authorization;
+        }
+        var profile = http.get({
+          hostname: options.mlHost,
+          port: options.mlHttpPort,
+          path: '/v1/documents?uri=/api/users/' + passportUser.username + '.json',
+          headers: headers
+        }, function(response) {
+          if (response.statusCode === 200) {
+            response.on('data', function(chunk) {
+              var json = JSON.parse(chunk);
+              if (json.user === undefined) {
+                console.log('did not find chunk.user');
+              }
+              res.status(200).send(authStatus(
+                true,
+                passportUser.username,
+                json.user
+              ));
+            });
+          } else if (response.statusCode === 404) {
+            //no profile yet for user
             res.status(200).send(authStatus(
               true,
               passportUser.username,
-              json.user
+              null
             ));
-          });
-        } else if (response.statusCode === 404) {
-          //no profile yet for user
-          res.status(200).send(authStatus(
-            true,
-            passportUser.username,
-            null
-          ));
-        } else {
-          res.send(authStatus(
-            false
-          ));
-        }
-      });
+          } else {
+            res.send(authStatus(
+              false
+            ));
+          }
+        });
 
-      profile.on('error', function(e) {
-        console.log(JSON.stringify(e));
-        console.log('status check failed: ' + e.statusCode);
+        profile.on('error', function(e) {
+          console.log(JSON.stringify(e));
+          console.log('status check failed: ' + e.statusCode);
+        });
       });
-    });
   }
 });
 
@@ -101,8 +100,6 @@ router.post('/user/login', function(req, res, next) {
   // 404 - valid credentials, but no profile yet
   // 401 - bad credentials
   var username = req.body.username || '';
-  var password = req.body.password || '';
-  var headers = req.headers;
 
   //make sure login isn't cached
   noCache(res);

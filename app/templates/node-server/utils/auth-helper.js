@@ -194,7 +194,7 @@ function getAuthorization(session, reqMethod, reqPath, authOptions) {
   var mergedOptions = _.extend({}, defaultOptions, authOptions || {});
   var authenticator = getAuthenticator(
     session,
-    mergedOptions.authUser,
+    mergedOptions.authUser || options.defaultUser,
     mergedOptions.authHost,
     mergedOptions.authPort
   );
@@ -216,8 +216,8 @@ function getAuthorization(session, reqMethod, reqPath, authOptions) {
           session,
           mergedOptions.authHost,
           mergedOptions.authPort,
-          mergedOptions.authUser,
-          mergedOptions.authPassword,
+          mergedOptions.authUser || options.defaultUser,
+          mergedOptions.authPassword || options.defaultPass,
           challenge
         );
         authorization = authenticator.authorize(reqMethod, reqPath);
