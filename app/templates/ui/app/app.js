@@ -10,6 +10,7 @@
     'app.create',
     'app.detail',
     'app.error',
+    'app.landing',
     'app.login',
     'app.root',
     'app.search',

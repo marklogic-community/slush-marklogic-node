@@ -10,8 +10,11 @@ var four0four = require('./utils/404')();
 
 var options = require('./utils/options')();
 var passport = require('passport');
+var authHelper = require('./utils/auth-helper');
 var port = options.appPort;
 var environment = options.env;
+
+authHelper.init();
 
 // Making this middle-tier slightly more secure: https://www.npmjs.com/package/helmet#how-it-works
 app.use(helmet({
