@@ -1,12 +1,15 @@
 /* global X2JS,vkbeautify */
 (function () {
+
   'use strict';
+
   angular.module('app.detail')
-  .controller('DetailCtrl', DetailCtrl);
+    .controller('DetailCtrl', DetailCtrl);
 
   DetailCtrl.$inject = ['doc', '$stateParams','MLRest', 'ngToast',
-                        '$state','$scope','userService'];
-  function DetailCtrl(doc, $stateParams, MLRest, toast, $state, $scope, userService) {
+                        '$state','$scope'];
+
+  function DetailCtrl(doc, $stateParams, MLRest, toast, $state, $scope) {
     var ctrl = this;
 
     var uri = $stateParams.uri;
@@ -41,8 +44,8 @@
       ctrl.json = {'Error' : 'Error occured determining document type.'};
     }
 
-    function deleteFunc() {
-      MLRest.deleteDocument (uri).then(function(response) {
+    function deleteDocument() {
+      MLRest.deleteDocument(uri).then(function(response) {
         // create a toast with settings:
         toast.create({
           className: 'warning',
@@ -60,12 +63,7 @@
     angular.extend(ctrl, {
       doc : doc.data,
       uri : uri,
-      currentUser: null,
-      delete: deleteFunc
-    });
-
-    $scope.$watch(userService.currentUser, function(newValue) {
-      ctrl.currentUser = newValue;
+      delete: deleteDocument
     });
   }
 }());

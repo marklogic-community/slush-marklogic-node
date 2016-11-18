@@ -4,12 +4,11 @@
   angular.module('app.landing')
     .controller('LandingCtrl', LandingCtrl);
 
-  LandingCtrl.$inject = ['$scope', '$location', 'userService', 'MLSearchFactory'];
+  LandingCtrl.$inject = ['$rootScope', '$scope', '$location', 'MLSearchFactory'];
 
-  function LandingCtrl($scope, $location, userService, searchFactory) {
+  function LandingCtrl($rootScope, $scope, $location, searchFactory) {
 
     var ctrl = this;
-    ctrl.mlSearch = searchFactory.newContext();
 
     angular.extend(ctrl, {
       eyeColor: top10Chart('Eye Color', 'pie', 'eyeColor', 'Eye Color', 50),
@@ -18,11 +17,15 @@
                   'gender', 'Gender')
     });
 
-    $scope.$watch(userService.currentUser, function(newValue) {
-      ctrl.currentUser = newValue;
-      if (newValue) {
-        ctrl.mlSearch.search(); // trigger showing of charts
+    $rootScope.$on('loginService:login-success', function(e, user) {
+      if (!ctrl.mlSearch) {
+        ctrl.mlSearch = searchFactory.newContext();
       }
+      ctrl.mlSearch.search(); // trigger showing of charts
+    });
+
+    $rootScope.$on('loginService:logout-success', function() {
+      ctrl.mlSearch = null; // hide charts
     });
 
   }

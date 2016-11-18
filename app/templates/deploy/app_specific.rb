@@ -136,7 +136,7 @@ class ServerConfig
       },
       { :db_name => where }
     )
-    r.body = parse_json r.body
+    r.body = parse_body r.body
     logger.info r.body
     logger.info ""
   end
@@ -169,7 +169,7 @@ class ServerConfig
       },
       { :db_name => @properties["ml.content-db"]}
     )
-    r.body = parse_json r.body
+    r.body = parse_body r.body
     logger.info r.body
   end
 

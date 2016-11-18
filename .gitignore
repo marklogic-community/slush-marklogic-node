@@ -1,3 +1,9 @@
 node_modules
 .DS_Store
 /tmp/
+/ml
+/ml.bat
+/slush-default
+/slush-3column
+/slush-dashboard
+/slush-map

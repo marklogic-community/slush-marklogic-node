@@ -4,12 +4,12 @@
 
 <section class="content">
   <content-box box-bordered="true" box-title="Example Charts">
-    <div class="row" ng-if="!ctrl.currentUser.authenticated">
+    <div class="row" ng-if="!rootCtrl.currentUser.authenticated">
       <div class="col-sm-12">
         <uib-alert type="warning"><a ui-sref="root.login">Sign in</a> to see some nice charts</uib-alert>
       </div>
     </div>
-    <div class="row" ng-if="ctrl.currentUser.authenticated">
+    <div class="row" ng-if="rootCtrl.currentUser.authenticated">
       <div class="col-sm-3 col-sm-offset-1">
         <ml-highchart highchart-config="ctrl.eyeColor" ml-search="ctrl.mlSearch"></ml-highchart>
       </div>

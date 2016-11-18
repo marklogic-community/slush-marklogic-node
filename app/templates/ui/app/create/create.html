@@ -1,4 +1,11 @@
-<div class="create" ng-show="ctrl.currentUser && !ctrl.currentUser.disallowUpdates">
+<div class="create" ng-if="rootCtrl.currentUser.disallowUpdates">
+  <div class="row">
+    <div class="col-sm-12">
+      <uib-alert type="warning">Editing has been disallowed</uib-alert>
+    </div>
+  </div>
+<div>
+<div class="create" ng-if="!rootCtrl.currentUser.disallowUpdates">
   <div class="row">
     <div class="col-sm-2">
     </div>
