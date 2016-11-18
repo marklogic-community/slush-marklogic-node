@@ -4,10 +4,10 @@
   angular.module('app.create')
     .controller('CreateCtrl', CreateCtrl);
 
-  CreateCtrl.$inject = ['$scope', 'MLRest', '$state', 'userService',
+  CreateCtrl.$inject = ['$scope', 'MLRest', '$state',
     'ngToast','x2js','doc','$stateParams'];
 
-  function CreateCtrl($scope, mlRest, $state, userService, toast, x2js, doc, $stateParams) {
+  function CreateCtrl($scope, mlRest, $state, toast, x2js, doc, $stateParams) {
     var ctrl = this;
 
     ctrl.x2js = x2js;
@@ -74,7 +74,6 @@
 
     angular.extend(ctrl, {
       newTag: null,
-      currentUser: null,
       editorOptions: {
         plugins : 'advlist autolink link image lists charmap print preview'
       },
@@ -134,9 +133,5 @@
     function removeTag(index) {
       ctrl.person.tags.splice(index, 1);
     }
-
-    $scope.$watch(userService.currentUser, function(newValue) {
-      ctrl.currentUser = newValue;
-    });
   }
 }());

@@ -1,5 +1,4 @@
-<div class="row" ng-if="!ctrl.currentUser">Please log in to see content</div>
-<div class="row" ng-if="ctrl.currentUser">
+<div class="row">
   <div class="col-md-12">
     <ml-input qtext="ctrl.qtext" search="ctrl.search(qtext)" suggest="ctrl.suggest(val)" template="fa" class="search"></ml-input>
     <label class="radio-inline">
@@ -11,7 +10,7 @@
   </div>
 </div>
 
-<div class="search row" ng-if="ctrl.currentUser">
+<div class="search row">
   <ml-facets class="col-md-12 right-col" facets="ctrl.response.facets" toggle="ctrl.toggleFacet(facet, value)" active-facets="ctrl.mlSearch.activeFacets" negate="ctrl.toggleNegatedFacet(facet,value)"></ml-facets>
   <div class="col-md-11">
     <h4 ng-if="ctrl.response.total === 0">No results to show</h4>

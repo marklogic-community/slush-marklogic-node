@@ -1,4 +1,4 @@
-<div class="wrapper skin-black sidebar-mini" ng-class="{'sidebar-open': !!ctrl.navService.showSidebar, 'sidebar-collapse': !ctrl.navService.showSidebar}">
+<div class="wrapper skin-black sidebar-mini" ng-class="{'sidebar-open': !!rootCtrl.navService.showSidebar, 'sidebar-collapse': !rootCtrl.navService.showSidebar}">
   <toast></toast>
 
   <header class="main-header">
@@ -10,26 +10,26 @@
       <span class="logo-lg"><h1 id="logo">Sample App</h1></span>
     </a>
     <nav class="navbar navbar-static-top" role="navigation" ng-cloak>
-      <a class="sidebar-toggle" role="button" data-toggle="offcanvas" href="#" ng-click="ctrl.navService.toggleSidebar()">
+      <a class="sidebar-toggle" role="button" data-toggle="offcanvas" href="#" ng-click="rootCtrl.navService.toggleSidebar()">
         <span class="sr-only">Toggle navigation</span>
       </a>
       <!-- Navbar Right Menu -->
       <div class="navbar-custom-menu">
-        <ul class="nav navbar-nav" ng-if="!ctrl.currentUser">
+        <ul class="nav navbar-nav" ng-if="!rootCtrl.currentUser">
           <li class="user">
             <a ui-sref="root.login"><span class="glyphicon glyphicon-user"></span> Sign In</a></li>
         </ul>
-        <ul class="nav navbar-nav" ng-if="ctrl.currentUser">
+        <ul class="nav navbar-nav" ng-if="rootCtrl.currentUser">
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <i class="fa fa-user"></i>
-              <span class="hidden-xs">{{ ctrl.currentUser.profile.fullname || ctrl.currentUser.username }}</span>
+              <span class="hidden-xs">{{ rootCtrl.currentUser.profile.fullname || rootCtrl.currentUser.username }}</span>
             </a>
             <ul class="dropdown-menu">
               <!-- User image -->
               <li class="user-header">
                 <p>
-                  {{ ctrl.currentUser.profile.fullname || ctrl.currentUser.username }}
+                  {{ rootCtrl.currentUser.profile.fullname || rootCtrl.currentUser.username }}
                 </p>
               </li>
               <!-- Menu Footer-->
@@ -38,7 +38,7 @@
                   <a ui-sref="root.profile" class="btn btn-default btn-flat">Profile</a>
                 </div>
                 <div class="pull-right">
-                  <a ng-click="ctrl.loginService.logout()" class="btn btn-default btn-flat">Sign out</a>
+                  <a ng-click="rootCtrl.loginService.logout()" class="btn btn-default btn-flat">Sign out</a>
                 </div>
               </li>
             </ul>
@@ -52,16 +52,16 @@
     <section class="sidebar" style="height: auto;">
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu">
-        <li ng-repeat="link in ctrl.navService.getLinks('dashboard')" ng-class="{ active: ctrl.navService.isActive(link.state) }" ng-show="!link.label.edit || (ctrl.currentUser && !ctrl.currentUser.disallowUpdates)">
-          <a ng-click="ctrl.navService.gotoLink(link)"><i class="fa" ng-class="link.label.navClass"></i> <span>{{ link.label.text }}</span></a>
+        <li ng-repeat="link in rootCtrl.navService.getLinks('dashboard')" ng-class="{ active: rootCtrl.navService.isActive(link.state) }" ng-show="!link.label.edit || !rootCtrl.currentUser.disallowUpdates">
+          <a ng-click="rootCtrl.navService.gotoLink(link)"><i class="fa" ng-class="link.label.navClass"></i> <span>{{ link.label.text }}</span></a>
         </li>
       </ul>
     </section>
   </aside>
 
   <div class="content-wrapper" style="min-height:800px">
-    <message-board msg="ctrl.messageBoardService.message()"></message-board>
-    <div ng-hide="ctrl.messageBoardService.message()">
+    <message-board msg="rootCtrl.messageBoardService.message()"></message-board>
+    <div ng-hide="rootCtrl.messageBoardService.message()">
       <ui-view></ui-view>
     </div>
   </div>
@@ -100,7 +100,7 @@
       </div>
       <div class="row copyright">
         <div class="col-sm-12 text-muted">
-          Copyright <sup>&copy;</sup> {{ ctrl.currentYear }} MarkLogic Corporation. MARKLOGIC <sup>&reg;</sup> is a registered trademark of MarkLogic Corporation.
+          Copyright <sup>&copy;</sup> {{ rootCtrl.currentYear }} MarkLogic Corporation. MARKLOGIC <sup>&reg;</sup> is a registered trademark of MarkLogic Corporation.
         </div>
       </div>
     </div>

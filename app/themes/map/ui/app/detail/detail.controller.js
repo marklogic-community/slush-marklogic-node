@@ -5,9 +5,9 @@
   .controller('DetailCtrl', DetailCtrl);
 
   DetailCtrl.$inject = ['doc', '$stateParams', 'MLUiGmapManager','MLRest',
-    'ngToast','$state','$scope','userService'];
+    'ngToast','$state','$scope'];
 
-  function DetailCtrl(doc, $stateParams, mlMapManager, MLRest, toast, $state, $scope, userService) {
+  function DetailCtrl(doc, $stateParams, mlMapManager, MLRest, toast, $state, $scope) {
     var ctrl = this;
 
     var uri = $stateParams.uri;
@@ -86,12 +86,7 @@
     angular.extend(ctrl, {
       doc : doc.data,
       uri : uri,
-      currentUser: null,
       delete: deleteFunc
-    });
-
-    $scope.$watch(userService.currentUser, function(newValue) {
-      ctrl.currentUser = newValue;
     });
   }
 }());

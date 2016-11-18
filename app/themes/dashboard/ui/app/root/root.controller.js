@@ -10,20 +10,20 @@
   function RootCtrl(messageBoardService, userService, $scope,
     loginService, navService, $state) {
 
-    var ctrl = this;
-    ctrl.currentYear = new Date().getUTCFullYear();
-    ctrl.messageBoardService = messageBoardService;
+    var rootCtrl = this;
+    rootCtrl.currentYear = new Date().getUTCFullYear();
+    rootCtrl.messageBoardService = messageBoardService;
 
     $scope.$watch(userService.currentUser, function(newValue) {
-      ctrl.currentUser = newValue;
+      rootCtrl.currentUser = newValue;
     });
 
     // allow logout from custom header user section
-    ctrl.loginService = loginService;
+    rootCtrl.loginService = loginService;
 
     // call this to register the available states
     navService.registerStates($state.get());
 
-    ctrl.navService = navService;
+    rootCtrl.navService = navService;
   }
 }());

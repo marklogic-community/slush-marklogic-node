@@ -6,8 +6,6 @@
 
     var controller;
 
-    var currentUser = null;
-
     var results = [{
       uri: 'abc',
       extracted: {
@@ -35,10 +33,6 @@
       bard.inject('$controller', '$q', '$rootScope', '$location',
         'userService', 'MLSearchFactory', 'MLRest', 'MLUiGmapManager', 'uiGmapGoogleMapApi');
 
-      bard.mockService(userService, {
-        currentUser: $q.when(currentUser)
-      });
-
       bard.mockService(MLRest, {
         search: $q.when({
           data: {
@@ -56,10 +50,6 @@
 
     it('should be created successfully', function() {
       expect(controller).to.be.defined;
-    });
-
-    it('should update the current user if it changes', function() {
-      expect(controller.currentUser).to.not.be.defined;
     });
 
     it('should run a search', function() {

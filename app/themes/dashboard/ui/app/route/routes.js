@@ -41,7 +41,7 @@
         // abstract: true,
         templateUrl: 'app/root/root.html',
         controller: 'RootCtrl',
-        controllerAs: 'ctrl',
+        controllerAs: 'rootCtrl',
         resolve: {
           user: function(userService) {
             return userService.getUser();

@@ -6,8 +6,6 @@
 
     var controller;
 
-    var currentUser = null;
-
     var results = [
       {
         uri: 'abc'
@@ -20,11 +18,7 @@
     beforeEach(function() {
       bard.appModule('app.search');
       bard.inject('$controller', '$q', '$rootScope', '$location',
-        'userService', 'MLSearchFactory', 'MLRest');
-
-      bard.mockService(userService, {
-        currentUser: $q.when(currentUser)
-      });
+        'MLSearchFactory', 'MLRest');
 
       bard.mockService(MLRest, {
         search: $q.when({
@@ -45,12 +39,25 @@
       expect(controller).to.be.defined;
     });
 
-    it('should update the current user if it changes', function() {
-      expect(controller.currentUser).to.not.be.defined;
+    // TODO: needs to run on login-success event..
+    // it('should update the current user if it changes', function() {
+    //   expect(controller.currentUser).to.not.be.defined;
+    // });
+
+    it('should run an initial search', function() {
+      expect(controller.response.results).to.eq(results);
     });
 
     it('should run a search', function() {
+      controller.response = null;
       controller.search('stuff');
+      $rootScope.$apply();
+      expect(controller.response.results).to.eq(results);
+    });
+
+    it('should search on snippet change', function() {
+      controller.response = null;
+      controller.setSnippet('my-snippet');
       $rootScope.$apply();
       expect(controller.response.results).to.eq(results);
     });

@@ -4,24 +4,24 @@
 
   angular.module('app.snippet')
     .directive('mlSnippet', SnippetDirective)
-    .controller('SnippetController', SnippetController);
+    .controller('SnippetCtrl', SnippetCtrl);
 
   function SnippetDirective() {
     return {
       restrict: 'E',
-      controller: 'SnippetController',
+      controller: 'SnippetCtrl',
       controllerAs: 'ctrl',
       replace: true,
       scope: {
         setSnippet: '&'
       },
-      templateUrl: 'app/search/snippet.html'
+      templateUrl: 'app/search/ml-snippet.html'
     };
   }
 
-  SnippetController.$inject = ['$scope'];
+  SnippetCtrl.$inject = ['$scope'];
 
-  function SnippetController($scope) {
+  function SnippetCtrl($scope) {
     $scope.snippets = ['detailed', 'compact'];
 
     var ctrl = this;

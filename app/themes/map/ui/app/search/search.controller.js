@@ -5,14 +5,14 @@
   angular.module('app.search')
     .controller('SearchCtrl', SearchCtrl);
 
-  SearchCtrl.$inject = ['$scope', '$location', 'userService', 'MLSearchFactory',
+  SearchCtrl.$inject = ['$scope', '$location', 'MLSearchFactory',
     'MLQueryBuilder', 'MLUiGmapManager'];
 
   // inherit from MLSearchController
   var superCtrl = MLSearchController.prototype;
   SearchCtrl.prototype = Object.create(superCtrl);
 
-  function SearchCtrl($scope, $location, userService, searchFactory, qb, mlMapManager) {
+  function SearchCtrl($scope, $location, searchFactory, qb, mlMapManager) {
     var ctrl = this;
 
     superCtrl.constructor.call(ctrl, $scope, $location, searchFactory.newContext({
@@ -37,10 +37,6 @@
       mlMapManager.markerMode = ctrl.showFacetsOnMap ? 'facets' : 'results';
     };
     ctrl.toggleShowFacets();
-
-    $scope.$watch(userService.currentUser, function(newValue) {
-      ctrl.currentUser = newValue;
-    });
 
     $scope.$watch(mlMapManager.watchBounds, function(bounds) {
       if (bounds) {
