@@ -11,8 +11,7 @@
 
     beforeEach(function() {
       bard.appModule('app.create');
-      bard.inject('$controller', '$q', '$rootScope', 'MLRest', '$state', 'userService',
-        'x2js');
+      bard.inject('$controller', '$q', '$rootScope', 'MLRest', '$state', 'x2js');
 
       bard.mockService(MLRest, {
         createDocument: function () {
