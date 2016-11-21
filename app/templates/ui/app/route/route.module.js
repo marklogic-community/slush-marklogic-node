@@ -1,12 +1,10 @@
-(function() {
+(function () {
   'use strict';
 
-  angular.module('app.similar', [
+  angular.module('app.route', [
     // inject dependencies
+    'app.user',
     'ml.common',
-
-    // html dependencies
     'ui.router'
   ]);
-
 }());

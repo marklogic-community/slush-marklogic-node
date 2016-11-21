@@ -14,6 +14,13 @@
 
     ctrl.mode = 'create';
 
+    ctrl.prevState = $stateParams.prev || 'root.landing';
+    if (doc && (ctrl.prevState === 'root.view')) {
+      ctrl.prevState = ctrl.prevState + '({uri: ctrl.uri})';
+    } else if (['root.create', 'root.edit'].indexOf(ctrl.prevState) >= 0) {
+      ctrl.prevState = 'root.landing';
+    }
+
     if (doc) {
       ctrl.mode = 'edit';
       //check extension

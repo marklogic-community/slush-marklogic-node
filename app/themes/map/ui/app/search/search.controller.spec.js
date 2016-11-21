@@ -1,37 +1,24 @@
 /* jshint -W117, -W030 */
-(function() {
+(function () {
   'use strict';
 
-  describe('Controller: SearchCtrl', function() {
+  describe('Controller: SearchCtrl', function () {
 
     var controller;
 
-    var results = [{
-      uri: 'abc',
-      extracted: {
-        content: [{
-          location: {
-            latitude: 1,
-            longitude: 2
-          }
-        }]
+    var results = [
+      {
+        uri: 'abc'
+      },
+      {
+        uri: 'def'
       }
-    }, {
-      uri: 'def',
-      extracted: {
-        content: [{
-          location: {
-            latitude: 1,
-            longitude: 2
-          }
-        }]
-      }
-    }];
+    ];
 
     beforeEach(function() {
       bard.appModule('app.search');
       bard.inject('$controller', '$q', '$rootScope', '$location',
-        'userService', 'MLSearchFactory', 'MLRest', 'MLUiGmapManager', 'uiGmapGoogleMapApi');
+        'MLSearchFactory', 'MLRest');
 
       bard.mockService(MLRest, {
         search: $q.when({
@@ -43,17 +30,34 @@
 
     });
 
-    beforeEach(function() {
+    beforeEach(function () {
       controller = $controller('SearchCtrl', { $scope: $rootScope.$new() });
       $rootScope.$apply();
     });
 
-    it('should be created successfully', function() {
+    it('should be created successfully', function () {
       expect(controller).to.be.defined;
     });
 
+    // TODO: needs to run on login-success event..
+    // it('should update the current user if it changes', function() {
+    //   expect(controller.currentUser).to.not.be.defined;
+    // });
+
+    it('should run an initial search', function() {
+      expect(controller.response.results).to.eq(results);
+    });
+
     it('should run a search', function() {
+      controller.response = null;
       controller.search('stuff');
+      $rootScope.$apply();
+      expect(controller.response.results).to.eq(results);
+    });
+
+    it('should search on snippet change', function() {
+      controller.response = null;
+      controller.setSnippet('my-snippet');
       $rootScope.$apply();
       expect(controller.response.results).to.eq(results);
     });

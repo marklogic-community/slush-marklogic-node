@@ -1,9 +1,15 @@
 (function () {
   'use strict';
 
-  angular.module('app.search', ['ml.search',
-    'app.user',
+  angular.module('app.search', [
+    // inject dependencies
+    'app.map',
+    'ml.search',
+
+    // html dependencies
     'app.snippet',
-    'app.root',
-    'uiGmapgoogle-maps']);
+    'ml.search.tpls',
+    'ui.bootstrap',
+    'ui.router'
+  ]);
 }());

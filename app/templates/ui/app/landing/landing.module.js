@@ -2,9 +2,11 @@
   'use strict';
 
   angular.module('app.landing', [
+    // inject dependencies
     'ml.search',
     'app.user',
-    'app.snippet'
-  ]);
 
+    // html dependencies
+    'ui.bootstrap'
+  ]);
 }());

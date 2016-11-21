@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  angular.module('app')
+  angular.module('app.dashboard')
     .directive('contentBox', ContentBoxDirective);
 
   function ContentBoxDirective() {
@@ -16,6 +16,7 @@
       link: function(scope) {
         scope.hasBorder = scope.boxBordered !== 'false' && scope.boxBordered !== 'no';
 
+        // TODO: what is the purpose of this watch?
         scope.$watch(scope.boxTabs, function(newVal) {
           if (newVal) {
             scope.hasTabs = true;

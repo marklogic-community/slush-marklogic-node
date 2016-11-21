@@ -6,19 +6,22 @@
 
     var controller;
 
-    var results = [
-      {
-        uri: 'abc'
-      },
-      {
-        uri: 'def'
+    var _user = {
+      data: {
+        username: 'bob',
+        authenticated: true
       }
-    ];
+    };
+    var results = [{
+      uri: 'abc'
+    }, {
+      uri: 'def'
+    }];
 
     beforeEach(function() {
       bard.appModule('app.landing');
-      bard.inject('$controller', '$q', '$rootScope', '$location',
-        'MLSearchFactory', 'MLRest');
+      bard.inject('$controller', '$rootScope',
+        'MLSearchFactory', 'MLRest', '$q');
 
       bard.mockService(MLRest, {
         search: $q.when({
@@ -31,7 +34,11 @@
     });
 
     beforeEach(function () {
-      controller = $controller('LandingCtrl', { $scope: $rootScope.$new() });
+      controller = $controller('LandingCtrl', {
+        $scope: $rootScope.$new(),
+        $rootScope: $rootScope,
+        MLSearchFactory: MLSearchFactory
+      });
       $rootScope.$apply();
     });
 
@@ -39,20 +46,29 @@
       expect(controller).to.be.defined;
     });
 
-    // it('currentUser should not be defined', function() {
-    //   expect(controller.currentUser).to.not.be.defined;
-    // });
-    //
-    // it('should update the current user when logged in using loginService', function(done) {
-    //   $rootScope.$broadcast('loginService:login-success', {data:_user});
-    //   $rootScope.$apply(controller);
-    //
-    //   done();
-    //   expect(controller.currentUser().name).to.eq('bob');
-    // });
-    //
-    // it('should run a search at login', function() {
-    //   expect(controller.mlSearch.results.results).to.eq(results);
-    // });
+    it('should run a search at login', function(done) {
+      $rootScope.$broadcast('loginService:login-success', {data:_user});
+      $rootScope.$apply(controller);
+      done();
+      expect(controller.mlSearch.results.results).to.eq(results);
+    });
+
+    it('should succeed twice', function(done) {
+      $rootScope.$broadcast('loginService:login-success', {data:_user});
+      $rootScope.$apply(controller);
+      done();
+      $rootScope.$broadcast('loginService:login-success', {data:_user});
+      $rootScope.$apply(controller);
+      done();
+      expect(controller.mlSearch.results.results).to.eq(results);
+      // mostly for code coverage
+    });
+
+    it('should flush results at logout', function(done) {
+      $rootScope.$broadcast('loginService:logout-success');
+      $rootScope.$apply(controller);
+      done();
+      expect(controller.mlSearch).to.eq(null);
+    });
   });
 }());

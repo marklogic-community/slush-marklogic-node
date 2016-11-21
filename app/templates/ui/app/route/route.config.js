@@ -1,17 +1,17 @@
 (function () {
   'use strict';
 
-  angular.module('app')
+  angular.module('app.route')
     .run(['loginService', function(loginService) {
       loginService.protectedRoutes(['root.search', 'root.create', 'root.profile']);
     }])
-    .config(Config);
+    .config(RouteConfig);
 
-  Config.$inject = ['$stateProvider', '$urlMatcherFactoryProvider',
+  RouteConfig.$inject = ['$stateProvider', '$urlMatcherFactoryProvider',
     '$urlRouterProvider', '$locationProvider'
   ];
 
-  function Config(
+  function RouteConfig(
     $stateProvider,
     $urlMatcherFactoryProvider,
     $urlRouterProvider,
@@ -71,7 +71,7 @@
         }
       })
       .state('root.create', {
-        url: '/create',
+        url: '/create?prev',
         templateUrl: 'app/create/create.html',
         controller: 'CreateCtrl',
         controllerAs: 'ctrl',
@@ -88,7 +88,7 @@
         }
       })
       .state('root.edit', {
-        url: '/edit{uri:path}',
+        url: '/edit{uri:path}?prev',
         templateUrl: 'app/create/create.html',
         controller: 'CreateCtrl',
         controllerAs: 'ctrl',

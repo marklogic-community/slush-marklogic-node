@@ -1,4 +1,4 @@
-/* global X2JS,vkbeautify */
+/* global vkbeautify */
 (function () {
 
   'use strict';
@@ -6,17 +6,17 @@
   angular.module('app.detail')
     .controller('DetailCtrl', DetailCtrl);
 
-  DetailCtrl.$inject = ['doc', '$stateParams','MLRest', 'ngToast',
-                        '$state','$scope'];
+  DetailCtrl.$inject = ['doc', '$stateParams', 'MLRest', 'ngToast',
+                        '$state', '$scope', 'x2js'];
 
-  function DetailCtrl(doc, $stateParams, MLRest, toast, $state, $scope) {
+  // TODO: inject vkbeautify
+  function DetailCtrl(doc, $stateParams, MLRest, toast, $state, $scope, x2js) {
     var ctrl = this;
 
     var uri = $stateParams.uri;
 
     var contentType = doc.headers('content-type');
 
-    var x2js = new X2JS();
     /* jscs: disable */
     if (contentType.lastIndexOf('application/json', 0) === 0) {
       /*jshint camelcase: false */
@@ -46,6 +46,8 @@
 
     function deleteDocument() {
       MLRest.deleteDocument(uri).then(function(response) {
+        // TODO: not reached with code coverage yet!
+
         // create a toast with settings:
         toast.create({
           className: 'warning',
@@ -57,6 +59,8 @@
             $state.go('root.search');
           }
         });
+      }, function(response) {
+        toast.danger(response.data);
       });
     }
 

@@ -2,7 +2,6 @@
   'use strict';
 
   angular.module('app.root')
-    .factory('rootUtils', RootUtilsFactory)
     .controller('RootCtrl', RootCtrl)
     .filter('isObject', function() {
       return function(val) {
@@ -15,29 +14,13 @@
       };
     });
 
-  function RootUtilsFactory() {
-    var service = {}, width = window.innerWidth;
-
-    service.isMobile = function() {
-      return service.isXS() || service.isSM();
-    };
-
-    service.isXS = function() {
-      return width < 768; // match boostrap xs
-    };
-
-    service.isSM = function() {
-      return width < 992; // match bootrap sm
-    };
-
-    return service;
-  }
-
-  RootCtrl.$inject = ['messageBoardService', 'userService', '$scope', '$rootScope',
-    '$templateRequest', '$compile', 'rootUtils', 'MLUiGmapManager', 'uiGmapGoogleMapApi'];
+  RootCtrl.$inject = ['messageBoardService', 'userService', '$scope',
+    '$state', '$rootScope', '$templateRequest', '$compile', 'mapUtils',
+    'MLUiGmapManager', 'uiGmapGoogleMapApi'];
 
   function RootCtrl(messageBoardService, userService, $scope,
-    $rootScope, $templateRequest, $compile, rootUtils, mlMapManager, $googleMapsApi) {
+    $state, $rootScope, $templateRequest, $compile, mapUtils,
+    mlMapManager, $googleMapsApi) {
 
     var rootCtrl = this;
     rootCtrl.currentYear = new Date().getUTCFullYear();
@@ -45,6 +28,12 @@
 
     $scope.$watch(userService.currentUser, function(newValue) {
       rootCtrl.currentUser = newValue;
+    });
+
+    $scope.$watch(function() {
+      return $state.current.name;
+    }, function(newValue) {
+      rootCtrl.currentState = newValue;
     });
 
     var miw = window.jQuery('#map-mobile-info-window').get(0); // FIXME: use angular.element?
@@ -58,11 +47,11 @@
 
     rootCtrl.mapManager = mlMapManager;
 
-    if (rootUtils.isMobile()) {
+    if (miw && mapUtils.isMobile()) {
       rootCtrl.hideControls = true;
       // compile the info window template
       // FIXME: can we use ng-include somehow? or the compile directive?
-      $templateRequest('app/map/infoWindow.html').then(function(html) {
+      $templateRequest('app/root/infoWindow.html').then(function(html) {
         var fn = $compile(html);
         var ele = fn(miwscope);
         miw.appendChild(ele[0]); // compile the template once, and we'll just update the scope
@@ -70,7 +59,8 @@
     }
 
     // FIXME: can we make more use of ui-gmap-window nested inside ui-gmap-markers directive?
-    //        Alternatively, push away part of this code into a service. RootUtils perhaps?
+    //        Alternatively, push away part of this code into a service or directive.
+    //        RootUtils or app.map module perhaps?
     rootCtrl.markerClick = function(inst,evt,marker) {
       if (!$googleMaps) {
         return;
@@ -89,7 +79,7 @@
         inst.map.setCenter(position);
         rootCtrl.infoWindow.shown = false;
         delete rootCtrl.infoWindow.data;
-      } else if (rootUtils.isMobile()) {
+      } else if (mapUtils.isMobile()) {
         if (!mobileWin) {
           mobileWin = new $googleMaps.InfoWindow({ content: '<span>' + marker.title + '</span>' });
           google.maps.event.addListener(mobileWin, 'closeclick', function() {
@@ -143,7 +133,7 @@
 
     rootCtrl.infoWindow = {
       shown: false,
-      templateUrl: 'app/map/infoWindow.html'
+      templateUrl: 'app/root/infoWindow.html'
     };
 
   }

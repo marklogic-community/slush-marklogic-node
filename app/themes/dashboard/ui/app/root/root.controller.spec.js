@@ -30,6 +30,10 @@
           current: {
             name: 'root'
           }
+        },
+        loginService: {},
+        navService: {
+          registerStates: function() {}
         }
       });
 

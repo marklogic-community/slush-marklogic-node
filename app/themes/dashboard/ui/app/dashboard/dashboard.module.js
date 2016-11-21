@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  angular.module('app.snippet', [
+  angular.module('app.dashboard', [
     // html dependencies
     'ui.bootstrap'
   ]);

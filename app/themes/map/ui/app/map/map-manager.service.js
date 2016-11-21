@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  angular.module('app.root')
+  angular.module('app.map')
     .service('MLUiGmapManager', ['$rootScope', '$timeout', 'uiGmapGoogleMapApi', MapManager]);
 
   function MapManager($rootScope, $timeout, $googleMapsApi) {
@@ -115,8 +115,8 @@
       // prepare result markers for consumption by angular-google-maps
       var newMarkers = [];
       angular.forEach(newResults, function(result, i) {
-        var r = result.extracted.content[0];
-        if (r.location) {
+        var r = result.extracted && result.extracted.content && result.extracted.content[0];
+        if (r && r.location) {
           var m = {
             id: 'result-' + result.uri,
             location: r.location,
