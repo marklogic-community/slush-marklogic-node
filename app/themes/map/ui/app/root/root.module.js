@@ -4,6 +4,7 @@
   angular.module('app.root', [
     // inject dependencies
     'app.login',
+    'app.map',
     'app.messageBoard',
     'app.user',
     'ui.router',

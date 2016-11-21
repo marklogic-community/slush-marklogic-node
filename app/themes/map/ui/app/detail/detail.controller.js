@@ -1,20 +1,20 @@
-/* global X2JS,vkbeautify */
+/* global vkbeautify */
 (function () {
   'use strict';
   angular.module('app.detail')
-  .controller('DetailCtrl', DetailCtrl);
+    .controller('DetailCtrl', DetailCtrl);
 
-  DetailCtrl.$inject = ['doc', '$stateParams', 'MLUiGmapManager','MLRest',
-    'ngToast','$state','$scope'];
+  DetailCtrl.$inject = ['doc', '$stateParams', 'MLRest', 'ngToast',
+                        '$state', '$scope', 'x2js', 'MLUiGmapManager'];
 
-  function DetailCtrl(doc, $stateParams, mlMapManager, MLRest, toast, $state, $scope) {
+  // TODO: inject vkbeautify
+  function DetailCtrl(doc, $stateParams, MLRest, toast, $state, $scope, x2js, mlMapManager) {
     var ctrl = this;
 
     var uri = $stateParams.uri;
 
     var contentType = doc.headers('content-type');
 
-    var x2js = new X2JS();
     /* jscs: disable */
     if (contentType.lastIndexOf('application/json', 0) === 0) {
       /*jshint camelcase: false */
@@ -42,6 +42,26 @@
       ctrl.json = {'Error' : 'Error occured determining document type.'};
     }
 
+    function deleteDocument() {
+      MLRest.deleteDocument(uri).then(function(response) {
+        // TODO: not reached with code coverage yet!
+
+        // create a toast with settings:
+        toast.create({
+          className: 'warning',
+          content: 'Deleted ' + uri,
+          dismissOnTimeout: true,
+          timeout: 2000,
+          onDismiss: function () {
+            //redirect to search page
+            $state.go('root.search');
+          }
+        });
+      }, function(response) {
+        toast.danger(response.data);
+      });
+    }
+
     ctrl.showMarker = function(latitude, longitude, content, name) {
       var newMarkers = [];
       var m = {
@@ -62,31 +82,17 @@
 
     if (ctrl.type === 'json' || ctrl.type === 'xml') {
       //note that this should be matched with the exact data
-
-      ctrl.showMarker(ctrl.json.location.latitude, ctrl.json.location.longitude,
-        ctrl.json, ctrl.json.name);
-    }
-
-    function deleteFunc() {
-      MLRest.deleteDocument (uri).then(function(response) {
-        // create a toast with settings:
-        toast.create({
-          className: 'warning',
-          content: 'Deleted ' + uri,
-          dismissOnTimeout: true,
-          timeout: 2000,
-          onDismiss: function () {
-            //redirect to search page
-            $state.go('root.search');
-          }
-        });
-      });
+      if (ctrl.json.location && (ctrl.json.location.latitude !== undefined) &&
+                                (ctrl.json.location.longitude !== undefined)) {
+        ctrl.showMarker(ctrl.json.location.latitude, ctrl.json.location.longitude,
+          ctrl.json, ctrl.json.name);
+      }
     }
 
     angular.extend(ctrl, {
       doc : doc.data,
       uri : uri,
-      delete: deleteFunc
+      delete: deleteDocument
     });
   }
 }());

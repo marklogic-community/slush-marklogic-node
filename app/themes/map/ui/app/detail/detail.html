@@ -3,7 +3,7 @@
     <button class="btn btn-default" ui-sref="root.search">Search</button>
     <button class="btn btn-primary"
             ng-show="!rootCtrl.currentUser.disallowUpdates" 
-            ui-sref="root.edit({uri: ctrl.uri})">Edit</button>
+            ui-sref="root.edit({uri: ctrl.uri, prev: 'root.view'})">Edit</button>
     <button class="btn btn-primary"
             ng-show="!rootCtrl.currentUser.disallowUpdates" 
             mwl-confirm
@@ -17,26 +17,23 @@
             cancel-button-type="default">Delete</button>
   </div>
   <div class="col-sm-12">
-    <uib-tabset type="tabs" type="pills" active="ctrl.type">
-      <uib-tab index="'json'" ng-click="ctrl.type='json'"
-               ng-if="ctrl.type==='json'">
+    <uib-tabset type="pills">
+      <uib-tab ng-if="ctrl.type==='json'">
         <uib-tab-heading>JSON</uib-tab-heading>
         <div class="col-sm-12">
           <json-explorer data="ctrl.json"></json-explorer>
         </div>
       </uib-tab>
-      <uib-tab index="'xml'" ng-click="ctrl.type='xml'"
-               ng-if="ctrl.type==='xml' || ctrl.type==='txt'">
+      <uib-tab ng-if="ctrl.type==='xml' || ctrl.type==='txt'">
         <uib-tab-heading >XML</uib-tab-heading>
         <div class="col-sm-12">
           <pre class="pre-xml">{{ctrl.xml}}</pre>
         </div>
       </uib-tab>
-      <uib-tab index="'binary'" ng-click="ctrl.type='binary'"
-               ng-if="ctrl.type==='binary'">
+      <uib-tab ng-if="ctrl.type==='binary'">
         <uib-tab-heading >Binary</uib-tab-heading>
         <div class="col-sm-12">
-          <a ng-if="ctrl.type==='binary'" target="_blank"
+          <a target="_blank"
              ng-href="/v1/documents?uri={{ctrl.uri}}&transform=download"
              class="btn btn-default">Download</a>
         </div>

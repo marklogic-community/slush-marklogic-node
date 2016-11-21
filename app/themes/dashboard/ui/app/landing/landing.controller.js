@@ -1,12 +1,12 @@
-(function() {
+(function () {
   'use strict';
 
   angular.module('app.landing')
     .controller('LandingCtrl', LandingCtrl);
 
-  LandingCtrl.$inject = ['$rootScope', '$scope', '$location', 'MLSearchFactory'];
+  LandingCtrl.$inject = ['$scope', 'userService', 'MLSearchFactory'];
 
-  function LandingCtrl($rootScope, $scope, $location, searchFactory) {
+  function LandingCtrl($scope, userService, searchFactory) {
 
     var ctrl = this;
 
@@ -17,15 +17,15 @@
                   'gender', 'Gender')
     });
 
-    $rootScope.$on('loginService:login-success', function(e, user) {
-      if (!ctrl.mlSearch) {
-        ctrl.mlSearch = searchFactory.newContext();
+    $scope.$watch(userService.currentUser, function(user) {
+      if (user && user.authenticated) {
+        if (!ctrl.mlSearch) {
+          ctrl.mlSearch = searchFactory.newContext();
+        }
+        ctrl.mlSearch.search(); // trigger showing of charts
+      } else {
+        ctrl.mlSearch = null; // hide charts
       }
-      ctrl.mlSearch.search(); // trigger showing of charts
-    });
-
-    $rootScope.$on('loginService:logout-success', function() {
-      ctrl.mlSearch = null; // hide charts
     });
 
   }
@@ -44,9 +44,9 @@
           },
           shared: true,
           crosshairs: true,
-          headerFormat: '<b>{series.name}</b><br/>',
-          pointFormatter: function() {
-            return (this.xCategory || this.x) + ': <b>' + (this.yCategory || this.y) + '</b><br/>';
+          headerFormat: '<b>{series.name}</b><br>',
+          pointFormatter: /* istanbul ignore next Unreachable */ function() {
+            return (this.xCategory || this.x) + ': <b>' + (this.yCategory || this.y) + '</b><br>';
           }
         },
         legend: {
@@ -93,7 +93,7 @@
       size: {
         height: 250
       },
-      resultLimit: limit || 10,
+      resultLimit: limit || /* istanbul ignore next Unreachable */ 10,
       credits: {
         enabled: true
       }
@@ -115,9 +115,9 @@
           shared: false,
           split: true,
           crosshairs: true,
-          headerFormat: '<b>{series.name}</b><br/>',
-          pointFormatter: function() {
-            return (this.xCategory || this.x) + ': <b>' + (this.yCategory || this.y) + '</b><br/>';
+          headerFormat: '<b>{series.name}</b><br>',
+          pointFormatter: /* istanbul ignore next Unreachable */ function() {
+            return (this.xCategory || this.x) + ': <b>' + (this.yCategory || this.y) + '</b><br>';
           }
         },
         legend: {
@@ -134,7 +134,7 @@
         },
         labels: (type !== 'bar' ? {
           rotation: -45
-        } : {})
+        } : /* istanbul ignore next Unreachable */ {})
       },
       // constraint name for x axis
       // xAxisMLConstraint: xFacet,

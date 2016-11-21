@@ -8,7 +8,11 @@
 
     beforeEach(function() {
       bard.appModule('app.root');
-      bard.inject('$controller', '$rootScope');
+      bard.inject('$controller', '$rootScope', '$templateCache');
+
+      $templateCache.put( 'app/root/infoWindow.html',
+        '<div class="info-window"></div>'
+      );
 
       var msg = {};
       var user = { name: 'Guest' };

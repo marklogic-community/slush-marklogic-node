@@ -2,23 +2,15 @@
   'use strict';
 
   angular.module('app', [
-    'ml.common',
-    'ml.search',
-    'ml.search.tpls',
-    'ml.utils',
-    'ngJsonExplorer',
-    'app.create',
-    'app.detail',
+    // routing
+    'app.route',
+
+    // http interceptors
     'app.error',
-    'app.landing',
     'app.login',
-    'app.root',
-    'app.search',
-    'app.user',
-    'ui.bootstrap',
-    'ui.router',
-    'ui.tinymce',
-    'ngToast'
+
+    // top-level state
+    'app.root'
   ]);
 
 }());

@@ -2,10 +2,16 @@
   'use strict';
 
   angular.module('app.create', [
+    // inject dependencies
+    'cb.x2js',
     'ml.common',
     'ngToast',
-    'cb.x2js',
+    'ui.router',
+
+    // html dependencies
+    'mwl.confirm',
     'ngMessages',
-    'mwl.confirm'
+    'ui.bootstrap',
+    'ui.tinymce'
   ]);
 }());

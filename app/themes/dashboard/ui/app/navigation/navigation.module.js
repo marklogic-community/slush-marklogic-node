@@ -1,9 +1,8 @@
 (function () {
   'use strict';
 
-  angular.module('app.error', [
+  angular.module('app.navigation', [
     // inject dependencies
-    'app.messageBoard',
-    'ngToast'
+    'ui.router'
   ]);
 }());

@@ -16,7 +16,7 @@
         mode: '@',
         callback: '&'
       },
-      templateUrl: 'app/login/login-dir.html'
+      templateUrl: 'app/login/login.html'
     };
   }
 

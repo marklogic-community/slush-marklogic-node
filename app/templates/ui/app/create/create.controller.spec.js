@@ -90,11 +90,11 @@
 
       // for json edit
       controller2 = $controller('CreateCtrl', { $scope: $rootScope.$new(), 'doc': jsondoc,
-        $stateParams: { uri: '/doc.json' } });
+        $stateParams: { uri: '/doc.json', prev: 'root.view' } });
 
       // for xml edit
       controller3 = $controller('CreateCtrl', { $scope: $rootScope.$new(), 'doc': xmldoc,
-        $stateParams: { uri: '/doc.xml' } });
+        $stateParams: { uri: '/doc.xml', prev: 'root.edit' } });
 
       $rootScope.$apply();
     });

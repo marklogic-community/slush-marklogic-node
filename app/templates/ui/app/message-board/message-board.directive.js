@@ -15,7 +15,7 @@
       scope: {
         msg: '='
       },
-      templateUrl: 'app/message-board/message-board-dir.html'
+      templateUrl: 'app/message-board/message-board.html'
     };
   }
 

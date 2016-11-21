@@ -2,9 +2,13 @@
   'use strict';
 
   angular.module('app.landing', [
+    // inject dependencies
     'ml.search',
     'app.user',
-    'app.snippet',
-    'ml.highcharts'
+
+    // html dependencies
+    'app.dashboard',
+    'ml.highcharts',
+    'ui.bootstrap'
   ]);
 }());

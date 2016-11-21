@@ -1,4 +1,13 @@
 (function () {
   'use strict';
-  angular.module('app.login', ['app.messageBoard', 'ml.common', 'ui.bootstrap', 'ui.router']);
+
+  angular.module('app.login', [
+    // inject dependencies
+    'app.login', // for loginInterceptor
+    'app.messageBoard',
+    'app.user', // for loginInterceptor
+    'ml.common',
+    'ui.bootstrap',
+    'ui.router'
+  ]);
 }());

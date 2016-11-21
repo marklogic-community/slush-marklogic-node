@@ -2,13 +2,17 @@
   'use strict';
 
   angular.module('app.detail', [
-    'app.similar',
-    'app.user',
-    'ui.router',
-    'app.root',
-    'uiGmapgoogle-maps',
+    // inject dependencies
+    'cb.x2js',
     'ml.common', // Using MLRest for delete
-    'ngToast', // Showing a toast on delete
-    'mwl.confirm' // for delete confirmation popups
+    'ngToast', // Showing toast on delete
+    'ui.router',
+    'app.map',
+
+    // html dependencies
+    'app.similar',
+    'ngJsonExplorer',
+    'mwl.confirm', // for delete confirmation popups
+    'ui.bootstrap'
   ]);
 }());

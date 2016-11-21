@@ -13,9 +13,9 @@
     </div>
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li><a href="/">Home</a></li>
-        <li><a href="/search">Search</a></li>
-        <li ng-show="!rootCtrl.currentUser.disallowUpdates"><a href="/create">Create</a></li>
+        <li><a ui-sref="root.landing">Home</a></li>
+        <li><a ui-sref="root.search">Search</a></li>
+        <li ng-show="!rootCtrl.currentUser.disallowUpdates"><a ui-sref="root.create({prev: rootCtrl.currentState})">Create</a></li>
       </ul>
       <ml-user mode="inline"></ml-user>
     </div><!-- /.navbar-collapse -->

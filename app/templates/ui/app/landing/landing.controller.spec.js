@@ -8,11 +8,13 @@
 
     beforeEach(function() {
       bard.appModule('app.landing');
-      bard.inject('$controller', '$q', '$rootScope');
+      bard.inject('$controller', '$rootScope');
     });
 
     beforeEach(function () {
-      controller = $controller('LandingCtrl', { $scope: $rootScope.$new() });
+      controller = $controller('LandingCtrl', {
+        $scope: $rootScope.$new()
+      });
       $rootScope.$apply();
     });
 
