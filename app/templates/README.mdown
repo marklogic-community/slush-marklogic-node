@@ -152,7 +152,7 @@ handle JSON, but also XML, Binary, and Text data out of the box.
 ## Deployment on Server
 
 At some point you might want to deploy and run this as a service on some
-(demo) server. For details on that see INSTALL.md.
+(demo) server. For details on that see [INSTALL.mdown].
 
 ## Next Steps
 
