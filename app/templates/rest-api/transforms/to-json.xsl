@@ -43,7 +43,7 @@ For example, an XSL transform named add-attr must be contained in a file named a
   <xsl:template match="/">
     <xsl:choose>
       <xsl:when test="map:get($params, 'download')">
-        <xsl:sequence select="map:put($context,'output-type', xdmp:content-type(base-uri(.)))"/>
+        <xsl:sequence select="map:put($context,'output-type', xdmp:uri-content-type(base-uri(.)))"/>
         <xsl:sequence select="."/>
       </xsl:when>
       <xsl:when test="empty(* | text())">

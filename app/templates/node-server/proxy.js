@@ -37,6 +37,7 @@ router.put('*', function(req, res) {
   if (!req.isAuthenticated()) {
     res.status(401).send('Unauthorized');
   } else if (options.disallowUpdates || ((req.path === '/documents') &&
+    req.query.uri &&
     req.query.uri.match('/api/users/') &&
     !req.query.uri.match('/api/users/' + req.session.passport.user.username + '.json'))) {
     // The user is trying to PUT to a profile document other than his/her own. Not allowed.
@@ -129,10 +130,16 @@ function proxy(req, res) {
         mlReq.end();
       });
 
+      mlReq.on('socket', function (socket) {
+        socket.on('timeout', function() {
+          console.log('Timeout reached, aborting call to ML..');
+          mlReq.abort();
+        });
+      });
+
       mlReq.on('error', function(e) {
-        console.log('Problem with request: ' + e.message);
-        res.statusCode = 500;
-        res.end();
+        console.log('Proxying failed: ' + e.message);
+        res.status(500).end();
       });
     });
 }

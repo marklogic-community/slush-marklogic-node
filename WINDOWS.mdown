@@ -1,4 +1,4 @@
-# Additional Microsoft Windows Requirement
+# Additional Microsoft Windows Requirements
 
 Some required modules do not have native Windows modules available and require a development environment in which they can be compiled. To do this, npm uses node-gyp to create these modules.  For more information, please read the [node-gyp documentation](https://github.com/nodejs/node-gyp/blob/master/README.md)
 

@@ -24,7 +24,7 @@ For example, an XSL transform named add-attr must be contained in a file named a
     <xsl:variable name="filename" select="xdmp:url-decode(tokenize(base-uri(.), '/')[last()])" />
     <xsl:variable name="dquote">"</xsl:variable>
     <xsl:sequence select="xdmp:add-response-header('content-disposition', concat('attachment; filename=', $dquote, $filename, $dquote))"/>
-    <xsl:sequence select="map:put($context,'output-type',xdmp:content-type(base-uri(.)))"/>
+    <xsl:sequence select="map:put($context,'output-type',xdmp:uri-content-type(base-uri(.)))"/>
     <xsl:sequence select="."/>
   </xsl:template>
 
