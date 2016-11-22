@@ -20,6 +20,28 @@ gulp build
 
 cd ..
 
+## SLUSH CARDS ##
+
+if [ -d slush-cards ]; then
+  cd slush-cards
+  ./ml local wipe
+  ./ml local restart
+  cd ..
+  rm -rf slush-cards
+fi
+
+gulp --gulpfile=slushfile.js --app-name=slush-cards --theme=cards --ml-version=8 --ml-host=ml8-ml1 --ml-admin-user=admin --ml-admin-pass=admin ---ml-http-port=8044 --node-port=8054 --guest-access=true --disallow-updates=true --appusers-only=true
+
+cd slush-cards
+
+gulp build
+
+./ml local bootstrap local deploy modules local deploy content local mlcp -options_file import-sample-data.options
+
+cd ..
+
+exit
+
 ## SLUSH 3COLUMN ##
 
 if [ -d slush-3column ]; then

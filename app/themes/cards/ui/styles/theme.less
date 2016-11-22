@@ -53,7 +53,7 @@ footer {
   height: 310px;
 }
 /* Facets */
-.right-col {
+.facets-col {
   padding-top: 20px;
   .facet {
     border: 1px solid #ccc;
@@ -75,9 +75,10 @@ footer {
   }
 }
 /* Search box */
-.col-md-12.search-row {
+.search-row {
   background-color: @ML-mid-grey;
   height: 55px;
+  padding-top: 10px;
 }
 .input-group .form-control:first-child {
   border-radius: 0;
@@ -90,12 +91,12 @@ footer {
   .container-fluid {
     padding-top: 0;
     
-    .search .col-md-10 {
+    .search .results-col {
       background-color: @ML-mid-grey2;
     }
   }
   background-color: #fff;
-  padding-top: 0;
+  padding-top: 52px;
 }
 .breadcrumb {
   margin-top: 20px;
@@ -104,7 +105,7 @@ footer {
 .detail {
   padding-top: 30px;
   background-color: @ML-mid-grey2;
-  .col-sm-9 {
+  .content-col {
     padding-bottom: 10px;
   }
   .tab-content {
@@ -168,9 +169,8 @@ footer {
 .facet-list .facet a {
   cursor: pointer;
 }
-.result.col-md-3 {
-  margin: 10px;
-  padding: 0;
+.search .result {
+  padding: 10px;
 }
 .panel {
   border-radius: 0;
@@ -184,7 +184,7 @@ footer {
     overflow: hidden;
     height: 207px;
   }
-  .panel-footer.phone {
+  .panel-footer {
     color: @ML-purple;
     font-size: 1.1em;
     text-align: center;
@@ -228,7 +228,7 @@ form[name=profileForm] {
     margin-top: 10px;
     margin-right: 5px;
   }
-  label.col-sm-2 {
+  label.control-label {
     background: @ML-light-grey2;
   }
 }

@@ -1,12 +1,14 @@
 <div class="row">
-  <div class="col-md-12">
+  <div class="col-md-12 search-row">
     <ml-input qtext="ctrl.qtext" search="ctrl.search(qtext)" suggest="ctrl.suggest(val)" template="fa" class="search"></ml-input>
   </div>
 </div>
 
 <div class="search row">
-  <ml-facets class="col-md-3 right-col" facets="ctrl.response.facets" toggle="ctrl.toggleFacet(facet, value)" active-facets="ctrl.mlSearch.activeFacets" negate="ctrl.toggleNegatedFacet(facet,value)"></ml-facets>
-  <div class="col-md-9">
+  <div class="col-sx-5 col-sm-4 col-md-3 facets-col">
+    <ml-facets facets="ctrl.response.facets" toggle="ctrl.toggleFacet(facet, value)" active-facets="ctrl.mlSearch.activeFacets" negate="ctrl.toggleNegatedFacet(facet,value)"></ml-facets>
+  </div>
+  <div class="col-sx-7 col-sm-8 col-md-9 results-col">
     <h4 ng-if="ctrl.response.total === 0">No results to show</h4>
 
     <div ng-if="ctrl.response.total > 0" class="results">
