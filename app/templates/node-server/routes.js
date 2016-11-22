@@ -87,10 +87,18 @@ router.get('/user/status', function(req, res) {
           }
         });
 
-        profile.on('error', function(e) {
-          console.log(JSON.stringify(e));
-          console.log('status check failed: ' + e.statusCode);
+        profile.on('socket', function (socket) {
+          socket.on('timeout', function() {
+            console.log('Timeout reached, aborting call to ML..');
+            profile.abort();
+          });
         });
+
+        profile.on('error', function(e) {
+          console.log('Status check failed: ' + e.message);
+          res.status(500).end();
+        });
+
       });
   }
 });
