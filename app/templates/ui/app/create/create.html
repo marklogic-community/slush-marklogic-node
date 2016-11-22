@@ -189,7 +189,7 @@
         <label class="col-sm-2 control-label">Tags</label>
         <div class="col-sm-10">
           <input type="text" ng-model="ctrl.newTag">
-          <button class="add-feature btn btn-default btn-sm" ng-click="ctrl.addTag()">Add</button>
+          <button class="add-feature btn btn-info btn-sm" ng-click="ctrl.addTag()">Add</button>
         </div>
         <div class="col-sm-10 col-sm-offset-2">
           <div class="tag btn btn-info" ng-repeat="tag in ctrl.person.tags track by $index">
@@ -200,10 +200,8 @@
       </div>
       <div class="form-group">
         <label class="col-sm-2 control-label">Active</label>
-        <div class="col-sm-1">
-          <label class="checkbox">
-            <input type="checkbox" ng-model="ctrl.person.isActive" ng-true-value="'true'" ng-false-value="'false'">
-          </label>
+        <div class="col-sm-10">
+          <input type="checkbox" ng-model="ctrl.person.isActive" ng-true-value="'true'" ng-false-value="'false'">
         </div>
       </div>
       <div class="form-group">
@@ -213,7 +211,7 @@
                                              ng-disabled="ctrl.mode == 'edit'"
                                              ng-required="!ctrl.person.docFormat">JSON</label>
         </div>
-        <div class="col-sm-1">
+        <div class="col-sm-9">
           <label class="radio-inline"><input type="radio" name="docFormat" value="xml" ng-model="ctrl.person.docFormat" placeholder=""
                                              ng-disabled="ctrl.mode == 'edit'"
                                              ng-required="!ctrl.person.docFormat">XML</label>
