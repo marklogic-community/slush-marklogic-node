@@ -519,6 +519,9 @@ gulp.task('init', ['checkForUpdates'], function(done) {
         name: '3-columns',
         value: '3column'
       }, {
+        name: 'Cards',
+        value: 'cards'
+      }, {
         name: 'Dashboard',
         value: 'dashboard'
       }, {
@@ -545,6 +548,9 @@ gulp.task('init', ['checkForUpdates'], function(done) {
       }, {
         name: 'Map/Graph',
         value: 'map'
+      }, {
+        name: 'Data records',
+        value: 'cards'
       }, {
         name: 'Documents',
         value: '3column'

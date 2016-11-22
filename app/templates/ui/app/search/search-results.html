@@ -1,4 +1,4 @@
-<div ng-repeat="result in results track by $index">
+<div ng-repeat="result in results track by $index" class="result">
   <h4>
     <a ui-sref="root.view({uri: result.uri})">{{ result.label || result.uri }}</a>
   </h4>
