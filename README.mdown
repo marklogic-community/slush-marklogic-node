@@ -1,21 +1,20 @@
 # Generator of Node.js Application Backed by MarkLogic
 
-This is a [Slush](http://slushjs.github.io/) generator that produces a skeleton
-[MarkLogic](http://www.marklogic.com/) application with the following
-components:
+This is a [Slush](http://slushjs.github.io/) generator template that
+produces a skeleton [MarkLogic](http://www.marklogic.com/) application
+with the following components:
 
 - [AngularJS](https://angularjs.org/)
 - [Gulp](http://gulpjs.com/)
 - [node.js](http://nodejs.org/): very thin layer, hosting the Angular code and proxying MarkLogic REST API requests
 - [Roxy Deployer](https://github.com/marklogic/roxy): bootstrap MarkLogic databases, application servers, etc; scaffolding for MarkLogic REST API service extensions
 
-# Getting Started
-
-Microsoft Windows users should read the [additional requirements documentation](WINDOWS.mdown)
 ## Install Required Dependencies
 
-- [node.js](http://nodejs.org/download/)
-- [npm](https://www.npmjs.com/): Built-in package manager for node (comes with
+To run this generator, you need:
+
+- [node.js v0.10+](http://nodejs.org/download/)
+- [npm v2+](https://www.npmjs.com/): Built-in package manager for node (comes with
   node, but check to be sure you have latest version: `npm install -g npm`)
 - [gulp](http://gulpjs.com/): Javascript task automation (`npm install -g
   gulp`)
@@ -24,89 +23,134 @@ Microsoft Windows users should read the [additional requirements documentation](
 - [Bower](http://bower.io/): A package manager for front-end libraries (`npm
   install -g bower`)
 - [Git](https://git-scm.com/) - Roxy depends on this version control system
-- [Ruby](https://www.ruby-lang.org/en/documentation/installation/) - Roxy
+- [Ruby v1.9.3+](https://www.ruby-lang.org/en/documentation/installation/) - Roxy
   depends on Ruby in order to run server configuration scripts
 
-## Install the generator
+Note: the `node` command has been renamed to `nodejs`. Some dependencies still point to `node`, which is out of our control.
+You may need to manually alias those commands, or install the `node-legacy` package.
+
+Microsoft Windows users should also read the [Additional Microsoft Windows Requirements](WINDOWS.mdown).
+
+## Install the Generator
+
+The recommended way to install this generator is:
 
     npm install -g slush-marklogic-node
 
-If you prefer to use the latest code under development:
+To grab latest features under development you can use:
 
     npm install -g git://github.com/marklogic/slush-marklogic-node.git
 
-## Run the generator
+## Run the Generator
 
-Go to the directory where your new project will be created (the parent). Then:
+Go to the directory under which your new project should be created (the parent), and run:
+
+    slush marklogic-node
+
+Or:
 
     slush marklogic-node <app-name>
 
-This will ask you several questions, with some intelligent defaults.
+This will ask you several questions, with some intelligent defaults. The end result should
+be a subdirectory with a name matching the app-name, containing all the application code.
 
-## Configure your application
+## Quick Start (for the Impatient)
+
+On Mac or Linux:
+
+    cd <app-name>
+    npm install
+    bower install
+    gulp init-local
+    ./ml local bootstrap
+    ./ml local deploy modules
+    ./ml local deploy content
+    ./ml local mlcp -options_file import-sample-data.options
+
+On Windows:
+
+    cd <app-name>
+    npm install
+    bower install
+    gulp init-local
+    ml.bat local bootstrap
+    ml.bat local deploy modules
+    ml.bat local deploy content
+    ml.bat local mlcp -options_file import-sample-data.options
+
+## Prepare your Application
 
 Go to the generated application directory:
 
-    cd {app-name}
+    cd <app-name>
 
-Edit `deploy/build.properties` to set the -port properties to available ports
-(defaults: 8040, 8041) and change other properties. The file itself documents
-many of those properties. Others are described in the [documentation for the
-Roxy deployer](https://github.com/marklogic/roxy). Then run the following Roxy
-commands to configure your local MarkLogic database (typically, depending on
-your configuration, it will create a database, associated forest(s), a REST
-server, an app-user, and a role for that user).
+The generator installs NodeJS and JavaScript dependencies automatically,
+but if shared among colleagues, they likely need to run the following commands
+manually:
+
+    npm install
+    bower install
+
+The generator also creates a `local.json` and a `deploy/local.properties`, but
+those are usually gitignored. Check if they exist. If they do, check the settings,
+most importantly the port settings to make sure they list available ports. If
+those files don't exist, then use the following command to create them:
+
+    gulp init-local
+
+Note: you can use `gulp init-dev` and `gulp init-prod` to setup properties for
+the dev and prod environments.
+
+Note: the deploy properties allow tweaking the MarkLogic side of the application
+in great detail. Look inside `deploy/build.properties` or the documentation of
+the [Roxy deployer](https://github.com/marklogic/roxy) to learn more about this.
+
+Note: consider editing the `_loginMode` variable in `ui/app/login/login.service.js`
+to change the login mode of the application. The default is set to `full`. The
+other options are `top-right` or `modal`.
+
+## Deploy your Application
+
+Run the following Roxy commands to deploy the application to the chosen MarkLogic
+installation. It will create and configure databases, REST servers, users, and
+roles for you, and deploy the back-end application code.
 
     ./ml local bootstrap
     ./ml local deploy modules
 
-On Windows, that would be:
+Or on Windows:
 
     ml.bat local bootstrap
     ml.bat local deploy modules
 
-Install additional dependencies using the bower package manager:
+## Launch your Application
 
-    bower install
+To launch the middle-tier, and open a browser tab automatically, you only need to run:
 
-Edit the `_loginMode` variable in `ui/app/login/login.service.js` to change the login mode of the application. The default is set to `full`. The other options are `top-right` or `modal`.
+    gulp serve-local
 
-## Run your application
+Note: this will also watch the `ui/` folder for changes, compile them, and reload the
+browser fully automatically.
 
-    gulp serve-local # this will watch the .less file for changes, compile them to .css, and run the node server
+Note: to get more debug logging from Express, run with:
 
-You can set some settings to match your setup in the Roxy properties files. For example:
+    DEBUG=http,mail,express:* gulp serve-local
+
+Note: it is possible to override settings on the command-line:
 
     gulp serve-local --ml-host=<your-host> --ml-http-port=8234 --app-port=9234 --nosync
 
-# Next Steps
+Note: `--nosync` will cause no extra browsersync reload proxy to get launched at 3000,
+and no browser tab will be opened automatically. In addition you have `--verbose`, and
+`--ignoreErrors` (for `gulp build`). A few more flags are documented at the top of
+`gulpfile.js`.
 
-Load some sample data, as described in the next section of this README.
+## Loading Sample Data (optional)
 
-The slush generation creates an entire project directory, described in
-[Project folder structure](https://github.com/marklogic/slush-marklogic-node/wiki/Project-folder-structure).
-
-[Explaining the
-stack](https://github.com/marklogic/slush-marklogic-node/wiki/Explaining-the-stack)
-gives a more complete description of the overall architecture.
-
-Learn more about specific components of the generated application on the
-[Components](https://github.com/marklogic/slush-marklogic-node/wiki/Components) page.
-
-Learn about specific ways of customizing your app on the [Customization
-Recipes](https://github.com/marklogic/slush-marklogic-node/wiki/Customization-recipes)
-page.
-
-# Data
-
-## Sample Data
-
-The application comes with 3000 JSON documents generated by json-generator.com.
-You can load them with
-(MLCP)[https://docs.marklogic.com/guide/ingestion/content-pump] like this:
-
-**NOTE:** @sample-app-role in import-sample-data.options will change to your app's role
-(Alternatively, you can discover that with `./ml local info`)
+The application comes with 3000 JSON documents generated by json-generator.com. They
+will allow you to explore all the features you get out of the box in a better way. You
+can load them with (MLCP)[https://docs.marklogic.com/guide/ingestion/content-pump]
+with:
 
     ./ml local mlcp -options_file import-sample-data.options
 
@@ -114,20 +158,22 @@ Or on Windows:
 
     ml.bat local mlcp -options_file import-sample-data.options
 
-## General Data Information
+Note: the detail controller, the part that handles showing your data, can not only
+handle JSON, but also XML, Binary, and Text data out of the box.
 
-The application assumes that you're storing JSON data. This shows up in the
-default format request for the MLRest service's `searchContext`, the
-`detailController`'s (`detail-ctrl.js`) request to get a document, and in the
-out-of-the-box detail view.
+## Deployment on Server
 
-# Options
+At some point you might want to deploy and run this as a service on some
+(demo) server. For details on that see INSTALL.md.
 
-## Roxy
+## Next Steps
 
-The generator defaults to using a 'rest'-type Roxy app and the 'master' branch
-of Roxy. If you know what you're doing, and you want to do something different,
-you can specify those options with this syntax:
+Documentation about the slush generator is provided on the [Generator Wiki](https://github.com/marklogic/slush-marklogic-node/wiki). It covers amongst others:
 
-    slush marklogic-node <appName> appType=mvc branch=dev
+- [Project folder structure](https://github.com/marklogic/slush-marklogic-node/wiki/Project-folder-structure), which describes the project directory as produces by the generator.
 
+- [Explaining the stack](https://github.com/marklogic/slush-marklogic-node/wiki/Explaining-the-stack), which gives a brief description of the overall architecture.
+
+- [Core Tools and Components](https://github.com/marklogic/slush-marklogic-node/wiki/Core-Tools-and-Components), which allows you to learn more about the various tools and components used by or for the application.
+
+Last but not least, the landing page of the out of the box application provides many more links.
