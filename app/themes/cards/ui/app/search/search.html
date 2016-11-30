@@ -5,10 +5,10 @@
 </div>
 
 <div class="search row">
-  <div class="col-sx-4 col-sm-3 col-md-2 facets-col">
+  <div class="col-xs-4 col-sm-3 col-md-2 facets-col">
     <ml-facets facets="ctrl.response.facets" toggle="ctrl.toggleFacet(facet, value)" active-facets="ctrl.mlSearch.activeFacets" negate="ctrl.toggleNegatedFacet(facet,value)"></ml-facets>
   </div>
-  <div class="col-sx-8 col-sm-9 col-md-10 results-col">
+  <div class="col-xs-8 col-sm-9 col-md-10 results-col">
     <h4 ng-if="ctrl.response.total === 0">No results to show</h4>
 
     <div ng-if="ctrl.response.total > 0" class="results">
