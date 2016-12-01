@@ -1,3 +1,6 @@
+
+(: REST transform for document-filtering binaries at ingest. :)
+
 xquery version "1.0-ml";
 module namespace trans = "http://marklogic.com/rest-api/transform/filter-docs";
 
@@ -19,7 +22,7 @@ declare function trans:transform(
         data($meta/@content)
       }
   return (
-    xdmp:document-set-property($uri, <ingest:filter>{$filter}</ingest:filter>),
+    xdmp:document-set-property($uri, $filter),
     xdmp:document-set-property($uri, <ingest:metadata>{$metadata}</ingest:metadata>),
     $content
   )

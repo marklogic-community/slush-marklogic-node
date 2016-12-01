@@ -41,13 +41,16 @@ For example, an XSL transform named add-attr must be contained in a file named a
   </xsl:template>
 
   <xsl:template match="/">
+    <xsl:variable name="uri" select="map:get($context, 'uri')"/>
+    <xsl:variable name="content-type" select="util:get-content-type($uri, /)" />
+
     <xsl:choose>
       <xsl:when test="map:get($params, 'download')">
-        <xsl:sequence select="map:put($context,'output-type', xdmp:uri-content-type(base-uri(.)))"/>
+        <xsl:sequence select="map:put($context,'output-type', $content-type)"/>
         <xsl:sequence select="."/>
       </xsl:when>
-      <xsl:when test="empty(* | text())">
-        <xsl:apply-templates select="xdmp:document-properties(base-uri(.))" mode="binary"/>
+      <xsl:when test="util:is-binary(/)">
+        <xsl:apply-templates select="xdmp:document-properties($uri)" mode="binary"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:apply-templates select="." mode="non-binary"/>

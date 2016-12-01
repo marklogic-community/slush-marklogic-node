@@ -1,13 +1,15 @@
 xquery version "1.0-ml";
 
-module namespace utilities = "http://marklogic.com/utilities";
+module namespace util = "http://marklogic.com/utilities";
 
 declare default function namespace "http://www.w3.org/2005/xpath-functions";
+
+declare option xdmp:mapping "false"; (::)
 
 (:
  : Wrapper function for sending an email
  :)
-declare function utilities:send-notification(
+declare function util:send-notification(
   $recipient-name as xs:string,
   $recipient-email as xs:string,
   $subject as  xs:string,
@@ -20,8 +22,8 @@ declare function utilities:send-notification(
       <rf:subject>{$subject}</rf:subject>
       <rf:from>
         <em:Address>
-          <em:name>IHS Demo</em:name>
-          <em:adrs>no-reply@yihs.marklogic.com</em:adrs>
+          <em:name>MarkLogic Demo</em:name>
+          <em:adrs>no-reply@demo.marklogic.com</em:adrs>
         </em:Address>
       </rf:from>
       <rf:to>
@@ -42,6 +44,28 @@ declare function utilities:send-notification(
   )
 };
 
-declare function utilities:highlight($doc, $query) {
+declare function util:highlight($doc, $query) {
   cts:highlight($doc, $query, <span class="highlight">{$cts:text}</span>)
+};
+
+declare function util:is-binary($node) {
+  $node instance of binary()
+    or $node/node() instance of binary()
+};
+
+declare function util:get-content-type($uri) {
+  xdmp:uri-content-type($uri)
+};
+
+declare function util:get-content-type($uri, $doc) {
+  let $content-type :=
+    if (util:is-binary($doc)) then
+      xdmp:document-properties($uri)//*:meta[@name = 'content-type']/(@content, .)[not(. = ('', 'text/plain'))]
+    else ()
+  return
+    ($content-type, xdmp:uri-content-type($uri))[1]
+};
+
+declare function util:get-filename($uri) {
+  xdmp:url-decode(tokenize($uri, '/')[last()])
 };
