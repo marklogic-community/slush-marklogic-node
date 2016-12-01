@@ -1,11 +1,93 @@
 # Change Log
 
+## [1.2.0](https://github.com/marklogic/slush-marklogic-node/tree/1.2.0) (2016-12-01)
+[Full Changelog](https://github.com/marklogic/slush-marklogic-node/compare/1.1.1...1.2.0)
+
+**Implemented enhancements:**
+
+- Allow passing in generator options from cmdline for testing purposes [\#391](https://github.com/marklogic/slush-marklogic-node/issues/391)
+- Add transform for extracted xml elements to be converted to json properties in the Search REST response [\#373](https://github.com/marklogic/slush-marklogic-node/issues/373)
+- Use ml-highcharts-ng in dashboard theme landing page [\#361](https://github.com/marklogic/slush-marklogic-node/issues/361)
+- pm2 integration [\#351](https://github.com/marklogic/slush-marklogic-node/issues/351)
+- Leverage form validation in create page [\#324](https://github.com/marklogic/slush-marklogic-node/issues/324)
+- Make it easier to disable login/auth [\#288](https://github.com/marklogic/slush-marklogic-node/issues/288)
+- Consider adding use of helmetjs by default [\#287](https://github.com/marklogic/slush-marklogic-node/issues/287)
+- Support digest authentication [\#284](https://github.com/marklogic/slush-marklogic-node/issues/284)
+- Prepend app-specific ML users with app-name [\#246](https://github.com/marklogic/slush-marklogic-node/issues/246)
+- Streamline user profile handling [\#240](https://github.com/marklogic/slush-marklogic-node/issues/240)
+- Use Passport For Login [\#175](https://github.com/marklogic/slush-marklogic-node/issues/175)
+- Edit and delete options for slush-marklogic [\#15](https://github.com/marklogic/slush-marklogic-node/issues/15)
+
+**Fixed bugs:**
+
+- Npm install fails with Node v6 [\#421](https://github.com/marklogic/slush-marklogic-node/issues/421)
+- More explicit requirements in README [\#419](https://github.com/marklogic/slush-marklogic-node/issues/419)
+- Admin theme ignores adminLTE.css so the file is missing in git repos [\#415](https://github.com/marklogic/slush-marklogic-node/issues/415)
+- Difficulty running MLCP import under Windows [\#410](https://github.com/marklogic/slush-marklogic-node/issues/410)
+- reqOptions is not defined [\#405](https://github.com/marklogic/slush-marklogic-node/issues/405)
+- Guest-access doesn't work with passport [\#397](https://github.com/marklogic/slush-marklogic-node/issues/397)
+- Gulp build breaks with old nodejs \(0.10\) [\#389](https://github.com/marklogic/slush-marklogic-node/issues/389)
+- README.md lacks npm install, and gulp init details [\#388](https://github.com/marklogic/slush-marklogic-node/issues/388)
+- Use xdmp:uri-content-type instead of xdmp:content-type [\#385](https://github.com/marklogic/slush-marklogic-node/issues/385)
+- Back-end calls fail if taking more than 2 minutes [\#384](https://github.com/marklogic/slush-marklogic-node/issues/384)
+- Add /api/users/admin.json with default to prevent errors in the ErrorLog.txt [\#377](https://github.com/marklogic/slush-marklogic-node/issues/377)
+- update customization wiki [\#333](https://github.com/marklogic/slush-marklogic-node/issues/333)
+- Node routes hang on bad profiles [\#329](https://github.com/marklogic/slush-marklogic-node/issues/329)
+
+**Closed issues:**
+
+- Add support for most/all drawing types in map theme [\#398](https://github.com/marklogic/slush-marklogic-node/issues/398)
+- Dashboard CSS bug [\#382](https://github.com/marklogic/slush-marklogic-node/issues/382)
+- Add link to community add ons in the README [\#375](https://github.com/marklogic/slush-marklogic-node/issues/375)
+- README slightly out of date [\#273](https://github.com/marklogic/slush-marklogic-node/issues/273)
+
+**Merged pull requests:**
+
+- \#411: Rebased cards-theme on top of latest changes, and consolidation across themes [\#425](https://github.com/marklogic/slush-marklogic-node/pull/425) ([grtjn](https://github.com/grtjn))
+- \#411: Added cards theme [\#412](https://github.com/marklogic/slush-marklogic-node/pull/412) ([jenbreese](https://github.com/jenbreese))
+- \#361: Highcharts in dashboard theme [\#409](https://github.com/marklogic/slush-marklogic-node/pull/409) ([divino](https://github.com/divino))
+- \#405: Define variables that were left undefined [\#406](https://github.com/marklogic/slush-marklogic-node/pull/406) ([patrickmcelwee](https://github.com/patrickmcelwee))
+- Fixed landing page panel issue, cleaned up rest transforms [\#427](https://github.com/marklogic/slush-marklogic-node/pull/427) ([grtjn](https://github.com/grtjn))
+- Adding documentation for the proper use of MLCP in Windows. [\#426](https://github.com/marklogic/slush-marklogic-node/pull/426) ([bluetorch](https://github.com/bluetorch))
+- Fixed link to INSTALL docs [\#424](https://github.com/marklogic/slush-marklogic-node/pull/424) ([grtjn](https://github.com/grtjn))
+- Fixed link to INSTALL docs [\#423](https://github.com/marklogic/slush-marklogic-node/pull/423) ([grtjn](https://github.com/grtjn))
+- Various changes for 1.2.0 [\#422](https://github.com/marklogic/slush-marklogic-node/pull/422) ([grtjn](https://github.com/grtjn))
+- \#243: various fixes [\#420](https://github.com/marklogic/slush-marklogic-node/pull/420) ([grtjn](https://github.com/grtjn))
+- \#243: minor bug in create ctrl tests [\#418](https://github.com/marklogic/slush-marklogic-node/pull/418) ([grtjn](https://github.com/grtjn))
+- \#243: Initial progress with code cleanup and code coverage [\#417](https://github.com/marklogic/slush-marklogic-node/pull/417) ([grtjn](https://github.com/grtjn))
+- Fixed \#397: proper init of auth-helper, and defaulting of user/pass [\#416](https://github.com/marklogic/slush-marklogic-node/pull/416) ([grtjn](https://github.com/grtjn))
+- Fine-tuned dashboard charts, and fixed node-server proxy [\#413](https://github.com/marklogic/slush-marklogic-node/pull/413) ([grtjn](https://github.com/grtjn))
+- Fixed \#398: added OOTB logic for all Google overlay types [\#400](https://github.com/marklogic/slush-marklogic-node/pull/400) ([grtjn](https://github.com/grtjn))
+- \#391: theme argument was not handled correctly [\#399](https://github.com/marklogic/slush-marklogic-node/pull/399) ([grtjn](https://github.com/grtjn))
+- \#391: small bug in xcc-port [\#396](https://github.com/marklogic/slush-marklogic-node/pull/396) ([grtjn](https://github.com/grtjn))
+- \#391: ignore gulpfile arg [\#395](https://github.com/marklogic/slush-marklogic-node/pull/395) ([grtjn](https://github.com/grtjn))
+- \#391: Allow app-name as gulp arg [\#394](https://github.com/marklogic/slush-marklogic-node/pull/394) ([grtjn](https://github.com/grtjn))
+- \#391: allow running slushfile with gulp directly for easier testing [\#393](https://github.com/marklogic/slush-marklogic-node/pull/393) ([grtjn](https://github.com/grtjn))
+- 391 generator options [\#392](https://github.com/marklogic/slush-marklogic-node/pull/392) ([grtjn](https://github.com/grtjn))
+- fixing the footer logo for bug \#382 [\#383](https://github.com/marklogic/slush-marklogic-node/pull/383) ([jenbreese](https://github.com/jenbreese))
+- Hide 'Edit' and 'Delete' when `disallowUpdates: true` [\#380](https://github.com/marklogic/slush-marklogic-node/pull/380) ([patrickmcelwee](https://github.com/patrickmcelwee))
+- Add triples to sample data [\#374](https://github.com/marklogic/slush-marklogic-node/pull/374) ([patrickmcelwee](https://github.com/patrickmcelwee))
+- Added sudo and amended some of the commands for removing services [\#372](https://github.com/marklogic/slush-marklogic-node/pull/372) ([Audarth](https://github.com/Audarth))
+- 15 edit and delete options [\#369](https://github.com/marklogic/slush-marklogic-node/pull/369) ([divino](https://github.com/divino))
+- Added pm2 config generation [\#352](https://github.com/marklogic/slush-marklogic-node/pull/352) ([Audarth](https://github.com/Audarth))
+- Fixed \#287: added helmet package for slightly better security [\#301](https://github.com/marklogic/slush-marklogic-node/pull/301) ([grtjn](https://github.com/grtjn))
+- Fixed \#288: allow guest-acces, disallow updates, require app users only [\#298](https://github.com/marklogic/slush-marklogic-node/pull/298) ([grtjn](https://github.com/grtjn))
+- Use an auth helper that can handle digest authentication \#284 [\#285](https://github.com/marklogic/slush-marklogic-node/pull/285) ([ryanjdew](https://github.com/ryanjdew))
+
+## [1.1.1](https://github.com/marklogic/slush-marklogic-node/tree/1.1.1) (2016-06-17)
+[Full Changelog](https://github.com/marklogic/slush-marklogic-node/compare/1.1.0...1.1.1)
+
+**Fixed bugs:**
+
+- Error: ENOENT, no such file or directory '.../ui/app/templates.js' [\#365](https://github.com/marklogic/slush-marklogic-node/issues/365)
+
 ## [1.1.0](https://github.com/marklogic/slush-marklogic-node/tree/1.1.0) (2016-06-17)
 [Full Changelog](https://github.com/marklogic/slush-marklogic-node/compare/1.0.3...1.1.0)
 
 **Implemented enhancements:**
 
 - Review ui-themes branch [\#336](https://github.com/marklogic/slush-marklogic-node/issues/336)
+- Avoid /v1 in proxy.js [\#332](https://github.com/marklogic/slush-marklogic-node/issues/332)
 - Add map theme [\#311](https://github.com/marklogic/slush-marklogic-node/issues/311)
 - Add 3-column theme [\#310](https://github.com/marklogic/slush-marklogic-node/issues/310)
 - Add dashboard theme [\#309](https://github.com/marklogic/slush-marklogic-node/issues/309)
