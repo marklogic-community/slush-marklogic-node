@@ -6,6 +6,7 @@
     'app.login',
     'app.messageBoard',
     'app.navigation',
+    'app.route',
     'app.user',
     'ui.router',
 
