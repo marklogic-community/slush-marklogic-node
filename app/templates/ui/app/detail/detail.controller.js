@@ -15,7 +15,8 @@
 
     var uri = $stateParams.uri;
 
-    var contentType = doc.headers('content-type');
+    var contentType = doc.headers('content-type').split(/;/)[0];
+    var encodedUri = encodeURIComponent(uri);
 
     /* jscs: disable */
     if (contentType.lastIndexOf('application/json', 0) === 0) {
@@ -67,6 +68,10 @@
     angular.extend(ctrl, {
       doc : doc.data,
       uri : uri,
+      contentType: contentType,
+      fileName: uri.split('/').pop(),
+      viewUri: '/v1/documents?uri=' + encodedUri + '&format=binary&transform=sanitize',
+      downloadUri: '/v1/documents?uri=' + encodedUri + '&format=binary&transform=download',
       delete: deleteDocument
     });
   }
