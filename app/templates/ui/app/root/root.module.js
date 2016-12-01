@@ -5,6 +5,7 @@
     // inject dependencies
     'app.login',
     'app.messageBoard',
+    'app.route',
     'app.user',
     'ui.router',
 
