@@ -2,20 +2,25 @@
   'use strict';
 
   angular.module('app.route')
+    .constant('appConfig', {
+      showHome: false
+    })
     .run(['loginService', function(loginService) {
       loginService.protectedRoutes(['root.search', 'root.create', 'root.profile']);
     }])
     .config(RouteConfig);
 
   RouteConfig.$inject = ['$stateProvider', '$urlMatcherFactoryProvider',
-    '$urlRouterProvider', '$locationProvider'
+    '$urlRouterProvider', '$locationProvider', 'appConfig'
   ];
 
   function RouteConfig(
     $stateProvider,
     $urlMatcherFactoryProvider,
     $urlRouterProvider,
-    $locationProvider) {
+    $locationProvider,
+    appConfig
+  ) {
 
     $urlRouterProvider.otherwise('/');
     $locationProvider.html5Mode(true);
@@ -47,20 +52,24 @@
             return userService.getUser();
           }
         }
-      })
-      .state('root.landing', {
-        url: '/',
-        templateUrl: 'app/landing/landing.html',
-        controller: 'LandingCtrl',
-        controllerAs: 'ctrl',
-        navLabel: {
-          text: 'Home',
-          area: 'dashboard',
-          navClass: 'fa-home'
-        }
-      })
+      });
+    if (appConfig.showHome) {
+      $stateProvider
+        .state('root.landing', {
+          url: '/',
+          templateUrl: 'app/landing/landing.html',
+          controller: 'LandingCtrl',
+          controllerAs: 'ctrl',
+          navLabel: {
+            text: 'Home',
+            area: 'dashboard',
+            navClass: 'fa-home'
+          }
+        });
+    }
+    $stateProvider
       .state('root.search', {
-        url: '/search',
+        url: appConfig.showHome ? '/search' : '/',
         templateUrl: 'app/search/search.html',
         controller: 'SearchCtrl',
         controllerAs: 'ctrl',

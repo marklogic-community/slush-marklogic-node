@@ -5,14 +5,15 @@
     .controller('RootCtrl', RootCtrl);
 
   RootCtrl.$inject = ['messageBoardService', 'userService', '$scope',
-    '$state'];
+    '$state', 'appConfig'];
 
   function RootCtrl(messageBoardService, userService, $scope,
-    $state) {
+    $state, appConfig) {
 
     var rootCtrl = this;
     rootCtrl.currentYear = new Date().getUTCFullYear();
     rootCtrl.messageBoardService = messageBoardService;
+    angular.extend(rootCtrl, appConfig);
 
     $scope.$watch(userService.currentUser, function(newValue) {
       rootCtrl.currentUser = newValue;
