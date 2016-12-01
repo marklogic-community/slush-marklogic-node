@@ -1,3 +1,8 @@
+/*
+  REST transform for converting XML content to JSON (for use with extract-document-data). Copied from:
+  http://stackoverflow.com/questions/37986731/extract-document-data-comes-as-xml-string-element-in-json-output/37994680#37994680
+*/
+
 /* jshint node:true,esnext:true */
 /* global xdmp */
 
