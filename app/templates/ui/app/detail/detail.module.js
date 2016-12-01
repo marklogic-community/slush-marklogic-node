@@ -12,6 +12,7 @@
     'app.similar',
     'ngJsonExplorer',
     'mwl.confirm', // for delete confirmation popups
-    'ui.bootstrap'
+    'ui.bootstrap',
+    'view.file'
   ]);
 }());
