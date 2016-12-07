@@ -5,18 +5,32 @@
 @ML-red:          #CA3639;
 @ML-blue:         #115391;
 @ML-purple:       #3A4C93;
-@ML-dark-grey:    #333;
-@ML-mid-grey:     #666;
-@ML-mid-grey2:    #b1b3b6;
-@ML-light-grey:   #f1f2f2;
-@ML-light-grey2:  #e6e7e8;
+@brand-primary:   #115391;
+@brand-warning:   #CA3639;
 
-@brand-primary: #115391;
-@brand-warning: #CA3639;
+/* These are the variables for the default grey colors.
+If you'd like to change the greys, change them here so it is global.
+*/
+@ML-dark:    #333;
+@ML-mid:     #666;
+@ML-mid2:    #b1b3b6;
+@ML-light:   #f1f2f2;
+@ML-light2:  #e6e7e8;
+
+/* Here is a blue version of the theme. 
+Just uncomment this block of code to use.
+Then comment out the grey above. lines 11-18.
+@ML-dark:    #2A3B80;
+@ML-mid:     #0069AD;
+@ML-mid2:    #85B8DF;
+@ML-light:   #f1f2f2;
+@ML-light2:  #e6e7e8;
+*/
 
 body {
-  background-color: @ML-dark-grey;
+  background-color: @ML-light2;
 }
+
 a {
   cursor: hand;
   cursor: pointer;
@@ -43,17 +57,20 @@ a {
   background-image: none;
 }
 footer {
+  background-color: @ML-light2;
   border-top: 1px solid #000;
-  color: #fff;
   text-align: center;
-  background-color: @ML-dark-grey;
+
+  a {
+    color: #fff;
+  }
 }
 /* Landing */
 .content.landing .panel {
   height: 310px;
 }
 /* Facets */
-.facets-col {
+.right-col {
   padding-top: 20px;
   .facet {
     border: 1px solid #ccc;
@@ -75,10 +92,9 @@ footer {
   }
 }
 /* Search box */
-.search-row {
-  background-color: @ML-mid-grey;
+.col-md-12.search-row {
+  background-color: @ML-mid;
   height: 55px;
-  padding-top: 10px;
 }
 .input-group .form-control:first-child {
   border-radius: 0;
@@ -91,12 +107,12 @@ footer {
   .container-fluid {
     padding-top: 0;
     
-    .search .results-col {
-      background-color: @ML-mid-grey2;
+    .search .col-md-10 {
+      background-color: @ML-mid2;
     }
   }
   background-color: #fff;
-  padding-top: 52px;
+  padding-top: 0;
 }
 .breadcrumb {
   margin-top: 20px;
@@ -104,8 +120,8 @@ footer {
 /* Detail page */
 .detail {
   padding-top: 30px;
-  background-color: @ML-mid-grey2;
-  .content-col {
+  background-color: @ML-mid2;
+  .col-sm-9 {
     padding-bottom: 10px;
   }
   .tab-content {
@@ -116,9 +132,9 @@ footer {
     text-decoration: none;
     background-color: #ccc;
     border-bottom-color: #fff;
-    border-left-color: @ML-mid-grey2;
-    border-right-color: @ML-mid-grey2;
-    border-top-color: @ML-mid-grey2;
+    border-left-color: @ML-mid2;
+    border-right-color: @ML-mid2;
+    border-top-color: @ML-mid2;
   }
   .desc textarea {
     width: 100%;
@@ -130,7 +146,7 @@ footer {
       text-decoration: none;
     }
     .string {
-      color: @ML-mid-grey;
+      color: @ML-mid;
       white-space: pre-wrap;
     }
     .num {
@@ -142,7 +158,7 @@ footer {
   }
   .similar {
     .panel-heading {
-      background-color: @ML-light-grey2;
+      background-color: @ML-light2;
       color: @ML-purple;
       font-size: 1.1em;
       text-align: center;
@@ -169,8 +185,9 @@ footer {
 .facet-list .facet a {
   cursor: pointer;
 }
-.search .result {
-  padding: 10px;
+.result.col-md-3 {
+  margin: 10px;
+  padding: 0;
 }
 .panel {
   border-radius: 0;
@@ -184,11 +201,11 @@ footer {
     overflow: hidden;
     height: 207px;
   }
-  .panel-footer {
+  .panel-footer.phone {
     color: @ML-purple;
     font-size: 1.1em;
     text-align: center;
-    background-color: @ML-light-grey2;
+    background-color: @ML-light2;
   }
   .match .highlight {
     background-color: @ML-purple;
@@ -227,9 +244,6 @@ form[name=profileForm] {
   .tag {
     margin-top: 10px;
     margin-right: 5px;
-  }
-  label.control-label {
-    background: @ML-light-grey2;
   }
 }
 .table th {
