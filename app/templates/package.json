@@ -14,7 +14,7 @@
     "www-authenticate": "^0.6.2"
   },
   "devDependencies": {
-    "browser-sync": "^2.7.12",
+    "browser-sync": "2.8.3",
     "chai": "^3.0.0",
     "del": "^2.0.2",
     "glob": "^6.0.0",
