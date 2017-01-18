@@ -2,7 +2,7 @@
 /* Remove the powered by image on small devices (tablets, 768px and down) */
 @media (max-width: @screen-sm-min) { .powered { background: none; } }
 
-@ML-red:          #CA3639;
+@ML-red:          #CB333B;
 @ML-blue:         #115391;
 @ML-purple:       #3A4C93;
 @brand-primary:   #115391;
@@ -16,15 +16,23 @@ If you'd like to change the greys, change them here so it is global.
 @ML-mid2:    #b1b3b6;
 @ML-light:   #f1f2f2;
 @ML-light2:  #e6e7e8;
+@brand-primary:   @ML-purple;
+@brand-warning:   @ML-red;
+footer#footer, .results .result .panel-footer.phone { background-color: @ML-dark; }
+.content .container-fluid .search .col-md-10 { background-color: #fff; }
 
-/* Here is a blue version of the theme. 
+/* Here is a purple version of the theme. 
 Just uncomment this block of code to use.
-Then comment out the grey above. lines 11-18.
-@ML-dark:    #2A3B80;
-@ML-mid:     #0069AD;
-@ML-mid2:    #85B8DF;
-@ML-light:   #f1f2f2;
-@ML-light2:  #e6e7e8;
+Then comment out the grey above. lines 11-22.
+
+@ML-dark:    #2c2D65;
+@ML-mid:     #6068B2;
+@ML-mid2:    #dcddde;
+@ML-light:   #A5B0E3;
+@ML-light2:  #838DC8;
+@brand-primary: @ML-dark;
+@brand-info: @ML-light;
+.detail .similar.panel-default .panel-heading { color: #fff; }
 */
 
 body {
@@ -61,8 +69,22 @@ footer {
   border-top: 1px solid #000;
   text-align: center;
 
-  a {
+  .text-muted {
     color: #fff;
+  }
+  .nav {
+    li {
+      a {
+        color: #fff;
+      }
+      a:hover {
+        background-color: none;
+        text-decoration: underline;
+      }
+    }
+  }
+  .nav > li > a:hover, .nav > li > a:focus {
+    background-color: transparent;
   }
 }
 /* Landing */
@@ -202,7 +224,7 @@ footer {
     height: 207px;
   }
   .panel-footer.phone {
-    color: @ML-purple;
+    color: #fff;
     font-size: 1.1em;
     text-align: center;
     background-color: @ML-light2;
@@ -226,6 +248,10 @@ footer {
   .highlight {
     background-color: #FFFFCC;
   }
+}
+/* Profile page */
+.profile {
+    padding: 20px;
 }
 form[name=profileForm] {
   .valid-email {
