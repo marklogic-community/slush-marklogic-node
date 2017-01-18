@@ -3,7 +3,7 @@
 
   angular.module('app.route')
     .constant('appConfig', {
-      showHome: false
+      showHome: true
     })
     .run(['loginService', function(loginService) {
       loginService.protectedRoutes(['root.search', 'root.create', 'root.profile']);

@@ -1,12 +1,24 @@
 <div class="row">
   <div class="col-md-12 search-row">
     <ml-input qtext="ctrl.qtext" search="ctrl.search(qtext)" suggest="ctrl.suggest(val)" template="fa" class="search"></ml-input>
-    <label class="radio-inline">
-      <input type="radio" ng-model="ctrl.showFacetsOnMap" ng-value="true" ng-change="ctrl.toggleShowFacets()"> Show facets or
-    </label>
-    <label class="radio-inline">
-      <input type="radio" ng-model="ctrl.showFacetsOnMap" ng-value="false" ng-change="ctrl.toggleShowFacets()"> results on map
-    </label>
+    <div>
+      <label class="radio-inline">
+        <input type="radio" ng-model="ctrl.showFacetsOnMap" ng-value="true" ng-change="ctrl.toggleShowFacets()"> Show facets or
+      </label>
+      <label class="radio-inline">
+        <input type="radio" ng-model="ctrl.showFacetsOnMap" ng-value="false" ng-change="ctrl.toggleShowFacets()"> results on map
+      </label>
+    </div>
+    <div class="checkbox">
+      <label>
+        <input type="checkbox" ng-model="ctrl.limitToMap"> Limit results to visible map
+      </label>
+    </div>
+    <div class="checkbox">
+      <label>
+        <input type="checkbox" ng-model="ctrl.limitToIntersect"> Limit to intersect of drawings
+      </label>
+    </div>
   </div>
 </div>
 

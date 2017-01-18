@@ -1,5 +1,9 @@
 #!/bin/bash
 
+HOST=ml9-ml1
+USER=admin
+PASS=admin
+
 ## SLUSH DEFAULT ##
 
 if [ -d slush-default ]; then
