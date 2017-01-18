@@ -10,9 +10,9 @@
       <!-- add nbsp for better alignment of values -->
       <dd ng-if="!(val | isArray) || (val[0] | isObject)">&#160;</dd>
       <!-- object, recurse -->
-      <dd ng-if="!(val | isArray)" ng-init="parameter = val" ng-include="'app/map/infoWindow-details.html'"></dd>
+      <dd ng-if="!(val | isArray)" ng-init="parameter = val" ng-include="'app/root/infoWindow-details.html'"></dd>
       <!-- array of object, repeat recurse -->
-      <dd ng-if="(val | isArray) && (val[0] | isObject)" ng-repeat="parameter in val track by $index" ng-include="'app/map/infoWindow-details.html'"></dd>
+      <dd ng-if="(val | isArray) && (val[0] | isObject)" ng-repeat="parameter in val track by $index" ng-include="'app/root/infoWindow-details.html'"></dd>
     </span>
   </span>
 </dl>
