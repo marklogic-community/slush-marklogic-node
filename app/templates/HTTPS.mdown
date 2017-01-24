@@ -1,4 +1,4 @@
-### How to enable HTTPS on the Node.js server?
+### HOW TO: Enable HTTPS on the Node.js Server
 
 1. Create a key and certificate for the node server
    
@@ -47,7 +47,7 @@
    $ gulp serve-local
    ```
 
-### How to configure Node.js to proxy calls to MarkLogic App Server hosted in HTTPS?
+### HOW TO: Configure Node.js to Proxy Requests to MarkLogic App Server hosted in HTTPS
 
 1. Enable SSL on MarkLogic (skip if App Server is already in HTTPS)
    
@@ -113,7 +113,7 @@
       $ gulp serve-local
       ```
 
-### How to enable HTTPS in MarkLogic App Server using Roxy?
+### HOW TO: Enable HTTPS in MarkLogic App Server using Roxy
 
 1. Uncomment and fill up the following in build.properties or create and fillup in local.properties or <env>.properties file
 
@@ -181,7 +181,7 @@
    Refer to "How to disable HTTPS in MarkLogic App Server?" below.
    ```
 
-### How to disable HTTPS in a MarkLogic App Server?
+### HOW TO: Disable HTTPS in a MarkLogic App Server
 
 From the management console: 
     
