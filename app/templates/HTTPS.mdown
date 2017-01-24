@@ -71,7 +71,7 @@
    
    7. Copy the file in the root of the project
 
-3. Edit local.json or <env>.json
+3. Edit local.json or \<env\>.json
 
    1. If using self signed certificate set *"httpsStrict"* this to *false*
 
@@ -112,13 +112,6 @@
       ```bash
       $ gulp serve-local
       ```
-
-#### Note:
-
-Out of the box, roxy cannot deploy server side code while SSL is enabled in ML. 
-
-You have to disable HTTPS first before doing a deploy. 
-Refer to "How to disable HTTPS in MarkLogic App Server?" below.
 
 ### How to enable HTTPS in MarkLogic App Server using Roxy?
 
@@ -176,8 +169,17 @@ Refer to "How to disable HTTPS in MarkLogic App Server?" below.
 
 ####Note: 
    
+   ```
    To create a template, uncomment at least ssl-certificate-template (ml-config.xml),
    ssl-certificate-countryName (<env>.properties), and ssl-certificate-oranizationName (<env>.properties)
+   ```
+   
+   ```
+   Out of the box, roxy cannot deploy server side code while SSL is enabled in ML. 
+
+   You have to disable HTTPS first before doing a deploy. 
+   Refer to "How to disable HTTPS in MarkLogic App Server?" below.
+   ```
 
 ### How to disable HTTPS in a MarkLogic App Server?
 
