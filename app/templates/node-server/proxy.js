@@ -4,8 +4,20 @@
 
 var router = require('express').Router();
 var authHelper = require('./utils/auth-helper');
-var http = require('http');
 var options = require('./utils/options')();
+var http = require('http');
+var https = require('https');
+var fs = require('fs');
+
+var ca = "";
+var httpClient = null;
+if (options.mlCertificate) {
+  console.log("Loading ML Certificate " + options.mlCertificate);
+  ca = fs.readFileSync(options.mlCertificate);
+  httpClient = https;
+} else {
+  httpClient = http;
+}
 
 // ==================================
 // MarkLogic REST API endpoints
@@ -88,6 +100,7 @@ function proxy(req, res) {
   console.log(
     req.method + ' ' + req.path + ' proxied to ' +
     options.mlHost + ':' + options.mlHttpPort + path);
+
   var reqOptions = {
       hostname: options.mlHost,
       port: options.mlHttpPort,
@@ -95,6 +108,10 @@ function proxy(req, res) {
       path: path,
       headers: req.headers
     };
+
+  if (ca) {
+    reqOptions["ca"] = ca;
+  }
 
   var passportUser = req.session.passport && req.session.passport.user;
   authHelper.getAuthorization(req.session, reqOptions.method, reqOptions.path,
@@ -106,7 +123,7 @@ function proxy(req, res) {
       if (authorization) {
         reqOptions.headers.Authorization = authorization;
       }
-      var mlReq = http.request(reqOptions, function(response) {
+      var mlReq = httpClient.request(reqOptions, function(response) {
 
         res.statusCode = response.statusCode;
 

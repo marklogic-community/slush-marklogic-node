@@ -1,14 +1,16 @@
 /*jshint node:true*/
 'use strict';
 
+var fs = require('fs');
 var express = require('express');
 var helmet = require('helmet');
 var expressSession = require('express-session');
 var app = express();
 var logger = require('morgan');
 var four0four = require('./utils/404')();
-
 var options = require('./utils/options')();
+var http = require('http');
+var https = require('https');
 var passport = require('passport');
 var authHelper = require('./utils/auth-helper');
 var port = options.appPort;
@@ -76,10 +78,30 @@ switch (environment){
     break;
 }
 
-var server = app.listen(port, function() {
+var server = null;
+if (options.nodeJsCertificate) {
+  // Docs on how to create self signed certificates
+  // https://devcenter.heroku.com/articles/ssl-certificate-self#prerequisites
+  console.log("Starting the server in HTTPS");
+  console.log("Node Certificate " + options.nodeJsCertificate);
+  console.log("Node JS key " + options.nodeJsPrivateKey);
+  var privateKey  = fs.readFileSync(options.nodeJsPrivateKey, 'utf8');
+  var certificate = fs.readFileSync(options.nodeJsCertificate, 'utf8');
+  var credentials = {
+    key: privateKey,
+    cert: certificate
+  };
+  server = https.createServer(credentials, app);
+} else {
+  console.log("Starting the server in HTTP");
+  server = http.createServer(app);
+}
+
+server.listen(port, function() {
   console.log('Express server listening on port ' + port);
   console.log('env = ' + app.get('env') +
     '\n__dirname = ' + __dirname  +
     '\nprocess.cwd = ' + process.cwd());
 });
+
 server.timeout = 0;
