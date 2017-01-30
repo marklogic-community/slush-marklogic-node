@@ -75,8 +75,8 @@
 
     // service init method
     function init(newCenter, newZoom) {
-      defaultCenter = newCenter;
-      defaultZoom = newZoom;
+      service.center = defaultCenter = newCenter;
+      service.zoom = defaultZoom = newZoom;
     }
 
     // (re)set properties to defaults
@@ -110,11 +110,16 @@
       markers[mode] = newMarkers;
     }
 
-    function setResultMarkers(newResults, colorId) {
+    function setResultMarkers(newResults, colorId, handleResult) {
       var color = getColor(colorId || 0);
       // prepare result markers for consumption by angular-google-maps
       var newMarkers = [];
-      angular.forEach(newResults, function(result, i) {
+      angular.forEach(newResults, handleResult ? function(result, i) {
+        var m = handleResult(result, i, color);
+        if (m) {
+          newMarkers.push(m);
+        }
+      } : function(result, i) {
         var r = result.extracted && result.extracted.content && result.extracted.content[0];
         if (r && r.location) {
           var m = {
@@ -130,13 +135,18 @@
       setMarkers('results', newMarkers);
     }
 
-    function setFacetMarkers(newFacets) {
+    function setFacetMarkers(newFacets, handleBox) {
       var colorId = 0;
       // prepare facet markers for consumption by angular-google-maps
       var newMarkers = [];
       angular.forEach(newFacets, function(facet, facetName) {
         var color = getColor(colorId);
-        angular.forEach(facet.boxes, function(box, i) {
+        angular.forEach(facet.boxes, handleBox ? function(box, i) {
+          var m = handleBox(facetName, box, i, color);
+          if (m) {
+            newMarkers.push(m);
+          }
+        } : function(box, i) {
           var m = {
             id: 'box-' + box.n + box.s + box.w + box.e + box.count,
             location: {
@@ -275,9 +285,10 @@
       }
     });
 
+    // pretend drawing is in progress at init, Google Map fires events while initializing..
     $timeout(function() {
       changingBounds = false;
-    }, 2000);
+    }, 2500);
 
     return service;
   }

@@ -12,7 +12,7 @@
       <a class="navbar-brand" href="/"><h1 id="logo">Sample App</h1></a>
     </div>
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav" role="tablist">
+      <ul class="nav nav-tabs navbar-nav" role="tablist">
         <li ng-if="rootCtrl.showHome"><a ui-sref="root.landing">Home</a></li>
         <li><a ui-sref="root.search">Search</a></li>
         <li ng-show="!rootCtrl.currentUser.disallowUpdates"><a ui-sref="root.create({prev: rootCtrl.currentState})">Create</a></li>
@@ -31,7 +31,7 @@
   </div>
 
   <footer id="footer" class="powered">
-    <div class="container">
+    <div class="container-fluid">
       <div class="row">
         <div class="col-sm-12">
           <div class="social-links">

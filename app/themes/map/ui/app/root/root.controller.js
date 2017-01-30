@@ -15,16 +15,17 @@
     });
 
   RootCtrl.$inject = ['messageBoardService', 'userService', '$scope',
-    '$state', '$rootScope', '$templateRequest', '$compile', 'mapUtils',
-    'MLUiGmapManager', 'uiGmapGoogleMapApi'];
+    '$state', 'appConfig', '$rootScope', '$templateRequest', '$compile',
+    'mapUtils', 'MLUiGmapManager', 'uiGmapGoogleMapApi'];
 
   function RootCtrl(messageBoardService, userService, $scope,
-    $state, $rootScope, $templateRequest, $compile, mapUtils,
-    mlMapManager, $googleMapsApi) {
+    $state, appConfig, $rootScope, $templateRequest, $compile,
+    mapUtils, mlMapManager, $googleMapsApi) {
 
     var rootCtrl = this;
     rootCtrl.currentYear = new Date().getUTCFullYear();
     rootCtrl.messageBoardService = messageBoardService;
+    angular.extend(rootCtrl, appConfig);
 
     $scope.$watch(userService.currentUser, function(newValue) {
       rootCtrl.currentUser = newValue;
@@ -46,6 +47,10 @@
     });
 
     rootCtrl.mapManager = mlMapManager;
+    mlMapManager.init(
+      /* center */ { latitude: 52.0325133, longitude: 5.2289087 },
+      /* zoom */ 2
+    );
 
     if (miw && mapUtils.isMobile()) {
       rootCtrl.hideControls = true;
