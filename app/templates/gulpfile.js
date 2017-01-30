@@ -950,8 +950,6 @@ function getNodeOptions(env) {
   }
   var port = args['app-port'] || process.env.PORT || envJson['node-port'] || config.defaultPort;
 
-  console.log("config.nodeServer : " + config.nodeServer);
-
   var env = {
       'PORT': port,
       'NODE_ENV': env,
@@ -969,7 +967,7 @@ function getNodeOptions(env) {
   };
 
   //Temporary fix to remove undefined nodes
-  //which becomes enviroment variables with string "undefined" values
+  //which becomes environment variables with string "undefined" value
   for (var key in env) {
       if (env[key] === undefined) {
           delete env[key];
