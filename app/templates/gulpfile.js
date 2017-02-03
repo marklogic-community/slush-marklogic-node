@@ -477,7 +477,12 @@ gulp.task('build-specs', ['templatecache'], function() {
  * optimize before handling image or fonts
  * @param  {Function} done - callback when complete
  */
-gulp.task('build', ['optimize', 'images', 'fonts', 'statics', 'tinymce'], function(done) {
+gulp.task('build', ['check-config'], function() {
+  if (!skipBuild) {
+    gulp.start('do-build');
+  }
+});
+gulp.task('do-build', ['optimize', 'images', 'fonts', 'statics', 'tinymce'], function(done) {
   log('Building everything');
 
   var msg = {
@@ -621,10 +626,13 @@ gulp.task('clean-code', function() {
  *  gulp test --startServers
  * @param  {Function} done - callback when complete
  */
-gulp.task('test', ['check-config', 'vet', 'templatecache'], function(done) {
+gulp.task('test', ['check-config'], function() {
   if (!skipBuild) {
-    startTests(true /*singleRun*/ , done);
+    gulp.start('do-test');
   }
+});
+gulp.task('do-test', ['vet', 'templatecache'], function(done) {
+  startTests(true /*singleRun*/ , done);
 });
 
 /**
@@ -634,10 +642,13 @@ gulp.task('test', ['check-config', 'vet', 'templatecache'], function(done) {
  *  gulp autotest --startServers
  * @param  {Function} done - callback when complete
  */
-gulp.task('autotest', ['check-config'], function(done) {
+gulp.task('autotest', ['check-config'], function() {
   if (!skipBuild) {
-    startTests(false /*singleRun*/ , done);
+    gulp.start('do-autotest');
   }
+});
+gulp.task('do-autotest', function(done) {
+  startTests(false /*singleRun*/ , done);
 });
 
 /**
@@ -648,10 +659,10 @@ gulp.task('autotest', ['check-config'], function(done) {
  */
 gulp.task('serve-local', ['check-config'], function() {
   if (!skipBuild) {
-    gulp.start('build-serve-local');
+    gulp.start('do-serve-local');
   }
 });
-gulp.task('build-serve-local', ['inject', 'fonts'], function() {
+gulp.task('do-serve-local', ['inject', 'fonts'], function() {
   return serve('local' /*env*/ );
 });
 
@@ -663,10 +674,10 @@ gulp.task('build-serve-local', ['inject', 'fonts'], function() {
  */
 gulp.task('serve-dev', ['check-config'], function() {
   if (!skipBuild) {
-    gulp.start('build-serve-dev');
+    gulp.start('do-serve-dev');
   }
 });
-gulp.task('build-serve-dev', ['build'], function() {
+gulp.task('do-serve-dev', ['build'], function() {
   return serve('dev' /*env*/ );
 });
 
@@ -678,10 +689,10 @@ gulp.task('build-serve-dev', ['build'], function() {
  */
 gulp.task('serve-prod', ['check-config'], function() {
   if (!skipBuild) {
-    gulp.start('build-serve-prod');
+    gulp.start('do-serve-prod');
   }
 });
-gulp.task('build-serve-prod', ['build'], function() {
+gulp.task('do-serve-prod', ['build'], function() {
   return serve('prod' /*env*/ );
 });
 
@@ -867,6 +878,8 @@ function init(env, done) {
         } else {
           settings.nameDashed = _s.slugify(appName);
         }
+
+        settings.marklogicAdminPass = settings.marklogicAdminPass || '';
 
         try {
           var configJSON = {};

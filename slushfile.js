@@ -608,7 +608,7 @@ gulp.task('init', ['checkForUpdates'], function(done) {
     settings.mlVersion = answers.mlVersion || clArgs['ml-version'];
     settings.marklogicHost = answers.marklogicHost || clArgs['ml-host'];
     settings.marklogicAdminUser = answers.marklogicAdminUser || clArgs['ml-admin-user'];
-    settings.marklogicAdminPass = answers.marklogicAdminPass || clArgs['ml-admin-pass'];
+    settings.marklogicAdminPass = answers.marklogicAdminPass || clArgs['ml-admin-pass'] || '';
     settings.nodePort = answers.nodePort || clArgs['node-port'];
     settings.appPort = answers.appPort || clArgs['ml-http-port'];
     settings.xccPort = answers.xccPort || clArgs['ml-xcc-port'] || null;
