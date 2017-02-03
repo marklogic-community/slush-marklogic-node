@@ -1,11 +1,12 @@
-(function () {
+(function() {
   'use strict';
 
   angular.module('app.create')
     .controller('CreateCtrl', CreateCtrl);
 
   CreateCtrl.$inject = ['$scope', 'MLRest', '$state',
-    'ngToast','x2js','doc','$stateParams'];
+    'ngToast', 'x2js', 'doc', '$stateParams'
+  ];
 
   function CreateCtrl($scope, mlRest, $state, toast, x2js, doc, $stateParams) {
     var ctrl = this;
@@ -82,7 +83,7 @@
     angular.extend(ctrl, {
       newTag: null,
       editorOptions: {
-        plugins : 'advlist autolink link image lists charmap print preview'
+        plugins: 'advlist autolink link image lists charmap print preview'
       },
       submit: submit,
       addTag: addTag,
@@ -95,7 +96,7 @@
       if (ctrl.person.docFormat === 'xml') {
         extension = '.xml';
         var wrap = {
-          xml : ctrl.person
+          xml: ctrl.person
         };
         /*jshint camelcase: false */
         data = x2js.json2xml_str(wrap);
@@ -113,9 +114,15 @@
           // 'perm:sample-role': 'update'
         }).then(function(response) {
           toast.success('Created');
-          $state.go('root.view', { uri: response.replace(/(.*\?uri=)/, '') });
+          $state.go('root.view', {
+            uri: response.replace(/(.*\?uri=)/, '')
+          });
         }, function(response) {
-          toast.danger(response.data);
+          //since we already toast and redirect to the login screen on 401s
+          //only toast on other errors
+          if (response.status !== 401) {
+            toast.danger(response.data);
+          }
         });
       } else {
         // use update when in update mode
@@ -123,7 +130,9 @@
           uri: ctrl.uri
         }).then(function(response) {
           toast.success('Saved');
-          $state.go('root.view', { uri: ctrl.uri });
+          $state.go('root.view', {
+            uri: ctrl.uri
+          });
         }, function(response) {
           toast.danger(response.data);
         });
