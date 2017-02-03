@@ -248,10 +248,10 @@ gulp.task('templatecache', ['clean-code'], function() {
  */
 gulp.task('wiredep', ['check-config'], function() {
   if (!skipBuild) {
-    gulp.start('wiredep-do');
+    return gulp.start('do-wiredep');
   }
 });
-gulp.task('wiredep-do', function(){
+gulp.task('do-wiredep', function(){
   log('Wiring the bower dependencies into the html');
 
   var wiredep = require('wiredep').stream;
@@ -272,7 +272,7 @@ gulp.task('wiredep-do', function(){
  * Inject dependencies into index.html
  * @return {Stream}
  */
-gulp.task('inject', ['wiredep', 'styles', 'templatecache'], function() {
+gulp.task('inject', ['do-wiredep', 'styles', 'templatecache'], function() {
   log('Wire up css into the html, after files are ready');
 
   return gulp
@@ -479,7 +479,7 @@ gulp.task('build-specs', ['templatecache'], function() {
  */
 gulp.task('build', ['check-config'], function() {
   if (!skipBuild) {
-    gulp.start('do-build');
+    return gulp.start('do-build');
   }
 });
 gulp.task('do-build', ['optimize', 'images', 'fonts', 'statics', 'tinymce'], function(done) {
@@ -500,7 +500,7 @@ gulp.task('do-build', ['optimize', 'images', 'fonts', 'statics', 'tinymce'], fun
  * and inject them into the new index.html
  * @return {Stream}
  */
-gulp.task('optimize', ['inject', 'test'], function() {
+gulp.task('optimize', ['inject', 'do-test'], function() {
   log('Optimizing the js, css, and html');
 
   // Filters are named for the gulp-useref path
@@ -554,7 +554,10 @@ gulp.task('optimize', ['inject', 'test'], function() {
     .pipe($.sourcemaps.write('.'))
     .pipe(jslibFilter.restore)
     // Rename the recorded file names in the steam, and in the html to append rev numbers
-    .pipe($.revReplace())
+    .pipe($.revReplace({
+      modifyUnreved: replaceMapExt,
+      modifyReved: replaceMapExt
+    }))
     // copy result to dist/, and print some logging..
     .pipe(gulp.dest(config.build))
     .pipe($.if(args.verbose, $.print()));
@@ -562,8 +565,14 @@ gulp.task('optimize', ['inject', 'test'], function() {
   combined.on('error', console.error.bind(console));
 
   return combined;
-});
 
+  function replaceMapExt(filename) {
+    if (filename.indexOf('.map') > -1) {
+      return filename.replace('.map', '');
+    }
+    return filename;
+  }
+});
 /**
  * Remove all files from the build, temp, and reports folders
  * @return {Stream}
@@ -628,7 +637,7 @@ gulp.task('clean-code', function() {
  */
 gulp.task('test', ['check-config'], function() {
   if (!skipBuild) {
-    gulp.start('do-test');
+    return gulp.start('do-test');
   }
 });
 gulp.task('do-test', ['vet', 'templatecache'], function(done) {
@@ -644,7 +653,7 @@ gulp.task('do-test', ['vet', 'templatecache'], function(done) {
  */
 gulp.task('autotest', ['check-config'], function() {
   if (!skipBuild) {
-    gulp.start('do-autotest');
+    return gulp.start('do-autotest');
   }
 });
 gulp.task('do-autotest', function(done) {
@@ -659,7 +668,7 @@ gulp.task('do-autotest', function(done) {
  */
 gulp.task('serve-local', ['check-config'], function() {
   if (!skipBuild) {
-    gulp.start('do-serve-local');
+    return gulp.start('do-serve-local');
   }
 });
 gulp.task('do-serve-local', ['inject', 'fonts'], function() {
@@ -674,10 +683,10 @@ gulp.task('do-serve-local', ['inject', 'fonts'], function() {
  */
 gulp.task('serve-dev', ['check-config'], function() {
   if (!skipBuild) {
-    gulp.start('do-serve-dev');
+    return gulp.start('do-serve-dev');
   }
 });
-gulp.task('do-serve-dev', ['build'], function() {
+gulp.task('do-serve-dev', ['do-build'], function() {
   return serve('dev' /*env*/ );
 });
 
@@ -689,10 +698,10 @@ gulp.task('do-serve-dev', ['build'], function() {
  */
 gulp.task('serve-prod', ['check-config'], function() {
   if (!skipBuild) {
-    gulp.start('do-serve-prod');
+    return gulp.start('do-serve-prod');
   }
 });
-gulp.task('do-serve-prod', ['build'], function() {
+gulp.task('do-serve-prod', ['do-build'], function() {
   return serve('prod' /*env*/ );
 });
 
@@ -1080,6 +1089,7 @@ function startBrowserSync(env, specRunner) {
   }
 
   log('Starting BrowserSync on port ' + nodeOptions.env.APP_PORT);
+  log('Proxying to ' + nodeOptions.env.ML_HOST + ':' + nodeOptions.env.ML_PORT);
 
   // If build: watches the files, builds, and restarts browser-sync.
   // If dev: watches less, compiles it to css, browser-sync handles reload
