@@ -32,7 +32,7 @@ module.exports = function(){
   if (options.httpsStrict==="true") {
     console.info("Self signed certificates not allowed.");
   } else {
-    console.warn("Allowing self signed certificates.");
+    console.warn("Allowing self signed certificates. Not advisable on production.");
     process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
   }
 

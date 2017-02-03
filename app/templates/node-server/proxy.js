@@ -2,169 +2,149 @@
 
 'use strict';
 
+var httpProxy = require('http-proxy');
 var router = require('express').Router();
+var url = require('url');
+
 var authHelper = require('./utils/auth-helper');
 var options = require('./utils/options')();
-var http = require('http');
-var https = require('https');
 var fs = require('fs');
 
-var ca = "";
-var httpClient = null;
+var ca = null;
 if (options.mlCertificate) {
   console.log("Loading ML Certificate " + options.mlCertificate);
   ca = fs.readFileSync(options.mlCertificate);
-  httpClient = https;
 } else {
-  httpClient = http;
+  console.log("No ML SSL Certificate.");
 }
 
-// ==================================
-// MarkLogic REST API endpoints
-// ==================================
+/************************************************/
+/*************  setup proxy server  *************/
+/************************************************/
 
-//
-// To not require authentication for a specific route, simply use the route below.
-// Copy and change according to your needs.
-//
-//router.get('/my/route', function(req, res) {
-//  noCache(res);
-//  proxy(req, res);
-//});
-
-// For any other GET request, proxy it on to MarkLogic.
-router.get('*', function(req, res) {
-  noCache(res);
-  if (!(options.guestAccess || req.isAuthenticated())) {
-    res.status(401).send('Unauthorized');
-  } else {
-    proxy(req, res);
-  }
+// TODO: configurable path?
+var target = url.format({
+  protocol: options.mlCertificate?'https':'http',
+  hostname: options.mlHost,
+  port: options.mlHttpPort,
+  pathname: '/v1'
 });
 
-// PUT requires special treatment, as a user could be trying to PUT a profile update..
-router.put('*', function(req, res) {
-  noCache(res);
-  // For PUT requests, require authentication
-  if (!req.isAuthenticated()) {
-    res.status(401).send('Unauthorized');
-  } else if (options.disallowUpdates || ((req.path === '/documents') &&
-    req.query.uri &&
-    req.query.uri.match('/api/users/') &&
-    !req.query.uri.match('/api/users/' + req.session.passport.user.username + '.json'))) {
-    // The user is trying to PUT to a profile document other than his/her own. Not allowed.
-    res.status(403).send('Forbidden');
-  } else {
-    // proxy original request
-    proxy(req, res);
-  }
+var proxyServer = httpProxy.createProxyServer({
+  target: target
+  , ca : options.mlCertificate?ca:null
+  //options.httpsStrict==="false" assumes that you are in dev mode
+  , secure: options.httpsStrict==="true"?true:false
 });
 
-// Require authentication for POST requests
-router.post(/^\/(alert\/match|search|suggest|values\/.*)$/, function(req, res) {
-  noCache(res);
-  if (!(options.guestAccess || req.isAuthenticated())) {
-    res.status(401).send('Unauthorized');
-  } else {
-    proxy(req, res);
-  }
-});
+function getAuth(req) {
+  var user = req.session.passport && req.session.passport.user &&
+             req.session.passport.user.username;
 
-router.post('*', function(req, res) {
-  noCache(res);
-  if (!req.isAuthenticated()) {
-    res.status(401).send('Unauthorized');
-  } else if (options.disallowUpdates) {
-    res.status(403).send('Forbidden');
-  } else {
-    proxy(req, res);
-  }
-});
+  return authHelper.getAuthorization(req.session, req.method, req.path, {
+    authUser: user
+  })
+}
 
-// (#176) Require authentication for DELETE requests
-router.delete('*', function(req, res) {
-  noCache(res);
-  if (!req.isAuthenticated()) {
-    res.status(401).send('Unauthorized');
-  } else if (options.disallowUpdates) {
-    res.status(403).send('Forbidden');
-  } else {
-    proxy(req, res);
-  }
-});
+function proxy (req, res) {
+  getAuth(req).then(function (auth) {
+    // TODO: if no auth?
+    var headers = { headers: { authorization: auth } };
 
-// Generic proxy function used by multiple HTTP verbs
-function proxy(req, res) {
-  var queryString = req.originalUrl.split('?')[1];
-  var path = req.baseUrl + req.path + (queryString ? '?' + queryString : '');
-  console.log(
-    req.method + ' ' + req.path + ' proxied to ' +
-    options.mlHost + ':' + options.mlHttpPort + path);
+    // TODO: filter www-header in response?
+    // (currently prompts without authed middleware)
 
-  var reqOptions = {
-      hostname: options.mlHost,
-      port: options.mlHttpPort,
-      method: req.method,
-      path: path,
-      headers: req.headers
-    };
-
-  if (ca) {
-    reqOptions["ca"] = ca;
-  }
-
-  var passportUser = req.session.passport && req.session.passport.user;
-  authHelper.getAuthorization(req.session, reqOptions.method, reqOptions.path,
-    {
-      authUser: passportUser && passportUser.username
-    }
-  ).then(
-    function(authorization) {
-      if (authorization) {
-        reqOptions.headers.Authorization = authorization;
-      }
-      var mlReq = httpClient.request(reqOptions, function(response) {
-
-        res.statusCode = response.statusCode;
-
-        // [GJo] (#67) forward all headers from MarkLogic
-        for (var header in response.headers) {
-          if (!/^WWW\-Authenticate$/i.test(header)) {
-            res.header(header, response.headers[header]);
-          }
-        }
-
-        response.on('data', function(chunk) {
-          res.write(chunk);
-        });
-        response.on('end', function() {
-          res.end();
-        });
-      });
-
-      req.pipe(mlReq);
-      req.on('end', function() {
-        mlReq.end();
-      });
-
-      mlReq.on('socket', function (socket) {
-        socket.on('timeout', function() {
-          console.log('Timeout reached, aborting call to ML..');
-          mlReq.abort();
-        });
-      });
-
-      mlReq.on('error', function(e) {
-        console.log('Proxying failed: ' + e.message);
-        res.status(500).end();
-      });
+    proxyServer.web(req, res, headers, function (e) {
+      console.log(e);
+      res.status(500).send('Error');
     });
+  }, function (e) {
+    console.log('auth error:');
+    console.log(e);
+    return res.status(401).send('Unauthorized');
+  });
 }
 
-function noCache(response) {
-  response.append('Cache-Control', 'no-cache, must-revalidate');     // HTTP 1.1 - must-revalidate
-  response.append('Pragma',        'no-cache');                      // HTTP 1.0
-  response.append('Expires',       'Sat, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+/************************************************/
+/**********  create custom middleware  **********/
+/************************************************/
+
+function noCache (req, res, next) {
+  res.append('Cache-Control', 'no-cache, must-revalidate');     // HTTP 1.1 - must-revalidate
+  res.append('Pragma',        'no-cache');                      // HTTP 1.0
+  res.append('Expires',       'Sat, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+
+  next();
 }
+
+function authed (req, res, next) {
+  if (!(options.guestAccess || req.isAuthenticated())) {
+    return res.status(401).send('Unauthorized');
+  }
+
+  next();
+}
+
+function update (req, res, next) {
+  if (options.disallowUpdates) {
+    return res.status(403).send('Forbidden');
+  }
+
+  next();
+}
+
+function profile (req, res, next) {
+  if ((req.path === '/documents') &&
+      req.query.uri &&
+      req.query.uri.match('/api/users/') &&
+      !req.query.uri.match('/api/users/' + req.session.passport.user.username + '.json')) {
+    return res.status(403).send('Forbidden');
+  }
+
+  next();
+}
+
+/************************************************/
+/************  configure middleware  ************/
+/************************************************/
+
+// allow any, unauthed:
+// router.use(proxy);
+
+router.use(noCache);
+router.use(authed);
+
+/************************************************/
+/**************  configure routes  **************/
+/************************************************/
+
+router.get('/config/query/*', proxy);
+
+router.get('/graphs/sparql', proxy);
+
+var search = router.route('/search');
+search.get(proxy);
+search.post(proxy);
+
+var suggest = router.route('/suggest');
+suggest.get(proxy);
+suggest.post(proxy);
+
+var values = router.route('/values');
+values.get(proxy);
+values.post(proxy);
+
+var docs = router.route('/documents');
+docs.get(proxy);
+docs.all(update, profile, proxy);
+
+var ext = router.route('/resources/*');
+ext.get(proxy);
+ext.all(update, proxy);
+
+// Explicitly reject all other routes
+router.all('*', function (req, res) {
+  res.status(401).send('Not proxied');
+});
 
 module.exports = router;

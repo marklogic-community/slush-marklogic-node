@@ -164,4 +164,6 @@ Documentation about the slush generator is provided on the [Generator Wiki](http
 
 - [Core Tools and Components](https://github.com/marklogic/slush-marklogic-node/wiki/Core-Tools-and-Components), which allows you to learn more about the various tools and components used by or for the application.
 
+- [Production Deployments](https://github.com/marklogic/slush-marklogic-node/wiki/Run-In-Production), which helps you understand best practices when deploying to a production environment
+
 Last but not least, the landing page of the out of the box application provides many more links.

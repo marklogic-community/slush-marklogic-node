@@ -23,7 +23,7 @@ REST transform for adding content-disposition header.
     <xsl:variable name="content-type" select="util:get-content-type($uri, /)" />
 
     <xsl:sequence select="xdmp:add-response-header('content-disposition', concat('attachment; filename=', $dquote, $filename, $dquote))"/>
-    <xsl:sequence select="map:put($context, 'output-type', $content-type"/>
+    <xsl:sequence select="map:put($context, 'output-type', $content-type)"/>
     <xsl:sequence select="."/>
   </xsl:template>
 

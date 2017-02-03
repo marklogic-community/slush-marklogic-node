@@ -243,8 +243,9 @@ function configRoxy() {
   try {
     var properties = fs.readFileSync('deploy/build.properties', encoding);
 
-    // Set the authentication-method property to digestbasic
-    properties = properties.replace(/^authentication\-method=digest/m, 'authentication-method=digestbasic');
+    // Ensure the authentication-method property is set to digest
+    properties = properties.replace(/^authentication\-method=basic/m, 'authentication-method=digest');
+    properties = properties.replace(/^authentication\-method=digestbasic/m, 'authentication-method=digest');
 
     // Capture appuser-password from Roxy properties for later use
     var passwordMatch = /^appuser\-password=(.*)$/m;

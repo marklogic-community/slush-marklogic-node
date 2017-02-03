@@ -20,7 +20,7 @@ REST transform for returning tidy HTML. Non-HTML is passed through untouched.
     <xsl:variable name="uri" select="map:get($context, 'uri')"/>
     <xsl:variable name="content-type" select="util:get-content-type($uri, /)" />
 
-    <xsl:sequence select="map:put($context, 'output-type', $content-type)"/>
+    <xsl:sequence select="map:put($context, 'output-type', $content-type"/>
 
     <xsl:choose>
       <xsl:when test="contains($content-type, 'html')">
