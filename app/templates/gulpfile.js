@@ -2,6 +2,14 @@
 
 'use strict';
 
+try {
+  var args = require('yargs');
+} catch (e) {
+  console.log('WARN: Required NPM dependencies are not installed!');
+  console.log('Please run: npm install');
+  process.exit(1);
+}
+
 var args = require('yargs').argv;
 var browserSync = require('browser-sync');
 var config = require('./gulp.config')();
@@ -26,6 +34,54 @@ var _s = require('underscore.string'),
 var encoding = {
   encoding: 'utf8'
 };
+
+/* Make start and current task names available within tasks */
+var _gulpStart = gulp.Gulp.prototype.start;
+var _runTask = gulp.Gulp.prototype._runTask;
+
+gulp.Gulp.prototype.start = function (taskName) {
+  this.startTask = taskName;
+  _gulpStart.apply(this, arguments);
+};
+
+gulp.Gulp.prototype._runTask = function (task) {
+  this.currentTask = task.name;
+  _runTask.apply(this, arguments);
+};
+
+var skipBuild = false;
+gulp.task('check-config', function(done) {
+  var env;
+  if (this.startTask.match(/^serve-/)) {
+    env = this.startTask.replace(/^serve-/, '');
+  }
+
+  var missingJsonEnv = false;
+  var missingPropsEnv = false;
+  var missingBowerComps = false;
+
+  if (env && ! fs.existsSync(env + '.json')) {
+    log($.util.colors.red('WARN: ' + env + '.json is missing!'));
+    missingJsonEnv = true;
+  }
+  if (env && ! fs.existsSync('deploy/' + env + '.properties')) {
+    log($.util.colors.red('WARN: deploy/' + env + '.properties is missing!'));
+    missingPropsEnv = true;
+  }
+  if (! fs.existsSync('bower_components')) {
+    log($.util.colors.red('WARN: bower_components/ is missing!'));
+    missingBowerComps = true;
+  }
+  if (missingJsonEnv || missingPropsEnv) {
+    log('Please run: gulp init-' + env);
+    skipBuild = true;
+  }
+  if (missingBowerComps) {
+    log('Please run: bower install');
+    skipBuild = true;
+  }
+  done();
+});
 
 /**
  * yargs variables can be passed in to alter the behavior, when present.
@@ -190,7 +246,12 @@ gulp.task('templatecache', ['clean-code'], function() {
  * Wire-up the bower dependencies
  * @return {Stream}
  */
-gulp.task('wiredep', function() {
+gulp.task('wiredep', ['check-config'], function() {
+  if (!skipBuild) {
+    gulp.start('wiredep-do');
+  }
+});
+gulp.task('wiredep-do', function(){
   log('Wiring the bower dependencies into the html');
 
   var wiredep = require('wiredep').stream;
@@ -558,8 +619,10 @@ gulp.task('clean-code', function() {
  *  gulp test --startServers
  * @param  {Function} done - callback when complete
  */
-gulp.task('test', ['vet', 'templatecache'], function(done) {
-  startTests(true /*singleRun*/ , done);
+gulp.task('test', ['check-config', 'vet', 'templatecache'], function(done) {
+  if (!skipBuild) {
+    startTests(true /*singleRun*/ , done);
+  }
 });
 
 /**
@@ -569,8 +632,10 @@ gulp.task('test', ['vet', 'templatecache'], function(done) {
  *  gulp autotest --startServers
  * @param  {Function} done - callback when complete
  */
-gulp.task('autotest', function(done) {
-  startTests(false /*singleRun*/ , done);
+gulp.task('autotest', ['check-config'], function(done) {
+  if (!skipBuild) {
+    startTests(false /*singleRun*/ , done);
+  }
 });
 
 /**
@@ -579,7 +644,12 @@ gulp.task('autotest', function(done) {
  * --nosync
  * @return {Stream}
  */
-gulp.task('serve-local', ['inject', 'fonts'], function() {
+gulp.task('serve-local', ['check-config'], function() {
+  if (!skipBuild) {
+    gulp.start('build-serve-local');
+  }
+});
+gulp.task('build-serve-local', ['inject', 'fonts'], function() {
   return serve('local' /*env*/ );
 });
 
@@ -589,7 +659,12 @@ gulp.task('serve-local', ['inject', 'fonts'], function() {
  * --nosync
  * @return {Stream}
  */
-gulp.task('serve-dev', ['build'], function() {
+gulp.task('serve-dev', ['check-config'], function() {
+  if (!skipBuild) {
+    gulp.start('build-serve-dev');
+  }
+});
+gulp.task('build-serve-dev', ['build'], function() {
   return serve('dev' /*env*/ );
 });
 
@@ -599,7 +674,12 @@ gulp.task('serve-dev', ['build'], function() {
  * --nosync
  * @return {Stream}
  */
-gulp.task('serve-prod', ['build'], function() {
+gulp.task('serve-prod', ['check-config'], function() {
+  if (!skipBuild) {
+    gulp.start('build-serve-prod');
+  }
+});
+gulp.task('build-serve-prod', ['build'], function() {
   return serve('prod' /*env*/ );
 });
 
@@ -677,6 +757,12 @@ function init(env, done) {
   } else {
     //copy from slushfile - config gulp - with modifications to use config instead
     var inquirer = require('inquirer');
+    var ignoreProps = false;
+
+    if (!fs.existsSync('deploy/' + env + '.properties')) {
+      fs.writeFileSync('deploy/' + env + '.properties', env + '-server=localhost', 'utf8');
+      ignoreProps = true;
+    }
 
     run('./ml', [env, 'info', '--format=json']).then(function(output) {
       var localJson = fs.existsSync('local.json') ? JSON.parse(fs.readFileSync('local.json', 'utf8')) : {};
@@ -804,7 +890,7 @@ function init(env, done) {
           fs.writeFileSync(env + '.json', configString, encoding);
           log('Created ' + env + '.json.');
 
-          if (fs.existsSync('deploy/' + env + '.properties')) {
+          if (!ignoreProps && fs.existsSync('deploy/' + env + '.properties')) {
             log('NOTE: deploy/' + env + '.properties already exists, change manually please!');
           } else {
             var envProperties = '#################################################################\n' +
