@@ -314,6 +314,8 @@ gulp.task('add-deploy-target', function(done) {
   var name = properties.match(/app-name=(.*)/)[1];
   var gitUrl = 'https://github.com/';
   var folderPath = '/space/projects/' + name;
+  var osHomedir = require('os-homedir');
+  var keyPath = osHomedir() + '/.ssh/id_rsa';
 
   var ecosystem = 'ecosystem.json';
 
@@ -336,7 +338,7 @@ gulp.task('add-deploy-target', function(done) {
       type: 'input',
       name: 'key',
       message: 'Where do you keep your ssh key that\'s used for both the target server and the git repository?',
-      default: '~/.ssh/id_rsa'
+      default: keyPath
     }, {
       type: 'input',
       name: 'username',
