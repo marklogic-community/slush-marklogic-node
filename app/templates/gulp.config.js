@@ -11,7 +11,6 @@ module.exports = function() {
   var specRunnerFile = 'specs.html';
   var temp = './.tmp/';
   var _ = require('lodash');
-  var wiredep = require('wiredep');
   var bower = {
     json: require('./bower.json'),
     directory: './bower_components/',
@@ -25,7 +24,6 @@ module.exports = function() {
       exclude: [ 'requirejs', 'angularjs', 'font-awesome.css' ]
     };
   };
-  var bowerFiles = wiredep(_.merge(getWiredepDefaultOptions(), { devDependencies: true })).js;
   var nodeModules = 'node_modules';
 
   var config = {
@@ -162,13 +160,9 @@ module.exports = function() {
   /**
    * karma settings
    */
-  config.karma = getKarmaOptions();
-
-  return config;
-
-  ////////////////
-
-  function getKarmaOptions() {
+  config.getKarmaOptions = function() {
+    var wiredep = require('wiredep');
+    var bowerFiles = wiredep(_.merge(getWiredepDefaultOptions(), { devDependencies: true })).js;
     var options = {
       files: [].concat(
         bowerFiles,
@@ -192,5 +186,8 @@ module.exports = function() {
     };
     options.preprocessors[clientApp + '**/!(*.spec)+(.js)'] = ['coverage'];
     return options;
-  }
+  };
+
+  return config;
+
 };
