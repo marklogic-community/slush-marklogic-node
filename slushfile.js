@@ -243,8 +243,9 @@ function configRoxy() {
   try {
     var properties = fs.readFileSync('deploy/build.properties', encoding);
 
-    // Set the authentication-method property to digestbasic
-    properties = properties.replace(/^authentication\-method=digest/m, 'authentication-method=digestbasic');
+    // Ensure the authentication-method property is set to digest
+    properties = properties.replace(/^authentication\-method=basic/m, 'authentication-method=digest');
+    properties = properties.replace(/^authentication\-method=digestbasic/m, 'authentication-method=digest');
 
     // Capture appuser-password from Roxy properties for later use
     var passwordMatch = /^appuser\-password=(.*)$/m;
@@ -607,7 +608,7 @@ gulp.task('init', ['checkForUpdates'], function(done) {
     settings.mlVersion = answers.mlVersion || clArgs['ml-version'];
     settings.marklogicHost = answers.marklogicHost || clArgs['ml-host'];
     settings.marklogicAdminUser = answers.marklogicAdminUser || clArgs['ml-admin-user'];
-    settings.marklogicAdminPass = answers.marklogicAdminPass || clArgs['ml-admin-pass'];
+    settings.marklogicAdminPass = answers.marklogicAdminPass || clArgs['ml-admin-pass'] || '';
     settings.nodePort = answers.nodePort || clArgs['node-port'];
     settings.appPort = answers.appPort || clArgs['ml-http-port'];
     settings.xccPort = answers.xccPort || clArgs['ml-xcc-port'] || null;

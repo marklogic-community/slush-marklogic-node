@@ -7,6 +7,7 @@
 
 module.exports = function(config) {
   var gulpConfig = require('./gulp.config')();
+  var karmaConf = gulpConfig.getKarmaOptions();
 
   config.set({
     // base path that will be used to resolve all patterns (eg. files, exclude)
@@ -17,10 +18,10 @@ module.exports = function(config) {
     frameworks: ['mocha', 'chai', 'sinon', 'chai-sinon'],
 
     // list of files / patterns to load in the browser
-    files: gulpConfig.karma.files,
+    files: karmaConf.files,
 
     // list of files to exclude
-    exclude: gulpConfig.karma.exclude,
+    exclude: karmaConf.exclude,
 
     proxies: {
       '/': 'http://localhost:8888/'
@@ -28,7 +29,7 @@ module.exports = function(config) {
 
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
-    preprocessors: gulpConfig.karma.preprocessors,
+    preprocessors: karmaConf.preprocessors,
 
     // test results reporter to use
     // possible values: 'dots', 'progress', 'coverage'
@@ -36,8 +37,8 @@ module.exports = function(config) {
     reporters: ['progress', 'coverage', 'notify'],
 
     coverageReporter: {
-      dir: gulpConfig.karma.coverage.dir,
-      reporters: gulpConfig.karma.coverage.reporters
+      dir: karmaConf.coverage.dir,
+      reporters: karmaConf.coverage.reporters
     },
 
     // web server port

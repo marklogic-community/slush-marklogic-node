@@ -9,10 +9,8 @@ PASS=admin
 if [ -d slush-default ]; then
   cd slush-default
   ./ml local wipe
-  ./ml local restart
   cd ..
   rm -rf slush-default
-  sleep 10
 fi
 
 ## SLUSH 3COLUMN ##
@@ -20,10 +18,8 @@ fi
 if [ -d slush-3column ]; then
   cd slush-3column
   ./ml local wipe
-  ./ml local restart
   cd ..
   rm -rf slush-3column
-  sleep 10
 fi
 
 ## SLUSH DASHBOARD ##
@@ -31,10 +27,8 @@ fi
 if [ -d slush-dashboard ]; then
   cd slush-dashboard
   ./ml local wipe
-  ./ml local restart
   cd ..
   rm -rf slush-dashboard
-  sleep 10
 fi
 
 ## SLUSH MAP ##
@@ -42,10 +36,8 @@ fi
 if [ -d slush-map ]; then
   cd slush-map
   ./ml local wipe
-  ./ml local restart
   cd ..
   rm -rf slush-map
-  sleep 10
 fi
 
 ## SLUSH CARDS ##
@@ -53,11 +45,12 @@ fi
 if [ -d slush-cards ]; then
   cd slush-cards
   ./ml local wipe
-  ./ml local restart
   cd ..
   rm -rf slush-cards
-  sleep 10
 fi
+
+./ml local restart
+sleep 10
 
 ####
 
