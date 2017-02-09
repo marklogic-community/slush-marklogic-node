@@ -13,7 +13,8 @@ var gulp = require('gulp'),
   pkgSettings = require('./package.json'),
   spawn = require('child_process').spawn,
   uuid = require('node-uuid'),
-  win32 = process.platform === 'win32';
+  win32 = process.platform === 'win32',
+  xmlpoke = require('gulp-xmlpoke');
 
 /* jshint ignore:start */
 var colors = require('colors'),
@@ -192,7 +193,7 @@ function getRoxyScript(appName, mlVersion, fork, branch) {
   return d.promise;
 }
 
-// Run the Roxy "ml new" command for the new project
+// Run the Roxy 'ml new' command for the new project
 function runRoxy(config) {
   var scriptName = config.script,
     appName = config.app,
@@ -366,6 +367,27 @@ function configRoxy() {
       '      </privileges>\n');
 
     fs.writeFileSync('deploy/ml-config.xml', foo);
+
+    console.log('Applying replacements..');
+    gulp.src(['deploy/ml-config.xml'])
+    .pipe(xmlpoke({
+        replacements: [{
+          namespaces: {
+            db: 'http://marklogic.com/xdmp/database'
+          },
+          xpath: ['//db:database[1]/db:stemmed-searches','//db:database[1]/db:word-searches','//db:database[1]/db:trailing-wildcard-searches'],
+          valueType: 'remove'
+        },{
+          namespaces: {
+            db: 'http://marklogic.com/xdmp/database'
+          },
+          xpath: '//db:database[1]',
+          valueType: 'append',
+          value: '  <stemmed-searches>basic</stemmed-searches>\n      <word-searches>true</word-searches>\n      <trailing-wildcard-searches>true</trailing-wildcard-searches>\n    '
+        }]
+      }))
+      .pipe(gulp.dest('deploy'));
+
   } catch (e) {
     console.log('failed to update configuration: ' + e.message);
     process.exit(1);
