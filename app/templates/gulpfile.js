@@ -1059,10 +1059,8 @@ function getNodeOptions(env) {
       '`gulp init-local` creates local.json which can be modified for other environments as well');
   }
   var port = args['app-port'] || process.env.PORT || envJson['node-port'] || config.defaultPort;
-  return {
-    script: config.nodeServer,
-    delayTime: 1,
-    env: {
+
+  var env = {
       'PORT': port,
       'NODE_ENV': env,
       'APP_PORT': port,
@@ -1071,8 +1069,25 @@ function getNodeOptions(env) {
       'ML_APP_PASS': args['ml-app-pass'] || process.env.ML_APP_PASS || envJson['ml-app-pass'] || config.marklogic.password,
       'ML_PORT': args['ml-http-port'] || process.env.ML_PORT || envJson['ml-http-port'] || config.marklogic.httpPort,
       'ML_XCC_PORT': args['ml-xcc-port'] || process.env.ML_XCC_PORT || envJson['ml-xcc-port'] || config.marklogic.xccPort,
-      'ML_VERSION': args['ml-version'] || process.env.ML_VERSION || envJson['ml-version'] || config.marklogic.version
-    },
+      'ML_VERSION': args['ml-version'] || process.env.ML_VERSION || envJson['ml-version'] || config.marklogic.version,
+      'ML_CERTIFICATE': args['ml-certificate'] || process.env.ML_CERTIFICATE || envJson['mlCertificate'] || config.marklogic.mlCertificate,
+      'NODEJS_CERTIFICATE': args['nodeJsCertificate'] || process.env.NODEJS_CERTIFICATE || envJson['nodeJsCertificate'] || config.marklogic.nodeJsCertificate,
+      'NODEJS_PRIVATE_KEY': args['nodeJsPrivateKey'] || process.env.NODEJS_PRIVATE_KEY || envJson['nodeJsPrivateKey'] || config.marklogic.nodeJsPrivateKey,
+      'HTTPS_STRICT': args['httpsStrict'] || process.env.HTTPS_STRICT || envJson['httpsStrict']==="true" || config.marklogic.httpsStrict || true
+  };
+
+  //Temporary fix to remove undefined nodes
+  //which becomes environment variables with string "undefined" value
+  for (var key in env) {
+      if (env[key] === undefined) {
+          delete env[key];
+      }
+  }
+
+  return {
+    script: config.nodeServer,
+    delayTime: 1,
+    env: env,
     watch: [config.server]
   };
 }
@@ -1101,8 +1116,18 @@ function startBrowserSync(env, specRunner) {
       .on('change', changeEvent);
   }
 
+  var proxyUrl = 'localhost:' + nodeOptions.env.APP_PORT;
+  if (nodeOptions.env.NODEJS_CERTIFICATE) {
+    proxyUrl = 'https://' + proxyUrl;
+  }
+  console.log("BROWSER SYNC PROXY REQUESTS TO : " + proxyUrl);
+
+  if (!nodeOptions.env.HTTPS_STRICT) {
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+  }
+
   var options = {
-    proxy: 'localhost:' + nodeOptions.env.APP_PORT,
+    proxy: proxyUrl,
     port: 3000,
     files: isDevMode(env) ? [
       config.client + '**/*.*',

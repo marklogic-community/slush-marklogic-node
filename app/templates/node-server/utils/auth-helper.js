@@ -2,14 +2,25 @@
 
 'use strict';
 
-var http = require('http');
 var options = require('./options')();
+var https = require('https')
+var http = require('http');
 var q = require('q');
 var wwwAuthenticate = require('www-authenticate');
 /* jshint -W079 */
 var _ = require('underscore');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
+
+var httpClient = http;
+if (options.mlCertificate) {
+    console.log("ML Certificate = '" + options.mlCertificate + "'")
+    console.log("Will use https client.");
+    httpClient = https;
+} else {
+    console.log("ML Certificate = '" + options.mlCertificate + "'")
+    console.log("Will use http client.");
+}
 
 var defaultOptions = {
   authHost: options.mlHost,
@@ -49,7 +60,8 @@ function init() {
         if (authorization) {
           reqOptions.headers.Authorization = authorization;
         }
-        var login = http.get(reqOptions, function(response) {
+
+        var login = httpClient.get(reqOptions, function(response) {
 
           var user = {
                 authenticated:true,
@@ -202,7 +214,7 @@ function getAuthorization(session, reqMethod, reqPath, authOptions) {
     authorization = authenticator.authorize(reqMethod, reqPath);
     d.resolve(authorization);
   } else {
-    var challengeReq = http.request({
+    var challengeReq = httpClient.request({
       hostname: mergedOptions.authHost,
       port: mergedOptions.authPort,
       method: mergedOptions.challengeMethod,

@@ -8,6 +8,15 @@ var url = require('url');
 
 var authHelper = require('./utils/auth-helper');
 var options = require('./utils/options')();
+var fs = require('fs');
+
+var ca = null;
+if (options.mlCertificate) {
+  console.log("Loading ML Certificate " + options.mlCertificate);
+  ca = fs.readFileSync(options.mlCertificate);
+} else {
+  console.log("No ML SSL Certificate.");
+}
 
 /************************************************/
 /*************  setup proxy server  *************/
@@ -15,13 +24,18 @@ var options = require('./utils/options')();
 
 // TODO: configurable path?
 var target = url.format({
-  protocol: 'http',
+  protocol: options.mlCertificate?'https':'http',
   hostname: options.mlHost,
   port: options.mlHttpPort,
   pathname: '/v1'
 });
 
-var proxyServer = httpProxy.createProxyServer({ target: target });
+var proxyServer = httpProxy.createProxyServer({
+  target: target
+  , ca : options.mlCertificate?ca:null
+  //options.httpsStrict==="false" assumes that you are in dev mode
+  , secure: options.httpsStrict==="true"?true:false
+});
 
 function getAuth(req) {
   var user = req.session.passport && req.session.passport.user &&

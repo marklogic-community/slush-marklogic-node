@@ -1,0 +1,198 @@
+### HOW TO: Enable HTTPS on the Node.js Server
+
+1. Create a key and certificate for the node server
+   
+   [Step by step guide can be found here.](https://devcenter.heroku.com/articles/ssl-certificate-self)
+
+2. Copy the certificate and key to the root of the project
+      
+3. Edit local.json or \<env\>.json file
+
+   1. Set *"nodeJsCertificate"* to the filename of the certificate created on step 1
+
+      ```json
+      "nodeJsCertificate": "<filename-of-certificate>"
+      ```
+
+   2. Set *"nodeJsPrivateKey"* to the filename of the key created on step 1
+
+      ```json
+      "nodeJsPrivateKey": "<filename-of-private-key>"
+      ```
+   
+   Example:
+
+   ```json
+   {
+     "app-name": "slush-https",
+     "ml-version": "8",
+     "ml-host": "localhost",
+     "ml-admin-user": "admin",
+     "ml-admin-pass": "admin",
+     "ml-app-user": "slush-https-user",
+     "ml-app-pass": "2jr>5m9m;+#$tB$()",
+     "ml-http-port": "55540",
+     "node-port": "55570",
+     "guest-access": "false",
+     "disallow-updates": "false",
+     "appusers-only": "false",
+     "nodeJsCertificate": "server.crt",
+     "nodeJsPrivateKey": "server.key"
+   }
+   ```
+
+4. Run node
+ 
+   ```bash 
+   $ gulp serve-local
+   ```
+
+### HOW TO: Configure Node.js to Proxy Requests to MarkLogic App Server hosted in HTTPS
+
+1. Enable SSL on MarkLogic (skip if App Server is already in HTTPS)
+   
+   See "How to enable HTTPS in MarkLogic App Server using Roxy?" below.
+
+2. Download MarkLogic App Server Certificate
+    
+   From the management console:
+   
+   1. Click on 'Configure'
+   
+   2. Click on 'Security'
+   
+   3. Click on 'Certificate Templates'
+   
+   4. Under the 'Summary' page on right, click on the match to the "ssl-certificate-template"
+   
+   5. Click on the 'Status' tab
+   
+   6. Click 'Download' button
+   
+   7. Copy the file in the root of the project
+
+3. Edit local.json or \<env\>.json
+
+   1. If using self signed certificate set *"httpsStrict"* this to *false*
+
+      ```json
+      "httpsStrict": "false"
+      ```
+
+   2. Set the value of *"mlCertificate"* to the MarkLogic Certificate created in Step 2
+
+      ```json
+      "mlCertificate": "certificate-ml.crt"
+      ```
+
+   Example:
+
+   ```json
+   {
+     "app-name": "slush-https",
+     "ml-version": "8",
+     "ml-host": "localhost",
+     "ml-admin-user": "admin",
+     "ml-admin-pass": "admin",
+     "ml-app-user": "slush-https-user",
+     "ml-app-pass": "2jr>5m9m;+#$tB$()",
+     "ml-http-port": "55540",
+     "node-port": "55570",
+     "guest-access": "false",
+     "disallow-updates": "false",
+     "appusers-only": "false",
+     "httpsStrict": "false",
+     "mlCertificate": "certificate-ml.crt"
+   }
+
+   ```
+
+   3. Run node
+
+      ```bash
+      $ gulp serve-local
+      ```
+
+### HOW TO: Enable HTTPS in MarkLogic App Server using Roxy
+
+1. Uncomment and fill up the following in build.properties or create and fillup in local.properties or <env>.properties file
+
+   ```properties
+   ssl-certificate-template=
+   ssl-certificate-countryName=
+   ssl-certificate-stateOrProvinceName=
+   ssl-certificate-localityName=
+   ssl-certificate-organizationName=
+   ssl-certificate-organizationalUnitName=
+   ssl-certificate-emailAddress=
+   ```
+
+   Example:
+
+   ```properties
+   ssl-certificate-template=sample-template
+   ssl-certificate-countryName=PH
+   ssl-certificate-stateOrProvinceName=NCR
+   ssl-certificate-localityName=Mandaluyong City
+   ssl-certificate-organizationName=MarkLogic Philippines
+   ssl-certificate-organizationalUnitName=Vanguard
+   ssl-certificate-emailAddress=sample.sample@marklogic.com
+   ```
+
+2. Uncomment ssl-certificate-template from ml-config.xml 
+
+   ```xml
+   <ssl-certificate-template>@ml.ssl-certificate-template</ssl-certificate-template>
+   ```
+
+3. Bootstrap to create and enable certificate
+   
+   ```bash    
+   $ ./ml local bootstrap
+   ```
+
+4. Verify ML App server setting
+    
+   From the management console (usually http://localhost:8001): 
+    
+   1. Click on 'Configure'
+   
+   2. Click on 'Groups'
+   
+   3. Under the App Servers click on the specific app server you created
+   
+   4. Scroll down to the bottom of the page
+   
+   5. `"ssl certificate template"` should be set to the "ssl-certificate-template" from Step 1
+   
+   6. `"ssl require client certificate"` should be `true`
+
+####Note: 
+   
+   ```
+   To create a template, uncomment at least ssl-certificate-template (ml-config.xml),
+   ssl-certificate-countryName (<env>.properties), and ssl-certificate-oranizationName (<env>.properties)
+   ```
+   
+   ```
+   Out of the box, roxy cannot deploy server side code while SSL is enabled in ML. 
+
+   You have to disable HTTPS first before doing a deploy. 
+   Refer to "How to disable HTTPS in MarkLogic App Server?" below.
+   ```
+
+### HOW TO: Disable HTTPS in a MarkLogic App Server
+
+From the management console: 
+    
+1. Click on "Configure"
+
+2. Click on "Groups"
+
+3. Under the "App Servers" click on the specific app server you created
+
+4. Scroll down to the bottom of the page
+
+5. Set `"ssl certificate template"` to `"none"`
+
+6. Click "ok" button

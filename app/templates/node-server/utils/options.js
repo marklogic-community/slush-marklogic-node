@@ -14,6 +14,11 @@ module.exports = function(){
   var options = {
     env: environment,
     appName: process.env.APP_NAME || envJson['app-name'] || 'slush-app',
+    httpsStrict: bool(process.env.HTTPS_STRICT || envJson['httpsStrict'] === "true" || true),
+    // ML CERTIFICATE should be set if "ssl require client certificate" of the ML AppServer is set to true
+    mlCertificate: process.env.ML_CERTIFICATE || envJson['mlCertificate'] || "",
+    nodeJsCertificate: process.env.NODEJS_CERTIFICATE || envJson['nodeJsCertificate'] || "",
+    nodeJsPrivateKey: process.env.NODEJS_PRIVATE_KEY || envJson['nodeJsPrivateKey'] || "",
     appPort: process.env.APP_PORT || process.env.PORT || envJson['node-port'] || config.defaultPort,
     mlHost: process.env.ML_HOST || envJson['ml-host'] || config.marklogic.host,
     mlHttpPort: process.env.ML_PORT || envJson['ml-http-port'] || config.marklogic.httpPort,
@@ -23,6 +28,13 @@ module.exports = function(){
     disallowUpdates: bool(process.env.DISALLOW_UPDATES || envJson['disallow-updates'] || config.marklogic.disallowUpdates || false),
     appUsersOnly: bool(process.env.APP_USERS_ONLY || envJson['appusers-only'] || config.marklogic.appUsersOnly || false)
   };
+
+  if (options.httpsStrict==="true") {
+    console.info("Self signed certificates not allowed.");
+  } else {
+    console.warn("Allowing self signed certificates. Not advisable on production.");
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+  }
 
   return options;
 
