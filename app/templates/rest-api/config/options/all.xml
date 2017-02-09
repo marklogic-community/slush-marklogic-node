@@ -12,8 +12,16 @@
   <!-- Full-text search options -->
   <term apply="term">
     <empty apply="all-results"/>
+    <!--
+      Below some example options for full-text searches. Note that MarkLogic will
+      toggle options automatically depending on caps, wildcards etc.
+      See Usage Notes of http://docs.marklogic.com/cts:word-query for details.
+      Also note that forcing stemmed searches will disable wildcarded searches.
+    -->
+    <!--
     <term-option>punctuation-insensitive</term-option>
     <term-option>stemmed</term-option>
+    -->
   </term>
 
   <!-- Default grammer -->
