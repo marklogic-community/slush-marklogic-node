@@ -2,12 +2,28 @@
   'use strict';
 
   angular.module('app.route')
+    // global settings
     .constant('appConfig', {
       showHome: true
     })
-    .run(['loginService', function(loginService) {
-      loginService.protectedRoutes(['root.search', 'root.create', 'root.profile']);
+
+    // global init
+    .run(['$rootScope', '$state', 'appConfig', 'loginService', function($rootScope, $state, appConfig, loginService) {
+      // add support for redirect states
+      $rootScope.$on('$stateChangeStart', function(evt, to, params) {
+        if (to.redirectTo) {
+          evt.preventDefault();
+          $state.go(to.redirectTo, params, {location: 'replace'});
+        }
+      });
+
+      // expose appConfig to views
+      $rootScope.appConfig = appConfig;
+
+      // configure loginService
+      loginService.protectedRoutes(['root.create', 'root.detail', 'root.profile', 'root.search']);
     }])
+
     .config(RouteConfig);
 
   RouteConfig.$inject = ['$stateProvider', '$urlMatcherFactoryProvider',
@@ -43,7 +59,7 @@
     $stateProvider
       .state('root', {
         url: '',
-        // abstract: true,
+        abstract: true,
         templateUrl: 'app/root/root.html',
         controller: 'RootCtrl',
         controllerAs: 'rootCtrl',
@@ -66,10 +82,16 @@
             navClass: 'fa-home'
           }
         });
+    } else {
+      $stateProvider
+        .state('root.landing', {
+          url: '/',
+          redirectTo: 'root.search'
+        });
     }
     $stateProvider
       .state('root.search', {
-        url: appConfig.showHome ? '/search' : '/',
+        url: '/search',
         templateUrl: 'app/search/search.html',
         controller: 'SearchCtrl',
         controllerAs: 'ctrl',
@@ -104,13 +126,7 @@
         resolve: {
           doc: function(MLRest, $stateParams) {
             var uri = $stateParams.uri;
-
-            var format = 'json';
-            if (uri.endsWith('.xml')) {
-              format = 'xml';
-            }
-
-            return MLRest.getDocument(uri, { format: format }).then(function(response) {
+            return MLRest.getDocument(uri).then(function(response) {
               return response;
             });
           }
@@ -129,7 +145,7 @@
         resolve: {
           doc: function(MLRest, $stateParams) {
             var uri = $stateParams.uri;
-            return MLRest.getDocument(uri, { format: 'json' }).then(function(response) {
+            return MLRest.getDocument(uri).then(function(response) {
               return response;
             });
           }
