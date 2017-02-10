@@ -127,7 +127,7 @@ function processInput() {
   (gulp.args || process.argv).forEach(function(arg) {
     if (isFlag(arg)) {
       var splits = arg.split('=');
-      var flag = splits[0].replace(/^-+/,'');
+      var flag = splits[0].replace(/^-+/, '');
       var value = splits[1];
       if (flag === 'gulpfile') {
         // ignore
@@ -270,6 +270,39 @@ function configRoxy() {
       '# These only affect your local environment and should not be checked in\n' +
       '#################################################################\n' +
       '\n' +
+      '#\n' +
+      '# the uris or IP addresses of your servers\n' +
+      '# WARNING: if you are running these scripts on WINDOWS you may need to change localhost to 127.0.0.1\n' +
+      '# There have been reported issues with dns resolution when localhost wasn\'t in the hosts file.\n' +
+      '#\n' +
+      'local-server=' + settings.marklogicHost + '\n';
+
+    var devProperties = '#################################################################\n' +
+      '# This file contains overrides to values in build.properties\n' +
+      '# These only affect your developer environment\n' +
+      '#################################################################\n' +
+      '\n' +
+      '#\n' +
+      '# the uris or IP addresses of your servers\n' +
+      '# WARNING: if you are running these scripts on WINDOWS you may need to change localhost to 127.0.0.1\n' +
+      '# There have been reported issues with dns resolution when localhost wasn\'t in the hosts file.\n' +
+      '#\n' +
+      'dev-server=' + settings.marklogicHost + '\n';
+
+    var prodProperties = '#################################################################\n' +
+      '# This file contains overrides to values in build.properties\n' +
+      '# These only affect your production environment\n' +
+      '#################################################################\n' +
+      '\n' +
+      '#\n' +
+      '# the uris or IP addresses of your servers\n' +
+      '# WARNING: if you are running these scripts on WINDOWS you may need to change localhost to 127.0.0.1\n' +
+      '# There have been reported issues with dns resolution when localhost wasn\'t in the hosts file.\n' +
+      '#\n' +
+      'prod-server=' + settings.marklogicHost + '\n';
+
+    var duplicateProperties = 'content-forests-per-host=3\n' +
+      '\n' +
       'server-version=' + settings.mlVersion + '\n' +
       '\n' +
       '#\n' +
@@ -277,31 +310,30 @@ function configRoxy() {
       '#\n' +
       'app-port=' + settings.appPort + '\n';
     if (settings.xccPort || (settings.mlVersion < 8)) {
-      localProperties += 'xcc-port=' + settings.xccPort + '\n';
+      duplicateProperties += 'xcc-port=' + settings.xccPort + '\n';
     } else {
-      localProperties += '# Taking advantage of not needing a XCC Port for ML8\n' +
+      duplicateProperties += '# Taking advantage of not needing a XCC Port for ML8\n' +
         'xcc-port=${app-port}\n' +
         'install-xcc=false\n';
     }
 
-    localProperties += '\n' +
-      '#\n' +
-      '# the uris or IP addresses of your servers\n' +
-      '# WARNING: if you are running these scripts on WINDOWS you may need to change localhost to 127.0.0.1\n' +
-      '# There have been reported issues with dns resolution when localhost wasn\'t in the hosts file.\n' +
-      '#\n' +
-      'local-server=' + settings.marklogicHost + '\n' +
-      'content-forests-per-host=3\n' +
-      '\n' +
+    duplicateProperties += '\n' +
       '#\n' +
       '# Admin username/password that will exist on the local/dev/prod servers\n' +
       '#\n' +
       'user=' + settings.marklogicAdminUser + '\n' +
       'password=' + settings.marklogicAdminPass + '\n';
 
+    localProperties += duplicateProperties;
     fs.writeFileSync('deploy/local.properties', localProperties, encoding);
+
+    devProperties += duplicateProperties;
+    fs.writeFileSync('deploy/dev.properties', devProperties, encoding);
+
+    prodProperties += duplicateProperties;
+    fs.writeFileSync('deploy/prod.properties', prodProperties, encoding);
   } catch (e) {
-    console.log('failed to write roxy local.properties');
+    console.log('failed to write roxy local.properties, dev.properties or prod.properties');
     process.exit(1);
   }
 
@@ -324,34 +356,34 @@ function configRoxy() {
 
     // add range path index for the default content
     foo = foo.replace(/^\s*<range-path-indexes>/m,
-        '      <range-path-indexes>\n' +
-        '        <range-path-index>\n' +
-        '          <scalar-type>string</scalar-type>\n' +
-        '          <collation>http://marklogic.com/collation/codepoint</collation>\n' +
-        '          <path-expression>docFormat</path-expression>\n' +
-        '          <range-value-positions>false</range-value-positions>\n' +
-        '          <invalid-values>reject</invalid-values>\n' +
-        '        </range-path-index>\n' +
-        '        <range-path-index>\n' +
-        '          <scalar-type>string</scalar-type>\n' +
-        '          <collation>http://marklogic.com/collation/codepoint</collation>\n' +
-        '          <path-expression>eyeColor</path-expression>\n' +
-        '          <range-value-positions>false</range-value-positions>\n' +
-        '          <invalid-values>reject</invalid-values>\n' +
-        '        </range-path-index>\n' +
-        '        <range-path-index>\n' +
-        '          <scalar-type>string</scalar-type>\n' +
-        '          <collation>http://marklogic.com/collation/codepoint</collation>\n' +
-        '          <path-expression>gender</path-expression>\n' +
-        '          <range-value-positions>false</range-value-positions>\n' +
-        '          <invalid-values>reject</invalid-values>\n' +
-        '        </range-path-index>\n' +
-        '        <range-path-index>\n' +
-        '          <scalar-type>unsignedInt</scalar-type>\n' +
-        '          <path-expression>age</path-expression>\n' +
-        '          <range-value-positions>false</range-value-positions>\n' +
-        '          <invalid-values>reject</invalid-values>\n' +
-        '        </range-path-index>\n');
+      '      <range-path-indexes>\n' +
+      '        <range-path-index>\n' +
+      '          <scalar-type>string</scalar-type>\n' +
+      '          <collation>http://marklogic.com/collation/codepoint</collation>\n' +
+      '          <path-expression>docFormat</path-expression>\n' +
+      '          <range-value-positions>false</range-value-positions>\n' +
+      '          <invalid-values>reject</invalid-values>\n' +
+      '        </range-path-index>\n' +
+      '        <range-path-index>\n' +
+      '          <scalar-type>string</scalar-type>\n' +
+      '          <collation>http://marklogic.com/collation/codepoint</collation>\n' +
+      '          <path-expression>eyeColor</path-expression>\n' +
+      '          <range-value-positions>false</range-value-positions>\n' +
+      '          <invalid-values>reject</invalid-values>\n' +
+      '        </range-path-index>\n' +
+      '        <range-path-index>\n' +
+      '          <scalar-type>string</scalar-type>\n' +
+      '          <collation>http://marklogic.com/collation/codepoint</collation>\n' +
+      '          <path-expression>gender</path-expression>\n' +
+      '          <range-value-positions>false</range-value-positions>\n' +
+      '          <invalid-values>reject</invalid-values>\n' +
+      '        </range-path-index>\n' +
+      '        <range-path-index>\n' +
+      '          <scalar-type>unsignedInt</scalar-type>\n' +
+      '          <path-expression>age</path-expression>\n' +
+      '          <range-value-positions>false</range-value-positions>\n' +
+      '          <invalid-values>reject</invalid-values>\n' +
+      '        </range-path-index>\n');
 
     // fix default app-role privileges to match rest-style applications
     foo = foo.replace(/<privileges>[^]*?<\/privileges>/,
