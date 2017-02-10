@@ -8,21 +8,22 @@
     })
 
     // global init
-    .run(['$rootScope', '$state', 'appConfig', 'loginService', function($rootScope, $state, appConfig, loginService) {
-      // add support for redirect states
-      $rootScope.$on('$stateChangeStart', function(evt, to, params) {
-        if (to.redirectTo) {
-          evt.preventDefault();
-          $state.go(to.redirectTo, params, {location: 'replace'});
-        }
-      });
+    .run(['$rootScope', '$state', 'appConfig', 'loginService',
+      function($rootScope, $state, appConfig, loginService) {
+        // add support for redirect states
+        $rootScope.$on('$stateChangeStart', function(evt, to, params) {
+          if (to.redirectTo) {
+            evt.preventDefault();
+            $state.go(to.redirectTo, params, {location: 'replace'});
+          }
+        });
 
-      // expose appConfig to views
-      $rootScope.appConfig = appConfig;
+        // expose appConfig to views
+        $rootScope.appConfig = appConfig;
 
-      // configure loginService
-      loginService.protectedRoutes(['root.create', 'root.detail', 'root.profile', 'root.search']);
-    }])
+        // configure loginService
+        loginService.protectedRoutes(['root.create', 'root.detail', 'root.profile', 'root.search']);
+      }])
 
     .config(RouteConfig);
 
