@@ -1,5 +1,61 @@
 # Change Log
 
+## [Unreleased](https://github.com/marklogic/slush-marklogic-node/tree/HEAD)
+
+[Full Changelog](https://github.com/marklogic/slush-marklogic-node/compare/1.2.0...HEAD)
+
+**Implemented enhancements:**
+
+- Add Cards theme [\#411](https://github.com/marklogic/slush-marklogic-node/issues/411)
+- Using slush with marklogic server in HTTPS [\#401](https://github.com/marklogic/slush-marklogic-node/issues/401)
+- View HTML keys/values on detail page [\#341](https://github.com/marklogic/slush-marklogic-node/issues/341)
+- Consider adding ec5/6 polyfill [\#330](https://github.com/marklogic/slush-marklogic-node/issues/330)
+- XML preview in detail page not using syntax highlights [\#245](https://github.com/marklogic/slush-marklogic-node/issues/245)
+
+**Fixed bugs:**
+
+- Helmet noSniff together with middle-tier sending wrong mimes, causes ui to not open [\#451](https://github.com/marklogic/slush-marklogic-node/issues/451)
+- Recent changes to `ml info` break `gulp init` [\#450](https://github.com/marklogic/slush-marklogic-node/issues/450)
+- vkbeautify-wrapper gone [\#438](https://github.com/marklogic/slush-marklogic-node/issues/438)
+- gulp add-deploy-target links to ~/.ssh [\#436](https://github.com/marklogic/slush-marklogic-node/issues/436)
+- INSTALL.md fails to mention git@ usage, and how to accept fingerprint [\#387](https://github.com/marklogic/slush-marklogic-node/issues/387)
+
+**Closed issues:**
+
+- Issue with charts in dashboard theme [\#467](https://github.com/marklogic/slush-marklogic-node/issues/467)
+- Navigation breaks if showHome is disabled [\#461](https://github.com/marklogic/slush-marklogic-node/issues/461)
+- "registered" property in sample data is incorrectly formatted dateTime [\#458](https://github.com/marklogic/slush-marklogic-node/issues/458)
+- Use digest by default [\#442](https://github.com/marklogic/slush-marklogic-node/issues/442)
+- BrowserSync 2.8.4+ doesn't work with Nodejs v0.10 [\#433](https://github.com/marklogic/slush-marklogic-node/issues/433)
+
+**Merged pull requests:**
+
+- Fix \#467 - Allow /values to proxy properly [\#468](https://github.com/marklogic/slush-marklogic-node/pull/468) ([mariannemyers](https://github.com/mariannemyers))
+- Fixing gulp build issue [\#464](https://github.com/marklogic/slush-marklogic-node/pull/464) ([grtjn](https://github.com/grtjn))
+- Improved fix for \#438: skip vkbeautify-wrapper entirely [\#463](https://github.com/marklogic/slush-marklogic-node/pull/463) ([grtjn](https://github.com/grtjn))
+- Fixed \#461: different handling of showHome false to fix navigation [\#462](https://github.com/marklogic/slush-marklogic-node/pull/462) ([grtjn](https://github.com/grtjn))
+- Fixed \#458: properly coded registered dateTime in sample-data [\#460](https://github.com/marklogic/slush-marklogic-node/pull/460) ([grtjn](https://github.com/grtjn))
+- Ironing out some small issues [\#459](https://github.com/marklogic/slush-marklogic-node/pull/459) ([grtjn](https://github.com/grtjn))
+- Merging of production hardening into master [\#456](https://github.com/marklogic/slush-marklogic-node/pull/456) ([grtjn](https://github.com/grtjn))
+- Fixed \#451: index should point to min js/css, not .map, fixed. Also fixed endless gulp build, related to earlier commits for \#450. [\#455](https://github.com/marklogic/slush-marklogic-node/pull/455) ([grtjn](https://github.com/grtjn))
+- Production hardening [\#454](https://github.com/marklogic/slush-marklogic-node/pull/454) ([grtjn](https://github.com/grtjn))
+- Fixed \#436: using os-homedir instead of ~ [\#453](https://github.com/marklogic/slush-marklogic-node/pull/453) ([grtjn](https://github.com/grtjn))
+- Fixed \#450: work-around for ml info throwing error + extra feedback about npm install, bower install, and gulp init [\#452](https://github.com/marklogic/slush-marklogic-node/pull/452) ([grtjn](https://github.com/grtjn))
+- adds a new, explicitly white-listed REST API proxy [\#449](https://github.com/marklogic/slush-marklogic-node/pull/449) ([joemfb](https://github.com/joemfb))
+- Make front end more fault tolerant to the session being lost [\#448](https://github.com/marklogic/slush-marklogic-node/pull/448) ([Audarth](https://github.com/Audarth))
+- Fixed \#442: making sure middle-tier uses digest auth against MarkLogic [\#446](https://github.com/marklogic/slush-marklogic-node/pull/446) ([grtjn](https://github.com/grtjn))
+- Merging cards theme into master [\#445](https://github.com/marklogic/slush-marklogic-node/pull/445) ([grtjn](https://github.com/grtjn))
+- SW-9  Added documentation on how to run in production.  This update c… [\#444](https://github.com/marklogic/slush-marklogic-node/pull/444) ([bluetorch](https://github.com/bluetorch))
+- 401-make-SSL-support-configurable [\#443](https://github.com/marklogic/slush-marklogic-node/pull/443) ([divino](https://github.com/divino))
+- adding fixes to the spacing [\#441](https://github.com/marklogic/slush-marklogic-node/pull/441) ([jenbreese](https://github.com/jenbreese))
+- Various changes for cards-theme [\#440](https://github.com/marklogic/slush-marklogic-node/pull/440) ([grtjn](https://github.com/grtjn))
+- Cards theme [\#439](https://github.com/marklogic/slush-marklogic-node/pull/439) ([jenbreese](https://github.com/jenbreese))
+- Do not add padding to .row in the dashboard theme [\#435](https://github.com/marklogic/slush-marklogic-node/pull/435) ([patrickmcelwee](https://github.com/patrickmcelwee))
+- refinements for \#411. Added the blue variant [\#432](https://github.com/marklogic/slush-marklogic-node/pull/432) ([jenbreese](https://github.com/jenbreese))
+- Fixed more app.route dependencies [\#430](https://github.com/marklogic/slush-marklogic-node/pull/430) ([grtjn](https://github.com/grtjn))
+- Fixed app.route dependency [\#429](https://github.com/marklogic/slush-marklogic-node/pull/429) ([grtjn](https://github.com/grtjn))
+- Cards theme [\#428](https://github.com/marklogic/slush-marklogic-node/pull/428) ([grtjn](https://github.com/grtjn))
+
 ## [1.2.0](https://github.com/marklogic/slush-marklogic-node/tree/1.2.0) (2016-12-01)
 [Full Changelog](https://github.com/marklogic/slush-marklogic-node/compare/1.1.1...1.2.0)
 
