@@ -130,7 +130,7 @@ var suggest = router.route('/suggest');
 suggest.get(proxy);
 suggest.post(proxy);
 
-var values = router.route('/values');
+var values = router.route('/values/*');
 values.get(proxy);
 values.post(proxy);
 
