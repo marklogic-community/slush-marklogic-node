@@ -9,7 +9,7 @@ sample-data.zip
 data,data/people
 
 -output_permissions
-@sample-app-role,read,@sample-app-role,update
+${app-role},read,${app-role},update
 
 -output_uri_replace
 ".*\.zip,''"
