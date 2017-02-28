@@ -4,7 +4,7 @@
   </button>
   <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
     <li role="menuitem" ng-repeat="snippet in snippets track by $index">
-      <a href ng-click="ctrl.setSnippetType(snippet)">{{snippet}}</a>
+      <a href ng-click="$ctrl.setSnippetType(snippet)">{{snippet}}</a>
     </li>
   </ul>
 </div>

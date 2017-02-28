@@ -1,22 +1,22 @@
 <div class="row">
   <div class="col-md-12 search-row">
-    <ml-input qtext="ctrl.qtext" search="ctrl.search(qtext)" suggest="ctrl.suggest(val)" template="fa" class="search"></ml-input>
+    <ml-input qtext="$ctrl.qtext" search="$ctrl.search(qtext)" suggest="$ctrl.suggest(val)" template="fa" class="search"></ml-input>
     <div>
       <label class="radio-inline">
-        <input type="radio" ng-model="ctrl.showFacetsOnMap" ng-value="true" ng-change="ctrl.toggleShowFacets()"> Show facets or
+        <input type="radio" ng-model="$ctrl.showFacetsOnMap" ng-value="true" ng-change="$ctrl.toggleShowFacets()"> Show facets or
       </label>
       <label class="radio-inline">
-        <input type="radio" ng-model="ctrl.showFacetsOnMap" ng-value="false" ng-change="ctrl.toggleShowFacets()"> results on map
+        <input type="radio" ng-model="$ctrl.showFacetsOnMap" ng-value="false" ng-change="$ctrl.toggleShowFacets()"> results on map
       </label>
     </div>
     <div class="checkbox">
       <label>
-        <input type="checkbox" ng-model="ctrl.limitToMap"> Limit results to visible map
+        <input type="checkbox" ng-model="$ctrl.limitToMap"> Limit results to visible map
       </label>
     </div>
     <div class="checkbox">
       <label>
-        <input type="checkbox" ng-model="ctrl.limitToIntersect"> Limit to intersect of drawings
+        <input type="checkbox" ng-model="$ctrl.limitToIntersect"> Limit to intersect of drawings
       </label>
     </div>
   </div>
@@ -24,19 +24,19 @@
 
 <div class="search row">
   <div class="col-md-12 right-col">
-    <ml-facets facets="ctrl.response.facets" toggle="ctrl.toggleFacet(facet, value)" active-facets="ctrl.mlSearch.activeFacets" negate="ctrl.toggleNegatedFacet(facet,value)"></ml-facets>
+    <ml-facets facets="$ctrl.response.facets" toggle="$ctrl.toggleFacet(facet, value)" active-facets="$ctrl.mlSearch.activeFacets" negate="$ctrl.toggleNegatedFacet(facet,value)"></ml-facets>
   </div>
   <div class="col-xs-11 col-md-11">
-    <h4 ng-if="ctrl.response.total === 0">No results to show</h4>
+    <h4 ng-if="$ctrl.response.total === 0">No results to show</h4>
 
-    <div ng-if="ctrl.response.total > 0" class="results">
+    <div ng-if="$ctrl.response.total > 0" class="results">
       <div class="pagination-ctrls">
-        <uib-pagination class="pagination-sm" ng-model="ctrl.page" ng-change="ctrl.search()" max-size="5" boundary-links="true" total-items="ctrl.response.total" items-per-page="ctrl.response['page-length']" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;">
+        <uib-pagination class="pagination-sm" ng-model="$ctrl.page" ng-change="$ctrl.search()" max-size="5" boundary-links="true" total-items="$ctrl.response.total" items-per-page="$ctrl.response['page-length']" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;">
         </uib-pagination>
-        <ml-snippet set-snippet="ctrl.setSnippet(type)"></ml-snippet>
+        <ml-snippet set-snippet="$ctrl.setSnippet(type)"></ml-snippet>
       </div>
-      <ml-metrics search="ctrl.response" ></ml-metrics>
-      <ml-results template="app/search/search-results.html" results="ctrl.response.results"></ml-results>
+      <ml-metrics search="$ctrl.response" ></ml-metrics>
+      <ml-results template="app/search/search-results.html" results="$ctrl.response.results"></ml-results>
     </div>
   </div>
 </div>

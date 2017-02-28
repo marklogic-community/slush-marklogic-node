@@ -63,7 +63,7 @@
         abstract: true,
         templateUrl: 'app/root/root.html',
         controller: 'RootCtrl',
-        controllerAs: 'rootCtrl',
+        controllerAs: '$rootCtrl',
         resolve: {
           user: function(userService) {
             return userService.getUser();
@@ -76,7 +76,7 @@
           url: '/',
           templateUrl: 'app/landing/landing.html',
           controller: 'LandingCtrl',
-          controllerAs: 'ctrl',
+          controllerAs: '$ctrl',
           navLabel: {
             text: 'Home',
             area: 'dashboard',
@@ -95,7 +95,7 @@
         url: '/search',
         templateUrl: 'app/search/search.html',
         controller: 'SearchCtrl',
-        controllerAs: 'ctrl',
+        controllerAs: '$ctrl',
         navLabel: {
           text: 'Search',
           area: 'dashboard',
@@ -106,7 +106,7 @@
         url: '/create?prev',
         templateUrl: 'app/create/create.html',
         controller: 'CreateCtrl',
-        controllerAs: 'ctrl',
+        controllerAs: '$ctrl',
         navLabel: {
           text: 'Create',
           area: 'dashboard',
@@ -123,7 +123,7 @@
         url: '/edit{uri:path}?prev',
         templateUrl: 'app/create/create.html',
         controller: 'CreateCtrl',
-        controllerAs: 'ctrl',
+        controllerAs: '$ctrl',
         resolve: {
           doc: function(MLRest, $stateParams) {
             var uri = $stateParams.uri;
@@ -142,7 +142,7 @@
         },
         templateUrl: 'app/detail/detail.html',
         controller: 'DetailCtrl',
-        controllerAs: 'ctrl',
+        controllerAs: '$ctrl',
         resolve: {
           doc: function(MLRest, $stateParams) {
             var uri = $stateParams.uri;
@@ -156,13 +156,13 @@
         url: '/profile',
         templateUrl: 'app/user/profile.html',
         controller: 'ProfileCtrl',
-        controllerAs: 'ctrl'
+        controllerAs: '$ctrl'
       })
       .state('root.login', {
         url: '/login?state&params',
         templateUrl: 'app/login/login-full.html',
         controller: 'LoginFullCtrl',
-        controllerAs: 'ctrl'
+        controllerAs: '$ctrl'
       });
   }
 }());

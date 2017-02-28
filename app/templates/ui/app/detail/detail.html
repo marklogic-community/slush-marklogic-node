@@ -2,45 +2,45 @@
   <div class="col-sm-8 content-col">
     <!-- note - ->
     <uib-tabset type="pills">
-      <uib-tab ng-if="ctrl.type==='json'">
+      <uib-tab ng-if="$ctrl.type==='json'">
         <uib-tab-heading>JSON</uib-tab-heading>
         <div class="col-sm-9">
-          <json-explorer data="ctrl.json"></json-explorer>
+          <json-explorer data="$ctrl.json"></json-explorer>
         </div>
       </uib-tab>
-      <uib-tab ng-if="ctrl.type==='xml' || ctrl.type==='txt'">
+      <uib-tab ng-if="$ctrl.type==='xml' || $ctrl.type==='txt'">
         <uib-tab-heading >XML</uib-tab-heading>
         <div class="col-sm-9">
-          <pre class="pre-xml">{{ctrl.xml}}</pre>
+          <pre class="pre-xml">{{$ctrl.xml}}</pre>
         </div>
       </uib-tab>
-      <uib-tab ng-if="ctrl.type==='binary'">
+      <uib-tab ng-if="$ctrl.type==='binary'">
         <uib-tab-heading >Binary</uib-tab-heading>
         <div class="col-sm-9">
-          <a target="_blank" ng-href="/v1/documents?uri={{ctrl.uri}}&transform=download"
+          <a target="_blank" ng-href="/v1/documents?uri={{$ctrl.uri}}&transform=download"
              class="btn btn-default">Download</a>
         </div>
       </uib-tab>
     </uib-tabset-->
-    <view-file uri="ctrl.viewUri" content-type="ctrl.contentType"
-      allow-modal="true" controls="true" download-uri="ctrl.downloadUri"
-      file-name="ctrl.fileName" show-code="false" trust-uri="false">
+    <view-file uri="$ctrl.viewUri" content-type="$ctrl.contentType"
+      allow-modal="true" controls="true" download-uri="$ctrl.downloadUri"
+      file-name="$ctrl.fileName" show-code="false" trust-uri="false">
     </view-file>
   </div>
   <div class="col-sm-4 right-col">
     <div id="buttons-detail">
       <button class="btn btn-default" ui-sref="root.search">Search</button>
       <button class="btn btn-primary"
-              ng-show="!rootCtrl.currentUser.disallowUpdates" 
-              ui-sref="root.edit({uri: ctrl.uri, prev: 'root.view'})">Edit</button>
+              ng-show="!$rootCtrl.currentUser.disallowUpdates" 
+              ui-sref="root.edit({uri: $ctrl.uri, prev: 'root.view'})">Edit</button>
       <button class="btn btn-primary"
-              ng-show="!rootCtrl.currentUser.disallowUpdates" 
+              ng-show="!$rootCtrl.currentUser.disallowUpdates" 
               mwl-confirm
-              title="This will permanently delete {{ctrl.uri}}, are you sure?"
+              title="This will permanently delete {{$ctrl.uri}}, are you sure?"
               confirm-text="Yes"
               cancel-text="No"
               placement="bottom"
-              on-confirm="ctrl.delete()"
+              on-confirm="$ctrl.delete()"
               on-cancel="cancelClicked = true"
               confirm-button-type="danger"
               cancel-button-type="default">Delete</button>
@@ -50,7 +50,7 @@
     <div class="panel panel-default similar">
       <div class="panel-heading">Similar</div>
       <div class="panel-body">
-        <ml-similar uri="{{ctrl.uri}}" limit="5"></ml-similar>
+        <ml-similar uri="{{$ctrl.uri}}" limit="5"></ml-similar>
       </div>
     </div>
   </div>
