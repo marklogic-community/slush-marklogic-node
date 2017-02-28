@@ -51,7 +51,7 @@
   "devDependencies": {
     "angular-mocks": "~1.4.4",
     "bardjs": "~0.1.8",
-    "sinon": "http://sinonjs.org/releases/sinon-1.16.1.js"
+    "sinon": "*"
   },
   "private": true,
   "resolutions": {

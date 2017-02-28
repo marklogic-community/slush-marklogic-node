@@ -662,7 +662,6 @@ gulp.task('init', ['checkForUpdates'], function(done) {
             }))
             .pipe(replace('@slush-version', pkgSettings.version.trim(), skipBinary))
             .pipe(replace('@sample-app-name', settings.appName, skipBinary))
-            .pipe(replace('@sample-app-role', settings.appName + '-role', skipBinary))
             .pipe(replace('@node-port', settings.nodePort, skipBinary))
             .pipe(replace('@ml-http-port', settings.appPort, skipBinary))
             .pipe(replace('@ml-xcc-port', settings.xccPort || settings.appPort, skipBinary))

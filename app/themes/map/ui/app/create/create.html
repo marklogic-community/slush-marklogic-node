@@ -1,22 +1,22 @@
 <div class="create">
-  <div class="row" ng-if="!rootCtrl.currentUser">
+  <div class="row" ng-if="!$rootCtrl.currentUser">
     <div class="col-sm-12">
       <uib-alert type="warning">Not allowed</uib-alert>
     </div>
   </div>
 
-  <div class="row" ng-if="rootCtrl.currentUser.disallowUpdates">
+  <div class="row" ng-if="$rootCtrl.currentUser.disallowUpdates">
     <div class="col-sm-12">
       <uib-alert type="warning">Updates are disallowed</uib-alert>
     </div>
   </div>
 
-  <div ng-if="!rootCtrl.currentUser.disallowUpdates">
+  <div ng-if="!$rootCtrl.currentUser.disallowUpdates">
     <div class="row">
       <div class="col-sm-1">
       </div>
-      <h2 class="col-sm-11" ng-if="ctrl.mode === 'create'">Create a Document</h2>
-      <h2 class="col-sm-11" ng-if="ctrl.mode === 'edit'">Edit "{{ ctrl.uri }}"</h2>
+      <h2 class="col-sm-11" ng-if="$ctrl.mode === 'create'">Create a Document</h2>
+      <h2 class="col-sm-11" ng-if="$ctrl.mode === 'edit'">Edit "{{ $ctrl.uri }}"</h2>
     </div>
     <form name="createForm" novalidate>
       <div class="form-group">
@@ -39,7 +39,7 @@
       <div class="form-group">
         <label class="control-label required">Name</label>
         <div>
-          <input type="text" class="form-control" placeholder="person's name" ng-model="ctrl.person.name"
+          <input type="text" class="form-control" placeholder="person's name" ng-model="$ctrl.person.name"
                  required name="name" minlength="3" maxlength="100">
           <div ng-messages="createForm.name.$error"
                ng-if="(createForm.$submitted || createForm.name.$touched) && createForm.name.$error">
@@ -52,31 +52,31 @@
       <div class="form-group">
         <label class="control-label">About</label>
         <div>
-          <textarea class="form-control" ui-tinymce="ctrl.editorOptions" ng-model="ctrl.person.about"></textarea>
+          <textarea class="form-control" ui-tinymce="$ctrl.editorOptions" ng-model="$ctrl.person.about"></textarea>
         </div>
       </div>
       <div class="form-group">
         <label class="control-label">Greeting</label>
         <div>
-          <input type="text" class="form-control" ng-model="ctrl.person.greeting" placeholder="How this person should be greeted on login">
+          <input type="text" class="form-control" ng-model="$ctrl.person.greeting" placeholder="How this person should be greeted on login">
         </div>
       </div>
       <div class="form-group">
         <label class="control-label">Balance</label>
         <div>
-          <input type="text" class="form-control" ng-model="ctrl.person.balance" placeholder="">
+          <input type="text" class="form-control" ng-model="$ctrl.person.balance" placeholder="">
         </div>
       </div>
       <div class="form-group">
         <label class="control-label">Picture</label>
         <div>
-          <input type="text" class="form-control" ng-model="ctrl.person.picture" placeholder="">
+          <input type="text" class="form-control" ng-model="$ctrl.person.picture" placeholder="">
         </div>
       </div>
       <div class="form-group">
         <label class="control-label">Age</label>
         <div>
-          <input type="number" class="form-control" ng-model="ctrl.person.age" placeholder="" name="age" string-to-number>
+          <input type="number" class="form-control" ng-model="$ctrl.person.age" placeholder="" name="age" string-to-number>
           <div ng-messages="createForm.age.$error"
                ng-if="(createForm.$submitted || createForm.age.$touched) && createForm.age.$error">
             <p class="alert alert-danger" ng-message="number">Invalid age format.</p>
@@ -86,7 +86,7 @@
       <div class="form-group">
         <label class="control-label required">Eye Color</label>
         <div>
-          <input type="text" class="form-control" ng-model="ctrl.person.eyeColor" placeholder="" name="eyeColor" required>
+          <input type="text" class="form-control" ng-model="$ctrl.person.eyeColor" placeholder="" name="eyeColor" required>
           <div ng-messages="createForm.eyeColor.$error"
                ng-if="(createForm.$submitted || createForm.eyeColor.$touched) && createForm.eyeColor.$error">
             <p class="alert alert-danger" ng-message="required">Eye Color is required.</p>
@@ -96,14 +96,14 @@
       <div class="form-group">
         <label class="control-label required">Gender</label>
         <div>
-          <label class="radio-inline"><input type="radio" value="female" ng-model="ctrl.person.gender"
+          <label class="radio-inline"><input type="radio" value="female" ng-model="$ctrl.person.gender"
                                              placeholder="" name="gender"
-                                             ng-required="!ctrl.person.gender">Female</label>
+                                             ng-required="!$ctrl.person.gender">Female</label>
         </div>
         <div>
-          <label class="radio-inline"><input type="radio" value="male" ng-model="ctrl.person.gender"
+          <label class="radio-inline"><input type="radio" value="male" ng-model="$ctrl.person.gender"
                                              placeholder="" name="gender"
-                                             ng-required="!ctrl.person.gender">Male</label>
+                                             ng-required="!$ctrl.person.gender">Male</label>
         </div>
         <div ng-messages="createForm.gender.$error"
              ng-if="(createForm.$submitted || createForm.gender.$touched) && createForm.gender.$error">
@@ -113,13 +113,13 @@
       <div class="form-group">
         <label class="control-label">Company</label>
         <div>
-          <input type="text" class="form-control" ng-model="ctrl.person.company" placeholder="">
+          <input type="text" class="form-control" ng-model="$ctrl.person.company" placeholder="">
         </div>
       </div>
       <div class="form-group">
         <label class="control-label">Email</label>
         <div>
-          <input type="email" class="form-control" ng-model="ctrl.person.email" placeholder=""
+          <input type="email" class="form-control" ng-model="$ctrl.person.email" placeholder=""
                  placeholder="" name="email">
           <div ng-messages="createForm.email.$error"
                ng-if="(createForm.$submitted || createForm.email.$touched) && createForm.email.$error">
@@ -130,20 +130,20 @@
       <div class="form-group">
         <label class="control-label">Phone</label>
         <div>
-          <input type="text" class="form-control" ng-model="ctrl.person.phone" placeholder="">
+          <input type="text" class="form-control" ng-model="$ctrl.person.phone" placeholder="">
         </div>
       </div>
       <div class="form-group">
         <label class="control-label">Address</label>
         <div>
-          <input type="text" class="form-control" ng-model="ctrl.person.address" placeholder="">
+          <input type="text" class="form-control" ng-model="$ctrl.person.address" placeholder="">
         </div>
       </div>
       <div class="form-group">
         <label class="control-label">Location</label>
         <div>
-          <input type="number" class="form-control" ng-model="ctrl.person.location.latitude" placeholder=""
-                 min="-90" max="90" name="latitude" ng-required="ctrl.person.location.longitude" string-to-number>
+          <input type="number" class="form-control" ng-model="$ctrl.person.location.latitude" placeholder=""
+                 min="-90" max="90" name="latitude" ng-required="$ctrl.person.location.longitude" string-to-number>
           <div ng-messages="createForm.latitude.$error"
                ng-if="(createForm.$submitted || createForm.latitude.$touched) && createForm.latitude.$error">
             <p class="alert alert-danger" ng-message="required">Latitude is required if longitude is filled.</p>
@@ -152,8 +152,8 @@
           </div>
         </div>
         <div>
-          <input type="number" class="form-control" ng-model="ctrl.person.location.longitude" placeholder=""
-                 min="-180" max="180" name="longitude" ng-required="ctrl.person.location.latitude" string-to-number>
+          <input type="number" class="form-control" ng-model="$ctrl.person.location.longitude" placeholder=""
+                 min="-180" max="180" name="longitude" ng-required="$ctrl.person.location.latitude" string-to-number>
           <div ng-messages="createForm.longitude.$error"
                ng-if="(createForm.$submitted || createForm.longitude.$touched) && createForm.longitude.$error">
             <p class="alert alert-danger" ng-message="required">Longitude is required if latitude is filled.</p>
@@ -165,20 +165,20 @@
       <div class="form-group">
         <label class="control-label">Tags</label>
         <div>
-          <input type="text" ng-model="ctrl.newTag">
-          <button class="add-feature btn btn-info btn-sm" ng-click="ctrl.addTag()">Add</button>
+          <input type="text" ng-model="$ctrl.newTag">
+          <button class="add-feature btn btn-info btn-sm" ng-click="$ctrl.addTag()">Add</button>
         </div>
         <div class="col-sm-10 col-sm-offset-2">
-          <div class="tag btn btn-info" ng-repeat="tag in ctrl.person.tags track by $index">
+          <div class="tag btn btn-info" ng-repeat="tag in $ctrl.person.tags track by $index">
             <span>{{tag}}</span>
-            <span class="glyphicon glyphicon-remove-circle" ng-click="ctrl.removeTag($index)"></span>
+            <span class="glyphicon glyphicon-remove-circle" ng-click="$ctrl.removeTag($index)"></span>
           </div>
         </div>
       </div>
       <div class="form-group check">
         <div class="col-sm-1">
           <label class="checkbox">
-            <input type="checkbox" ng-model="ctrl.person.isActive" ng-true-value="'true'" ng-false-value="'false'">
+            <input type="checkbox" ng-model="$ctrl.person.isActive" ng-true-value="'true'" ng-false-value="'false'">
           </label>
           <label class="col-sm-11 control-label">Active</label>
         </div>
@@ -186,14 +186,14 @@
       <div class="form-group">
         <label class="control-label required">Document Format</label>
         <div>
-          <label class="radio-inline"><input type="radio" name="docFormat" value="json" ng-model="ctrl.person.docFormat" placeholder=""
-                                             ng-disabled="ctrl.mode == 'edit'"
-                                             ng-required="!ctrl.person.docFormat">JSON</label>
+          <label class="radio-inline"><input type="radio" name="docFormat" value="json" ng-model="$ctrl.person.docFormat" placeholder=""
+                                             ng-disabled="$ctrl.mode == 'edit'"
+                                             ng-required="!$ctrl.person.docFormat">JSON</label>
         </div>
         <div>
-          <label class="radio-inline"><input type="radio" name="docFormat" value="xml" ng-model="ctrl.person.docFormat" placeholder=""
-                                             ng-disabled="ctrl.mode == 'edit'"
-                                             ng-required="!ctrl.person.docFormat">XML</label>
+          <label class="radio-inline"><input type="radio" name="docFormat" value="xml" ng-model="$ctrl.person.docFormat" placeholder=""
+                                             ng-disabled="$ctrl.mode == 'edit'"
+                                             ng-required="!$ctrl.person.docFormat">XML</label>
         </div>
         <div ng-messages="createForm.docFormat.$error"
              ng-if="(createForm.$submitted || createForm.docFormat.$touched) && createForm.docFormat.$error">
@@ -202,8 +202,8 @@
       </div>
       <div class="form-group">
         <div class="row">
-          <a class="btn btn-default" ui-sref="{{ctrl.prevState}}">Cancel</a>
-          <button class="btn btn-primary" ng-click="createForm.$valid && ctrl.submit()">Submit</button>
+          <a class="btn btn-default" ui-sref="{{$ctrl.prevState}}">Cancel</a>
+          <button class="btn btn-primary" ng-click="createForm.$valid && $ctrl.submit()">Submit</button>
         </div>
       </div>
     </form>

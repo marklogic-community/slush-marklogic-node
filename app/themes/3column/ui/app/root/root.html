@@ -13,9 +13,9 @@
     </div>
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav" role="tablist">
-        <li ng-if="rootCtrl.showHome"><a ui-sref="root.landing">Home</a></li>
+        <li ng-if="$rootCtrl.showHome"><a ui-sref="root.landing">Home</a></li>
         <li><a ui-sref="root.search">Search</a></li>
-        <li ng-show="!rootCtrl.currentUser.disallowUpdates"><a ui-sref="root.create({prev: rootCtrl.currentState})">Create</a></li>
+        <li ng-show="!$rootCtrl.currentUser.disallowUpdates"><a ui-sref="root.create({prev: $rootCtrl.currentState})">Create</a></li>
       </ul>
       <ml-user mode="inline"></ml-user>
     </div><!-- /.navbar-collapse -->
@@ -23,8 +23,8 @@
 
   <div class="content">
     <div class="container-fluid">
-      <message-board msg="rootCtrl.messageBoardService.message()"></message-board>
-      <div ng-hide="rootCtrl.messageBoardService.message()">
+      <message-board msg="$rootCtrl.messageBoardService.message()"></message-board>
+      <div ng-hide="$rootCtrl.messageBoardService.message()">
         <ui-view></ui-view>
       </div>
     </div>
@@ -64,7 +64,7 @@
       </div>
       <div class="row copyright">
         <div class="col-sm-12 text-muted">
-          Copyright <sup>&copy;</sup> {{ rootCtrl.currentYear }} MarkLogic Corporation. MARKLOGIC <sup>&reg;</sup> is a registered trademark of MarkLogic Corporation.
+          Copyright <sup>&copy;</sup> {{ $rootCtrl.currentYear }} MarkLogic Corporation. MARKLOGIC <sup>&reg;</sup> is a registered trademark of MarkLogic Corporation.
         </div>
       </div>
     </div>
