@@ -9,7 +9,7 @@
     return {
       restrict: 'EA',
       controller: 'LoginCtrl',
-      controllerAs: 'ctrl',
+      controllerAs: '$ctrl',
       replace: true,
       scope: {
         showCancel: '=',
