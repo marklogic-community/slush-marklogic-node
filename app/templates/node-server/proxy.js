@@ -12,10 +12,10 @@ var fs = require('fs');
 
 var ca = null;
 if (options.mlCertificate) {
-  console.log("Loading ML Certificate " + options.mlCertificate);
+  console.log('Loading ML Certificate ' + options.mlCertificate);
   ca = fs.readFileSync(options.mlCertificate);
 } else {
-  console.log("No ML SSL Certificate.");
+  console.log('No ML SSL Certificate.');
 }
 
 /************************************************/
@@ -24,41 +24,45 @@ if (options.mlCertificate) {
 
 // TODO: configurable path?
 var target = url.format({
-  protocol: options.mlCertificate?'https':'http',
+  protocol: options.mlCertificate ? 'https' : 'http',
   hostname: options.mlHost,
   port: options.mlHttpPort,
   pathname: '/v1'
 });
 
 var proxyServer = httpProxy.createProxyServer({
-  target: target
-  , ca : options.mlCertificate?ca:null
-  //options.httpsStrict==="false" assumes that you are in dev mode
-  , secure: options.httpsStrict==="true"?true:false
+  target: target,
+  ca: options.mlCertificate ? ca : null,
+  secure: options.httpsStrict
+    //options.httpsStrict === false assumes that you are in dev mode
 });
 
 function getAuth(req) {
   var user = req.session.passport && req.session.passport.user &&
-             req.session.passport.user.username;
+    req.session.passport.user.username;
 
   return authHelper.getAuthorization(req.session, req.method, req.path, {
     authUser: user
-  })
+  });
 }
 
-function proxy (req, res) {
-  getAuth(req).then(function (auth) {
+function proxy(req, res) {
+  getAuth(req).then(function(auth) {
     // TODO: if no auth?
-    var headers = { headers: { authorization: auth } };
+    var headers = {
+      headers: {
+        authorization: auth
+      }
+    };
 
     // TODO: filter www-header in response?
     // (currently prompts without authed middleware)
 
-    proxyServer.web(req, res, headers, function (e) {
+    proxyServer.web(req, res, headers, function(e) {
       console.log(e);
       res.status(500).send('Error');
     });
-  }, function (e) {
+  }, function(e) {
     console.log('auth error:');
     console.log(e);
     return res.status(401).send('Unauthorized');
@@ -69,15 +73,15 @@ function proxy (req, res) {
 /**********  create custom middleware  **********/
 /************************************************/
 
-function noCache (req, res, next) {
-  res.append('Cache-Control', 'no-cache, must-revalidate');     // HTTP 1.1 - must-revalidate
-  res.append('Pragma',        'no-cache');                      // HTTP 1.0
-  res.append('Expires',       'Sat, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+function noCache(req, res, next) {
+  res.append('Cache-Control', 'no-cache, must-revalidate'); // HTTP 1.1 - must-revalidate
+  res.append('Pragma', 'no-cache'); // HTTP 1.0
+  res.append('Expires', 'Sat, 26 Jul 1997 05:00:00 GMT'); // Date in the past
 
   next();
 }
 
-function authed (req, res, next) {
+function authed(req, res, next) {
   if (!(options.guestAccess || req.isAuthenticated())) {
     return res.status(401).send('Unauthorized');
   }
@@ -85,7 +89,7 @@ function authed (req, res, next) {
   next();
 }
 
-function update (req, res, next) {
+function update(req, res, next) {
   if (options.disallowUpdates) {
     return res.status(403).send('Forbidden');
   }
@@ -93,11 +97,11 @@ function update (req, res, next) {
   next();
 }
 
-function profile (req, res, next) {
+function profile(req, res, next) {
   if ((req.path === '/documents') &&
-      req.query.uri &&
-      req.query.uri.match('/api/users/') &&
-      !req.query.uri.match('/api/users/' + req.session.passport.user.username + '.json')) {
+    req.query.uri &&
+    req.query.uri.match('/api/users/') &&
+    !req.query.uri.match('/api/users/' + req.session.passport.user.username + '.json')) {
     return res.status(403).send('Forbidden');
   }
 
@@ -143,7 +147,7 @@ ext.get(proxy);
 ext.all(update, proxy);
 
 // Explicitly reject all other routes
-router.all('*', function (req, res) {
+router.all('*', function(req, res) {
   res.status(401).send('Not proxied');
 });
 

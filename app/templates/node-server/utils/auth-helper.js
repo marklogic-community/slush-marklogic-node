@@ -3,7 +3,7 @@
 'use strict';
 
 var options = require('./options')();
-var https = require('https')
+var https = require('https');
 var http = require('http');
 var q = require('q');
 var wwwAuthenticate = require('www-authenticate');
@@ -14,12 +14,12 @@ var LocalStrategy = require('passport-local').Strategy;
 
 var httpClient = http;
 if (options.mlCertificate) {
-    console.log("ML Certificate = '" + options.mlCertificate + "'")
-    console.log("Will use https client.");
-    httpClient = https;
+  console.log('ML Certificate = "' + options.mlCertificate + '"');
+  console.log('Will use https client.');
+  httpClient = https;
 } else {
-    console.log("ML Certificate = '" + options.mlCertificate + "'")
-    console.log("Will use http client.");
+  console.log('ML Certificate = "' + options.mlCertificate + '"');
+  console.log('Will use http client.');
 }
 
 var defaultOptions = {
@@ -39,8 +39,9 @@ function init() {
     done(null, obj);
   });
 
-  passport.use(new LocalStrategy(
-    { passReqToCallback: true },
+  passport.use(new LocalStrategy({
+      passReqToCallback: true
+    },
     function(req, username, password, done) {
       var reqOptions = {
         hostname: options.mlHost,
@@ -49,14 +50,12 @@ function init() {
         headers: {}
       };
 
-      getAuthorization(req.session, reqOptions.method, reqOptions.path,
-        {
-          authHost: options.mlHost,
-          authPort: options.mlHttpPort,
-          authUser: username,
-          authPassword: password
-        }
-      ).then(function(authorization) {
+      getAuthorization(req.session, reqOptions.method, reqOptions.path, {
+        authHost: options.mlHost,
+        authPort: options.mlHttpPort,
+        authUser: username,
+        authPassword: password
+      }).then(function(authorization) {
         if (authorization) {
           reqOptions.headers.Authorization = authorization;
         }
@@ -64,9 +63,9 @@ function init() {
         var login = httpClient.get(reqOptions, function(response) {
 
           var user = {
-                authenticated:true,
-                username:username
-              };
+            authenticated: true,
+            username: username
+          };
 
           if (response.statusCode === 200) {
             response.on('data', function(chunk) {
@@ -83,9 +82,13 @@ function init() {
             //no user profile yet..
             done(null, user);
           } else if (response.statusCode === 401) {
-            done(null, false, {message: 'Invalid credentials'});
+            done(null, false, {
+              message: 'Invalid credentials'
+            });
           } else {
-            done(null, false, {message: 'API error'});
+            done(null, false, {
+              message: 'API error'
+            });
           }
         });
         login.on('error', function(e) {
@@ -100,7 +103,9 @@ function init() {
 
 function handleLocalAuth(req, res, next) {
   passport.authenticate('local', function(err, user, info) {
-    if (err) { return next(err); }
+    if (err) {
+      return next(err);
+    }
     if (!user) {
       return res.json(401, {
         message: info.message
@@ -109,7 +114,9 @@ function handleLocalAuth(req, res, next) {
 
     // Manually establish the session...
     req.login(user, function(err) {
-      if (err) { return next(err); }
+      if (err) {
+        return next(err);
+      }
       return res.json(user);
     });
 
@@ -120,8 +127,7 @@ function isAuthenticated(req, res, next) {
 
   if (req.isAuthenticated()) {
     return next();
-  }
-  else {
+  } else {
     res.status(401).send('Unauthorized');
   }
 }
@@ -181,8 +187,7 @@ function timestampAuthenticator(authenticator) {
 var expirationTime = 1000 * 60 * 60 * 12;
 
 function isExpired(authenticator) {
-  return
-  authenticator.lastAccessed &&
+  return authenticator.lastAccessed &&
     ((new Date()) - authenticator.lastAccessed) > expirationTime;
 }
 
@@ -222,7 +227,7 @@ function getAuthorization(session, reqMethod, reqPath, authOptions) {
     }, function(response) {
       var statusCode = response.statusCode;
       var challenge = response.headers['www-authenticate'];
-      var hasChallenge = (challenge != null);
+      var hasChallenge = (challenge !== null);
       if (statusCode === 401 && hasChallenge) {
         authenticator = createAuthenticator(
           session,

@@ -12,18 +12,20 @@ var http = require('http');
 var https = require('https');
 var fs = require('fs');
 
-var ca = "";
+var ca = '';
 var httpClient = null;
 if (options.mlCertificate) {
-    console.log("Loading ML Certificate " + options.mlCertificate);
-    ca = fs.readFileSync(options.mlCertificate);
-    httpClient = https;
+  console.log('Loading ML Certificate ' + options.mlCertificate);
+  ca = fs.readFileSync(options.mlCertificate);
+  httpClient = https;
 } else {
-    httpClient = http;
+  httpClient = http;
 }
 
 // [GJo] (#31) Moved bodyParsing inside routing, otherwise it might try to parse uploaded binaries as json..
-router.use(bodyParser.urlencoded({extended: true}));
+router.use(bodyParser.urlencoded({
+  extended: true
+}));
 router.use(bodyParser.json());
 
 router.get('/user/status', function(req, res) {
@@ -33,8 +35,9 @@ router.get('/user/status', function(req, res) {
     if (options.guestAccess) {
       res.send(authStatus(
         true,
-        options.defaultUser,
-        { fullname: 'Guest' }
+        options.defaultUser, {
+          fullname: 'Guest'
+        }
       ));
     } else {
       res.send(authStatus(
@@ -54,14 +57,12 @@ router.get('/user/status', function(req, res) {
     };
 
     delete headers['content-length'];
-    authHelper.getAuthorization(req.session, reqOptions.method, reqOptions.path,
-      {
-        authHost: reqOptions.hostname || options.mlHost,
-        authPort: reqOptions.port || options.mlHttpPort,
-        authUser: passportUser.username,
-        authPassword: passportUser.password
-      }
-    ).then(
+    authHelper.getAuthorization(req.session, reqOptions.method, reqOptions.path, {
+      authHost: reqOptions.hostname || options.mlHost,
+      authPort: reqOptions.port || options.mlHttpPort,
+      authUser: passportUser.username,
+      authPassword: passportUser.password
+    }).then(
       function(authorization) {
         delete headers['content-length'];
         if (authorization) {
@@ -100,7 +101,7 @@ router.get('/user/status', function(req, res) {
           }
         });
 
-        profile.on('socket', function (socket) {
+        profile.on('socket', function(socket) {
           socket.on('timeout', function() {
             console.log('Timeout reached, aborting call to ML..');
             profile.abort();
@@ -135,19 +136,16 @@ router.post('/user/login', function(req, res, next) {
 
 router.get('/user/logout', function(req, res) {
   noCache(res);
-  if (req.session.authenticator) {
-    authHelper.clearAuthenticator(req.session);
-    delete req.session.authenticator;
-  }
   req.logout();
+  authHelper.clearAuthenticator(req.session);
   res.send();
 });
 
 router.get('/*', four0four.notFoundMiddleware);
 
 function noCache(response) {
-  response.append('Cache-Control', 'no-cache, must-revalidate');//HTTP 1.1 - must-revalidate
-  response.append('Pragma', 'no-cache');//HTTP 1.0
+  response.append('Cache-Control', 'no-cache, must-revalidate'); //HTTP 1.1 - must-revalidate
+  response.append('Pragma', 'no-cache'); //HTTP 1.0
   response.append('Expires', 'Sat, 26 Jul 1997 05:00:00 GMT'); // Date in the past
 }
 

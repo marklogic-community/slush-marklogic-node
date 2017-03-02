@@ -52,7 +52,7 @@ console.log('About to crank up node');
 console.log('PORT=' + port);
 console.log('NODE_ENV=' + environment);
 
-switch (environment){
+switch (environment) {
   case 'prod':
   case 'dev':
     console.log('** DIST **');
@@ -82,10 +82,10 @@ var server = null;
 if (options.nodeJsCertificate) {
   // Docs on how to create self signed certificates
   // https://devcenter.heroku.com/articles/ssl-certificate-self#prerequisites
-  console.log("Starting the server in HTTPS");
-  console.log("Node Certificate " + options.nodeJsCertificate);
-  console.log("Node JS key " + options.nodeJsPrivateKey);
-  var privateKey  = fs.readFileSync(options.nodeJsPrivateKey, 'utf8');
+  console.log('Starting the server in HTTPS');
+  console.log('Node Certificate ' + options.nodeJsCertificate);
+  console.log('Node JS key ' + options.nodeJsPrivateKey);
+  var privateKey = fs.readFileSync(options.nodeJsPrivateKey, 'utf8');
   var certificate = fs.readFileSync(options.nodeJsCertificate, 'utf8');
   var credentials = {
     key: privateKey,
@@ -93,14 +93,14 @@ if (options.nodeJsCertificate) {
   };
   server = https.createServer(credentials, app);
 } else {
-  console.log("Starting the server in HTTP");
+  console.log('Starting the server in HTTP');
   server = http.createServer(app);
 }
 
 server.listen(port, function() {
   console.log('Express server listening on port ' + port);
   console.log('env = ' + app.get('env') +
-    '\n__dirname = ' + __dirname  +
+    '\n__dirname = ' + __dirname +
     '\nprocess.cwd = ' + process.cwd());
 });
 
