@@ -10,7 +10,7 @@
     return {
       restrict: 'E',
       controller: 'SnippetCtrl',
-      controllerAs: 'ctrl',
+      controllerAs: '$ctrl',
       replace: true,
       scope: {
         setSnippet: '&'

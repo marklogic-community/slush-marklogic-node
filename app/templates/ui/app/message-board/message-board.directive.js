@@ -10,7 +10,7 @@
     return {
       restrict: 'E',
       controller: 'MessageBoardController',
-      controllerAs: 'ctrl',
+      controllerAs: '$ctrl',
       replace: true,
       scope: {
         msg: '='

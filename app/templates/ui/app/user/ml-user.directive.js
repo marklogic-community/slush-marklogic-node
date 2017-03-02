@@ -10,7 +10,7 @@
     return {
       restrict: 'EA',
       controller: 'UserCtrl',
-      controllerAs: 'ctrl',
+      controllerAs: '$ctrl',
       replace: true,
       scope: {
         showCancel: '=',
