@@ -38,7 +38,7 @@
 
     function getAuthenticatedStatus() {
       if (_isAuthenticated !== undefined) {
-        return _isAuthenticated;
+        return $q.resolve(_isAuthenticated);
       }
 
       return $http.get('/api/user/status', {}).then(function(response) {
@@ -120,6 +120,8 @@
             'params': JSON.stringify((_toStateParams || $stateParams))
           }).then(function() {
             d.reject();
+          }, function(error) {
+            throw error;
           });
       }
       return d.promise;
