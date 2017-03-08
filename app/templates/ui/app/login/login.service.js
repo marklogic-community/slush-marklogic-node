@@ -175,21 +175,12 @@
       }
 
       if (routeIsProtected(next.name)) {
-        var auth = service.getAuthenticatedStatus();
-
-        if (angular.isFunction(auth.then)) {
-          auth.then(function() {
-            if (!service.isAuthenticated()) {
-              //this does NOT block requests in a timely fashion...
-              blockRoute(event, next, nextParams);
-            }
-          });
-        }
-        else {
-          if (!auth) {
+        service.getAuthenticatedStatus().then(function() {
+          if (!service.isAuthenticated()) {
+            //this does NOT block requests in a timely fashion...
             blockRoute(event, next, nextParams);
           }
-        }
+        });
 
       }
     });
