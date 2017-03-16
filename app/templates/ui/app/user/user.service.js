@@ -4,8 +4,8 @@
   angular.module('app.user')
     .factory('userService', UserService);
 
-  UserService.$inject = ['$rootScope', 'loginService'];
-  function UserService($rootScope, loginService) {
+  UserService.$inject = ['$rootScope', '$q', 'loginService'];
+  function UserService($rootScope, $q, loginService) {
     var _currentUser = null;
 
     function currentUser() {
@@ -14,7 +14,7 @@
 
     function getUser() {
       if (_currentUser) {
-        return _currentUser;
+        return $q.resolve(_currentUser);
       }
 
       return loginService.getAuthenticatedStatus().then(currentUser);
