@@ -1,0 +1,22 @@
+# Additional Microsoft Windows Requirements
+
+Some required modules do not have native Windows modules available and require a development environment in which they can be compiled. To do this, npm uses node-gyp to create these modules.  For more information, please read the [node-gyp documentation](https://github.com/nodejs/node-gyp/blob/master/README.md)
+
+## Install Required Dependencies
+
+- [npm](https://www.npmjs.com/): Built-in package manager for node (comes with
+  node, but check to be sure you have latest version: `npm install -g npm`). Older versions of npm (versions older than 2.0) are not able to upgrade themselves properly. If `npm -v` does not reveal the latest version (3.7.3 at this time of writing) after installing the latest version, open an elevated command prompt and change to the nodejs home directory (typically C:\Program Files\nodejs) and execute `npm install npm`.
+- [Python 2.7](https://www.python.org/downloads/release/python-2710/): Python 2.7 is required. If you already have a different version, you will need to tell npm to use this version of python `npm config set python C:\Path\to\Python2.7`
+- [Visual Studio Community Edition](https://www.visualstudio.com/): Visual Studio Community Edition or Express Edition is required to provide a valid VC++ environment. Please make sure that VC++ and Windows SDK are both selected during install. You will need to set the environment variable `GYP_MSVS_VERSION` to the version of Visual Studio installed. This will probably be `2013` for Windows 7-8.1 and `2015` for Windows 10.
+
+## Use of Elevated Command Prompt
+
+If your installation of node and npm required elevated priviledges, you will need to use an elevated command prompt to upgrade npm and perform all global `npm install -g` commands. When scaffolding your project using slush, a normal command prompt is sufficient.
+
+## Configuring MLCP
+
+The default location for MLCP is `/usr/local/mlcp`.  This path is unlikely the appropriate location of your MLCP install.  To specify the correct location of MLCP in Windows, edit/create `deploy\local.properties` and add
+```
+mlcp-home=C:\\path\\to\\mlcp
+```
+Please note that the backslash is being escaped by a second backslash.  This inserts a literal backslash instead of inserting an escape character in Java.
