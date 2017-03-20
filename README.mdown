@@ -117,11 +117,13 @@ roles for you, and deploy the back-end application code.
 
     ./ml local bootstrap
     ./ml local deploy modules
+    ./ml local deploy content
 
 Or on Windows:
 
     ml.bat local bootstrap
     ml.bat local deploy modules
+    ml.bat local deploy content
 
 ## Launch your Application
 
