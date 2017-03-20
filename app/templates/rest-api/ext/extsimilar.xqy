@@ -45,7 +45,7 @@ function ext:post(
       json:to-array(
         (
           for $doc in cts:search(collection(), cts:and-query(($collection-q,cts:similar-query(doc($uri)))))
-          let $similar-uri := base-uri($doc)
+          let $similar-uri := xdmp:node-uri($doc)
           where $similar-uri != $uri
           return $similar-uri
         )[1 to $limit]
