@@ -152,7 +152,8 @@
   -->
 
   <!-- This will extract the latitude and longitude from the search. -->
-  <extract-document-data selected="all">
+  <extract-document-data selected="include">
+    <extract-path>//location</extract-path>
   </extract-document-data>
 
 </options>

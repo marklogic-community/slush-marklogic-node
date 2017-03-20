@@ -13,12 +13,9 @@ generator, and uses the following components:
 To deploy and run the application you need:
 
 - [node.js v0.10+](http://nodejs.org/download/)
-- [npm v2+](https://www.npmjs.com/): Built-in package manager for node (comes with
-  node, but check to be sure you have latest version: `npm install -g npm`)
-- [gulp](http://gulpjs.com/): Javascript task automation (`npm install -g
-  gulp`)
-- [Bower](http://bower.io/): A package manager for front-end libraries (`npm
-  install -g bower`)
+- [npm v2+](https://www.npmjs.com/): Built-in package manager for node (comes with node)
+- [gulp](http://gulpjs.com/): Javascript task automation (`npm install -g gulp`)
+- [Bower](http://bower.io/): A package manager for front-end libraries (`npm install -g bower`)
 - [Git](https://git-scm.com/) - Roxy depends on this version control system
 - [Ruby v1.9.3+](https://www.ruby-lang.org/en/documentation/installation/) - Roxy
   depends on Ruby in order to run server configuration scripts
@@ -89,11 +86,13 @@ roles for you, and deploy the back-end application code.
 
     ./ml local bootstrap
     ./ml local deploy modules
+    ./ml local deploy content
 
 Or on Windows:
 
     ml.bat local bootstrap
     ml.bat local deploy modules
+    ml.bat local deploy content
 
 ## Launch your Application
 
