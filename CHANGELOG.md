@@ -6,36 +6,33 @@
 **Implemented enhancements:**
 
 - User ${app-role} in sample options [\#471](https://github.com/marklogic/slush-marklogic-node/issues/471)
-- Add Cards theme [\#411](https://github.com/marklogic/slush-marklogic-node/issues/411)
+- Refactor to use $ctrl in html [\#465](https://github.com/marklogic/slush-marklogic-node/issues/465)
+- Use digest by default [\#442](https://github.com/marklogic/slush-marklogic-node/issues/442)
+- Cards theme [\#411](https://github.com/marklogic/slush-marklogic-node/issues/411)
 - Using slush with marklogic server in HTTPS [\#401](https://github.com/marklogic/slush-marklogic-node/issues/401)
-- View HTML keys/values on detail page [\#341](https://github.com/marklogic/slush-marklogic-node/issues/341)
-- Consider adding ec5/6 polyfill [\#330](https://github.com/marklogic/slush-marklogic-node/issues/330)
-- XML preview in detail page not using syntax highlights [\#245](https://github.com/marklogic/slush-marklogic-node/issues/245)
+- Show user-friendly keys/values on detail page [\#341](https://github.com/marklogic/slush-marklogic-node/issues/341)
+- Applied Bootstrap html template for polyfills and viewport [\#330](https://github.com/marklogic/slush-marklogic-node/issues/330)
+- Syntax highlighting for XML preview in detail page [\#245](https://github.com/marklogic/slush-marklogic-node/issues/245)
 
 **Fixed bugs:**
 
 - remove "vkbeautify-wrapper": "\*", from bower.json [\#486](https://github.com/marklogic/slush-marklogic-node/issues/486)
+- Default search options should not extract full doc [\#484](https://github.com/marklogic/slush-marklogic-node/issues/484)
+- Passport authenticators not flushed on logout [\#482](https://github.com/marklogic/slush-marklogic-node/issues/482)
+- userService.getUser fails if not logged in [\#480](https://github.com/marklogic/slush-marklogic-node/issues/480)
 - hard-coded sinon release in bower.json fails [\#475](https://github.com/marklogic/slush-marklogic-node/issues/475)
 - Guest-access still not working properly with passport [\#473](https://github.com/marklogic/slush-marklogic-node/issues/473)
 - Subtle diffs in auth with new whitelist proxy [\#472](https://github.com/marklogic/slush-marklogic-node/issues/472)
 - Middle-tier vars not passed through properly [\#470](https://github.com/marklogic/slush-marklogic-node/issues/470)
-- Helmet noSniff together with middle-tier sending wrong mimes, causes ui to not open [\#451](https://github.com/marklogic/slush-marklogic-node/issues/451)
-- Recent changes to `ml info` break `gulp init` [\#450](https://github.com/marklogic/slush-marklogic-node/issues/450)
-- vkbeautify-wrapper gone [\#438](https://github.com/marklogic/slush-marklogic-node/issues/438)
-- gulp add-deploy-target links to ~/.ssh [\#436](https://github.com/marklogic/slush-marklogic-node/issues/436)
-- INSTALL.md fails to mention git@ usage, and how to accept fingerprint [\#387](https://github.com/marklogic/slush-marklogic-node/issues/387)
-
-**Closed issues:**
-
-- BrowserSync 2.8.4+ doesn't work with Nodejs v0.10 [\#433](https://github.com/marklogic/slush-marklogic-node/issues/433)
-- Default search options extract full doc [\#484](https://github.com/marklogic/slush-marklogic-node/issues/484)
-- Passport authenticators not flushed on logout [\#482](https://github.com/marklogic/slush-marklogic-node/issues/482)
-- userService.getUser fails if not logged in [\#480](https://github.com/marklogic/slush-marklogic-node/issues/480)
 - Issue with charts in dashboard theme [\#467](https://github.com/marklogic/slush-marklogic-node/issues/467)
-- Refactor to use $ctrl in html [\#465](https://github.com/marklogic/slush-marklogic-node/issues/465)
 - Navigation breaks if showHome is disabled [\#461](https://github.com/marklogic/slush-marklogic-node/issues/461)
 - "registered" property in sample data is incorrectly formatted dateTime [\#458](https://github.com/marklogic/slush-marklogic-node/issues/458)
-- Use digest by default [\#442](https://github.com/marklogic/slush-marklogic-node/issues/442)
+- Helmet noSniff together with middle-tier sending wrong mimes, causes ui to not open [\#451](https://github.com/marklogic/slush-marklogic-node/issues/451)
+- Recent changes to `ml info` break `gulp init` [\#450](https://github.com/marklogic/slush-marklogic-node/issues/450)
+- Bower dependency vkbeautify-wrapper gone [\#438](https://github.com/marklogic/slush-marklogic-node/issues/438)
+- gulp add-deploy-target links to ~/.ssh [\#436](https://github.com/marklogic/slush-marklogic-node/issues/436)
+- BrowserSync 2.8.4+ doesn't work with Nodejs v0.10 [\#433](https://github.com/marklogic/slush-marklogic-node/issues/433)
+- INSTALL.md fails to mention git@ usage, and how to accept fingerprint [\#387](https://github.com/marklogic/slush-marklogic-node/issues/387)
 
 **Merged pull requests:**
 
