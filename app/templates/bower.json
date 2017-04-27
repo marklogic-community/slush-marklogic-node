@@ -27,7 +27,9 @@
     "tinymce-dist": "4.3.12",
     "vkbeautify": "*",
     "ml-highcharts-ng": "~0.0.11",
-    "view-file-ng": "^0.1.1"
+    "view-file-ng": "^0.1.1",
+    "socket.io-client": "^1.7.2",
+    "angular-socket-io": "^0.7.0"
   },
   "overrides": {
     "angular-highlightjs": {
@@ -45,6 +47,11 @@
     "vkbeautify": {
       "main": [
         "vkbeautify.js"
+      ]
+    },
+    "socket.io-client": {
+      "main": [
+        "dist/socket.io.js"
       ]
     }
   },

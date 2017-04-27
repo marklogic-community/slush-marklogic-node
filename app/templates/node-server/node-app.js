@@ -97,6 +97,22 @@ if (options.nodeJsCertificate) {
   server = http.createServer(app);
 }
 
+var io = require('socket.io')(server);
+io.on('connection', function(socket){
+  // console.log('a user connected');
+
+  // io.emit() sends a message to client on the 'server' channel
+  // io.emit('server', 'hi client');
+  socket.on('disconnect', function(){
+    // console.log('user disconnected');
+  });
+  socket.on('client', function(val){
+    // listening for message from client
+    // console.log('client', val);
+  });
+});
+
+
 server.listen(port, function() {
   console.log('Express server listening on port ' + port);
   console.log('env = ' + app.get('env') +
