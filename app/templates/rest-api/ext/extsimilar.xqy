@@ -43,12 +43,15 @@ function ext:post(
   let $content :=
     if (exists($uri)) then
       json:to-array(
-        (
-          for $doc in cts:search(collection(), cts:and-query(($collection-q,cts:similar-query(doc($uri)))))
-          let $similar-uri := xdmp:node-uri($doc)
-          where $similar-uri != $uri
-          return $similar-uri
-        )[1 to $limit]
+        cts:uris(
+          (),
+          ("limit="||$limit),
+          cts:and-query((
+            cts:not-query(cts:document-query($uri)),
+            $collection-q,
+            cts:similar-query(doc($uri))
+          ))
+        )
       )
     else json:array()
   let $response := json:object()
