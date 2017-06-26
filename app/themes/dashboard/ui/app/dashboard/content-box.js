@@ -8,7 +8,7 @@
     return {
       restrict: 'E',
       transclude: true,
-      replace: false,
+      replace: true,
       scope: {
         boxTitle: '@',
         boxBordered: '@',

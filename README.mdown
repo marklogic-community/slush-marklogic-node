@@ -62,9 +62,7 @@ On Mac or Linux:
     npm install
     bower install
     gulp init-local
-    ./ml local bootstrap
-    ./ml local deploy modules
-    ./ml local deploy content
+    ./ml local install
     ./ml local mlcp -options_file import-sample-data.options
 
 On Windows:
@@ -73,9 +71,7 @@ On Windows:
     npm install
     bower install
     gulp init-local
-    ml.bat local bootstrap
-    ml.bat local deploy modules
-    ml.bat local deploy content
+    ml.bat local install
     ml.bat local mlcp -options_file import-sample-data.options
 
 ## Prepare your Application
