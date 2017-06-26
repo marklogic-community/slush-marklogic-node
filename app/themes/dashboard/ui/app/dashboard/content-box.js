@@ -11,27 +11,32 @@
       replace: true,
       scope: {
         boxTitle: '@',
-        boxBordered: '@'
+        boxBordered: '@',
+        collapsed: '@'
       },
-      link: function(scope) {
-        scope.hasBorder = scope.boxBordered !== 'false' && scope.boxBordered !== 'no';
+      link: function($scope, $elem, $attrs) {
+        $scope.hasBorder = $scope.boxBordered !== 'false' && $scope.boxBordered !== 'no';
 
-        // TODO: what is the purpose of this watch?
-        scope.$watch(scope.boxTabs, function(newVal) {
-          if (newVal) {
-            scope.hasTabs = true;
-          } else {
-            scope.hasTabs = false;
-          }
+        $scope.toggleCollapsed = function() {
+          $scope.isCollapsed = !$scope.isCollapsed;
+        };
+
+        $scope.$watch(function() { return $attrs.collapsed; }, function(newVal) {
+          newVal = '' + newVal;
+          $scope.isCollapsed = newVal === 'true' || newVal === 'yes';
         });
       },
       /* jshint multistr: true */
       /* jscs: disable */
-      template: '<div class="box">\
-        <div class="box-header" ng-class="{ \'with-border\': boxBordered }" ng-if="boxTitle">\
+      template: '<div class="box" ng-init="collapsed = collapsed || false">\
+        <div class="box-header" ng-class="{ \'with-border\': boxBordered }" ng-if="boxTitle" ng-click="toggleCollapsed()">\
           <h3 class="box-title">{{ boxTitle }}</h3>\
+          <div class="box-tools pull-right">\
+            <button type="button" class="btn btn-box-tool" ng-hide="isCollapsed"><i class="fa fa-minus"></i></button>\
+            <button type="button" class="btn btn-box-tool" ng-show="isCollapsed"><i class="fa fa-plus"></i></button>\
+          </div>\
         </div>\
-        <div class="box-body" ng-transclude></div>\
+        <div class="box-body" ng-hide="isCollapsed" ng-transclude></div>\
       </div>'
       /* jscs: enable */
     };

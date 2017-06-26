@@ -1,5 +1,6 @@
 node_modules
 bower_components
+/mlpm_modules
 coverage
 ui/fonts
 deploy/local.properties

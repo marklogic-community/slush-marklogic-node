@@ -100,9 +100,9 @@ class ServerConfig
         xquery version "1.0-ml";
 
         let $new-permissions := (
-          xdmp:permission("#{@properties["ml.app-name"]}-role", "read"),
-          xdmp:permission("#{@properties["ml.app-name"]}-role", "update"),
-          xdmp:permission("#{@properties["ml.app-name"]}-role", "execute")
+          xdmp:permission("#{@properties["ml.app-role"]}", "read"),
+          xdmp:permission("#{@properties["ml.app-role"]}", "update"),
+          xdmp:permission("#{@properties["ml.app-role"]}", "execute")
         )
 
         let $uris :=

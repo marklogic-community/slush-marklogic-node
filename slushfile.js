@@ -42,13 +42,13 @@ function printUsage() {
   process.stdout.write('  fork=<..>             Github fork to use for Roxy. Defaults to: marklogic\n');
   process.stdout.write('  branch=<..>           Github branch to use for Roxy. Defaults to: master\n');
   process.stdout.write('  theme=<..>            Slush theme to use. Defaults to: default\n');
-  process.stdout.write('  ml-version=<..>       MarkLogic version. Defaults to: 8\n');
+  process.stdout.write('  ml-version=<..>       MarkLogic version. Defaults to: 9\n');
   process.stdout.write('  ml-host=<..>          Host on which MarkLogic runs. Defaults to: localhost\n');
   process.stdout.write('  ml-admin-user=<..>    User for MarkLogic deployments. Defaults to: admin\n');
   process.stdout.write('  ml-admin-pass=<..>    Pass for MarkLogic deployments. Defaults to: <blank>\n');
   process.stdout.write('  ml-app-user=<..>      MarkLogic user for guest access. Defaults to: <app-name>-user\n');
   process.stdout.write('  ml-app-pass=<..>      MarkLogic pass for guest access. Defaults to: <roxy-appuser-password>\n');
-  process.stdout.write('  ml-http-port=<..>     Port at which MarkLogic app-server runs. Defaults to: 8040\n');
+  process.stdout.write('  ml-http-port=<..>     Port at which MarkLogic app-server runs. Defaults to: 8070\n');
   process.stdout.write('  ml-xcc-port=<..>      Port at which MarkLogic xcc-server runs. Defaults to: <ml-app-port>\n');
   process.stdout.write('  node-port=<..>        Port at which Node.js middle-tier runs. Defaults to: 9070\n');
   process.stdout.write('  guest-access=<..>     Whether guests are automatically logged in. Defaults to: false\n');
@@ -126,7 +126,10 @@ function processInput() {
     branch: 'master'
   };
   (gulp.args || process.argv).forEach(function(arg) {
-    if (isFlag(arg)) {
+    if (arg === 'help') {
+      printUsage();
+      process.exit(0);
+    } else if (isFlag(arg)) {
       var splits = arg.split('=');
       var flag = splits[0].replace(/^-+/,'');
       var value = splits[1];
@@ -474,7 +477,7 @@ gulp.task('init', ['checkForUpdates'], function(done) {
       type: 'list',
       name: 'mlVersion',
       message: 'MarkLogic version?',
-      choices: ['8', '7', '6', '5'],
+      choices: ['9', '8', '7'],
       default: 0
     });
   }
@@ -508,7 +511,7 @@ gulp.task('init', ['checkForUpdates'], function(done) {
       type: 'input',
       name: 'appPort',
       message: 'MarkLogic App/Rest port?',
-      default: 8040
+      default: 8070
     });
   }
   if (!clArgs['ml-xcc-port']) {
@@ -516,7 +519,7 @@ gulp.task('init', ['checkForUpdates'], function(done) {
       type: 'input',
       name: 'xccPort',
       message: 'XCC port?',
-      default: 8041,
+      default: 8071,
       when: function(answers) {
         return (answers.mlVersion || clArgs['ml-version']) < 8;
       }
