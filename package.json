@@ -48,11 +48,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/marklogic/slush-marklogic-node"
+    "url": "https://github.com/marklogic-community/slush-marklogic-node"
   },
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/marklogic/slush-marklogic-node/issues"
+    "url": "https://github.com/marklogic-community/slush-marklogic-node/issues"
   },
-  "homepage": "https://github.com/marklogic/slush-marklogic-node"
+  "homepage": "https://github.com/marklogic-community/slush-marklogic-node"
 }
