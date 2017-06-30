@@ -1,5 +1,16 @@
 # Change Log
 
+## [1.3.2](https://github.com/marklogic-community/slush-marklogic-node/tree/1.3.2) (2017-06-30)
+[Full Changelog](https://github.com/marklogic-community/slush-marklogic-node/compare/1.3.1...1.3.2)
+
+**Fixed bugs:**
+
+- Chalk issue, SyntaxError: Use of const in strict mode. [\#511](https://github.com/marklogic-community/slush-marklogic-node/issues/511)
+
+**Merged pull requests:**
+
+- Fixed bower install for older node [\#510](https://github.com/marklogic-community/slush-marklogic-node/pull/510) ([grtjn](https://github.com/grtjn))
+
 ## [1.3.1](https://github.com/marklogic-community/slush-marklogic-node/tree/1.3.1) (2017-06-26)
 [Full Changelog](https://github.com/marklogic-community/slush-marklogic-node/compare/1.3.0...1.3.1)
 
