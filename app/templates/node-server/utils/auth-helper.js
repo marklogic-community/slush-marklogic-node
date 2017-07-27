@@ -82,6 +82,7 @@ function init() {
             //no user profile yet..
             done(null, user);
           } else if (response.statusCode === 401) {
+            clearAuthenticator(req.session);
             done(null, false, {
               message: 'Invalid credentials'
             });
