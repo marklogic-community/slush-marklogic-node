@@ -1,5 +1,5 @@
 /* global MLSearchController */
-(function () {
+(function() {
   'use strict';
 
   angular.module('app.search')
@@ -22,5 +22,27 @@
       ctrl.mlSearch.setSnippet(type);
       ctrl.search();
     };
+
+    ctrl.setSort = function(type) {
+      ctrl.mlSearch.setSort(type);
+      ctrl.search();
+    };
+
+    function listFromOperator(operatorArray, operatorType) {
+      return (_.filter(
+        operatorArray,
+        function(val) {
+          return val && val.state && val.state[0] && val.state[0][operatorType];
+        }
+      )[0] || { state: []}).state.map(function(state) {
+        return state.name;
+      });
+    }
+
+    ctrl.mlSearch.getStoredOptions().then(function(data) {
+      ctrl.sortList = listFromOperator(data.options.operator, 'sort-order');
+      ctrl.snippetList = listFromOperator(data.options.operator, 'transform-results');
+    });
+
   }
 }());
