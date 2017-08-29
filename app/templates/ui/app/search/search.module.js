@@ -6,7 +6,6 @@
     'ml.search',
 
     // html dependencies
-    'app.snippet',
     'ml.search.tpls',
     'ui.bootstrap',
     'ui.router'

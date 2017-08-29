@@ -25,6 +25,13 @@
           data: {
             results: results
           }
+        }),
+        queryConfig: $q.when({
+          data: {
+            options: {
+              operator: []
+            }
+          }
         })
       });
 

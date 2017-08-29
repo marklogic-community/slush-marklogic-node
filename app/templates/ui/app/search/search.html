@@ -3,21 +3,22 @@
     <ml-input qtext="$ctrl.qtext" search="$ctrl.search(qtext)" suggest="$ctrl.suggest(val)" template="fa" class="search"></ml-input>
   </div>
 </div>
-
 <div class="search row">
   <div class="col-xs-12 col-sm-4 col-md-3 facets-col">
     <ml-facets facets="$ctrl.response.facets" toggle="$ctrl.toggleFacet(facet, value)" active-facets="$ctrl.mlSearch.activeFacets" negate="$ctrl.toggleNegatedFacet(facet,value)"></ml-facets>
   </div>
   <div class="col-xs-12 col-sm-8 col-md-9 results-col">
     <h4 ng-if="$ctrl.response.total === 0">No results to show</h4>
-
     <div ng-if="$ctrl.response.total > 0" class="results">
       <div class="pagination-ctrls">
         <uib-pagination class="pagination-sm" ng-model="$ctrl.page" ng-change="$ctrl.search()" max-size="10" boundary-links="true" total-items="$ctrl.response.total" items-per-page="$ctrl.response['page-length']">
         </uib-pagination>
-        <ml-snippet set-snippet="$ctrl.setSnippet(type)"></ml-snippet>
+        <div class="col-sm-12 col-lg-5" id="search-operator-dropdowns">
+          <ml-select label="'Snippet Size'" current-selection="$ctrl.mlSearch.getSnippet() || 'compact'" selection-list="$ctrl.snippetList" on-select="$ctrl.setSnippet(selectionName)"></ml-select>
+          <ml-select label="'Sort'" current-selection="$ctrl.mlSearch.getSort() || 'score'" selection-list="$ctrl.sortList" on-select="$ctrl.setSort(selectionName)"></ml-select>
+        </div>
       </div>
-      <ml-metrics search="$ctrl.response" ></ml-metrics>
+      <ml-metrics search="$ctrl.response"></ml-metrics>
       <ml-results template="app/search/search-results.html" results="$ctrl.response.results"></ml-results>
     </div>
   </div>
