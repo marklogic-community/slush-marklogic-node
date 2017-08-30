@@ -20,7 +20,7 @@ cd slush-default
 
 gulp build
 
-./ml local bootstrap local deploy modules local deploy content local mlcp -options_file import-sample-data.options
+./ml local install local mlcp -options_file import-sample-data.options
 
 cd ..
 
@@ -40,7 +40,7 @@ cd slush-3column
 
 gulp build
 
-./ml local bootstrap local deploy modules local deploy content local mlcp -options_file import-sample-data.options
+./ml local install local mlcp -options_file import-sample-data.options
 
 cd ..
 
@@ -60,7 +60,7 @@ cd slush-dashboard
 
 gulp build
 
-./ml local bootstrap local deploy modules local deploy content local mlcp -options_file import-sample-data.options
+./ml local install local mlcp -options_file import-sample-data.options
 
 cd ..
 
@@ -80,7 +80,7 @@ cd slush-map
 
 gulp build
 
-./ml local bootstrap local deploy modules local deploy content local mlcp -options_file import-sample-data.options
+./ml local install local mlcp -options_file import-sample-data.options
 
 cd ..
 
@@ -100,7 +100,7 @@ cd slush-cards
 
 gulp build
 
-./ml local bootstrap local deploy modules local deploy content local mlcp -options_file import-sample-data.options
+./ml local install local mlcp -options_file import-sample-data.options
 
 cd ..
 
