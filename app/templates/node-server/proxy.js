@@ -23,15 +23,15 @@ if (options.mlCertificate) {
 /************************************************/
 
 // TODO: configurable path?
-var target = url.format({
+var target = {
   protocol: options.mlCertificate ? 'https' : 'http',
   hostname: options.mlHost,
   port: options.mlHttpPort,
   pathname: '/v1'
-});
+};
 
 var proxyServer = httpProxy.createProxyServer({
-  target: target,
+  target: url.format(target),
   ca: options.mlCertificate ? ca : null,
   secure: options.httpsStrict
     //options.httpsStrict === false assumes that you are in dev mode
@@ -41,7 +41,7 @@ function getAuth(req) {
   var user = req.session.passport && req.session.passport.user &&
     req.session.passport.user.username;
 
-  return authHelper.getAuthorization(req.session, req.method, req.path, {
+  return authHelper.getAuthorization(req.session, req.method, target.pathname + req.path, {
     authUser: user
   });
 }
