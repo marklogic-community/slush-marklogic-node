@@ -72,7 +72,7 @@
     "mocha": "^2.2.5",
     "node-notifier": "^4.2.3",
     "os-homedir": "^1.0.2",
-    "phantomjs-prebuilt": "^2.0.0",
+    "phantomjs-prebuilt": "2.1.15",
     "plato": "^1.5.0",
     "q": "^1.0.0",
     "sinon": "^1.15.3",
