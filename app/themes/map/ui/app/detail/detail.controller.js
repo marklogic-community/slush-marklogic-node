@@ -27,7 +27,7 @@
     } else if (contentType.lastIndexOf('application/xml', 0) === 0) {
       ctrl.xml = vkbeautify.xml(doc.data);
       /*jshint camelcase: false */
-      ctrl.json = x2js.xml_str2json(doc.data).xml;
+      ctrl.json = x2js.xml_str2json(doc.data);
       ctrl.type = 'xml';
       /* jscs: enable */
     } else if (contentType.lastIndexOf('text/plain', 0) === 0) {
