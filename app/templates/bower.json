@@ -20,7 +20,7 @@
     "font-awesome": "~4.6.0",
     "highcharts": "^4.2",
     "highlightjs": "~8.7.0",
-    "ng-json-explorer": "f7236fa857",
+    "ng-json-explorer": "maeisabelle/ng-json-explorer",
     "ngtoast": "^2.0.0",
     "lodash": "~3.10.1",
     "ml-search-ng": "~0.2.0",
@@ -58,7 +58,7 @@
     "angular": "~1.6.5",
     "angular-bootstrap": "^1.1",
     "highcharts": "^4.2",
-    "ng-json-explorer": "f7236fa857",
+    "ng-json-explorer": "maeisabelle/ng-json-explorer",
     "angular-sanitize": "~1.6.5"
   }
 }
