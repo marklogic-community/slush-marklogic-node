@@ -132,7 +132,9 @@
         $rootScope.$broadcast('loginService:logout-success', response);
         _loginError = null;
         _isAuthenticated = false;
-        $state.reload();
+        if (!$state.current.abstract) {
+          $state.reload();
+        }
         return response;
       });
     }
