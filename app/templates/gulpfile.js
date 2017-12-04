@@ -804,7 +804,7 @@ function init(env, done) {
 
       var properties = JSON.parse(output).properties || {};
 
-      var mlVersion = ['8', '7', '6', '5'].indexOf(localMlVersion || properties['ml.server-version'] || '8');
+      var mlVersion = ['9', '8', '7'].indexOf(localMlVersion || properties['ml.server-version'] || '9');
       var marklogicHost = properties['ml.' + env + '-server'] || localMlHost || 'localhost';
       var marklogicAdminUser = properties['ml.user'] || localMlAdminUser || 'admin';
       var appName = properties['ml.app-name'] || localAppName;
@@ -817,7 +817,7 @@ function init(env, done) {
         type: 'list',
         name: 'mlVersion',
         message: 'MarkLogic version?',
-        choices: ['8', '7', '6', '5'],
+        choices: ['9', '8', '7'],
         default: mlVersion > 0 ? mlVersion : 0
       }, {
         type: 'input',
@@ -1048,9 +1048,9 @@ function isDevMode(env) {
   return env === 'local';
 }
 
-function getNodeOptions(env) {
+function getNodeOptions(envName) {
   var envJson;
-  var envFile = './' + env + '.json';
+  var envFile = './' + envName + '.json';
   try {
     envJson = require(envFile);
   } catch (e) {
@@ -1061,27 +1061,27 @@ function getNodeOptions(env) {
   var port = args['app-port'] || process.env.PORT || envJson['node-port'] || config.defaultPort;
 
   var env = {
-      'PORT': port,
-      'NODE_ENV': env,
-      'APP_PORT': port,
-      'ML_HOST': args['ml-host'] || process.env.ML_HOST || envJson['ml-host'] || config.marklogic.host,
-      'ML_APP_USER': args['ml-app-user'] || process.env.ML_APP_USER || envJson['ml-app-user'] || config.marklogic.user,
-      'ML_APP_PASS': args['ml-app-pass'] || process.env.ML_APP_PASS || envJson['ml-app-pass'] || config.marklogic.password,
-      'ML_PORT': args['ml-http-port'] || process.env.ML_PORT || envJson['ml-http-port'] || config.marklogic.httpPort,
-      'ML_XCC_PORT': args['ml-xcc-port'] || process.env.ML_XCC_PORT || envJson['ml-xcc-port'] || config.marklogic.xccPort,
-      'ML_VERSION': args['ml-version'] || process.env.ML_VERSION || envJson['ml-version'] || config.marklogic.version,
-      'ML_CERTIFICATE': args['ml-certificate'] || process.env.ML_CERTIFICATE || envJson['mlCertificate'] || config.marklogic.mlCertificate,
-      'NODEJS_CERTIFICATE': args['nodeJsCertificate'] || process.env.NODEJS_CERTIFICATE || envJson['nodeJsCertificate'] || config.marklogic.nodeJsCertificate,
-      'NODEJS_PRIVATE_KEY': args['nodeJsPrivateKey'] || process.env.NODEJS_PRIVATE_KEY || envJson['nodeJsPrivateKey'] || config.marklogic.nodeJsPrivateKey,
-      'HTTPS_STRICT': args['httpsStrict'] || process.env.HTTPS_STRICT || envJson['httpsStrict']==="true" || config.marklogic.httpsStrict || true
+    'PORT': port,
+    'NODE_ENV': envName,
+    'APP_PORT': port,
+    'ML_HOST': args['ml-host'] || process.env.ML_HOST || envJson['ml-host'] || config.marklogic.host,
+    'ML_APP_USER': args['ml-app-user'] || process.env.ML_APP_USER || envJson['ml-app-user'] || config.marklogic.user,
+    'ML_APP_PASS': args['ml-app-pass'] || process.env.ML_APP_PASS || envJson['ml-app-pass'] || config.marklogic.password,
+    'ML_PORT': args['ml-http-port'] || process.env.ML_PORT || envJson['ml-http-port'] || config.marklogic.httpPort,
+    'ML_XCC_PORT': args['ml-xcc-port'] || process.env.ML_XCC_PORT || envJson['ml-xcc-port'] || config.marklogic.xccPort,
+    'ML_VERSION': args['ml-version'] || process.env.ML_VERSION || envJson['ml-version'] || config.marklogic.version,
+    'ML_CERTIFICATE': args['ml-certificate'] || process.env.ML_CERTIFICATE || envJson.mlCertificate || config.marklogic.mlCertificate,
+    'NODEJS_CERTIFICATE': args.nodeJsCertificate || process.env.NODEJS_CERTIFICATE || envJson.nodeJsCertificate || config.marklogic.nodeJsCertificate,
+    'NODEJS_PRIVATE_KEY': args.nodeJsPrivateKey || process.env.NODEJS_PRIVATE_KEY || envJson.nodeJsPrivateKey || config.marklogic.nodeJsPrivateKey,
+    'HTTPS_STRICT': args.httpsStrict || process.env.HTTPS_STRICT || (envJson.httpsStrict === 'true') || config.marklogic.httpsStrict || true
   };
 
   //Temporary fix to remove undefined nodes
   //which becomes environment variables with string "undefined" value
   for (var key in env) {
-      if (env[key] === undefined) {
-          delete env[key];
-      }
+    if (env[key] === undefined) {
+      delete env[key];
+    }
   }
 
   return {
@@ -1120,10 +1120,10 @@ function startBrowserSync(env, specRunner) {
   if (nodeOptions.env.NODEJS_CERTIFICATE) {
     proxyUrl = 'https://' + proxyUrl;
   }
-  console.log("BROWSER SYNC PROXY REQUESTS TO : " + proxyUrl);
+  console.log('BROWSER SYNC PROXY REQUESTS TO : ' + proxyUrl);
 
   if (!nodeOptions.env.HTTPS_STRICT) {
-    process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
   }
 
   var options = {
@@ -1145,7 +1145,7 @@ function startBrowserSync(env, specRunner) {
     logLevel: 'debug',
     logPrefix: 'gulp-patterns',
     notify: true,
-    reloadDelay: 0, //1000
+    reloadDelay: 1000,
     ui: false
   };
   if (specRunner) {
