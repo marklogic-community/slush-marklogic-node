@@ -42,21 +42,6 @@
     $urlRouterProvider.otherwise('/');
     $locationProvider.html5Mode(true);
 
-    function valToFromString(val) {
-      return val !== null ? val.toString() : val;
-    }
-
-    function regexpMatches(val) { // jshint validthis:true
-      return this.pattern.test(val);
-    }
-
-    $urlMatcherFactoryProvider.type('path', {
-      encode: valToFromString,
-      decode: valToFromString,
-      is: regexpMatches,
-      pattern: /.+/
-    });
-
     $stateProvider
       .state('root', {
         url: '',
@@ -120,7 +105,7 @@
         }
       })
       .state('root.edit', {
-        url: '/edit{uri:path}?prev',
+        url: '/edit{uri:.*}?prev',
         templateUrl: 'app/create/create.html',
         controller: 'CreateCtrl',
         controllerAs: '$ctrl',
@@ -134,7 +119,7 @@
         }
       })
       .state('root.view', {
-        url: '/detail{uri:path}',
+        url: '/detail{uri:.*}',
         params: {
           uri: {
             value: null
