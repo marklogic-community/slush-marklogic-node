@@ -83,7 +83,7 @@
     "yargs": "^3.26.0"
   },
   "engines": {
-    "node": ">=0.8.0"
+    "node": ">=4.0.0"
   },
   "private": true
 }
