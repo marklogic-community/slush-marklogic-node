@@ -1,6 +1,7 @@
 #!/bin/bash
 
 HOST=ml9-ml1
+VERSION=9
 USER=admin
 PASS=admin
 
@@ -14,7 +15,7 @@ if [ -d slush-default ]; then
   rm -rf slush-default
 fi
 
-gulp --gulpfile=slushfile.js --app-name=slush-default --theme=default --ml-version=8 --ml-host=$HOST --ml-admin-user=$USER --ml-admin-pass=$PASS ---ml-http-port=8040 --node-port=8050 --guest-access=true --disallow-updates=true --appusers-only=true
+gulp --gulpfile=slushfile.js --app-name=slush-default --theme=default --ml-version=$VERSION --ml-host=$HOST --ml-admin-user=$USER --ml-admin-pass=$PASS ---ml-http-port=8040 --node-port=8050 --guest-access=true --disallow-updates=true --appusers-only=true
 
 cd slush-default
 
@@ -34,7 +35,7 @@ if [ -d slush-3column ]; then
   rm -rf slush-3column
 fi
 
-gulp --gulpfile=slushfile.js --app-name=slush-3column --theme=3column --ml-version=8 --ml-host=$HOST --ml-admin-user=$USER --ml-admin-pass=$PASS ---ml-http-port=8041 --node-port=8051 --guest-access=true --disallow-updates=true --appusers-only=true
+gulp --gulpfile=slushfile.js --app-name=slush-3column --theme=3column --ml-version=$VERSION --ml-host=$HOST --ml-admin-user=$USER --ml-admin-pass=$PASS ---ml-http-port=8041 --node-port=8051 --guest-access=true --disallow-updates=true --appusers-only=true
 
 cd slush-3column
 
@@ -54,7 +55,7 @@ if [ -d slush-dashboard ]; then
   rm -rf slush-dashboard
 fi
 
-gulp --gulpfile=slushfile.js --app-name=slush-dashboard --theme=dashboard --ml-version=8 --ml-host=$HOST --ml-admin-user=$USER --ml-admin-pass=$PASS ---ml-http-port=8042 --node-port=8052 --guest-access=true --disallow-updates=true --appusers-only=true
+gulp --gulpfile=slushfile.js --app-name=slush-dashboard --theme=dashboard --ml-version=$VERSION --ml-host=$HOST --ml-admin-user=$USER --ml-admin-pass=$PASS ---ml-http-port=8042 --node-port=8052 --guest-access=true --disallow-updates=true --appusers-only=true
 
 cd slush-dashboard
 
@@ -74,7 +75,7 @@ if [ -d slush-map ]; then
   rm -rf slush-map
 fi
 
-gulp --gulpfile=slushfile.js --app-name=slush-map --theme=map --ml-version=8 --ml-host=$HOST --ml-admin-user=$USER --ml-admin-pass=$PASS ---ml-http-port=8043 --node-port=8053 --guest-access=true --disallow-updates=true --appusers-only=true
+gulp --gulpfile=slushfile.js --app-name=slush-map --theme=map --ml-version=$VERSION --ml-host=$HOST --ml-admin-user=$USER --ml-admin-pass=$PASS ---ml-http-port=8043 --node-port=8053 --guest-access=true --disallow-updates=true --appusers-only=true
 
 cd slush-map
 
@@ -94,7 +95,7 @@ if [ -d slush-cards ]; then
   rm -rf slush-cards
 fi
 
-gulp --gulpfile=slushfile.js --app-name=slush-cards --theme=cards --ml-version=8 --ml-host=$HOST --ml-admin-user=$USER --ml-admin-pass=$PASS ---ml-http-port=8044 --node-port=8054 --guest-access=true --disallow-updates=true --appusers-only=true
+gulp --gulpfile=slushfile.js --app-name=slush-cards --theme=cards --ml-version=$VERSION --ml-host=$HOST --ml-admin-user=$USER --ml-admin-pass=$PASS ---ml-http-port=8044 --node-port=8054 --guest-access=true --disallow-updates=true --appusers-only=true
 
 cd slush-cards
 
