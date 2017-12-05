@@ -1,5 +1,50 @@
 # Change Log
 
+## [1.4.0](https://github.com/marklogic-community/slush-marklogic-node/tree/1.4.0) (2017-12-04)
+[Full Changelog](https://github.com/marklogic-community/slush-marklogic-node/compare/1.3.2...1.4.0)
+
+**Implemented enhancements:**
+
+- Enhance send-email util function [\#497](https://github.com/marklogic-community/slush-marklogic-node/issues/497)
+- change default logo from "MarkLogic" to "Powered by MarkLogic" [\#434](https://github.com/marklogic-community/slush-marklogic-node/issues/434)
+- Officially migrate to newer version of NodeJS [\#386](https://github.com/marklogic-community/slush-marklogic-node/issues/386)
+- Add a sort toggle directive [\#366](https://github.com/marklogic-community/slush-marklogic-node/issues/366)
+- Detect available snippet states from search context? [\#152](https://github.com/marklogic-community/slush-marklogic-node/issues/152)
+
+**Fixed bugs:**
+
+- PhantomJS SyntaxError: Use of const in strict mode. [\#526](https://github.com/marklogic-community/slush-marklogic-node/issues/526)
+- Raw JSON preview broken [\#532](https://github.com/marklogic-community/slush-marklogic-node/issues/532)
+- Clicking search results fails to open them [\#531](https://github.com/marklogic-community/slush-marklogic-node/issues/531)
+- SyntaxError: Use of const in strict mode. [\#530](https://github.com/marklogic-community/slush-marklogic-node/issues/530)
+- Every reload of the '/search' requires the user to log-in again [\#529](https://github.com/marklogic-community/slush-marklogic-node/issues/529)
+- Stack overflow in indent.xsl [\#528](https://github.com/marklogic-community/slush-marklogic-node/issues/528)
+- Browser refresh while logged in forces reauthentication [\#522](https://github.com/marklogic-community/slush-marklogic-node/issues/522)
+- REST endpoints do not work in MarkLogic 9.0-3 [\#519](https://github.com/marklogic-community/slush-marklogic-node/issues/519)
+- login from abstract state fails [\#518](https://github.com/marklogic-community/slush-marklogic-node/issues/518)
+- Cannot log in after bad login attempt [\#513](https://github.com/marklogic-community/slush-marklogic-node/issues/513)
+- Update gulp init-\* ML versions to match slush wizard [\#512](https://github.com/marklogic-community/slush-marklogic-node/issues/512)
+- Detail page controller: the $ctrl.json value is not computed for xml documents [\#494](https://github.com/marklogic-community/slush-marklogic-node/issues/494)
+- Changing the name of the ${app-name}-user in ml-config.xml breaks the bootstrap [\#408](https://github.com/marklogic-community/slush-marklogic-node/issues/408)
+
+**Merged pull requests:**
+
+- Pinning down phantomjs-prebuilt to 2.1.15 [\#527](https://github.com/marklogic-community/slush-marklogic-node/pull/527) ([grtjn](https://github.com/grtjn))
+- Fixed \#434: replaced ML-logo with powered-by-ML logo in header [\#542](https://github.com/marklogic-community/slush-marklogic-node/pull/542) ([grtjn](https://github.com/grtjn))
+- Fixed \#531: fixed issue with uri state param handling [\#541](https://github.com/marklogic-community/slush-marklogic-node/pull/541) ([grtjn](https://github.com/grtjn))
+- Fixed \#518: robustness check for abstract states [\#540](https://github.com/marklogic-community/slush-marklogic-node/pull/540) ([grtjn](https://github.com/grtjn))
+- Fixed \#494: made xml 2 json code more generic [\#539](https://github.com/marklogic-community/slush-marklogic-node/pull/539) ([grtjn](https://github.com/grtjn))
+- Fixed \#497: added util function for sending multipart mail [\#538](https://github.com/marklogic-community/slush-marklogic-node/pull/538) ([grtjn](https://github.com/grtjn))
+- Fixed \#528: solved endless loop, updated some more [\#537](https://github.com/marklogic-community/slush-marklogic-node/pull/537) ([grtjn](https://github.com/grtjn))
+- Fixed \#386: pinned node engine to v4+ [\#536](https://github.com/marklogic-community/slush-marklogic-node/pull/536) ([grtjn](https://github.com/grtjn))
+- Fixed \#522, fixed \#529: typo in auth calculation [\#535](https://github.com/marklogic-community/slush-marklogic-node/pull/535) ([grtjn](https://github.com/grtjn))
+- Fixed \#512: updated ml-version choices in gulp init [\#534](https://github.com/marklogic-community/slush-marklogic-node/pull/534) ([grtjn](https://github.com/grtjn))
+- Fixed \#532: reverting to mae's fork of ng-json-explorer [\#533](https://github.com/marklogic-community/slush-marklogic-node/pull/533) ([grtjn](https://github.com/grtjn))
+- Fix proxy auth issue \#519 [\#520](https://github.com/marklogic-community/slush-marklogic-node/pull/520) ([ryanjdew](https://github.com/ryanjdew))
+- Removed redundant app.snippet module dependency from map theme [\#516](https://github.com/marklogic-community/slush-marklogic-node/pull/516) ([grtjn](https://github.com/grtjn))
+- Add sort toggle component \#366 and detect operator states \#152 [\#515](https://github.com/marklogic-community/slush-marklogic-node/pull/515) ([ryanjdew](https://github.com/ryanjdew))
+- \#513: Clear authenticator after invalid credentials [\#514](https://github.com/marklogic-community/slush-marklogic-node/pull/514) ([patrickmcelwee](https://github.com/patrickmcelwee))
+
 ## [1.3.2](https://github.com/marklogic-community/slush-marklogic-node/tree/1.3.2) (2017-06-30)
 [Full Changelog](https://github.com/marklogic-community/slush-marklogic-node/compare/1.3.1...1.3.2)
 
@@ -19,6 +64,7 @@
 - Support MarkLogic 9 [\#508](https://github.com/marklogic-community/slush-marklogic-node/issues/508)
 - Collapsible content-box [\#506](https://github.com/marklogic-community/slush-marklogic-node/issues/506)
 - Gitignore mlpm\_modules [\#505](https://github.com/marklogic-community/slush-marklogic-node/issues/505)
+- Update server-version options [\#503](https://github.com/marklogic-community/slush-marklogic-node/issues/503)
 
 **Fixed bugs:**
 
