@@ -75,15 +75,6 @@
       }, failLogin);
     }
 
-    function switchLogin(username) {
-      return $http.post('/api/user/switch', {
-        'username': username
-      }).then(function(response) {
-        loginSuccess(response);
-        return response;
-      }, failLogin);
-    }
-
     function loginPrompt() {
       var d = $q.defer();
       if (_loginMode === 'modal') {
@@ -195,7 +186,6 @@
     angular.extend(service, {
       login: login,
       logout: logout,
-      switch: switchLogin,
       loginPrompt: loginPrompt,
       loginError: loginError,
       loginMode: loginMode,
