@@ -81,23 +81,14 @@ If dev or prod configuration does not exist yet, run:
 
 Provide settings as needed. After that you follow the same steps as for deploying to your local MarkLogic, but with a different environment parameter:
 
-    ./ml dev bootstrap
-    ./ml dev clean content
-    ./ml dev deploy modules
-    ./ml dev deploy content
-    ./ml dev mlcp -options_file import-sample-data.options
-
-(Or ./ml prod .. depending on need. Check README.mdown to see if the deployment steps have been altered for this project.)
+    ./gradlew mlDeploy -PenvironmentName=[environment]
+    ./gradlew importSampleData -PenvironmentName=[environment]
 
 ## Deploying updates
 
 Deploying updates is a matter of repeating part of the initial deployment. For fully updating the back-end you repeat:
 
-    ./ml dev bootstrap
-    ./ml dev clean content (Be careful with cleaning content on production!)
-    ./ml dev deploy modules
-    ./ml dev deploy content
-    ./ml dev mlcp -options_file import-sample-data.options
+    ./gradlew mlDeploy -PenvironmentName=[environment]
 
 The middle-tier service is started on the server, and will not have to be stopped or restarted when deploying updates. pm2 will automatically restart the app if any of it's files are changed so all you need to do from your local machine is:
 

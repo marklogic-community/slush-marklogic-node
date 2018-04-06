@@ -64,8 +64,8 @@ gulp.task('check-config', function(done) {
     log($.util.colors.red('WARN: ' + env + '.json is missing!'));
     missingJsonEnv = true;
   }
-  if (env && ! fs.existsSync('deploy/' + env + '.properties')) {
-    log($.util.colors.red('WARN: deploy/' + env + '.properties is missing!'));
+  if (env && ! fs.existsSync('gradle-' + env + '.properties')) {
+    log($.util.colors.red('WARN: gradle-' + env + '.properties is missing!'));
     missingPropsEnv = true;
   }
   if (! fs.existsSync('bower_components')) {
@@ -309,9 +309,9 @@ gulp.task('init-prod', function(done) {
 gulp.task('add-deploy-target', function(done) {
   log('Update ecosystem.json targets or create new ones!');
 
-  var properties = fs.readFileSync('deploy/build.properties', encoding);
+  var properties = fs.readFileSync('gradle.properties', encoding);
 
-  var name = properties.match(/app-name=(.*)/)[1];
+  var name = properties.match(/mlAppName=(.*)/)[1];
   var gitUrl = 'https://github.com/';
   var folderPath = '/space/projects/' + name;
   var osHomedir = require('os-homedir');
@@ -770,10 +770,10 @@ function clean(files) {
 function init(env, done) {
   if (fs.existsSync(env + '.json')) {
     log('NOTE: ' + env + '.json already exists, change manually if needed.');
-    if (fs.existsSync('deploy/' + env + '.properties')) {
-      log('NOTE: deploy/' + env + '.properties already exists, change manually too.');
+    if (fs.existsSync('gradle-' + env + '.properties')) {
+      log('NOTE: gradle-' + env + '.properties already exists, change manually too.');
     } else {
-      log('WARN: deploy/' + env + '.properties is missing!');
+      log('WARN: gradle-' + env + '.properties is missing!');
     }
     done();
   } else {
@@ -781,45 +781,35 @@ function init(env, done) {
     var inquirer = require('inquirer');
     var ignoreProps = false;
 
-    if (!fs.existsSync('deploy/' + env + '.properties')) {
-      fs.writeFileSync('deploy/' + env + '.properties', env + '-server=localhost', 'utf8');
+    if (!fs.existsSync('gradle-' + env + '.properties')) {
+      fs.writeFileSync('gradle-' + env + '.properties', env + '-server=localhost', 'utf8');
       ignoreProps = true;
     }
 
-    run('./ml', [env, 'info', '--format=json']).then(function(output) {
+ //   run('./ml', [env, 'info', '--format=json']).then(function(output) {
       var localJson = fs.existsSync('local.json') ? JSON.parse(fs.readFileSync('local.json', 'utf8')) : {};
 
       var localAppName = localJson['app-name'];
-      var localMlVersion = localJson['ml-version'];
       var localMlHost = localJson['ml-host'];
       var localMlAdminUser = localJson['ml-admin-user'];
       var localMlAppUser = localJson['ml-app-user'];
       var localMlAppPass = localJson['ml-app-pass'];
       var localMlHttpPort = localJson['ml-http-port'];
-      var localMlXccPort = localJson['ml-xcc-port'];
       var localNodePort = localJson['node-port'] || 9070;
       var localGuestAccess = ['false', 'true'].indexOf(localJson['guest-access']);
       var localDisallowUpdates = ['false', 'true'].indexOf(localJson['disallow-updates']);
       var localAppUsersOnly = ['false', 'true'].indexOf(localJson['appusers-only']);
 
-      var properties = JSON.parse(output).properties || {};
-
-      var mlVersion = ['9', '8', '7'].indexOf(localMlVersion || properties['ml.server-version'] || '9');
+      //var properties = JSON.parse(output).properties || {};
+      var properties = {};
       var marklogicHost = properties['ml.' + env + '-server'] || localMlHost || 'localhost';
       var marklogicAdminUser = properties['ml.user'] || localMlAdminUser || 'admin';
       var appName = properties['ml.app-name'] || localAppName;
       var appUserName = properties['ml.default-user'] || localMlAppUser;
-      var appUserPass = unescape(properties['ml.appuser-password']) || localMlAppPass;
+      var appUserPass = properties['ml.appuser-password'] || localMlAppPass;
       var appPort = localMlHttpPort || properties['ml.app-port'] || 8040;
-      var xccPort = localMlXccPort || properties['ml.xcc-port'] || 8041;
 
       var prompts = [{
-        type: 'list',
-        name: 'mlVersion',
-        message: 'MarkLogic version?',
-        choices: ['9', '8', '7'],
-        default: mlVersion > 0 ? mlVersion : 0
-      }, {
         type: 'input',
         name: 'marklogicHost',
         message: 'MarkLogic Host?',
@@ -840,14 +830,6 @@ function init(env, done) {
         name: 'appPort',
         message: 'MarkLogic App/Rest port?',
         default: appPort
-      }, {
-        type: 'input',
-        name: 'xccPort',
-        message: 'XCC port?',
-        default: xccPort,
-        when: function(answers) {
-          return answers.mlVersion < 8;
-        }
       }, {
         type: 'input',
         name: 'nodePort',
@@ -901,10 +883,6 @@ function init(env, done) {
           configJSON['ml-app-pass'] = appUserPass || '';
           configJSON['ml-http-port'] = settings.appPort;
 
-          if (settings.mlVersion < 8) {
-            configJSON['ml-xcc-port'] = settings.xccPort;
-          }
-
           configJSON['node-port'] = settings.nodePort;
           configJSON['guest-access'] = settings.guestAccess;
           configJSON['disallow-updates'] = settings.disallowUpdates;
@@ -914,27 +892,20 @@ function init(env, done) {
           fs.writeFileSync(env + '.json', configString, encoding);
           log('Created ' + env + '.json.');
 
-          if (!ignoreProps && fs.existsSync('deploy/' + env + '.properties')) {
-            log('NOTE: deploy/' + env + '.properties already exists, change manually please!');
+          if (!ignoreProps && fs.existsSync('gradle-' + env + '.properties')) {
+            log('NOTE: gradle-' + env + '.properties already exists, change manually please!');
           } else {
             var envProperties = '#################################################################\n' +
-              '# This file contains overrides to values in build.properties\n' +
+              '# This file contains overrides to values in gradle.properties\n' +
               '# These only affect your local environment and should not be checked in\n' +
               '#################################################################\n' +
               '\n' +
-              'server-version=' + settings.mlVersion + '\n' +
+              'mlAppName=' + settings.nameDashed + '\n' +
               '\n' +
               '#\n' +
               '# The ports used by your application\n' +
               '#\n' +
-              'app-port=' + settings.appPort + '\n';
-            if (settings.mlVersion < 8) {
-              envProperties += 'xcc-port=' + settings.xccPort + '\n';
-            } else {
-              envProperties += '# Taking advantage of not needing a XCC Port for ML8\n' +
-                'xcc-port=${app-port}\n' +
-                'install-xcc=false\n';
-            }
+              'mlRestPort=' + settings.appPort + '\n';
 
             envProperties += '\n' +
               '#\n' +
@@ -942,17 +913,17 @@ function init(env, done) {
               '# WARNING: if you are running these scripts on WINDOWS you may need to change localhost to 127.0.0.1\n' +
               '# There have been reported issues with dns resolution when localhost wasn\'t in the hosts file.\n' +
               '#\n' +
-              env + '-server=' + settings.marklogicHost + '\n' +
-              'content-forests-per-host=3\n' +
+              'mlHost=' + settings.marklogicHost + '\n' +
+              'mlContentForestsPerHost=3\n' +
               '\n' +
               '#\n' +
               '# Admin username/password that will exist on the local/dev/prod servers\n' +
               '#\n' +
-              'user=' + settings.marklogicAdminUser + '\n' +
-              'password=' + settings.marklogicAdminPass + '\n';
+              'mlUsername=' + settings.marklogicAdminUser + '\n' +
+              'mlPassword=' + settings.marklogicAdminPass + '\n';
 
-            fs.writeFileSync('deploy/' + env + '.properties', envProperties, encoding);
-            log('Created deploy/' + env + '.properties.');
+            fs.writeFileSync('gradle-' + env + '.properties', envProperties, encoding);
+            log('Created gradle-' + env + '.properties.');
           }
           done();
         } catch (e) {
@@ -960,13 +931,9 @@ function init(env, done) {
           done();
         }
       });
-    });
+    }
   }
-}
-// bypass Roxy bug that causes special XML chars to get escaped as entities
-function unescape(s) {
-  return s.replace('&apos;', '\'').replace('&quot;', '"').replace('&lt;', '<').replace('&gt;', '>').replace('&amp;', '&').replace('{{', '{').replace('}}', '}');
-}
+//}
 
 /**
  * Inject files in a sorted sequence at a specified inject label
