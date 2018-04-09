@@ -1,0 +1,4 @@
+{
+  "role-name": "%%mlAppName%%-role",
+  "description": "a role for users of the %%mlAppName%% application"
+}

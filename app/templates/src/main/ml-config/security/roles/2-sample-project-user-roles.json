@@ -1,0 +1,14 @@
+{
+  "role-name": "%%mlAppName%%-role",
+  "description": "a role for users of the %%mlAppName%% application",
+  "permission": [
+    { "capability": "execute", "role-name": "%%mlAppName%%-role" },
+    { "capability": "update", "role-name": "%%mlAppName%%-role" },
+    { "capability": "insert", "role-name": "%%mlAppName%%-role" },
+    { "capability": "read", "role-name": "%%mlAppName%%-role" }
+  ],
+  "privilege": [ 
+    { "privilege-name": "rest-reader", "action": "http://marklogic.com/xdmp/privileges/rest-reader", "kind": "execute" },
+    { "privilege-name": "rest-writer", "action": "http://marklogic.com/xdmp/privileges/rest-writer", "kind": "execute" }
+  ]
+}

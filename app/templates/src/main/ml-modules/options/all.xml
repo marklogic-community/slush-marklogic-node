@@ -1,0 +1,178 @@
+<options xmlns="http://marklogic.com/appservices/search">
+  <search-option>unfiltered</search-option>
+  <page-length>10</page-length>
+
+  <!-- Limit all searches to this additional query -->
+  <additional-query>
+    <cts:collection-query xmlns:cts="http://marklogic.com/cts">
+      <cts:uri>data</cts:uri>
+    </cts:collection-query>
+  </additional-query>
+
+  <!-- Full-text search options -->
+  <term apply="term">
+    <empty apply="all-results"/>
+    <!--
+      Below some example options for full-text searches. Note that MarkLogic will
+      toggle options automatically depending on caps, wildcards etc.
+      See Usage Notes of http://docs.marklogic.com/cts:word-query for details.
+      Also note that forcing stemmed searches will disable wildcarded searches.
+    -->
+    <!--
+    <term-option>punctuation-insensitive</term-option>
+    <term-option>stemmed</term-option>
+    -->
+  </term>
+
+  <!-- Default grammer -->
+  <grammar>
+    <quotation>"</quotation>
+    <implicit>
+      <cts:and-query strength="20" xmlns:cts="http://marklogic.com/cts"/>
+    </implicit>
+    <starter strength="30" apply="grouping" delimiter=")">(</starter>
+    <starter strength="40" apply="prefix" element="cts:not-query">-</starter>
+    <joiner strength="10" apply="infix" element="cts:or-query" tokenize="word">OR</joiner>
+    <joiner strength="20" apply="infix" element="cts:and-query" tokenize="word">AND</joiner>
+    <joiner strength="30" apply="infix" element="cts:near-query" tokenize="word">NEAR</joiner>
+    <joiner strength="30" apply="near2" consume="2" element="cts:near-query">NEAR/</joiner>
+    <joiner strength="50" apply="constraint">:</joiner>
+    <joiner strength="50" apply="constraint" compare="LT" tokenize="word">LT</joiner>
+    <joiner strength="50" apply="constraint" compare="LE" tokenize="word">LE</joiner>
+    <joiner strength="50" apply="constraint" compare="GT" tokenize="word">GT</joiner>
+    <joiner strength="50" apply="constraint" compare="GE" tokenize="word">GE</joiner>
+    <joiner strength="50" apply="constraint" compare="NE" tokenize="word">NE</joiner>
+  </grammar>
+
+  <!-- Default sort order. You can also associate states with sort orders to allow switching sort orders -->
+  <sort-order direction="descending">
+    <score/>
+  </sort-order>
+
+  <!-- Not used, but the default snippeting behavior if no state (see compact/detailed below) was specified -->
+  <transform-results apply="snippet">
+    <preferred-elements><element ns="" name="body"/></preferred-elements>
+    <max-matches>1</max-matches>
+    <max-snippet-chars>150</max-snippet-chars>
+    <per-match-tokens>20</per-match-tokens>
+  </transform-results>
+
+  <return-query>1</return-query>
+
+  <!-- This controls the snippet size toggle -->
+  <operator name="results">
+    <state name="compact">
+      <transform-results apply="snippet">
+        <preferred-elements><element ns="" name="body"/></preferred-elements>
+        <max-matches>1</max-matches>
+        <max-snippet-chars>150</max-snippet-chars>
+        <per-match-tokens>20</per-match-tokens>
+      </transform-results>
+    </state>
+    <state name="detailed">
+      <transform-results apply="snippet">
+        <preferred-elements><element ns="" name="body"/></preferred-elements>
+        <max-matches>2</max-matches>
+        <max-snippet-chars>400</max-snippet-chars>
+        <per-match-tokens>30</per-match-tokens>
+      </transform-results>
+    </state>
+  </operator>
+
+  <operator name="sort">
+    <state name="score">
+      <sort-order>
+        <score/>
+      </sort-order>
+    </state>
+    <state name="eyeColorAsc">
+      <sort-order
+    direction="ascending" type="xs:string" collation="http://marklogic.com/collation/codepoint">
+        <path-index>eyeColor</path-index>
+      </sort-order>
+    </state>
+    <state name="eyeColorDsc">
+      <sort-order
+    direction="descending" type="xs:string" collation="http://marklogic.com/collation/codepoint">
+        <path-index>eyeColor</path-index>
+      </sort-order>
+    </state>
+  </operator>
+  <!-- Annotations (allowed pretty much anywhere) allow adding text or elements to feed custom components with options that would normally not validate) -->
+  <annotation>Delta options here</annotation>
+
+  <!-- Facet based on document collections, simple yet elegant -->
+  <constraint name="Collection">
+    <collection facet="true" />
+    <!-- optionally enable a prefix to see a specific subset of facets
+    <collection facet="true" prefix="data/" />
+    -->
+  </constraint>
+
+  <!-- Example facet based on the sample-data -->
+  <constraint name="eyeColor">
+    <range type="xs:string" facet="true" collation="http://marklogic.com/collation/codepoint">
+      <facet-option>limit=5</facet-option>
+      <facet-option>frequency-order</facet-option>
+      <facet-option>descending</facet-option>
+      <path-index>eyeColor</path-index>
+    </range>
+  </constraint>
+
+  <constraint name="docFormat">
+    <range type="xs:string" facet="true" collation="http://marklogic.com/collation/codepoint">
+      <facet-option>limit=5</facet-option>
+      <facet-option>item-order</facet-option>
+      <facet-option>descending</facet-option>
+      <path-index>docFormat</path-index>
+    </range>
+  </constraint>
+
+  <constraint name="gender">
+    <range type="xs:string" facet="true" collation="http://marklogic.com/collation/codepoint">
+      <facet-option>limit=5</facet-option>
+      <facet-option>item-order</facet-option>
+      <facet-option>descending</facet-option>
+      <path-index>gender</path-index>
+    </range>
+  </constraint>
+
+  <!-- Example geospatial facet based on the sample-data, used by map theme -->
+  <constraint name="Location">
+    <geo-elem-pair>
+      <parent ns="" name="location"/>
+      <lat ns="" name="latitude"/>
+      <lon ns="" name="longitude"/>
+      <geo-option>boundaries-included</geo-option>
+      <geo-option>score-function=reciprocal</geo-option>
+      <heatmap s="-90" w="-180" n="90" e="180" latdivs="4" londivs="4"/>
+    </geo-elem-pair>
+  </constraint>
+
+  <!-- example facet constraint below -->
+  <!--
+  <constraint name="myconstraint">
+    <range type="xs:string" facet="true">
+      <facet-option>limit=5</facet-option>
+      <facet-option>frequency-order</facet-option>
+      <facet-option>descending</facet-option>
+      <element ns="" name="my-el"/>
+    </range>
+  </constraint>
+  -->
+
+  <!-- example suggestion-source below -->
+  <!--
+  <suggestion-source ref="myconstraint">
+    <suggestion-option>frequency-order</suggestion-option>
+    <suggestion-option>descending</suggestion-option>
+    <suggestion-option>limit=10</suggestion-option>
+  </suggestion-source>
+  -->
+
+  <!-- This will extract the latitude and longitude from the search. -->
+  <extract-document-data selected="include">
+    <extract-path>//location</extract-path>
+  </extract-document-data>
+
+</options>
