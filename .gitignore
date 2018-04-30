@@ -8,3 +8,7 @@ node_modules
 /slush-dashboard
 /slush-map
 /slush-cards
+.idea/modules.xml
+.idea/slush-marklogic-node.iml
+.idea/vcs.xml
+.idea/workspace.xml
