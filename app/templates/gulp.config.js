@@ -21,7 +21,22 @@ module.exports = function() {
       bowerJson: bower.json,
       directory: bower.directory,
       ignorePath: bower.ignorePath,
-      exclude: [ 'requirejs', 'angularjs', 'font-awesome.css' ]
+      exclude: [ 'requirejs', 'angularjs', 'font-awesome.css' ],
+      fileTypes: {
+        html: {
+          block: /(([ \t]*)<!--\s*bower:*(\S*)\s*-->)(\n|\r|.)*?(<!--\s*endbower\s*-->)/gi,
+          detect: {
+            js: /<script.*src=['"]([^'"]+)/gi,
+            css: /<link.*href=['"]([^'"]+)/gi,
+            html: /<link.*href=['"]([^'"]+)/gi
+          },
+          replace: {
+            js: '<script src="{{filePath}}"></script>',
+            css: '<link rel="stylesheet" href="{{filePath}}">',
+            html: '<link rel="import" href="{{filePath}}">'
+          }
+        }
+      }
     };
   };
   var nodeModules = 'node_modules';
