@@ -515,6 +515,8 @@ gulp.task('optimize', ['inject', 'do-test'], function() {
 
   var combined = gulp
     .src(config.index)
+    .pipe($.replace(/<link rel="import" href="([^"]+)">/g, '<!-- @include ../$1 -->'))
+    .pipe($.preprocess())
     .pipe($.plumber())
     .pipe(inject(templateCache, 'templates'))
     // Apply the concat and file replacement with useref
