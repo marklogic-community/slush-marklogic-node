@@ -1,0 +1,67 @@
+{
+  "database-name": "test-database",
+  "maintain-last-modified": true,
+  "range-element-index": [
+    {
+      "invalid-values": "reject",
+      "collation": "",
+      "localname": "testDateTime",
+      "namespace-uri": "http://marklogic.com/test",
+      "range-value-positions": false,
+      "scalar-type": "dateTime"
+    },
+    {
+      "invalid-values": "reject",
+      "collation": "",
+      "localname": "secondTestDateTime",
+      "namespace-uri": "http://marklogic.com/test",
+      "range-value-positions": false,
+      "scalar-type": "dateTime"
+    }
+   ],
+  "range-path-index": [
+    {
+      "invalid-values": "reject",
+      "collation": "http://marklogic.com/collation/codepoint",
+      "path-expression": "docFormat",
+      "range-value-positions": false,
+      "scalar-type": "string"
+    },
+    {
+      "invalid-values": "reject",
+      "collation": "http://marklogic.com/collation/codepoint",
+      "path-expression": "eyeColor",
+      "range-value-positions": false,
+      "scalar-type": "string"
+    },
+    {
+      "invalid-values": "reject",
+      "collation": "http://marklogic.com/collation/codepoint",
+      "path-expression": "gender",
+      "range-value-positions": false,
+      "scalar-type": "string"
+    },
+    {
+      "invalid-values": "reject",
+      "collation": "",
+      "path-expression": "age",
+      "range-value-positions": false,
+      "scalar-type": "unsignedInt"
+    }
+   ],
+  "geospatial-element-pair-index": [
+    {
+      "parent-namespace-uri": "",
+      "parent-localname": "location",
+      "latitude-namespace-uri": "",
+      "latitude-localname": "latitude",
+      "longitude-namespace-uri": "",
+      "longitude-localname": "longitude",
+      "coordinate-system": "wgs84",
+      "range-value-positions": false,
+      "invalid-values": "reject"
+    }
+   ], 
+  "schema-database": "%%SCHEMAS_DATABASE%%",
+  "triggers-database": "%%TRIGGERS_DATABASE%%"
+}

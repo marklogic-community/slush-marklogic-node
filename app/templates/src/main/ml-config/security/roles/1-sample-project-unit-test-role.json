@@ -1,0 +1,4 @@
+{
+  "role-name": "%%mlAppName%%-unit-test",
+  "description": "a role for unit testing the %%mlAppName%% application"
+}

@@ -39,17 +39,13 @@ function printUsage() {
   process.stdout.write('  slush marklogic-node <app-name> [args]\n');
   process.stdout.write('\n');
   process.stdout.write('Arguments:\n');
-  process.stdout.write('  fork=<..>             Github fork to use for Roxy. Defaults to: marklogic\n');
-  process.stdout.write('  branch=<..>           Github branch to use for Roxy. Defaults to: master\n');
   process.stdout.write('  theme=<..>            Slush theme to use. Defaults to: default\n');
-  process.stdout.write('  ml-version=<..>       MarkLogic version. Defaults to: 9\n');
   process.stdout.write('  ml-host=<..>          Host on which MarkLogic runs. Defaults to: localhost\n');
   process.stdout.write('  ml-admin-user=<..>    User for MarkLogic deployments. Defaults to: admin\n');
   process.stdout.write('  ml-admin-pass=<..>    Pass for MarkLogic deployments. Defaults to: <blank>\n');
   process.stdout.write('  ml-app-user=<..>      MarkLogic user for guest access. Defaults to: <app-name>-user\n');
   process.stdout.write('  ml-app-pass=<..>      MarkLogic pass for guest access. Defaults to: <roxy-appuser-password>\n');
   process.stdout.write('  ml-http-port=<..>     Port at which MarkLogic app-server runs. Defaults to: 8070\n');
-  process.stdout.write('  ml-xcc-port=<..>      Port at which MarkLogic xcc-server runs. Defaults to: <ml-app-port>\n');
   process.stdout.write('  node-port=<..>        Port at which Node.js middle-tier runs. Defaults to: 9070\n');
   process.stdout.write('  guest-access=<..>     Whether guests are automatically logged in. Defaults to: false\n');
   process.stdout.write('  disallow-updates=<..> Whether updates to MarkLogic should be disallowed. Defaults to: false\n');
@@ -105,26 +101,19 @@ function isFlag(arg) {
 function processInput() {
   var allowedFlags = [
     'app-name',
-    'fork',
-    'branch',
     'theme',
-    'ml-version',
     'ml-host',
     'ml-admin-user',
     'ml-admin-pass',
     'ml-app-user',
     'ml-app-pass',
     'ml-http-port',
-    'ml-xcc-port',
     'node-port',
     'guest-access',
     'disallow-updates',
     'appusers-only'
   ];
-  var inputs = {
-    fork: 'marklogic',
-    branch: 'master'
-  };
+  var inputs = {};
   (gulp.args || process.argv).forEach(function(arg) {
     if (arg === 'help') {
       printUsage();
@@ -158,135 +147,43 @@ function getNameProposal() {
   }
 }
 
-// Download the Roxy ml script from GitHub
-function getRoxyScript(appName, mlVersion, fork, branch) {
-  fork = fork || 'marklogic';
-  branch = branch || 'master';
-
-  var d = q.defer(),
-    out;
-
-  var scriptName = (win32 ? '' : './') + 'ml' + (win32 ? '.bat' : '');
-
-  console.log('Retrieving Roxy script');
-  out = fs.createWriteStream(scriptName);
-  var stream = new FetchStream('https://github.com/' + fork + '/roxy/raw/' + branch + '/' + scriptName);
-  stream.pipe(out);
-  stream.on('end', function() {
-    console.log('Got Roxy script');
-    out.end();
-
-    fs.chmod(scriptName, '755', function(err) {
-      if (err) {
-        console.log(err);
-        d.reject(err);
-      } else {
-        console.log('chmod done; appName=' + appName + '; mlVersion=' + mlVersion + '; fork=' + fork + '; branch=' + branch);
-        d.resolve({
-          'script': scriptName,
-          'app': appName,
-          'mlVersion': mlVersion,
-          'fork': fork,
-          'branch': branch
-        });
-      }
-    });
-  });
-
-  return d.promise;
-}
-
-// Run the Roxy 'ml new' command for the new project
-function runRoxy(config) {
-  var scriptName = config.script,
-    appName = config.app,
-    mlVersion = config.mlVersion,
-    fork = config.fork,
-    branch = config.branch;
-
-  var d = q.defer();
-
-  var args = [
-    'new',
-    appName,
-    '--server-version=' + mlVersion,
-    '--app-type=rest',
-    '--fork=' + fork,
-    '--branch=' + branch
-  ];
-
-  console.log('Spawning Roxy new command: ' + scriptName + ' ' + args.join(' '));
-  var child = spawn(scriptName, args, {
-    stdio: [
-      0, // Use parents stdin for child
-      'pipe', // Pipe child's stdout to parent (default)
-      'pipe' // Pipe child's stderr to parent (default)
-    ]
-  });
-
-  child.on('close', function() {
-    console.log('done running ml new');
-    d.resolve('done');
-  });
-
-  child.stdout.on('data', function(data) {
-    console.log('' + data);
-  });
-
-  child.stderr.on('data', function(data) {
-    console.log('' + data);
-  });
-
-  return d.promise;
-}
-
-// Make some changes to Roxy's deploy/build.properties file for the out-of-the-box application
-function configRoxy() {
-  console.log('Configuring Roxy');
+// Make some changes to Gradle's gradle.properties file for the out-of-the-box application
+function configGradle() {
+  console.log('Generating local overrides for gradle.properties');
 
   try {
-    var properties = fs.readFileSync('deploy/build.properties', encoding);
+    var properties = fs.readFileSync(__dirname + '/app/templates/gradle.properties', encoding);   
 
-    // Ensure the authentication-method property is set to digest
-    properties = properties.replace(/^authentication\-method=basic/m, 'authentication-method=digest');
-    properties = properties.replace(/^authentication\-method=digestbasic/m, 'authentication-method=digest');
-
-    // Capture appuser-password from Roxy properties for later use
-    var passwordMatch = /^appuser\-password=(.*)$/m;
+    // Capture appuser-password from gradle properties for later use
+    var passwordMatch = /^appUserPassword=(.*)$/m;
     var matches = passwordMatch.exec(properties);
     settings.appuserPassword = matches[1];
 
     // Bypass bug in Roxy causing {, } and \ in pwd to get mangled
+	// Is this needed for gradle?
     if (settings.appuserPassword.match(/[\{\}\\]/g)) {
       settings.appuserPassword = settings.appuserPassword.replace(/[\{\}\\]/g, '');
-      properties = properties.replace(passwordMatch, 'appuser-password=' + settings.appuserPassword);
+      properties = properties.replace(passwordMatch, 'appUserPassword=' + settings.appuserPassword);
     }
 
-    fs.writeFileSync('deploy/build.properties', properties);
+    fs.writeFileSync('gradle.properties', properties);
   } catch (e) {
-    console.log('failed to update properties: ' + e.message);
+    console.log('failed to update gradle.properties: ' + e.message);
     process.exit(1);
   }
 
   try {
     var localProperties = '#################################################################\n' +
-      '# This file contains overrides to values in build.properties\n' +
+      '# This file contains overrides to values in gradle.properties\n' +
       '# These only affect your local environment and should not be checked in\n' +
       '#################################################################\n' +
       '\n' +
-      'server-version=' + settings.mlVersion + '\n' +
+      'mlAppName=' + settings.appName + '\n' + 
       '\n' +
       '#\n' +
       '# The ports used by your application\n' +
       '#\n' +
-      'app-port=' + settings.appPort + '\n';
-    if (settings.xccPort || (settings.mlVersion < 8)) {
-      localProperties += 'xcc-port=' + settings.xccPort + '\n';
-    } else {
-      localProperties += '# Taking advantage of not needing a XCC Port for ML8\n' +
-        'xcc-port=${app-port}\n' +
-        'install-xcc=false\n';
-    }
+      'mlRestPort=' + settings.appPort + '\n';
 
     localProperties += '\n' +
       '#\n' +
@@ -294,108 +191,20 @@ function configRoxy() {
       '# WARNING: if you are running these scripts on WINDOWS you may need to change localhost to 127.0.0.1\n' +
       '# There have been reported issues with dns resolution when localhost wasn\'t in the hosts file.\n' +
       '#\n' +
-      'local-server=' + settings.marklogicHost + '\n' +
+      'mlHost=' + settings.marklogicHost + '\n' +
       'content-forests-per-host=3\n' +
       '\n' +
       '#\n' +
       '# Admin username/password that will exist on the local/dev/prod servers\n' +
       '#\n' +
-      'user=' + settings.marklogicAdminUser + '\n' +
-      'password=' + settings.marklogicAdminPass + '\n';
+      'mlUsername=' + settings.marklogicAdminUser + '\n' +
+      'mlPassword=' + settings.marklogicAdminPass + '\n';
 
-    fs.writeFileSync('deploy/local.properties', localProperties, encoding);
+    fs.writeFileSync('gradle-local.properties', localProperties, encoding);
   } catch (e) {
-    console.log('failed to write roxy local.properties');
+    console.log('failed to write gradle-local.properties');
     process.exit(1);
   }
-
-  try {
-    var foo = fs.readFileSync('deploy/ml-config.xml', encoding);
-
-    // add a geospatial index for the default content
-    foo = foo.replace(/^\s*<geospatial-element-pair-indexes>/m,
-      '      <geospatial-element-pair-indexes>\n' +
-      '        <geospatial-element-pair-index>\n' +
-      '          <parent-namespace-uri/>\n' +
-      '          <parent-localname>location</parent-localname>\n' +
-      '          <latitude-namespace-uri/>\n' +
-      '          <latitude-localname>latitude</latitude-localname>\n' +
-      '          <longitude-namespace-uri/>\n' +
-      '          <longitude-localname>longitude</longitude-localname>\n' +
-      '          <coordinate-system>wgs84</coordinate-system>\n' +
-      '          <range-value-positions>false</range-value-positions>\n' +
-      '        </geospatial-element-pair-index>\n');
-
-    // add range path index for the default content
-    foo = foo.replace(/^\s*<range-path-indexes>/m,
-        '      <range-path-indexes>\n' +
-        '        <range-path-index>\n' +
-        '          <scalar-type>string</scalar-type>\n' +
-        '          <collation>http://marklogic.com/collation/codepoint</collation>\n' +
-        '          <path-expression>docFormat</path-expression>\n' +
-        '          <range-value-positions>false</range-value-positions>\n' +
-        '          <invalid-values>reject</invalid-values>\n' +
-        '        </range-path-index>\n' +
-        '        <range-path-index>\n' +
-        '          <scalar-type>string</scalar-type>\n' +
-        '          <collation>http://marklogic.com/collation/codepoint</collation>\n' +
-        '          <path-expression>eyeColor</path-expression>\n' +
-        '          <range-value-positions>false</range-value-positions>\n' +
-        '          <invalid-values>reject</invalid-values>\n' +
-        '        </range-path-index>\n' +
-        '        <range-path-index>\n' +
-        '          <scalar-type>string</scalar-type>\n' +
-        '          <collation>http://marklogic.com/collation/codepoint</collation>\n' +
-        '          <path-expression>gender</path-expression>\n' +
-        '          <range-value-positions>false</range-value-positions>\n' +
-        '          <invalid-values>reject</invalid-values>\n' +
-        '        </range-path-index>\n' +
-        '        <range-path-index>\n' +
-        '          <scalar-type>unsignedInt</scalar-type>\n' +
-        '          <path-expression>age</path-expression>\n' +
-        '          <range-value-positions>false</range-value-positions>\n' +
-        '          <invalid-values>reject</invalid-values>\n' +
-        '        </range-path-index>\n');
-
-    // fix default app-role privileges to match rest-style applications
-    foo = foo.replace(/<privileges>[^]*?<\/privileges>/,
-      '<privileges>\n' +
-      '        <privilege>\n' +
-      '          <privilege-name>rest-reader</privilege-name>\n' +
-      '        </privilege>\n' +
-      '        <!-- remove the rest-writer privilege if read-only access is required -->\n' +
-      '        <privilege>\n' +
-      '          <privilege-name>rest-writer</privilege-name>\n' +
-      '        </privilege>\n' +
-      '      </privileges>\n');
-
-    fs.writeFileSync('deploy/ml-config.xml', foo);
-
-    console.log('Applying replacements..');
-    gulp.src(['deploy/ml-config.xml'])
-    .pipe(xmlpoke({
-        replacements: [{
-          namespaces: {
-            db: 'http://marklogic.com/xdmp/database'
-          },
-          xpath: ['//db:database[1]/db:stemmed-searches','//db:database[1]/db:word-searches','//db:database[1]/db:trailing-wildcard-searches'],
-          valueType: 'remove'
-        },{
-          namespaces: {
-            db: 'http://marklogic.com/xdmp/database'
-          },
-          xpath: '//db:database[1]',
-          valueType: 'append',
-          value: '  <stemmed-searches>basic</stemmed-searches>\n      <word-searches>true</word-searches>\n      <trailing-wildcard-searches>true</trailing-wildcard-searches>\n    '
-        }]
-      }))
-      .pipe(gulp.dest('deploy'));
-
-  } catch (e) {
-    console.log('failed to update configuration: ' + e.message);
-    process.exit(1);
-  }
-
 }
 
 gulp.task('npmInstall', ['init', 'generateSecret', 'configGulp'], function(done) {
@@ -440,11 +249,6 @@ gulp.task('configGulp', ['init'], function(done) {
     configJSON['ml-app-user'] = settings.appName + '-user';
     configJSON['ml-app-pass'] = settings.appuserPassword;
     configJSON['ml-http-port'] = settings.appPort;
-
-    if (settings.xccPort || (settings.mlVersion < 8)) {
-      configJSON['ml-xcc-port'] = settings.xccPort;
-    }
-
     configJSON['node-port'] = settings.nodePort;
     configJSON['guest-access'] = settings.guestAccess;
     configJSON['disallow-updates'] = settings.disallowUpdates;
@@ -472,15 +276,7 @@ gulp.task('init', ['checkForUpdates'], function(done) {
   var appName = clArgs['app-name'];
 
   var prompts = [];
-  if (!clArgs['ml-version']) {
-    prompts.push({
-      type: 'list',
-      name: 'mlVersion',
-      message: 'MarkLogic version?',
-      choices: ['9', '8', '7'],
-      default: 0
-    });
-  }
+  
   if (!clArgs['ml-host']) {
     prompts.push({
       type: 'input',
@@ -512,17 +308,6 @@ gulp.task('init', ['checkForUpdates'], function(done) {
       name: 'appPort',
       message: 'MarkLogic App/Rest port?',
       default: 8070
-    });
-  }
-  if (!clArgs['ml-xcc-port']) {
-    prompts.push({
-      type: 'input',
-      name: 'xccPort',
-      message: 'XCC port?',
-      default: 8071,
-      when: function(answers) {
-        return (answers.mlVersion || clArgs['ml-version']) < 8;
-      }
     });
   }
   if (!clArgs['node-port']) {
@@ -630,54 +415,46 @@ gulp.task('init', ['checkForUpdates'], function(done) {
     } else {
       settings.appName = _.slugify(appName);
     }
-    settings.mlVersion = answers.mlVersion || clArgs['ml-version'];
     settings.marklogicHost = answers.marklogicHost || clArgs['ml-host'];
     settings.marklogicAdminUser = answers.marklogicAdminUser || clArgs['ml-admin-user'];
     settings.marklogicAdminPass = answers.marklogicAdminPass || clArgs['ml-admin-pass'] || '';
     settings.nodePort = answers.nodePort || clArgs['node-port'];
     settings.appPort = answers.appPort || clArgs['ml-http-port'];
-    settings.xccPort = answers.xccPort || clArgs['ml-xcc-port'] || null;
     settings.guestAccess = answers.guestAccess || clArgs['guest-access'];
     settings.disallowUpdates = answers.disallowUpdates || clArgs['disallowed-updates'];
     settings.appUsersOnly = answers.appUsersOnly || clArgs['appusers-only'];
     settings.theme = answers.theme || answers.template || clArgs.theme || 'default';
 
-    getRoxyScript(settings.appName, settings.mlVersion, clArgs.fork, clArgs.branch)
-      .then(runRoxy)
-      .then(function() {
-          // Copy over the Angular files
-          var files = [__dirname + '/app/templates/**'];
-          if (settings.theme !== 'default') { // overlay the theme if not the default theme chosen
-            files.push(__dirname + '/app/themes/' + settings.theme + '/**');
-          }
+    var files = [__dirname + '/app/templates/**'];
+    if (settings.theme !== 'default') {
+	  // overlay the theme if not the default theme chosen
+      files.push(__dirname + '/app/themes/' + settings.theme + '/**');
+    }
 
-          process.chdir('./' + settings.appName);
+    if(!fs.existsSync('./' + settings.appName)) {
+      fs.mkdirSync('./' + settings.appName);
+    }
+    process.chdir('./' + settings.appName);
 
-          configRoxy();
+    configGradle();
 
-          gulp.src(files)
-            .pipe(rename(function(file) {
-              // change _foo to .foo
-              if (file.basename[0] === '_') {
-                file.basename = '.' + file.basename.slice(1);
-              }
+    gulp.src(files)
+      .pipe(rename(function(file) {
+        // change _foo to .foo
+        if (file.basename[0] === '_') {
+          file.basename = '.' + file.basename.slice(1);
+        }
 
-            }))
-            .pipe(replace('@slush-version', pkgSettings.version.trim(), skipBinary))
-            .pipe(replace('@sample-app-name', settings.appName, skipBinary))
-            .pipe(replace('@node-port', settings.nodePort, skipBinary))
-            .pipe(replace('@ml-http-port', settings.appPort, skipBinary))
-            .pipe(replace('@ml-xcc-port', settings.xccPort || settings.appPort, skipBinary))
-            .pipe(replace('@ml-host', settings.marklogicHost, skipBinary))
-            .pipe(gulp.dest('./')) // Relative to cwd
-            .on('end', function() {
-              done(); // Finished!
-            });
-        },
-        function(reason) {
-          console.log('Caught an error: ' + reason);
-        });
-
+      }))
+      .pipe(replace('@slush-version', pkgSettings.version.trim(), skipBinary))
+      .pipe(replace('@sample-app-name', settings.appName, skipBinary))
+      .pipe(replace('@node-port', settings.nodePort, skipBinary))
+      .pipe(replace('@ml-http-port', settings.appPort, skipBinary))
+      .pipe(replace('@ml-host', settings.marklogicHost, skipBinary))
+      .pipe(gulp.dest('./')) // Relative to cwd
+      .on('end', function() {
+        done(); // Finished!
+      });
   });
 
 

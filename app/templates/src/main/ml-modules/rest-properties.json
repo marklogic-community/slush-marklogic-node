@@ -1,0 +1,8 @@
+{
+  "content-versions": "none",
+  "debug": false,
+  "validate-queries": false,
+  "document-transform-all": false,
+  "update-policy": "MERGE_METADATA",
+  "validate-options": true
+}

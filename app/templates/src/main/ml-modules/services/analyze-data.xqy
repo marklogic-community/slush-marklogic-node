@@ -6,7 +6,6 @@ import module namespace admin = "http://marklogic.com/xdmp/admin" at "/MarkLogic
 
 declare default function namespace "http://www.w3.org/2005/xpath-functions";
 
-declare namespace roxy = "http://marklogic.com/roxy";
 declare namespace xs = "http://www.w3.org/2001/XMLSchema";
 declare namespace db = "http://marklogic.com/xdmp/database";
 
@@ -19,9 +18,10 @@ declare variable $analyze-sample-only := false();
 declare variable $use-path-indexes := true();
 
 (:
+ : Params:
+ :  sample-size (integer), action (string), index (string), collection (string)
  :)
 declare
-%roxy:params("sample-size=xs:integer?", "action=xs:string?", "index=xs:string*", "collection=xs:string*")
 function ext:get(
   $context as map:map,
   $params  as map:map
@@ -31,9 +31,10 @@ function ext:get(
 };
 
 (:
+ : Params:
+ :  sample-size (integer), action (string), index (string), collection (string)
  :)
 declare
-%roxy:params("sample-size=xs:integer?", "action=xs:string?", "index=xs:string*", "collection=xs:string*")
 function ext:post(
   $context as map:map,
   $params  as map:map,

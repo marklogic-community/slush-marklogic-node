@@ -1,0 +1,6 @@
+{
+  "user-name": "%%mlAppName%%-user",
+  "description": "sample-project user with minimal roles",
+  "password": "%%appUserPassword%%",
+  "role": ["%%mlAppName%%-role"]
+}

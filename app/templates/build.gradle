@@ -1,0 +1,38 @@
+/*
+ * The most minimal ml-gradle file just has one thing - the ml-gradle plugin declaration.
+ *
+ * Without a gradle.properties file with properties such as mlAppName and mlRestPort, ml-gradle will use some sensible
+ * defaults to generate a new application - an app name of my-app, port 8003, and a username/password combo of
+ * admin/admin.
+ */
+
+plugins {
+  id "net.saliman.properties" version "1.4.6"
+  id "com.marklogic.ml-gradle" version "3.6.0"
+}
+
+repositories {
+  jcenter()
+  maven { url "https://developer.marklogic.com/maven2/" }
+}
+
+configurations {
+  mlcp
+}
+
+dependencies {
+  mlcp "com.marklogic:mlcp:9.0.4"
+  mlcp files("lib")
+}
+
+task importSampleData(type: com.marklogic.gradle.task.MlcpTask) {
+  classpath = configurations.mlcp
+  command = "IMPORT"
+  database = mlAppConfig.contentDatabaseName
+  logOutputUri = "/mlcp-log.txt"
+  input_file_path = "sample-data.zip"
+  input_compressed = "true"
+  output_collections = "data,data/people"
+  output_permissions = "slush-demo-role,read,slush-demo-role,update"
+  output_uri_replace = ".*.zip,''"
+}

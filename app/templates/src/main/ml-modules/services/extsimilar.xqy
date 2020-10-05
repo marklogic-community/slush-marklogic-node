@@ -4,19 +4,11 @@ module namespace ext = "http://marklogic.com/rest-api/resource/extsimilar";
 
 declare default function namespace "http://www.w3.org/2005/xpath-functions";
 
-declare namespace roxy = "http://marklogic.com/roxy";
-
 (:
- : To add parameters to the functions, specify them in the params annotations.
- : Example
- :   declare %roxy:params("uri=xs:string", "priority=xs:int") ext:get(...)
- : This means that the get function will take two parameters, a string and an int.
- :)
-
-(:
+ : Params
+ :  uri (string), limit (int)
  :)
 declare
-%roxy:params("uri=xs:string", "limit=xs:int?")
 function ext:get(
   $context as map:map,
   $params  as map:map
@@ -26,9 +18,10 @@ function ext:get(
 };
 
 (:
+ : Params
+ :  uri (string), limit (int)
  :)
 declare
-%roxy:params("uri=xs:string", "limit=xs:int?")
 function ext:post(
   $context as map:map,
   $params  as map:map,

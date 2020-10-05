@@ -13,10 +13,3 @@ Some required modules do not have native Windows modules available and require a
 
 If your installation of node and npm required elevated priviledges, you will need to use an elevated command prompt to upgrade npm and perform all global `npm install -g` commands. When scaffolding your project using slush, a normal command prompt is sufficient.
 
-## Configuring MLCP
-
-The default location for MLCP is `/usr/local/mlcp`.  This path is unlikely the appropriate location of your MLCP install.  To specify the correct location of MLCP in Windows, edit/create `deploy\local.properties` and add
-```
-mlcp-home=C:\\path\\to\\mlcp
-```
-Please note that the backslash is being escaped by a second backslash.  This inserts a literal backslash instead of inserting an escape character in Java.
