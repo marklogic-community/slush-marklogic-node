@@ -1,5 +1,9 @@
 # Generator of Node.js Application Backed by MarkLogic
 
+This project is DEPRECATED. Please use https://marklogic-community.github.io/grove/ instead!
+
+## Description
+
 This is a [Slush](http://slushjs.github.io/) generator template that
 produces a skeleton [MarkLogic](http://www.marklogic.com/) application
 with the following components:
