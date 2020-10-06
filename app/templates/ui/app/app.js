@@ -11,6 +11,9 @@
 
     // top-level state
     'app.root'
+
+    //socket io
+    , 'btford.socket-io'
   ]);
 
 }());

@@ -11,6 +11,7 @@
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
     "q": "^1.4.1",
+    "socket.io": "^1.7.3",
     "underscore": "^1.8.3",
     "www-authenticate": "^0.6.2"
   },
